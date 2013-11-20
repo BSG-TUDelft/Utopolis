@@ -14,10 +14,10 @@ var buildings = new Array();
 
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
-loader.load( './art/meshes/structural/iber_temple.dae', function ( collada ) {
+loader.load( './art/meshes/gaia/berrybush.dae', function ( collada ) {
     dae = collada.scene;
-    var texture = THREE.ImageUtils.loadTexture('./art/textures/skins/structural/iber_struct.png');
-    material = new THREE.MeshLambertMaterial({map: texture});
+    var texture = THREE.ImageUtils.loadTexture('./art/textures/skins/gaia/berry_bushes.png');
+    material = new THREE.MeshLambertMaterial({map: texture, transparent: true});
     setMaterial(dae, material);
     dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
     dae.updateMatrix();
