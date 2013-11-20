@@ -171,15 +171,18 @@ function init() {
 
 function collidablesContainEmitter(colliderOrigin) {
 	for(index = 0; index < collidableMeshList.length; index ++) {
-		alert("here");		
 		var boundingBox = new THREE.Box3();	
 		boundingBox.setFromObject(collidableMeshList[index]);
-		alert('bounding box coordinates: ' + 
-    	'(' + boundingBox.min.x + ', ' + boundingBox.min.y + ', ' + boundingBox.min.z + '), ' + 
-    	'(' + boundingBox.max.x + ', ' + boundingBox.max.y + ', ' + boundingBox.max.z + ')' );
-
+		//alert('bounding box coordinates: ' + 
+    	//'(' + boundingBox.min.x + ', ' + boundingBox.min.y + ', ' + boundingBox.min.z + '), ' + 
+    	//'(' + boundingBox.max.x + ', ' + boundingBox.max.y + ', ' + boundingBox.max.z + ')' +
+		//"\n" + boundingBox.containsPoint(new THREE.Vector3(10, 0, 0)) );
+		
 		if(boundingBox.containsPoint(colliderOrigin))
+		{	
+			//alert(true);			
 			return true;
+		}
 	}
 	return false;
 	
@@ -202,29 +205,32 @@ function detectCollision (collider) {			//collider = oject that detects collisio
         if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
 		{
 			collisionFlag = true; 
-			//break;		
+			break;		
 		}
 		//if (!window.console) console = {};
 		//console.log = console.log || function(){};
 		//console.log(vertexIndex);
-    }
-	if(collidablesContainEmitter(originPoint) == true) {
-		console.log("true");
-	}
-	else 
-		console.log("false");
-		
+    }	
     if(collisionFlag == true)
     {
+		//alert(originPoint.x + ", " + originPoint.y + ", " + originPoint.z);	
 		collider.material.color.r = 255;
 		collider.material.color.g = 0;
 		collider.material.color.b = 0;
     }
     else
     {
-		collider.material.color.r = 0;
-		collider.material.color.g = 255;
-		collider.material.color.b = 0;
+		if(collidablesContainEmitter(originPoint) == true) {
+			collider.material.color.r = 255;
+			collider.material.color.g = 0;
+			collider.material.color.b = 0;
+		}
+		else 
+		{
+			collider.material.color.r = 0;
+			collider.material.color.g = 255;
+			collider.material.color.b = 0;
+		}
     }
 }
 function onDocumentMouseMove( event ) {
