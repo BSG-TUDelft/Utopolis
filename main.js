@@ -16,6 +16,9 @@ var buildings = new Array();
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
 var ghostHeight;
+var colliderBox;
+
+var MovingCube;				//testing - remove later
 
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
@@ -80,11 +83,23 @@ function initRollOver() {
 	rollOverMesh = getBoundingMesh(dae);
 	var ghostMesh = dae.clone();
 	setMaterial(ghostMesh, rollOverMaterial);
-	ghostMesh.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;
+	ghostMesh.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
 	rollOverMesh.add(ghostMesh);
 	scene.add( rollOverMesh );	
 
 }
+
+function initMovingCube() {							//testing - delete later
+
+	rollOverGeo = new THREE.CubeGeometry( 1, 1, 1);
+    rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.25, transparent: true } );
+    rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+    ghostHeight = 1;
+	//set the cube as the object that detects collision
+	scene.add(rollOverMesh);    
+	MovingCube = rollOverMesh;
+}
+
 function init() {
     container = document.createElement( 'div' );
     document.body.appendChild( container );
@@ -111,9 +126,15 @@ function init() {
 	initCollisionWall();		//wall
 
     // Add the COLLADA
-    scene.add( dae );
+    //scene.add( dae );
+	
+	var daeBB = getBoundingMesh(dae);
+	daeBB.add(dae);
+	scene.add(daeBB);
 
-	initRollOver();				//rollOver		
+	//initRollOver();				//rollOver		
+	initMovingCube();	
+
 
     // Lights
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
@@ -148,6 +169,58 @@ function init() {
 
 }
 
+function collidablesContainEmitter(colliderOrigin) {
+	for(index = 0; index < collidableMeshList.length; index ++) {
+		var boundingBox = new THREE.Box3();	
+		boundingBox.setFromObject(collidableMeshList[index]);
+		if(boundingBox.containsPoint(colliderOrigin))
+			return true;
+	}
+	return false;
+	
+}
+
+function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
+	
+	var collisionFlag = false;
+    var originPoint = collider.position.clone();
+    //console.log(originPoint);    
+	
+   	for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
+    {                
+    	var localVertex = collider.geometry.vertices[vertexIndex].clone();
+    	var globalVertex = localVertex.applyMatrix4( collider.matrix );
+        var directionVector = globalVertex.sub( collider.position );
+                
+        var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+        var collisionResults = ray.intersectObjects( collidableMeshList );
+        if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+		{
+			collisionFlag = true; 
+			//break;		
+		}
+		if(collidablesContainEmitter == true) {
+			console.log("true");
+		}
+		else 
+			console.log("false");
+		//if (!window.console) console = {};
+		//console.log = console.log || function(){};
+		//console.log(vertexIndex);
+    }
+    if(collisionFlag == true)
+    {
+		collider.material.color.r = 255;
+		collider.material.color.g = 0;
+		collider.material.color.b = 0;
+    }
+    else
+    {
+		collider.material.color.r = 0;
+		collider.material.color.g = 255;
+		collider.material.color.b = 0;
+    }
+}
 function onDocumentMouseMove( event ) {
     event.preventDefault();
     mouse2D.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -238,7 +311,9 @@ function render() {
             rollOverMesh.position = voxelPosition;
         }
     }
-
+	
+	detectCollision(MovingCube);	
+	
     renderer.render( scene, camera );
 }
 
