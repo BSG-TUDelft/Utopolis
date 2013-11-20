@@ -93,11 +93,11 @@ function initRollOver() {
 }
 
 function getModelWithBB(model) {
-	var daeBB = getBoundingMesh(dae, 1, 1, 1);
-	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points
-	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points     --    not needed when we don't display the bounding boxes
+	var daeBB = getBoundingMesh(model, 1, 1, 1);
+	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points*
+	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points*     -   * = not needed when we don't display the bounding boxes
 	collidableMeshList.push(daeBB);	
-	daeBB.add(dae);
+	daeBB.add(model);
 	return daeBB
 }
 
@@ -256,10 +256,10 @@ function onDocumentMouseDown( event ) {
     intersector = getRealIntersector( intersects );
 
     var i = buildings.length - 1;
-    buildings[i] = dae.clone();
-    buildings[i].position = intersector.point;
-    
-
+    buildings[i] = getModelWithBB(dae.clone());
+    //buildings[i].position = intersector.point;
+	buildings[i].position.x = intersector.point.x;
+	buildings[i].position.z = intersector.point.z;
 	scene.add(buildings[i]);
 }
 
