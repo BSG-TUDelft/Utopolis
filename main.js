@@ -71,7 +71,7 @@ function getBoundingMesh (object, widthSegments, heightSegments, depthSegments) 
 	var depth = boundingBox.max.z - boundingBox.min.z;
 													
 	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
-	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } )
+	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.5, wireframe: true } )
 	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
 	return bbMesh;
 }
@@ -199,6 +199,12 @@ function collidablesContainEmitter(colliderOrigin) {
 	
 }
 
+function changeColliderColor(collider, r, g, b) {
+	collider.children[0].material.color.r = r;
+	collider.children[0].material.color.g = g;
+	collider.children[0].material.color.b = b;
+}
+
 function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
 	
 	var collisionFlag = false;
@@ -225,23 +231,14 @@ function detectCollision (collider) {			//collider = oject that detects collisio
     if(collisionFlag == true)
     {
 		//alert(originPoint.x + ", " + originPoint.y + ", " + originPoint.z);	
-		collider.material.color.r = 255;
-		collider.material.color.g = 0;
-		collider.material.color.b = 0;
+		changeColliderColor(collider, 255, 0, 0);
     }
     else
     {
-		if(collidablesContainEmitter(originPoint) == true) {
-			collider.material.color.r = 255;
-			collider.material.color.g = 0;
-			collider.material.color.b = 0;
-		}
+		if(collidablesContainEmitter(originPoint) == true)
+			changeColliderColor(collider, 255, 0, 0);
 		else 
-		{
-			collider.material.color.r = 0;
-			collider.material.color.g = 255;
-			collider.material.color.b = 0;
-		}
+			changeColliderColor(collider, 0, 255, 0);
     }
 }
 function onDocumentMouseMove( event ) {
