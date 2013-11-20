@@ -17,11 +17,9 @@ var allowBuildingPlacement;
 
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
-var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision?
+var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision
 var ghostHeight;
 var colliderBox;
-
-var MovingCube;				//testing - remove later
 
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
@@ -36,16 +34,6 @@ loader.load( './art/meshes/structural/iber_temple.dae', function ( collada ) {
     init();
     animate();
 } );
-
-function initCollisionWall() {	//testing - remove later
-    var wallGeometry = new THREE.CubeGeometry( 2, 4, 2, 1, 1, 1 );
-    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
-	        
-    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(10, 0, 0);
-    scene.add(wall);
-    collidableMeshList.push(wall);
-}
 
 function initFloor() {
 	// FLOOR
@@ -64,10 +52,10 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
 	var width = boundingBox.max.x - boundingBox.min.x;
 	var height = boundingBox.max.y - boundingBox.min.y;
 	var depth = boundingBox.max.z - boundingBox.min.z;
-													
 	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
-	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.0, wireframe: true, transparent: true } )	// transparent bounding boxes - used in order to not show the bounding box on the rollOverMesh
+	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
 	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
+	bbMesh.visible = false;
 	return bbMesh;
 }
 
@@ -79,10 +67,6 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 }
 
 function initRollOver() {
-    // roll-over helpers
-    //rollOverGeo = new THREE.CubeGeometry( 1, 2, 1 );
-    //rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
-    
 	rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
 	rollOverMesh = buildBoundingMeshFromObject(dae, 3, 3, 3);			// use values higher than 3 for increased collision precision
 	ghostHeight = rollOverMesh.geometry.height;	
@@ -92,37 +76,25 @@ function initRollOver() {
 	rollOverMesh.add(ghostMesh);	
 	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
 	scene.add( rollOverMesh );	
-
 }
 
 function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
-	var boundingBox = new THREE.Box3();	
-	boundingBox.setFromObject(model);	
-	var daeBB = buildBoundingMeshFromBox(boundingBox, 1, 1, 1);
-	daeBB.position.set(model.position.x, model.position.y + daeBB.geometry.height/2, model.position.z);			//compensate for difference in reference points
-	collidableMeshList.push(daeBB);
-	collidableBoundingBoxes.push(boundingBox);
-	
+	var modelBoundingBox = new THREE.Box3();	
+	modelBoundingBox.setFromObject(model);	
+	var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
+	modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.geometry.height/2, model.position.z);			//compensate for difference in reference points	
+	scene.add(modelBoundingMesh);								//need to add on the scene otherwise raytracing won't work
+	collidableMeshList.push(modelBoundingMesh);
+	collidableBoundingBoxes.push(modelBoundingBox);
 }
 
-function getModelWithBoundingMesh(model) {
+function getModelWithBoundingMesh(model) {						//testing currently - might be needed in the future if we decide not to go with the registerCollidableBoundingMesh method
 	var daeBB = buildBoundingMeshFromObject(model, 1, 1, 1);
 	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points*
 	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points*     -   * = not needed when we don't display the bounding boxes
-//	collidableMeshList.push(daeBB);	
+//	collidableMeshList.push(daeBB);								
 	daeBB.add(model);
 	return daeBB
-}
-
-function initMovingCube() {							//testing - delete later
-
-	rollOverGeo = new THREE.CubeGeometry( 1, 1, 1);
-    rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.25, transparent: true } );
-    rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
-    ghostHeight = 1;
-	//set the cube as the object that detects collision
-	scene.add(rollOverMesh);    
-	MovingCube = rollOverMesh;
 }
 
 function init() {
@@ -148,7 +120,6 @@ function init() {
     // scene.add( line );
     
 	initFloor();				//floor
-	//initCollisionWall();		//wall	-	testing
 
     // Add the COLLADA
     scene.add( dae );
@@ -197,7 +168,8 @@ function collidablesContainEmitter(colliderOrigin) {
 			return true;
 		}
 	}
-	return false;	
+	return false;
+	
 }
 
 function changeColliderColor(collider, r, g, b) {
@@ -210,7 +182,6 @@ function detectCollision (collider) {			//collider = oject that detects collisio
 	
 	var collisionFlag = false;
     var originPoint = collider.position.clone();
-    //console.log(originPoint);    
 	
    	for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
     {                
@@ -220,24 +191,16 @@ function detectCollision (collider) {			//collider = oject that detects collisio
                 
         var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
         var collisionResults = ray.intersectObjects( collidableMeshList );
-        if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-		{
+        if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
 			collisionFlag = true; 
 			break;		
 		}
-		//if (!window.console) console = {};
-		//console.log = console.log || function(){};
-		//console.log(vertexIndex);
-    }	
-    if(collisionFlag == true)
-    {
-		//alert(originPoint.x + ", " + originPoint.y + ", " + originPoint.z);	
+	}	
+    if(collisionFlag == true) {
 		changeColliderColor(collider, 255, 0, 0);
     }
-    else
-    {
-		if(collidablesContainEmitter(originPoint) == true)
-		{
+    else {
+		if(collidablesContainEmitter(originPoint) == true) {
 			collisionFlag = true;			
 			changeColliderColor(collider, 255, 0, 0);
 		}
@@ -246,6 +209,7 @@ function detectCollision (collider) {			//collider = oject that detects collisio
     }
 	allowBuildingPlacement = !collisionFlag;
 }
+
 function onDocumentMouseMove( event ) {
     event.preventDefault();
     mouse2D.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -261,8 +225,8 @@ function onDocumentMouseDown( event ) {
 	    var i = buildings.length - 1;
    		buildings[i] = dae.clone();
     	buildings[i].position = intersector.point;
-		registerCollidableBoundingMesh(buildings[i]);
 		scene.add(buildings[i]);
+		registerCollidableBoundingMesh(buildings[i]);
 	}
 }
 
@@ -348,7 +312,7 @@ function render() {
 function getRealIntersector( intersects ) {
     for( i = 0; i < intersects.length; i++ ) {
         intersector = intersects[ i ];
-        if ( intersector.object != rollOverMesh ) {
+        if ( intersector.object == floor ) {		//otherwise we can build buildings on top of each other when viewing at the right angle
             return intersector;
         }
     }
