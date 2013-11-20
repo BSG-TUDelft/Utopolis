@@ -12,6 +12,8 @@ var i, intersector;
 var intersectorHeightOffset;
 
 var buildings = new Array();
+//bolean
+var allowBuildingPlacement; 		
 
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
@@ -43,10 +45,6 @@ function initCollisionWall() {	//testing - remove later
     wall.position.set(10, 0, 0);
     scene.add(wall);
     collidableMeshList.push(wall);
-//	var wallBB = new THREE.Box3();
-//	wallBB.setFromObject(wall);
-//	collidableBoundingBoxes.push(wallBB);
-	
 }
 
 function initFloor() {
@@ -106,11 +104,12 @@ function registerCollidableBoundingMesh(model) {			//using this method might cau
 	collidableBoundingBoxes.push(boundingBox);
 	
 }
+
 function getModelWithBoundingMesh(model) {
 	var daeBB = buildBoundingMeshFromObject(model, 1, 1, 1);
 	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points*
 	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points*     -   * = not needed when we don't display the bounding boxes
-	collidableMeshList.push(daeBB);	
+//	collidableMeshList.push(daeBB);	
 	daeBB.add(model);
 	return daeBB
 }
@@ -193,22 +192,12 @@ function init() {
 }
 
 function collidablesContainEmitter(colliderOrigin) {
-	for(index = 0; index < collidableMeshList.length; index ++) {
-		var boundingBox = new THREE.Box3();	
-		boundingBox.setFromObject(collidableMeshList[index]);
-		//alert('bounding box coordinates: ' + 
-    	//'(' + boundingBox.min.x + ', ' + boundingBox.min.y + ', ' + boundingBox.min.z + '), ' + 
-    	//'(' + boundingBox.max.x + ', ' + boundingBox.max.y + ', ' + boundingBox.max.z + ')' +
-		//"\n" + boundingBox.containsPoint(new THREE.Vector3(10, 0, 0)) );
-		
-		if(boundingBox.containsPoint(colliderOrigin))
-		{	
-			//alert(true);			
+	for(index = 0; index < collidableBoundingBoxes.length; index ++) {
+		if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){				
 			return true;
 		}
 	}
-	return false;
-	
+	return false;	
 }
 
 function changeColliderColor(collider, r, g, b) {
@@ -248,10 +237,14 @@ function detectCollision (collider) {			//collider = oject that detects collisio
     else
     {
 		if(collidablesContainEmitter(originPoint) == true)
+		{
+			collisionFlag = true;			
 			changeColliderColor(collider, 255, 0, 0);
+		}
 		else 
 			changeColliderColor(collider, 0, 255, 0);
     }
+	allowBuildingPlacement = !collisionFlag;
 }
 function onDocumentMouseMove( event ) {
     event.preventDefault();
@@ -261,14 +254,16 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-    var intersects = raycaster.intersectObjects( scene.children );
-    intersector = getRealIntersector( intersects );
+	if(allowBuildingPlacement) {    
+		var intersects = raycaster.intersectObjects( scene.children );
+    	intersector = getRealIntersector( intersects );
 
-    var i = buildings.length - 1;
-    buildings[i] = dae.clone();
-    buildings[i].position = intersector.point;
-	registerCollidableBoundingMesh(buildings[i]);
-	scene.add(buildings[i]);
+	    var i = buildings.length - 1;
+   		buildings[i] = dae.clone();
+    	buildings[i].position = intersector.point;
+		registerCollidableBoundingMesh(buildings[i]);
+		scene.add(buildings[i]);
+	}
 }
 
 var angle = 0.0;
