@@ -15,7 +15,7 @@ var buildings = new Array();
 
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
-var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision
+var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision?
 var ghostHeight;
 var colliderBox;
 
@@ -62,18 +62,22 @@ function initFloor() {
     scene.add(floor);
 }
 
-function getBoundingMesh (object, widthSegments, heightSegments, depthSegments) {
-	var boundingBox = new THREE.Box3();	
-	boundingBox.setFromObject(object);
-
+function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, depthSegments) {
 	var width = boundingBox.max.x - boundingBox.min.x;
 	var height = boundingBox.max.y - boundingBox.min.y;
 	var depth = boundingBox.max.z - boundingBox.min.z;
 													
 	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
-	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.5, wireframe: true } )
+	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.0, wireframe: true, transparent: true } )	// transparent bounding boxes - used in order to not show the bounding box on the rollOverMesh
 	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
 	return bbMesh;
+}
+
+function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
+	var boundingBox = new THREE.Box3();	
+	boundingBox.setFromObject(object);
+	
+	return buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
 }
 
 function initRollOver() {
@@ -82,18 +86,28 @@ function initRollOver() {
     //rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
     
 	rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
-	rollOverMesh = getBoundingMesh(dae, 3, 3, 3);			// use values higher than 3 for increased collision precision
+	rollOverMesh = buildBoundingMeshFromObject(dae, 3, 3, 3);			// use values higher than 3 for increased collision precision
 	ghostHeight = rollOverMesh.geometry.height;	
 	var ghostMesh = dae.clone();
 	setMaterial(ghostMesh, rollOverMaterial);
 	ghostMesh.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
 	rollOverMesh.add(ghostMesh);	
+	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
 	scene.add( rollOverMesh );	
 
 }
 
-function getModelWithBB(model) {
-	var daeBB = getBoundingMesh(model, 1, 1, 1);
+function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
+	var boundingBox = new THREE.Box3();	
+	boundingBox.setFromObject(model);	
+	var daeBB = buildBoundingMeshFromBox(boundingBox, 1, 1, 1);
+	daeBB.position.set(model.position.x, model.position.y + daeBB.geometry.height/2, model.position.z);			//compensate for difference in reference points
+	collidableMeshList.push(daeBB);
+	collidableBoundingBoxes.push(boundingBox);
+	
+}
+function getModelWithBoundingMesh(model) {
+	var daeBB = buildBoundingMeshFromObject(model, 1, 1, 1);
 	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points*
 	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points*     -   * = not needed when we don't display the bounding boxes
 	collidableMeshList.push(daeBB);	
@@ -135,14 +149,12 @@ function init() {
     // scene.add( line );
     
 	initFloor();				//floor
-	initCollisionWall();		//wall
+	//initCollisionWall();		//wall	-	testing
 
     // Add the COLLADA
-    //scene.add( dae );
+    scene.add( dae );
+	registerCollidableBoundingMesh(dae);
 	
-	var model = getModelWithBB(dae);
-	scene.add(model);
-
 	initRollOver();				//rollOver		
 	//initMovingCube();	
 
@@ -253,10 +265,9 @@ function onDocumentMouseDown( event ) {
     intersector = getRealIntersector( intersects );
 
     var i = buildings.length - 1;
-    buildings[i] = getModelWithBB(dae.clone());
-    //buildings[i].position = intersector.point;
-	buildings[i].position.x = intersector.point.x;
-	buildings[i].position.z = intersector.point.z;
+    buildings[i] = dae.clone();
+    buildings[i].position = intersector.point;
+	registerCollidableBoundingMesh(buildings[i]);
 	scene.add(buildings[i]);
 }
 
