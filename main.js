@@ -12,6 +12,10 @@ var i, intersector;
 
 var buildings = new Array();
 
+var floor;					//needed to restrict mouse projection to floor only
+var collidableMeshList = [];	//collidable list
+
+
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
 loader.load( './art/meshes/structural/iber_temple.dae', function ( collada ) {
@@ -26,10 +30,36 @@ loader.load( './art/meshes/structural/iber_temple.dae', function ( collada ) {
     animate();
 } );
 
+function initCollisionWall() {	//testing - remove later
+	//test
+    var wallGeometry = new THREE.CubeGeometry( 2, 4, 2, 1, 1, 1 );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
+	        
+    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
+    wall.position.set(10, 0, 0);
+    scene.add(wall);
+    collidableMeshList.push(wall);
+    //endtest
+	
+}
+
+function initFloor() {
+	// FLOOR
+    var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+    floorTexture.repeat.set( 10, 10 );
+    var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+    var floorGeometry = new THREE.PlaneGeometry(40, 40, 10, 10);
+    floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.position.y = 0;
+    floor.rotation.x = Math.PI / 2;
+    scene.add(floor);
+}
+
 function init() {
     container = document.createElement( 'div' );
     document.body.appendChild( container );
-
+	
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
     camera.position.set( 2, 2, 3 );
 
@@ -47,18 +77,10 @@ function init() {
     // }
     // var line = new THREE.Line( geometry, material, THREE.LinePieces );
     // scene.add( line );
-
-    // FLOOR
-    var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-    floorTexture.repeat.set( 10, 10 );
-    var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-    var floorGeometry = new THREE.PlaneGeometry(40, 40, 10, 10);
-    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.position.y = 0;
-    floor.rotation.x = Math.PI / 2;
-    scene.add(floor);
     
+	initFloor();				//floor
+	initCollisionWall();		//wall
+
     // Add the COLLADA
     scene.add( dae );
 
@@ -182,7 +204,7 @@ function render() {
     camera.lookAt( scene.position );
 
     raycaster = projector.pickingRay( mouse2D.clone(), camera );
-    var intersects = raycaster.intersectObjects( scene.children );
+    var intersects = raycaster.intersectObject( floor );
     if ( intersects.length > 0 ) {
         intersector = getRealIntersector( intersects );
         if ( intersector ) {
