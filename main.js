@@ -15,6 +15,7 @@ var buildings = new Array();
 
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
+var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision
 var ghostHeight;
 var colliderBox;
 
@@ -35,7 +36,6 @@ loader.load( './art/meshes/structural/iber_temple.dae', function ( collada ) {
 } );
 
 function initCollisionWall() {	//testing - remove later
-	//test
     var wallGeometry = new THREE.CubeGeometry( 2, 4, 2, 1, 1, 1 );
     var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
 	        
@@ -43,7 +43,9 @@ function initCollisionWall() {	//testing - remove later
     wall.position.set(10, 0, 0);
     scene.add(wall);
     collidableMeshList.push(wall);
-    //endtest
+//	var wallBB = new THREE.Box3();
+//	wallBB.setFromObject(wall);
+//	collidableBoundingBoxes.push(wallBB);
 	
 }
 
@@ -67,10 +69,10 @@ function getBoundingMesh (object) {
 	var width = boundingBox.max.x - boundingBox.min.x;
 	var height = boundingBox.max.y - boundingBox.min.y;
 	var depth = boundingBox.max.z - boundingBox.min.z;
-	ghostHeight = height;
+													
 	var bbGeometry = new THREE.CubeGeometry( width, height, depth );		//FIXME change to the other cubeGeometry constructor and generate multiple vertices(segments) to increase collision accuracy
 	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } )
-	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );	
+	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
 	return bbMesh;
 }
 
@@ -81,10 +83,11 @@ function initRollOver() {
     
 	rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
 	rollOverMesh = getBoundingMesh(dae);
+	ghostHeight = rollOverMesh.geometry.height;	
 	var ghostMesh = dae.clone();
 	setMaterial(ghostMesh, rollOverMaterial);
 	ghostMesh.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
-	rollOverMesh.add(ghostMesh);
+	rollOverMesh.add(ghostMesh);	
 	scene.add( rollOverMesh );	
 
 }
@@ -129,11 +132,14 @@ function init() {
     //scene.add( dae );
 	
 	var daeBB = getBoundingMesh(dae);
+	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points
+	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points     --    not needed when we don't display the bounding boxes
+	collidableMeshList.push(daeBB);	
 	daeBB.add(dae);
 	scene.add(daeBB);
 
-	//initRollOver();				//rollOver		
-	initMovingCube();	
+	initRollOver();				//rollOver		
+	//initMovingCube();	
 
 
     // Lights
@@ -324,7 +330,7 @@ function render() {
         }
     }
 	
-	detectCollision(MovingCube);	
+	detectCollision(rollOverMesh);	
 	
     renderer.render( scene, camera );
 }
