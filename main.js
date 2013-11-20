@@ -171,8 +171,13 @@ function init() {
 
 function collidablesContainEmitter(colliderOrigin) {
 	for(index = 0; index < collidableMeshList.length; index ++) {
+		alert("here");		
 		var boundingBox = new THREE.Box3();	
 		boundingBox.setFromObject(collidableMeshList[index]);
+		alert('bounding box coordinates: ' + 
+    	'(' + boundingBox.min.x + ', ' + boundingBox.min.y + ', ' + boundingBox.min.z + '), ' + 
+    	'(' + boundingBox.max.x + ', ' + boundingBox.max.y + ', ' + boundingBox.max.z + ')' );
+
 		if(boundingBox.containsPoint(colliderOrigin))
 			return true;
 	}
@@ -199,15 +204,16 @@ function detectCollision (collider) {			//collider = oject that detects collisio
 			collisionFlag = true; 
 			//break;		
 		}
-		if(collidablesContainEmitter == true) {
-			console.log("true");
-		}
-		else 
-			console.log("false");
 		//if (!window.console) console = {};
 		//console.log = console.log || function(){};
 		//console.log(vertexIndex);
     }
+	if(collidablesContainEmitter(originPoint) == true) {
+		console.log("true");
+	}
+	else 
+		console.log("false");
+		
     if(collisionFlag == true)
     {
 		collider.material.color.r = 255;
