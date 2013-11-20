@@ -62,7 +62,7 @@ function initFloor() {
     scene.add(floor);
 }
 
-function getBoundingMesh (object) {
+function getBoundingMesh (object, widthSegments, heightSegments, depthSegments) {
 	var boundingBox = new THREE.Box3();	
 	boundingBox.setFromObject(object);
 
@@ -70,7 +70,7 @@ function getBoundingMesh (object) {
 	var height = boundingBox.max.y - boundingBox.min.y;
 	var depth = boundingBox.max.z - boundingBox.min.z;
 													
-	var bbGeometry = new THREE.CubeGeometry( width, height, depth );		//FIXME change to the other cubeGeometry constructor and generate multiple vertices(segments) to increase collision accuracy
+	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
 	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } )
 	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
 	return bbMesh;
@@ -82,7 +82,7 @@ function initRollOver() {
     //rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
     
 	rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
-	rollOverMesh = getBoundingMesh(dae);
+	rollOverMesh = getBoundingMesh(dae, 3, 3, 3);			// use values higher than 3 for increased collision precision
 	ghostHeight = rollOverMesh.geometry.height;	
 	var ghostMesh = dae.clone();
 	setMaterial(ghostMesh, rollOverMaterial);
@@ -90,6 +90,15 @@ function initRollOver() {
 	rollOverMesh.add(ghostMesh);	
 	scene.add( rollOverMesh );	
 
+}
+
+function getModelWithBB(model) {
+	var daeBB = getBoundingMesh(dae, 1, 1, 1);
+	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points
+	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points     --    not needed when we don't display the bounding boxes
+	collidableMeshList.push(daeBB);	
+	daeBB.add(dae);
+	return daeBB
 }
 
 function initMovingCube() {							//testing - delete later
@@ -131,12 +140,8 @@ function init() {
     // Add the COLLADA
     //scene.add( dae );
 	
-	var daeBB = getBoundingMesh(dae);
-	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points
-	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points     --    not needed when we don't display the bounding boxes
-	collidableMeshList.push(daeBB);	
-	daeBB.add(dae);
-	scene.add(daeBB);
+	var model = getModelWithBB(dae);
+	scene.add(model);
 
 	initRollOver();				//rollOver		
 	//initMovingCube();	
@@ -253,7 +258,9 @@ function onDocumentMouseDown( event ) {
     var i = buildings.length - 1;
     buildings[i] = dae.clone();
     buildings[i].position = intersector.point;
-    scene.add(buildings[i]);
+    
+
+	scene.add(buildings[i]);
 }
 
 var angle = 0.0;
