@@ -9,12 +9,13 @@ var mouse2D, mouse3D, raycaster, rollOveredFace;
 var rollOverMesh, rollOverMaterial;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
 var i, intersector;
+var intersectorHeightOffset;
 
 var buildings = new Array();
 
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
-
+var ghostHeight;
 
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
@@ -56,6 +57,34 @@ function initFloor() {
     scene.add(floor);
 }
 
+function getBoundingMesh (object) {
+	var boundingBox = new THREE.Box3();	
+	boundingBox.setFromObject(object);
+
+	var width = boundingBox.max.x - boundingBox.min.x;
+	var height = boundingBox.max.y - boundingBox.min.y;
+	var depth = boundingBox.max.z - boundingBox.min.z;
+	ghostHeight = height;
+	var bbGeometry = new THREE.CubeGeometry( width, height, depth );		//FIXME change to the other cubeGeometry constructor and generate multiple vertices(segments) to increase collision accuracy
+	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } )
+	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );	
+	return bbMesh;
+}
+
+function initRollOver() {
+    // roll-over helpers
+    //rollOverGeo = new THREE.CubeGeometry( 1, 2, 1 );
+    //rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+    
+	rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
+	rollOverMesh = getBoundingMesh(dae);
+	var ghostMesh = dae.clone();
+	setMaterial(ghostMesh, rollOverMaterial);
+	ghostMesh.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;
+	rollOverMesh.add(ghostMesh);
+	scene.add( rollOverMesh );	
+
+}
 function init() {
     container = document.createElement( 'div' );
     document.body.appendChild( container );
@@ -84,6 +113,8 @@ function init() {
     // Add the COLLADA
     scene.add( dae );
 
+	initRollOver();				//rollOver		
+
     // Lights
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
 
@@ -93,13 +124,7 @@ function init() {
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
-
-    // roll-over helpers
-    rollOverGeo = new THREE.CubeGeometry( 1, 2, 1 );
-    rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
-    rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
-    scene.add( rollOverMesh );
-
+	
     // picking
     projector = new THREE.Projector();
 
@@ -208,7 +233,8 @@ function render() {
     if ( intersects.length > 0 ) {
         intersector = getRealIntersector( intersects );
         if ( intersector ) {
-            setVoxelPosition( intersector );
+			intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
+			setVoxelPosition( intersector );
             rollOverMesh.position = voxelPosition;
         }
     }
