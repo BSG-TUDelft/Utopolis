@@ -26,8 +26,8 @@
 		<property name="c3p0.min_size">1</property>
 		<property name="c3p0.timeout">3605</property> <!-- seconds -->
 		<property name="hibernate.c3p0.preferredTestQuery">select 1;</property>
-		<mapping class="nl.tudelft.bsg.utopolis.server.model.Player"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Building"/>
+		<mapping class="nl.tudelft.bsg.utopolis.server.model.Player"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.City"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Region"/>
 		
