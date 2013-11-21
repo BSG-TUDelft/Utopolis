@@ -6,7 +6,7 @@ var camera, scene, renderer;
 var material, dae, skin;
 
 var mouse2D, mouse3D, raycaster, rollOveredFace;
-var rollOverMesh, rollOverMaterial;
+var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
 var i, intersector;
 var intersectorHeightOffset;
@@ -67,13 +67,13 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 }
 
 function initRollOver() {
-	rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0.3, transparent: true } );
 	rollOverMesh = buildBoundingMeshFromObject(dae, 3, 3, 3);			// use values higher than 3 for increased collision precision
 	ghostHeight = rollOverMesh.geometry.height;	
-	var ghostMesh = dae.clone();
-	setMaterial(ghostMesh, rollOverMaterial);
-	ghostMesh.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
-	rollOverMesh.add(ghostMesh);	
+	var ghostModel = dae.clone();
+	setMaterial(ghostModel, material.clone());
+	setTransparent(ghostModel);		
+	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
+	rollOverMesh.add(ghostModel);	
 	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
 	scene.add( rollOverMesh );	
 }
@@ -122,8 +122,8 @@ function init() {
 	initFloor();				//floor
 
     // Add the COLLADA
-    scene.add( dae );
-	registerCollidableBoundingMesh(dae);
+    //scene.add( dae );
+	//registerCollidableBoundingMesh(dae);
 	
 	initRollOver();				//rollOver		
 	//initMovingCube();	
@@ -173,9 +173,9 @@ function collidablesContainEmitter(colliderOrigin) {
 }
 
 function changeColliderColor(collider, r, g, b) {
-	collider.children[0].material.color.r = r;
-	collider.children[0].material.color.g = g;
-	collider.children[0].material.color.b = b;
+	collider.children[0].material.ambient.r = r;
+	collider.children[0].material.ambient.g = g;
+	collider.children[0].material.ambient.b = b;
 }
 
 function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
@@ -324,6 +324,16 @@ function setVoxelPosition( intersector ) {
     //tmpVec.copy( intersector.face.normal );
     tmpVec.applyMatrix3( normalMatrix ).normalize();
     voxelPosition.addVectors( intersector.point, tmpVec );
+}
+
+var setTransparent = function(node) {
+	node.material.opacity = 0.3;
+	node.material.transparent = true;
+	if (node.children) {
+        for (var i = 0; i < node.children.length; i++) {
+            setTransparent(node.children[i]);
+        }
+    }
 }
 
 var setMaterial = function(node, material) {
