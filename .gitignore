@@ -2,4 +2,9 @@
 *~
 *.swp
 art-original/
+*.class
+target/
+.classpath
+.project
+.settings/
 
