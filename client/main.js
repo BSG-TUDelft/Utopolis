@@ -5,6 +5,9 @@ var container, stats;
 var camera, scene, renderer;
 var material, dae, skin;
 
+//model array
+var models = new ModelArray();
+
 var mouse2D, mouse3D, raycaster, rollOveredFace;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
@@ -21,19 +24,11 @@ var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time
 var ghostHeight;
 var colliderBox;
 
-var loader = new THREE.ColladaLoader();
-loader.options.convertUpAxis = true;
-loader.load( './art/meshes/structural/iber_temple.dae', function ( collada ) {
-    dae = collada.scene;
-    var texture = THREE.ImageUtils.loadTexture('./art/textures/skins/structural/iber_struct.png');
-    material = new THREE.MeshLambertMaterial({map: texture});
-    setMaterial(dae, material);
-    dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
-    dae.updateMatrix();
+var t = 0;
+var clock = new THREE.Clock();
 
-    init();
-    animate();
-} );
+init();
+animate();
 
 function initFloor() {
 	// FLOOR
@@ -67,7 +62,7 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 }
 
 function initRollOver() {
-	rollOverMesh = buildBoundingMeshFromObject(dae, 3, 3, 3);			// use values higher than 3 for increased collision precision
+	rollOverMesh = buildBoundingMeshFromObject(dae, 1, 1, 1);			// use values higher than 1 for increased collision precision
 	ghostHeight = rollOverMesh.geometry.height;	
 	var ghostModel = dae.clone();
 	setMaterial(ghostModel, material.clone());
@@ -98,40 +93,26 @@ function getModelWithBoundingMesh(model) {						//testing currently - might be n
 }
 
 function init() {
-    container = document.createElement( 'div' );
-    document.body.appendChild( container );
+	//CONTAINER    
+	container = document.createElement( 'div' );
+    document.body.appendChild( container );	
+
+	//SCENE
+    scene = new THREE.Scene();
 	
+	//CAMERA
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
     camera.position.set( 2, 2, 3 );
 
-    scene = new THREE.Scene();
-
-    // GRID
-    // var size = 14, step = 1;
-    // var geometry = new THREE.Geometry();
-    // var material = new THREE.LineBasicMaterial( { color: 0x303030 } );
-    // for ( var i = - size; i <= size; i += step ) {
-    //     geometry.vertices.push( new THREE.Vector3( - size, 0, i ) );
-    //     geometry.vertices.push( new THREE.Vector3(   size, 0, i ) );
-    //     geometry.vertices.push( new THREE.Vector3( i, 0, - size ) );
-    //     geometry.vertices.push( new THREE.Vector3( i, 0,   size ) );
-    // }
-    // var line = new THREE.Line( geometry, material, THREE.LinePieces );
-    // scene.add( line );
-    
-	initFloor();				//floor
+	//FLOOR
+	initFloor();				
 
     // Add the COLLADA
     //scene.add( dae );
 	//registerCollidableBoundingMesh(dae);
 	
-	initRollOver();				//rollOver		
-	//initMovingCube();	
-
-
-    // Lights
+    // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
-
     var directionalLight = new THREE.DirectionalLight(/*Math.random() * 0xffffff*/0xeeeeee );
     directionalLight.position.x = Math.random() - 0.5;
     directionalLight.position.y = Math.random() - 0.5;
@@ -141,19 +122,42 @@ function init() {
 	
     // picking
     projector = new THREE.Projector();
-
     mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
-
+	
+	//RENDERER
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
-
     container.appendChild( renderer.domElement );
-
+	
+	//STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
     container.appendChild( stats.domElement );
+	
+	//LOADER
+	var loader2 = new ModelLoader();	
 
+	var loader = new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	loader2.load('./art/meshes/structural/iber_temple.dae', './art/textures/skins/structural/iber_struct.png');	
+	//loader.load( './art/meshes/structural/iber_temple.dae', loader2.setTextureOnModel('./art/textures/skins/structural/iber_struct.png'));	
+	/*loader.load( './art/meshes/structural/iber_temple.dae', function colladaReady ( collada ) {
+		//console.log(collada);    	
+		dae = collada.scene;
+    	var texture = THREE.ImageUtils.loadTexture('./art/textures/skins/structural/iber_struct.png');
+    	material = new THREE.MeshLambertMaterial({map: texture});
+    	setMaterial(dae, material);
+    	dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
+    	dae.updateMatrix();
+		scene.add(dae);
+	} );*/
+
+	console.log(models[0]);
+		
+	//ROLLOVER						//make sure this is always after the loader as it depends on the dae variable being defined
+	//initRollOver();
+	
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -271,18 +275,16 @@ function onWindowResize() {
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-//
-
-var t = 0;
-var clock = new THREE.Clock();
-
 function animate() {
-    var delta = clock.getDelta();
     requestAnimationFrame( animate );
-    if ( t > 1 ) t = 0;
-
+	update();
     render();
-    stats.update();
+}
+
+function update() {
+	var delta = clock.getDelta();
+	if ( t > 1 ) t = 0;
+	stats.update();
 }
 
 function render() {
@@ -304,7 +306,7 @@ function render() {
         }
     }
 	
-	detectCollision(rollOverMesh);	
+	//detectCollision(rollOverMesh);	
 	
     renderer.render( scene, camera );
 }
@@ -326,7 +328,7 @@ function setVoxelPosition( intersector ) {
     voxelPosition.addVectors( intersector.point, tmpVec );
 }
 
-var setTransparent = function(node) {
+function setTransparent(node) {
 	node.material.opacity = 0.3;
 	node.material.transparent = true;
 	if (node.children) {
@@ -336,7 +338,7 @@ var setTransparent = function(node) {
     }
 }
 
-var setMaterial = function(node, material) {
+function setMaterial(node, material) {
     node.material = material;
     if (node.children) {
         for (var i = 0; i < node.children.length; i++) {
