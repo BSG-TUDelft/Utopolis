@@ -108,10 +108,6 @@ function init() {
 	//FLOOR
 	initFloor();				
 
-    // Add the COLLADA
-    //scene.add( dae );
-	//registerCollidableBoundingMesh(dae);
-	
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
     var directionalLight = new THREE.DirectionalLight(/*Math.random() * 0xffffff*/0xeeeeee );
@@ -138,22 +134,8 @@ function init() {
 	
 	//LOADER
 	var loader = new IberModelLoader();	
-	loader.loadModels();   //('./art/meshes/structural/iber_wall_tower.dae');	
-	//loader.load( './art/meshes/structural/iber_temple.dae', loader2.setTextureOnModel('./art/textures/skins/structural/iber_struct.png'));	
-	/*loader.load( './art/meshes/structural/iber_temple.dae', function colladaReady ( collada ) {
-		//console.log(collada);    	
-		dae = collada.scene;
-    	var texture = THREE.ImageUtils.loadTexture('./art/textures/skins/structural/iber_struct.png');
-    	material = new THREE.MeshLambertMaterial({map: texture});
-    	setMaterial(dae, material);
-    	dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
-    	dae.updateMatrix();
-		scene.add(dae);
-	} );*/
-		
-	//ROLLOVER						//make sure this is always after the loader as it depends on the dae variable being defined
-	//initRollOver();
-	
+	loader.loadModels();
+
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
@@ -169,7 +151,6 @@ function collidablesContainEmitter(colliderOrigin) {
 		}
 	}
 	return false;
-	
 }
 
 function changeColliderColor(collider, r, g, b) {
@@ -345,23 +326,15 @@ function getMouseProjectionOnFloor() {
 
 function render() {
     var timer = Date.now() * 0.0005;
-
-    // camera.position.x = Math.cos( timer ) * 10;
-    // camera.position.y = 2;
-    // camera.position.z = Math.sin( timer ) * 10;
     camera.lookAt( scene.position );
 
-    //raycaster = projector.pickingRay( mouse2D.clone(), camera );
-    //var intersects = raycaster.intersectObject( floor );
-    //if ( intersects.length > 0 ) {
-        intersector = getMouseProjectionOnFloor();//getRealIntersector( intersects );
-        if ( intersector && rollOverMesh) {
-			intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
-			setVoxelPosition( intersector );
-            rollOverMesh.position = voxelPosition;
-        }
-    //}
-	
+    intersector = getMouseProjectionOnFloor();
+    if ( intersector && rollOverMesh) {
+		intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
+		setVoxelPosition( intersector );
+        rollOverMesh.position = voxelPosition;
+    }
+
 	detectCollision(rollOverMesh);	
 	
     renderer.render( scene, camera );
