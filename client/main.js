@@ -5,9 +5,6 @@ var container, stats;
 var camera, scene, renderer;
 var material, dae, skin;
 
-//model array
-var models = new ModelArray();
-
 var mouse2D, mouse3D, raycaster, rollOveredFace;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
@@ -70,7 +67,11 @@ function initRollOver() {
 	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
 	rollOverMesh.add(ghostModel);	
 	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
-	scene.add( rollOverMesh );	
+	scene.add( rollOverMesh );
+    
+    //register event handler
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener( 'mousedown', onDocumentMouseDown, false );	
 }
 
 function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
@@ -136,11 +137,8 @@ function init() {
     container.appendChild( stats.domElement );
 	
 	//LOADER
-	var loader2 = new ModelLoader();	
-
-	var loader = new THREE.ColladaLoader();
-	loader.options.convertUpAxis = true;
-	loader2.load('./art/meshes/structural/iber_temple.dae', './art/textures/skins/structural/iber_struct.png');	
+	var loader = new ModelLoader();	
+	loader.load('./art/meshes/structural/iber_temple.dae', './art/textures/skins/structural/iber_struct.png');	
 	//loader.load( './art/meshes/structural/iber_temple.dae', loader2.setTextureOnModel('./art/textures/skins/structural/iber_struct.png'));	
 	/*loader.load( './art/meshes/structural/iber_temple.dae', function colladaReady ( collada ) {
 		//console.log(collada);    	
@@ -152,15 +150,11 @@ function init() {
     	dae.updateMatrix();
 		scene.add(dae);
 	} );*/
-
-	console.log(models[0]);
 		
 	//ROLLOVER						//make sure this is always after the loader as it depends on the dae variable being defined
 	//initRollOver();
 	
     // register event handlers
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    document.addEventListener( 'mousedown', onDocumentMouseDown, false );
     document.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'resize', onWindowResize, false );
 
@@ -184,34 +178,38 @@ function changeColliderColor(collider, r, g, b) {
 
 function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
 	
-	var collisionFlag = false;
-    var originPoint = collider.position.clone();
-	
-   	for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
-    {                
-    	var localVertex = collider.geometry.vertices[vertexIndex].clone();
-    	var globalVertex = localVertex.applyMatrix4( collider.matrix );
-        var directionVector = globalVertex.sub( collider.position );
-                
-        var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-        var collisionResults = ray.intersectObjects( collidableMeshList );
-        if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-			collisionFlag = true; 
-			break;		
-		}
-	}	
-    if(collisionFlag == true) {
-		changeColliderColor(collider, 255, 0, 0);
+	if(collider)
+    {
+        var collisionFlag = false;
+        var originPoint = collider.position.clone();
+    	
+       	for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
+        {                
+        	var localVertex = collider.geometry.vertices[vertexIndex].clone();
+        	var globalVertex = localVertex.applyMatrix4( collider.matrix );
+            var directionVector = globalVertex.sub( collider.position );
+                    
+            var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+            var collisionResults = ray.intersectObjects( collidableMeshList );
+            if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
+    			collisionFlag = true; 
+    			break;		
+    		}
+    	}	
+        if(collisionFlag == true) {
+    		changeColliderColor(collider, 255, 0, 0);
+        }
+        else {
+    		if(collidablesContainEmitter(originPoint) == true) {
+    			collisionFlag = true;			
+    			changeColliderColor(collider, 255, 0, 0);
+    		}
+    		else 
+    			changeColliderColor(collider, 0, 255, 0);
+        }
+    	allowBuildingPlacement = !collisionFlag;
     }
-    else {
-		if(collidablesContainEmitter(originPoint) == true) {
-			collisionFlag = true;			
-			changeColliderColor(collider, 255, 0, 0);
-		}
-		else 
-			changeColliderColor(collider, 0, 255, 0);
-    }
-	allowBuildingPlacement = !collisionFlag;
+
 }
 
 function onDocumentMouseMove( event ) {
@@ -306,7 +304,7 @@ function render() {
         }
     }
 	
-	//detectCollision(rollOverMesh);	
+	detectCollision(rollOverMesh);	
 	
     renderer.render( scene, camera );
 }
