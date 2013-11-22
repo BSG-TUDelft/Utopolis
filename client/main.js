@@ -268,8 +268,41 @@ function onKeyDown ( event ) {
         case 80: // p  
             togglePlacementMode();
             break;
+        case 219: // [, {
+            previousBuilding();
+            break;
+        case 221: // ], }
+            nextBuilding();           
+            break;
     }
 };
+
+function nextBuilding() {
+    var index = loadedModels.indexOf(currentModel);
+    if(index != loadedModels.length-1) {
+        index++;
+        currentModel = loadedModels[index];
+        refreshRollover();
+        console.log(index);
+    }
+}
+
+function previousBuilding() {
+    var index = loadedModels.indexOf(currentModel);
+    if(index != 0) {
+        index--;
+        currentModel = loadedModels[index];
+        refreshRollover();
+        console.log(index);
+    }
+}
+
+function refreshRollover() {
+    if(rollOverMesh) {                                //check if it is set
+        togglePlacementMode();
+        togglePlacementMode();
+    }
+}
 
 function togglePlacementMode () {
     if(rollOverMesh) {
