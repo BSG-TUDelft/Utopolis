@@ -5,8 +5,6 @@ IberModelLoader = function () {
 	numModelStructures = this.getSize(this.modelStructuresArray);
 }
 
-//IberModelLoader.prototype = new ModelLoader('./art/textures/skins/structural/iber_struct.png');			//works for the basic example - uses the load function from the ModelLoader class
-
 IberModelLoader.prototype.loader = new ModelLoader('./art/textures/skins/structural/iber_struct.png');
 
 IberModelLoader.prototype.loadModels = function () {
