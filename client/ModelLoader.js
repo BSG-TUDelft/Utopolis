@@ -1,18 +1,18 @@
-//var textureFile = './art/textures/skins/structural/iber_struct.png';
-//var modelFile = './art/meshes/structural/iber_temple.dae';
+var loadedModels = [];
 
-ModelLoader = function () {
-
+ModelLoader = function ( file ) {
+	this.textureFile = file;
 }
 
 ModelLoader.prototype.loader = new THREE.ColladaLoader();
 ModelLoader.prototype.loader.options.convertUpAxis = true;
 
-ModelLoader.prototype.load = function (modelFile, textureFile) {
-	this.loader.load( modelFile, this.setTextureOnModel(textureFile) );
+ModelLoader.prototype.load = function (modelFile, callbackDecRemainingStructures) {
+	this.loader.load( modelFile, this.setTextureOnModel(this.textureFile, callbackDecRemainingStructures) );
 }
 
-ModelLoader.prototype.setTextureOnModel = function (textureFile) {
+ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRemainingStructures) {
+	
 	return function ( collada ) {  	
 		dae = collada.scene;
    		var texture = THREE.ImageUtils.loadTexture(textureFile);
@@ -20,8 +20,7 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile) {
    		setMaterial(dae, material);
    		dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
    		dae.updateMatrix();
-//		console.log(dae);
-//		scene.add(dae);
-		initRollOver();
+   		this.loadedModels.push(dae);
+		callbackDecRemainingStructures();
 		};
 }

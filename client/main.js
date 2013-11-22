@@ -5,6 +5,8 @@ var container, stats;
 var camera, scene, renderer;
 var material, dae, skin;
 
+var currentModel;
+
 var mouse2D, mouse3D, raycaster, rollOveredFace;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
@@ -58,20 +60,18 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 	return buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
 }
 
-function initRollOver() {
-	rollOverMesh = buildBoundingMeshFromObject(dae, 1, 1, 1);			// use values higher than 1 for increased collision precision
+function initRollOver(position) {
+	rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);			// use values higher than 1 for increased collision precision
 	ghostHeight = rollOverMesh.geometry.height;	
-	var ghostModel = dae.clone();
+	var ghostModel = currentModel.clone();
 	setMaterial(ghostModel, material.clone());
 	setTransparent(ghostModel);		
 	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
-	rollOverMesh.add(ghostModel);	
+	rollOverMesh.add(ghostModel);
+    rollOverMesh.position.x = 0;
+    //rollOverMesh.position.z = position.z;	
 	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
 	scene.add( rollOverMesh );
-    
-    //register event handler
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    document.addEventListener( 'mousedown', onDocumentMouseDown, false );	
 }
 
 function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
@@ -137,8 +137,8 @@ function init() {
     container.appendChild( stats.domElement );
 	
 	//LOADER
-	var loader = new ModelLoader();	
-	loader.load('./art/meshes/structural/iber_temple.dae', './art/textures/skins/structural/iber_struct.png');	
+	var loader = new IberModelLoader();	
+	loader.loadModels();   //('./art/meshes/structural/iber_wall_tower.dae');	
 	//loader.load( './art/meshes/structural/iber_temple.dae', loader2.setTextureOnModel('./art/textures/skins/structural/iber_struct.png'));	
 	/*loader.load( './art/meshes/structural/iber_temple.dae', function colladaReady ( collada ) {
 		//console.log(collada);    	
@@ -155,6 +155,8 @@ function init() {
 	//initRollOver();
 	
     // register event handlers
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
     document.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'resize', onWindowResize, false );
 
@@ -209,7 +211,6 @@ function detectCollision (collider) {			//collider = oject that detects collisio
         }
     	allowBuildingPlacement = !collisionFlag;
     }
-
 }
 
 function onDocumentMouseMove( event ) {
@@ -220,12 +221,12 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-	if(allowBuildingPlacement) {    
-		var intersects = raycaster.intersectObjects( scene.children );
+	if(allowBuildingPlacement && rollOverMesh) {                               //only place if there is no collision and if the ghost model is visible     
+		var intersects = raycaster.intersectObject( floor );
     	intersector = getRealIntersector( intersects );
 
 	    var i = buildings.length - 1;
-   		buildings[i] = dae.clone();
+   		buildings[i] = currentModel.clone();
     	buildings[i].position = intersector.point;
 		scene.add(buildings[i]);
 		registerCollidableBoundingMesh(buildings[i]);
@@ -264,6 +265,16 @@ function onKeyDown ( event ) {
         case 70: // f  
             camera.position.y--; 
             break;
+        case 80: // p  
+            if(rollOverMesh){
+                scene.remove(rollOverMesh);
+                rollOverMesh = null;
+            }
+            else {
+                var intersector = getMouseProjectionOnFloor();
+                initRollOver(intersector); 
+            }
+            break;
     }
 };
 
@@ -285,6 +296,16 @@ function update() {
 	stats.update();
 }
 
+function getMouseProjectionOnFloor() {
+    raycaster = projector.pickingRay( mouse2D.clone(), camera );
+    var intersects = raycaster.intersectObject( floor );
+    if ( intersects.length > 0 ) {
+        intersector = getRealIntersector( intersects );
+        return intersector;
+    }
+    return null;
+}
+
 function render() {
     var timer = Date.now() * 0.0005;
 
@@ -293,16 +314,16 @@ function render() {
     // camera.position.z = Math.sin( timer ) * 10;
     camera.lookAt( scene.position );
 
-    raycaster = projector.pickingRay( mouse2D.clone(), camera );
-    var intersects = raycaster.intersectObject( floor );
-    if ( intersects.length > 0 ) {
-        intersector = getRealIntersector( intersects );
-        if ( intersector ) {
+    //raycaster = projector.pickingRay( mouse2D.clone(), camera );
+    //var intersects = raycaster.intersectObject( floor );
+    //if ( intersects.length > 0 ) {
+        intersector = getMouseProjectionOnFloor();//getRealIntersector( intersects );
+        if ( intersector && rollOverMesh) {
 			intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
 			setVoxelPosition( intersector );
             rollOverMesh.position = voxelPosition;
         }
-    }
+    //}
 	
 	detectCollision(rollOverMesh);	
 	
@@ -327,7 +348,7 @@ function setVoxelPosition( intersector ) {
 }
 
 function setTransparent(node) {
-	node.material.opacity = 0.3;
+	node.material.opacity = 0.5;
 	node.material.transparent = true;
 	if (node.children) {
         for (var i = 0; i < node.children.length; i++) {
