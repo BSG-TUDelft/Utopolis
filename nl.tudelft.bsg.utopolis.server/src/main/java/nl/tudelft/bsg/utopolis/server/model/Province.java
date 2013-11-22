@@ -1,5 +1,6 @@
 package nl.tudelft.bsg.utopolis.server.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -8,7 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Province {
+public class Province implements Serializable {
+	private static final long serialVersionUID = 3634843961492433604L;
+	
 	@Id
 	@GeneratedValue
 	private int id;
