@@ -3,11 +3,18 @@ package nl.tudelft.bsg.utopolis.server.db;
 import java.io.Serializable;
 import java.util.List;
 
+import nl.tudelft.bsg.utopolis.server.model.Player;
+import nl.tudelft.bsg.utopolis.server.model.Province;
+import nl.tudelft.bsg.utopolis.server.model.Structure;
+
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
@@ -94,31 +101,29 @@ public class DBConnector {
 		}
 	}
 
-	/*public Person getPerson(String email, String password) {
+	public Player getPlayer(String nick, String password) {
 		Query query = getSession().createQuery(
-				"from Person where email = :email ");
-		query.setParameter("email", email);
-		Person person = (Person) query.uniqueResult();
-		String hash = Password.hash(password, person.getSalt());
-		return hash.equals(person.getHashedPassword()) ? person : null;
-	}*/
+				"from Person where nick = :nick and password = :password ");
+		query.setParameter("nick", nick);
+		return (Player) query.uniqueResult();
+	}
 
-	/*public Submission getSubmission(int id) {
+	public Structure getStructure(int id) {
 		Query query = getSession()
-				.createQuery("from Submission where id = :id");
+				.createQuery("from Structure where id = :id");
 		query.setParameter("id", id);
-		return (Submission) query.uniqueResult();
-	}*/
+		return (Structure) query.uniqueResult();
+	}
 
-	/*@SuppressWarnings("unchecked")
-	public List<Journal> getJournals() {
-		return getSession().createQuery("from Journal").list();
-	}*/
+	@SuppressWarnings("unchecked")
+	public List<Province> getRegions() {
+		return getSession().createQuery("from Region").list();
+	}
 
-	/*public long count(String table) {
-		Criteria criteria = getSession().createCriteria(Submission.class);
+	public long count(Class<?> clazz) {
+		Criteria criteria = getSession().createCriteria(clazz);
 		criteria.setProjection(Projections.rowCount());
 		return (Long) criteria.uniqueResult();
-	}*/
+	}
 
 }

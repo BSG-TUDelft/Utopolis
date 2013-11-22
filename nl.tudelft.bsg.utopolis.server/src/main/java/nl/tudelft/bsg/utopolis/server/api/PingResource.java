@@ -6,7 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("ping")
-public class Ping {
+public class PingResource extends Resource {
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)

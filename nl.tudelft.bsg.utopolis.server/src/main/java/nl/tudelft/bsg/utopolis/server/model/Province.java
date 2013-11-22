@@ -8,16 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Region {
+public class Province {
 	@Id
 	@GeneratedValue
 	private int id;
 	@OneToMany
 	private List<City> cities;
+	private String name;
 
-	public Region() {
+	public Province() {
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -32,5 +33,13 @@ public class Region {
 
 	public void setCities(List<City> cities) {
 		this.cities = cities;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

@@ -6,16 +6,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class City {
 	@Id
 	@GeneratedValue
 	private int id;
+	@OneToOne
+	private Player player;
 	@OneToMany
-	private List<Player> players;
-	@OneToMany
-	private List<Building> buildings;
+	private List<Structure> buildings;
+	private String name;
 
 	public City() {
 	}
@@ -28,20 +30,28 @@ public class City {
 		this.id = id;
 	}
 
-	public List<Player> getPlayers() {
-		return players;
+	public Player getPlayer() {
+		return player;
 	}
 
-	public void setPlayers(List<Player> players) {
-		this.players = players;
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
-	public List<Building> getBuildings() {
+	public List<Structure> getBuildings() {
 		return buildings;
 	}
 
-	public void setBuildings(List<Building> buildings) {
+	public void setBuildings(List<Structure> buildings) {
 		this.buildings = buildings;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

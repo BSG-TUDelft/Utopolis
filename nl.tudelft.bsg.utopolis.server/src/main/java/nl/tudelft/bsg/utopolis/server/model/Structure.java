@@ -1,23 +1,26 @@
 package nl.tudelft.bsg.utopolis.server.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Building {
+public class Structure {
 	@Id
 	@GeneratedValue
 	private int id;
-	private String type;
+	@Enumerated
+	private StructureType type;
 	private double x;
 	private double y;
 	private double z;
 	private double rotation;
-	private int numWorkers;
-	private int maxWorkers;
+	private double scale;
+	private int numCitizens;
+	private int maxCitizens;
 
-	public Building() {
+	public Structure() {
 	}
 	
 	public int getId() {
@@ -28,11 +31,11 @@ public class Building {
 		this.id = id;
 	}
 
-	public String getType() {
+	public StructureType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(StructureType type) {
 		this.type = type;
 	}
 
@@ -67,21 +70,29 @@ public class Building {
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
 	}
-
-	public int getNumWorkers() {
-		return numWorkers;
+	
+	public double getScale() {
+		return scale;
 	}
 
-	public void setNumWorkers(int numWorkers) {
-		this.numWorkers = numWorkers;
+	public void setScale(double scale) {
+		this.scale = scale;
 	}
 
-	public int getMaxWorkers() {
-		return maxWorkers;
+	public int getNumCitizens() {
+		return numCitizens;
 	}
 
-	public void setMaxWorkers(int maxWorkers) {
-		this.maxWorkers = maxWorkers;
+	public void setNumCitizens(int numCitizens) {
+		this.numCitizens = numCitizens;
+	}
+
+	public int getMaxCitizens() {
+		return maxCitizens;
+	}
+
+	public void setMaxCitizens(int maxCitizens) {
+		this.maxCitizens = maxCitizens;
 	}
 
 }

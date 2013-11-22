@@ -24,7 +24,7 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in nl.tudelft.bsg.utopolis.server package
-        final ResourceConfig rc = new ResourceConfig().packages("nl.tudelft.bsg.utopolis.server");
+        final ResourceConfig rc = new ResourceConfig().packages("nl.tudelft.bsg.utopolis.server.api");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

@@ -11,6 +11,7 @@ public class Player {
 	private int id;
 	private String name;
 	private String nick;
+	private String password;
 	
 	public Player() {
 	}
@@ -37,6 +38,14 @@ public class Player {
 
 	public void setNick(String nick) {
 		this.nick = nick;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }
