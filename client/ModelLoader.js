@@ -22,6 +22,6 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile) {
    		dae.updateMatrix();
 //		console.log(dae);
 //		scene.add(dae);
-		models.add(dae);
+		initRollOver();
 		};
 }
