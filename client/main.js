@@ -266,17 +266,21 @@ function onKeyDown ( event ) {
             camera.position.y--; 
             break;
         case 80: // p  
-            if(rollOverMesh){
-                scene.remove(rollOverMesh);
-                rollOverMesh = null;
-            }
-            else {
-                var intersector = getMouseProjectionOnFloor();
-                initRollOver(intersector); 
-            }
+            togglePlacementMode();
             break;
     }
 };
+
+function togglePlacementMode () {
+    if(rollOverMesh) {
+        scene.remove(rollOverMesh);
+        rollOverMesh = null;
+    }
+    else {
+        var intersector = getMouseProjectionOnFloor();
+        initRollOver(intersector); 
+    }
+}                         
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
