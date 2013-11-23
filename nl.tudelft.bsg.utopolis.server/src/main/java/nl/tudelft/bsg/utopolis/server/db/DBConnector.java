@@ -107,6 +107,11 @@ public class DBConnector {
 		query.setParameter("nick", nick);
 		return (Player) query.uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Player> getPlayers() {
+		return getSession().createQuery("from Player").list();
+	}
 
 	public Structure getStructure(int id) {
 		Query query = getSession()

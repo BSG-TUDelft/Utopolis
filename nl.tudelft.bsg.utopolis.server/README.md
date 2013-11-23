@@ -9,7 +9,7 @@ You need to have maven installed and a MySQL database running.
 To build the server run the following in the server root folder:
 
 ```
-mvn install
+mvn clean install
 ```
 
 To run the server locally run:
