@@ -209,7 +209,7 @@ function onDocumentMouseDown( event ) {
 
 	    var i = buildings.length - 1;
    		buildings[i] = currentModel.clone();
-    	buildings[i].position = intersector.point;
+        buildings[i].position = intersector.point;
 		scene.add(buildings[i]);
 		registerCollidableBoundingMesh(buildings[i]);
 	}
