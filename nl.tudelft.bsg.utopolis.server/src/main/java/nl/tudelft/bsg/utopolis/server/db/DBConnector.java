@@ -3,6 +3,7 @@ package nl.tudelft.bsg.utopolis.server.db;
 import java.io.Serializable;
 import java.util.List;
 
+import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
@@ -112,6 +113,18 @@ public class DBConnector {
 	public List<Player> getPlayers() {
 		return getSession().createQuery("from Player").list();
 	}
+	
+	public City getCity(int playerId) {
+		Query query = getSession()
+				.createQuery("from City where player_id = :player_id");
+		query.setParameter("player_id", playerId);
+		return (City) query.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<City> getCities() {
+		return getSession().createQuery("from City").list();
+	}
 
 	public Structure getStructure(int id) {
 		Query query = getSession()
@@ -121,7 +134,7 @@ public class DBConnector {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Province> getRegions() {
+	public List<Province> getProvinces() {
 		return getSession().createQuery("from Region").list();
 	}
 
