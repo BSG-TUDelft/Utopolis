@@ -15,6 +15,7 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRema
 	
 	return function ( collada ) {  	
 		dae = collada.scene;
+  		removeLights(dae);
    		var texture = THREE.ImageUtils.loadTexture(textureFile);
    		material = new THREE.MeshLambertMaterial({map: texture});
    		setMaterial(dae, material);
@@ -22,5 +23,16 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRema
    		dae.updateMatrix();
    		this.loadedModels.push(dae);
 		callbackDecRemainingStructures();
-		};
+	};
+}
+
+function removeLights(model) {
+	if (model.children) {
+        for (var j = 0; j < model.children.length; j++) {
+            var child = model.children[j];
+            if (child instanceof THREE.Light) {
+                model.children.splice(j, 1);
+            }
+        }
+    }
 }
