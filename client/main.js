@@ -69,8 +69,8 @@ function initRollOver(position) {
 	setTransparent(ghostModel);		
 	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
 	rollOverMesh.add(ghostModel);
-    rollOverMesh.position.x = 0;
-    //rollOverMesh.position.z = position.z;	
+    rollOverMesh.position.x = position.x
+    rollOverMesh.position.z = position.z;	
 	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
 	scene.add( rollOverMesh );
 }
