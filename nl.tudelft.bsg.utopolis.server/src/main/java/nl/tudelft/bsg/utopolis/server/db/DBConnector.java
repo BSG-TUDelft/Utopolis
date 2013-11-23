@@ -8,9 +8,7 @@ import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -103,45 +101,59 @@ public class DBConnector {
 	}
 
 	public Player getPlayer(String nick, String password) {
-		Query query = getSession().createQuery(
-				"from Person where nick = :nick and password = :password ");
-		query.setParameter("nick", nick);
-		return (Player) query.uniqueResult();
+		return (Player) getSession()
+				.createQuery("from Player where nick = :nick")
+				.setParameter("nick", nick)
+				.uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Player> getPlayers() {
-		return getSession().createQuery("from Player").list();
+		return getSession()
+				.createQuery("from Player")
+				.list();
 	}
 	
 	public City getCity(int playerId) {
-		Query query = getSession()
-				.createQuery("from City where player_id = :player_id");
-		query.setParameter("player_id", playerId);
-		return (City) query.uniqueResult();
+		return (City) getSession()
+				.createQuery("from City where player_id = :player_id")
+				.setParameter("player_id", playerId)
+				.uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<City> getCities() {
-		return getSession().createQuery("from City").list();
+		return getSession()
+				.createQuery("from City")
+				.list();
 	}
 
 	public Structure getStructure(int id) {
-		Query query = getSession()
-				.createQuery("from Structure where id = :id");
-		query.setParameter("id", id);
-		return (Structure) query.uniqueResult();
+		return (Structure) getSession()
+				.createQuery("from Structure where id = :id")
+				.setParameter("id", id)
+				.uniqueResult();
+	}
+	
+	public Province getProvince(int id) {
+		return (Province) getSession()
+				.createQuery("from Province where id = :id")
+				.setParameter("id", id)
+				.uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Province> getProvinces() {
-		return getSession().createQuery("from Region").list();
+		return getSession()
+				.createQuery("from Province")
+				.list();
 	}
 
 	public long count(Class<?> clazz) {
-		Criteria criteria = getSession().createCriteria(clazz);
-		criteria.setProjection(Projections.rowCount());
-		return (Long) criteria.uniqueResult();
+		return (Long) getSession()
+				.createCriteria(clazz)
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
 	}
 
 }
