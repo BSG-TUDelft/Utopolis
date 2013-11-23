@@ -46,6 +46,7 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
 	var width = boundingBox.max.x - boundingBox.min.x;
 	var height = boundingBox.max.y - boundingBox.min.y;
 	var depth = boundingBox.max.z - boundingBox.min.z;
+    //console.log(width + " - " + height + " - " + depth);
 	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
 	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
 	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
@@ -68,8 +69,8 @@ function initRollOver(position) {
 	setTransparent(ghostModel);		
 	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
 	rollOverMesh.add(ghostModel);
-    rollOverMesh.position.x = 0;
-    //rollOverMesh.position.z = position.z;	
+    rollOverMesh.position.x = position.x
+    rollOverMesh.position.z = position.z;	
 	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
 	scene.add( rollOverMesh );
 }
@@ -77,7 +78,8 @@ function initRollOver(position) {
 function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
 	var modelBoundingBox = new THREE.Box3();	
 	modelBoundingBox.setFromObject(model);	
-	var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
+	//console.log(modelBoundingBox);                           //debugging
+    var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
 	modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.geometry.height/2, model.position.z);			//compensate for difference in reference points	
 	scene.add(modelBoundingMesh);								//need to add on the scene otherwise raytracing won't work
 	collidableMeshList.push(modelBoundingMesh);
@@ -147,7 +149,7 @@ function init() {
 function collidablesContainEmitter(colliderOrigin) {
 	for(index = 0; index < collidableBoundingBoxes.length; index ++) {
 		if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){				
-			return true;
+            return true;
 		}
 	}
 	return false;
@@ -160,7 +162,6 @@ function changeColliderColor(collider, r, g, b) {
 }
 
 function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
-	
 	if(collider)
     {
         var collisionFlag = false;
@@ -255,8 +256,18 @@ function onKeyDown ( event ) {
         case 221: // ], }
             nextBuilding();           
             break;
+        case 75: // k
+            printEmitterOfModel(rollOverMesh);                  //collision debugging
+            break;
     }
 };
+
+function printEmitterOfModel (collider) {                       //keep for collision debugging
+    if(collider) { 
+        var originPoint = collider.position.clone();
+        console.log(originPoint)
+    }
+}
 
 function nextBuilding() {
     var index = loadedModels.indexOf(currentModel);
@@ -264,7 +275,7 @@ function nextBuilding() {
         index++;
         currentModel = loadedModels[index];
         refreshRollover();
-        console.log(index);
+        //console.log(index);
     }
 }
 
@@ -274,7 +285,7 @@ function previousBuilding() {
         index--;
         currentModel = loadedModels[index];
         refreshRollover();
-        console.log(index);
+        //console.log(index);
     }
 }
 
