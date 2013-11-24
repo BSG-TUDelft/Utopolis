@@ -28,6 +28,8 @@ var colliderBox;
 var t = 0;
 var clock = new THREE.Clock();
 
+var rotateCamera;
+
 init();
 animate();
 
@@ -276,8 +278,18 @@ function onKeyDown ( event ) {
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
             break;
+        case 76: // l
+            toggleCameraRotation();
+            break;
     }
 };
+
+function toggleCameraRotation() {
+    if(rotateCamera)
+        rotateCamera = null;
+    else
+        rotateCamera = true;
+}
 
 function printEmitterOfModel (collider) {                       //keep for collision debugging
     if(collider) { 
@@ -389,9 +401,13 @@ function getMouseProjectionOnFloor() {
 }
 
 function render() {
-    var timer = Date.now() * 0.0005;
+    var timer = Date.now() * 0.0002;
     camera.lookAt( scene.position );
-
+    if(rotateCamera) {
+        camera.position.x = 10 * Math.cos( timer );
+        camera.position.y += ( - mouse2D.y - camera.position.y ) * .05;
+        camera.position.z = 10 * Math.sin( timer );    
+    }
     
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
         intersector = getMouseProjectionOnFloor();
