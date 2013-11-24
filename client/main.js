@@ -222,16 +222,12 @@ function onDocumentMouseDown( event ) {
         var intersects = getMouseProjectionOnObjects( selectableMeshes );
         if(intersects.length > 0) {
             if (selectedModel != intersects[0].object) {                    //we have a new selection
-                if(selectedModel) {                                         //if we already have a model selected
-                    removeHighlightFromSelectedModel();
-                }
+                clearSelectedModel();
                 highlightSelectedModel (intersects[0].object);
             }
         }   
         else {                                                                      //not selected anything 
-            if( selectedModel )                                             //we have a current selection
-                removeHighlightFromSelectedModel();
-            selectedModel = null;
+            clearSelectedModel();
         }            
     }
 }
@@ -323,6 +319,7 @@ function togglePlacementMode () {
         rollOverMesh = null;
     }
     else {
+        clearSelectedModel();                 //clear selected model
         var intersector = getMouseProjectionOnFloor();
         if(intersector)                                     //avoid errors when mouse is outside the floor area
             initRollOver(intersector); 
@@ -355,8 +352,11 @@ function highlightSelectedModel (model) {
     selectedModel.material = highlightMaterial;
 }
 
-function removeHighlightFromSelectedModel () {
-    selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
+function clearSelectedModel () {
+    if(selectedModel) {                                         //if we already have a model selected
+        selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
+    }
+    selectedModel = null;
 }
 
 function getMeshFromModel (model) {
