@@ -276,6 +276,9 @@ function onKeyDown ( event ) {
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
             break;
+        case 88: // x
+            removeSelectedModel();
+            break
     }
 };
 
@@ -303,6 +306,15 @@ function previousBuilding() {
         currentModel = loadedModels[index];
         refreshRollover();
         //console.log(index);
+    }
+}
+
+function removeSelectedModel() {
+    for (var i = 0; i < scene.children.length; i++) {
+        if (getMeshFromModel(scene.children[i]) == selectedModel) {
+            scene.remove(scene.children[i]);
+            break;
+        }
     }
 }
 
