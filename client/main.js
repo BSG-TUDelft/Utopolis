@@ -135,7 +135,9 @@ function init() {
 	//RENDERER
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setClearColor( 0xffffff, 1 );                                           //make background white
     container.appendChild( renderer.domElement );
+
 	
 	//STATS
     stats = new Stats();
@@ -285,14 +287,21 @@ function onKeyDown ( event ) {
         case 76: // l
             toggleCameraRotation();
             break;
+
     }
 };
 
 function toggleCameraRotation() {
-    if(rotateCamera)
+    
+    if(rotateCamera) {
         rotateCamera = null;
-    else
+        floor.material.color = floor.material.oldColor;
+    }
+    else {
         rotateCamera = true;
+        floor.material.oldColor = floor.material.color.clone();
+        floor.material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+    }
 }
 
 function printEmitterOfModel (collider) {                       //keep for collision debugging
