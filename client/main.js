@@ -35,7 +35,7 @@ animate();
 
 function initFloor() {
 	// FLOOR
-    var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
+    var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/grass1.png' );
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
     floorTexture.repeat.set( 10, 10 );
     var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
@@ -123,6 +123,10 @@ function init() {
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
+
+    pointLight = new THREE.PointLight( 0x111111, 2 );
+    pointLight.position.set( 2000, 1200, 10000 );
+    scene.add( pointLight );
 	
     // picking
     projector = new THREE.Projector();
@@ -402,11 +406,14 @@ function getMouseProjectionOnFloor() {
 
 function render() {
     var timer = Date.now() * 0.0002;
-    camera.lookAt( scene.position );
+    if(rotateCamera == null)
+        camera.lookAt( scene.position );
     if(rotateCamera) {
+        var newPos = new THREE.Vector3(scene.position.x, scene.position.y, scene.position.z+10);
+        camera.lookAt(newPos);
         camera.position.x = 10 * Math.cos( timer );
-        camera.position.y += ( - mouse2D.y - camera.position.y ) * .05;
-        camera.position.z = 10 * Math.sin( timer );    
+        camera.position.y += 0.4 + ( - mouse2D.y - camera.position.y ) * .1;
+        camera.position.z = 10 * Math.sin( timer ) + 10;    
     }
     
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
