@@ -6,6 +6,7 @@ var camera, scene, renderer;
 var material, dae, skin;
 
 var currentModel;
+var selectedModel;
 
 var mouse2D, mouse3D, raycaster, rollOveredFace;
 var rollOverMesh;
@@ -20,6 +21,7 @@ var allowBuildingPlacement;
 var floor;					//needed to restrict mouse projection to floor only
 var collidableMeshList = [];	//collidable list
 var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision
+var selectableMeshes = [];          //merge this with collidableMeshList?       //might slow down collision detection, but we don't keep that many arrays;
 var ghostHeight;
 var colliderBox;
 
@@ -84,6 +86,7 @@ function registerCollidableBoundingMesh(model) {			//using this method might cau
 	scene.add(modelBoundingMesh);								//need to add on the scene otherwise raytracing won't work
 	collidableMeshList.push(modelBoundingMesh);
 	collidableBoundingBoxes.push(modelBoundingBox);
+    selectableMeshes.push( getMeshFromModel(model) );
 }
 
 function getModelWithBoundingMesh(model) {						//testing currently - might be needed in the future if we decide not to go with the registerCollidableBoundingMesh method
@@ -203,16 +206,34 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-	if(allowBuildingPlacement && rollOverMesh) {                               //only place if there is no collision and if the ghost model is visible     
-		var intersects = raycaster.intersectObject( floor );
-    	intersector = getRealIntersector( intersects );
-
-	    var i = buildings.length - 1;
-   		buildings[i] = currentModel.clone();
-        buildings[i].position = intersector.point;
-		scene.add(buildings[i]);
-		registerCollidableBoundingMesh(buildings[i]);
+	if(rollOverMesh) {                                             //if the ghost model is visible     
+		if(allowBuildingPlacement) {                               //and there there is no collision 
+            intersector = getMouseProjectionOnFloor();
+            if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
+                var i = buildings.length - 1;
+                buildings[i] = currentModel.clone();
+                buildings[i].position = intersector.point;
+                scene.add(buildings[i]);
+                registerCollidableBoundingMesh(buildings[i]);
+            }   
+        }
 	}
+    else {                                                          //if the model is not visible, then we are in select building mode
+        var intersects = getMouseProjectionOnObjects( selectableMeshes );
+        if(intersects.length > 0) {
+            if (selectedModel != intersects[0].object) {                    //we have a new selection
+                if(selectedModel) {                                         //if we already have a model selected
+                    removeHighlightFromSelectedModel();
+                }
+                highlightSelectedModel (intersects[0].object);
+            }
+        }   
+        else {                                                                      //not selected anything 
+            if( selectedModel )                                             //we have a current selection
+                removeHighlightFromSelectedModel();
+            selectedModel = null;
+        }            
+    }
 }
 
 var angle = 0.0;
@@ -303,7 +324,8 @@ function togglePlacementMode () {
     }
     else {
         var intersector = getMouseProjectionOnFloor();
-        initRollOver(intersector); 
+        if(intersector)                                     //avoid errors when mouse is outside the floor area
+            initRollOver(intersector); 
     }
 }                         
 
@@ -325,6 +347,37 @@ function update() {
 	stats.update();
 }
 
+function highlightSelectedModel (model) {
+    selectedModel = model;                            //get the first object intersected;
+    selectedModel.oldMaterial = selectedModel.material;
+    var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
+    highlightMaterial.emissive.setHex(0x888888);
+    selectedModel.material = highlightMaterial;
+}
+
+function removeHighlightFromSelectedModel () {
+    selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
+}
+
+function getMeshFromModel (model) {
+    if(model.children) {
+        for(var i = 0; i < model.children.length; i++) {
+            var child = model.children[i];
+            if(child instanceof THREE.Mesh) {
+                return child;
+            }
+        }
+        return null;
+    }
+    return null;
+}
+
+function getMouseProjectionOnObjects(objectArray) {
+    raycaster = projector.pickingRay( mouse2D.clone(), camera );
+    var intersects = raycaster.intersectObjects( objectArray );
+    return intersects;
+}
+
 function getMouseProjectionOnFloor() {
     raycaster = projector.pickingRay( mouse2D.clone(), camera );
     var intersects = raycaster.intersectObject( floor );
@@ -339,11 +392,14 @@ function render() {
     var timer = Date.now() * 0.0005;
     camera.lookAt( scene.position );
 
-    intersector = getMouseProjectionOnFloor();
-    if ( intersector && rollOverMesh) {
-		intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
-		setVoxelPosition( intersector );
-        rollOverMesh.position = voxelPosition;
+    
+    if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
+        intersector = getMouseProjectionOnFloor();
+        if ( intersector ) {
+            intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
+    		setVoxelPosition( intersector );
+            rollOverMesh.position = voxelPosition;
+        }
     }
 
 	detectCollision(rollOverMesh);	
