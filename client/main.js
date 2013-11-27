@@ -16,11 +16,11 @@ var intersectorHeightOffset;
 
 var buildings = new Array();
 //bolean
-var allowBuildingPlacement; 		
+var allowBuildingPlacement;         
 
-var floor;					//needed to restrict mouse projection to floor only
-var collidableMeshList = [];	//collidable list
-var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision
+var floor;                  //needed to restrict mouse projection to floor only
+var collidableMeshList = [];    //collidable list
+var collidableBoundingBoxes = [];   //avoid creating a new bounding box every time we check for collision
 var selectableMeshes = [];          //merge this with collidableMeshList?       //might slow down collision detection, but we don't keep that many arrays;
 var ghostHeight;
 var colliderBox;
@@ -32,7 +32,7 @@ init();
 animate();
 
 function initFloor() {
-	// FLOOR
+    // FLOOR
     var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
     floorTexture.repeat.set( 10, 10 );
@@ -45,73 +45,100 @@ function initFloor() {
 }
 
 function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, depthSegments) {
-	var width = boundingBox.max.x - boundingBox.min.x;
-	var height = boundingBox.max.y - boundingBox.min.y;
-	var depth = boundingBox.max.z - boundingBox.min.z;
+    var width = boundingBox.max.x - boundingBox.min.x;
+    var height = boundingBox.max.y - boundingBox.min.y;
+    var depth = boundingBox.max.z - boundingBox.min.z;
     //console.log(width + " - " + height + " - " + depth);
-	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
-	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
-	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
-	bbMesh.visible = false;
-	return bbMesh;
+    var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
+    var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
+    var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
+    
+    var cubeVertex1 = new THREE.Vector3(-bbMesh.geometry.width/2, - bbMesh.geometry.height/2, -bbMesh.geometry.height/2);                       //get lower left corner of the cube
+    var offsetVector = boundingBox.min.sub(cubeVertex1);    
+    bbMesh.offsetY = offsetVector.y;
+    bbMesh.visible = true;
+    return bbMesh;
 }
 
 function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
-	var boundingBox = new THREE.Box3();	
-	boundingBox.setFromObject(object);
-	
-	return buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
+    var boundingBox = new THREE.Box3(); 
+    boundingBox.setFromObject(object);
+
+    return buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
 }
 
 function initRollOver(position) {
-	rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);			// use values higher than 1 for increased collision precision
-	ghostHeight = rollOverMesh.geometry.height;	
-	var ghostModel = currentModel.clone();
-	setMaterial(ghostModel, material.clone());
-	setTransparent(ghostModel);		
-	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
-	rollOverMesh.add(ghostModel);
-    rollOverMesh.position.x = position.x
-    rollOverMesh.position.z = position.z;	
-	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
-	scene.add( rollOverMesh );
+    rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);            // use values higher than 1 for increased collision precision
+    var ghostModel = cloneModel(currentModel);
+    var ghostMaterial = ghostModel.material;
+    
+    setMaterial(ghostModel, ghostMaterial.clone());
+    setTransparent(ghostModel);     
+
+    ghostModel.position.y = -rollOverMesh.offsetY;
+    rollOverMesh.add(ghostModel);
+      
+    scene.add( rollOverMesh );
 }
 
-function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
-	var modelBoundingBox = new THREE.Box3();	
-	modelBoundingBox.setFromObject(model);	
-	//console.log(modelBoundingBox);                           //debugging
+function setRollOverPosition (intersector) {
+    setVoxelPosition( intersector );
+    rollOverMesh.position.x = voxelPosition.x;
+    rollOverMesh.position.y = voxelPosition.y + rollOverMesh.offsetY;
+    rollOverMesh.position.z = voxelPosition.z;
+}
+
+function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
+    var modelBoundingBox = new THREE.Box3(); 
+    modelBoundingBox.setFromObject(model);
+    model.modelBoundingBox = modelBoundingBox;                   //add bounding box to the model (use for deletion)
+    collidableBoundingBoxes.push(modelBoundingBox);
+    console.log(modelBoundingBox);
+
+    var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
+    var pointMinMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
+    var pointMinMesh = new THREE.Mesh( pointGeometry, pointMinMaterial );
+    pointMinMesh.position.x = modelBoundingBox.min.x;
+    pointMinMesh.position.y = modelBoundingBox.min.y;
+    pointMinMesh.position.z = modelBoundingBox.min.z;
+    console.log(pointMinMesh.position.x);
+    scene.add(pointMinMesh);
+    console.log(pointMinMesh.position);
+
+    var pointMaxMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00} );
+    var pointMaxMesh = new THREE.Mesh( pointGeometry, pointMaxMaterial );
+    pointMaxMesh.position.x = modelBoundingBox.max.x;
+    pointMaxMesh.position.y = modelBoundingBox.max.y;
+    pointMaxMesh.position.z = modelBoundingBox.max.z;
+    scene.add(pointMaxMesh);
+
+
     var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
-	modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.geometry.height/2, model.position.z);			//compensate for difference in reference points	
-	scene.add(modelBoundingMesh);								//need to add on the scene otherwise raytracing won't work
-	collidableMeshList.push(modelBoundingMesh);
-	collidableBoundingBoxes.push(modelBoundingBox);
-    selectableMeshes.push( getMeshFromModel(model) );
-}
+    modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.offsetY, model.position.z);         //compensate for difference in reference points 
+    model.modelBoundingMesh = modelBoundingMesh;                   //add bounding box to the model (use for deletion)
+    scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
+    collidableMeshList.push(modelBoundingMesh);
 
-function getModelWithBoundingMesh(model) {						//testing currently - might be needed in the future if we decide not to go with the registerCollidableBoundingMesh method
-	var daeBB = buildBoundingMeshFromObject(model, 1, 1, 1);
-	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points*
-	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points*     -   * = not needed when we don't display the bounding boxes
-//	collidableMeshList.push(daeBB);								
-	daeBB.add(model);
-	return daeBB
+    console.log(model);
+
+    //console.log(collidableMeshList);
+    selectableMeshes.push( getMeshFromModel(model) );                   //TODO fix this!
 }
 
 function init() {
-	//CONTAINER    
-	container = document.createElement( 'div' );
-    document.body.appendChild( container );	
+    //CONTAINER    
+    container = document.createElement( 'div' );
+    document.body.appendChild( container ); 
 
-	//SCENE
+    //SCENE
     scene = new THREE.Scene();
-	
-	//CAMERA
+    
+    //CAMERA
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
     camera.position.set( 2, 2, 3 );
 
-	//FLOOR
-	initFloor();				
+    //FLOOR
+    initFloor();                
 
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
@@ -121,25 +148,25 @@ function init() {
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
-	
+    
     // picking
     projector = new THREE.Projector();
     mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
-	
-	//RENDERER
+    
+    //RENDERER
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
-	
-	//STATS
+    
+    //STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
     container.appendChild( stats.domElement );
-	
-	//LOADER
-	var loader = new IberModelLoader();	
-	loader.loadModels();
+    
+    //LOADER
+    var loader = new IberModelLoader(); 
+    loader.loadModels();
 
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -150,51 +177,68 @@ function init() {
 }
 
 function collidablesContainEmitter(colliderOrigin) {
-	for(index = 0; index < collidableBoundingBoxes.length; index ++) {
-		if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){				
+    for(index = 0; index < collidableBoundingBoxes.length; index ++) {
+        if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){               
             return true;
-		}
-	}
-	return false;
+        }
+    }
+    return false;
 }
 
 function changeColliderColor(collider, r, g, b) {
-	collider.children[0].material.ambient.r = r;
-	collider.children[0].material.ambient.g = g;
-	collider.children[0].material.ambient.b = b;
+    collider.children[0].material.ambient.r = r;
+    collider.children[0].material.ambient.g = g;
+    collider.children[0].material.ambient.b = b;
 }
 
-function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
-	if(collider)
+var pointMesh = null;
+
+function detectCollision (collider) {           //collider = oject that detects collision (casts rays)
+    if(collider)
     {
         var collisionFlag = false;
         var originPoint = collider.position.clone();
-    	
-       	for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
+        
+        if(pointMesh == null)
+        {   
+            console.log("point");
+            var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
+            var pointMaterial = new THREE.MeshBasicMaterial( { color: 0x000000} );
+            pointMesh = new THREE.Mesh( pointGeometry, pointMaterial );
+            scene.add(pointMesh);
+        }
+        if(pointMesh)
+        {
+            pointMesh.position.x = originPoint.x;
+            pointMesh.position.y = originPoint.y;
+            pointMesh.position.z = originPoint.z;
+        }
+
+        for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
         {                
-        	var localVertex = collider.geometry.vertices[vertexIndex].clone();
-        	var globalVertex = localVertex.applyMatrix4( collider.matrix );
+            var localVertex = collider.geometry.vertices[vertexIndex].clone();
+            var globalVertex = localVertex.applyMatrix4( collider.matrix );
             var directionVector = globalVertex.sub( collider.position );
                     
             var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
             var collisionResults = ray.intersectObjects( collidableMeshList );
             if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-    			collisionFlag = true; 
-    			break;		
-    		}
-    	}	
+                collisionFlag = true; 
+                break;      
+            }
+        }   
         if(collisionFlag == true) {
-    		changeColliderColor(collider, 255, 0, 0);
+            changeColliderColor(collider, 255, 0, 0);
         }
         else {
-    		if(collidablesContainEmitter(originPoint) == true) {
-    			collisionFlag = true;			
-    			changeColliderColor(collider, 255, 0, 0);
-    		}
-    		else 
-    			changeColliderColor(collider, 0, 255, 0);
+            if(collidablesContainEmitter(originPoint) == true) {
+                collisionFlag = true;           
+                changeColliderColor(collider, 255, 0, 0);
+            }
+            else 
+                changeColliderColor(collider, 0, 255, 0);
         }
-    	allowBuildingPlacement = !collisionFlag;
+        allowBuildingPlacement = !collisionFlag;
     }
 }
 
@@ -206,18 +250,19 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-	if(rollOverMesh) {                                             //if the ghost model is visible     
-		if(allowBuildingPlacement) {                               //and there there is no collision 
+    if(rollOverMesh) {                                             //if the ghost model is visible     
+        if(allowBuildingPlacement) {                               //and there there is no collision 
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
-                buildings[i] = currentModel.clone();
+                buildings[i] = cloneModel(currentModel);
                 buildings[i].position = intersector.point;
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
+                
             }   
         }
-	}
+    }
     else {                                                          //if the model is not visible, then we are in select building mode
         var intersects = getMouseProjectionOnObjects( selectableMeshes );
         if(intersects.length > 0) {
@@ -279,6 +324,16 @@ function onKeyDown ( event ) {
     }
 };
 
+function cloneModel(model) {                                    
+    var clone = model.clone();
+    
+    clone.material = model.material;
+    clone.modelBoundingBox = model.modelBoundingBox;
+    clone.modelBoundingMesh = model.modelBoundingMesh;
+
+    return clone;
+}
+
 function printEmitterOfModel (collider) {                       //keep for collision debugging
     if(collider) { 
         var originPoint = collider.position.clone();
@@ -334,14 +389,14 @@ function onWindowResize() {
 
 function animate() {
     requestAnimationFrame( animate );
-	update();
+    update();
     render();
 }
 
 function update() {
-	var delta = clock.getDelta();
-	if ( t > 1 ) t = 0;
-	stats.update();
+    var delta = clock.getDelta();
+    if ( t > 1 ) t = 0;
+    stats.update();
 }
 
 function highlightSelectedModel (model) {
@@ -396,21 +451,19 @@ function render() {
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
         intersector = getMouseProjectionOnFloor();
         if ( intersector ) {
-            intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
-    		setVoxelPosition( intersector );
-            rollOverMesh.position = voxelPosition;
+            setRollOverPosition(intersector);
         }
     }
 
-	detectCollision(rollOverMesh);	
-	
+    detectCollision(rollOverMesh);  
+    
     renderer.render( scene, camera );
 }
 
 function getRealIntersector( intersects ) {
     for( i = 0; i < intersects.length; i++ ) {
         intersector = intersects[ i ];
-        if ( intersector.object == floor ) {		//otherwise we can build buildings on top of each other when viewing at the right angle
+        if ( intersector.object == floor ) {        //otherwise we can build buildings on top of each other when viewing at the right angle
             return intersector;
         }
     }
@@ -425,9 +478,9 @@ function setVoxelPosition( intersector ) {
 }
 
 function setTransparent(node) {
-	node.material.opacity = 0.5;
-	node.material.transparent = true;
-	if (node.children) {
+    node.material.opacity = 0.5;
+    node.material.transparent = true;
+    if (node.children) {
         for (var i = 0; i < node.children.length; i++) {
             setTransparent(node.children[i]);
         }
