@@ -14,7 +14,7 @@ ModelLoader.prototype.load = function (modelFile, callbackDecRemainingStructures
 ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRemainingStructures) {
 	
 	return function ( collada ) {  	
-		dae = collada.scene;
+		  dae = collada.scene;
   		removeLights(dae);
    		var texture = THREE.ImageUtils.loadTexture(textureFile);
    		material = new THREE.MeshLambertMaterial({map: texture});
@@ -22,7 +22,7 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRema
    		dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
    		dae.updateMatrix();
    		this.loadedModels.push(dae);
-		callbackDecRemainingStructures();
+		  callbackDecRemainingStructures();
 	};
 }
 

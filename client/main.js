@@ -68,7 +68,7 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 }
 
 function initRollOver(position) {
-    rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);            // use values higher than 1 for increased collision precision
+    rollOverMesh = buildBoundingMeshFromObject(currentModel, 3, 3, 3);            // use values higher than 1 for increased collision precision
     var ghostModel = cloneModel(currentModel);
     var ghostMaterial = ghostModel.material;
     
@@ -91,35 +91,20 @@ function setRollOverPosition (intersector) {
 function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
     var modelBoundingBox = new THREE.Box3(); 
     modelBoundingBox.setFromObject(model);
-    model.modelBoundingBox = modelBoundingBox;                   //add bounding box to the model (use for deletion)
-    collidableBoundingBoxes.push(modelBoundingBox);
-    console.log(modelBoundingBox);
+    
+    var tempBox = new THREE.Box3(new THREE.Vector3(modelBoundingBox.min.x-0.1, modelBoundingBox.min.y-0.1, modelBoundingBox.min.z-0.1), new THREE.Vector3(modelBoundingBox.max.x+0.1, modelBoundingBox.max.y+0.1, modelBoundingBox.max.z+0.1));
+    //var tempBox = new THREE.Box3(modelBoundingBox.min, modelBoundingBox.max);
+    collidableBoundingBoxes.push(tempBox);
 
-    var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
-    var pointMinMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
-    var pointMinMesh = new THREE.Mesh( pointGeometry, pointMinMaterial );
-    pointMinMesh.position.x = modelBoundingBox.min.x;
-    pointMinMesh.position.y = modelBoundingBox.min.y;
-    pointMinMesh.position.z = modelBoundingBox.min.z;
-    console.log(pointMinMesh.position.x);
-    scene.add(pointMinMesh);
-    console.log(pointMinMesh.position);
-
-    var pointMaxMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00} );
-    var pointMaxMesh = new THREE.Mesh( pointGeometry, pointMaxMaterial );
-    pointMaxMesh.position.x = modelBoundingBox.max.x;
-    pointMaxMesh.position.y = modelBoundingBox.max.y;
-    pointMaxMesh.position.z = modelBoundingBox.max.z;
-    scene.add(pointMaxMesh);
-
+    //showBoundingBox(modelBoundingBox);                //collision debugging
 
     var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
     modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.offsetY, model.position.z);         //compensate for difference in reference points 
-    model.modelBoundingMesh = modelBoundingMesh;                   //add bounding box to the model (use for deletion)
     scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
     collidableMeshList.push(modelBoundingMesh);
 
-    console.log(model);
+    model.modelBoundingBox = tempBox;                               //add bounding box to the model (use for deletion)
+    model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
 
     //console.log(collidableMeshList);
     selectableMeshes.push( getMeshFromModel(model) );                   //TODO fix this!
@@ -199,21 +184,6 @@ function detectCollision (collider) {           //collider = oject that detects 
         var collisionFlag = false;
         var originPoint = collider.position.clone();
         
-        if(pointMesh == null)
-        {   
-            console.log("point");
-            var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
-            var pointMaterial = new THREE.MeshBasicMaterial( { color: 0x000000} );
-            pointMesh = new THREE.Mesh( pointGeometry, pointMaterial );
-            scene.add(pointMesh);
-        }
-        if(pointMesh)
-        {
-            pointMesh.position.x = originPoint.x;
-            pointMesh.position.y = originPoint.y;
-            pointMesh.position.z = originPoint.z;
-        }
-
         for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
         {                
             var localVertex = collider.geometry.vertices[vertexIndex].clone();
@@ -320,6 +290,7 @@ function onKeyDown ( event ) {
             break;
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
+            showEmitterOfModel(rollOverMesh);
             break;
     }
 };
@@ -332,6 +303,48 @@ function cloneModel(model) {
     clone.modelBoundingMesh = model.modelBoundingMesh;
 
     return clone;
+}
+
+function showBoundingBox(modelBoundingBox) {
+    var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
+    var pointMinMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
+    var pointMinMesh = new THREE.Mesh( pointGeometry, pointMinMaterial );
+    pointMinMesh.position.x = modelBoundingBox.min.x;
+    pointMinMesh.position.y = modelBoundingBox.min.y;
+    pointMinMesh.position.z = modelBoundingBox.min.z;
+    //console.log(pointMinMesh.position);
+    scene.add(pointMinMesh);
+    //console.log(pointMinMesh.position);
+
+    var pointMaxMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00} );
+    var pointMaxMesh = new THREE.Mesh( pointGeometry, pointMaxMaterial );
+    pointMaxMesh.position.x = modelBoundingBox.max.x;
+    pointMaxMesh.position.y = modelBoundingBox.max.y;
+    pointMaxMesh.position.z = modelBoundingBox.max.z;
+    scene.add(pointMaxMesh);
+}
+
+function showEmitterOfModel (collider) {                            //collision debugging
+    if (collider) {
+        var originPoint = collider.position.clone();
+        if(pointMesh == null){   
+            //console.log("point");
+            var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
+            var pointMaterial = new THREE.MeshBasicMaterial( { color: 0x000000} );
+            pointMesh = new THREE.Mesh( pointGeometry, pointMaterial );
+            scene.add(pointMesh);
+        }
+        if(pointMesh)
+        {
+            pointMesh.position.x = originPoint.x;
+            pointMesh.position.y = originPoint.y;
+            pointMesh.position.z = originPoint.z;
+        }
+    }
+    else {
+        scene.remove(pointMesh);
+        pointMesh = null;
+    }
 }
 
 function printEmitterOfModel (collider) {                       //keep for collision debugging
