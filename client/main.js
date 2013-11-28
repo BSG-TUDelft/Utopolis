@@ -53,7 +53,7 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
     var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
     var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
     
-    bbMesh.visible = true;
+    bbMesh.visible = false;
     return bbMesh;
 }
 
@@ -67,7 +67,7 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 }
 
 function initRollOver(position) {
-    rollOverMesh = buildBoundingMeshFromObject(currentModel, 3, 3, 3);            // use values higher than 1 for increased collision precision
+    rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);            // use values higher than 1 for increased collision precision
     var ghostModel = cloneModel(currentModel);
     var ghostMaterial = ghostModel.material;
     
@@ -304,7 +304,7 @@ function cloneModel(model) {
     return clone;
 }
 
-function showBoundingBox(modelBoundingBox) {
+function showBoundingBox(modelBoundingBox) {                                                //debugging
     var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
     var pointMinMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
     var pointMinMesh = new THREE.Mesh( pointGeometry, pointMinMaterial );
@@ -427,12 +427,15 @@ function clearSelectedModel () {
 }
 
 function getMeshFromModel (model) {
+    if(model instanceof THREE.Mesh){
+        return model;
+    }
     if(model.children) {
         for(var i = 0; i < model.children.length; i++) {
             var child = model.children[i];
-            if(child instanceof THREE.Mesh) {
-                return child;
-            }
+            var mesh = getMeshFromModel(child);
+            if(mesh instanceof THREE.Mesh)
+                return mesh;
         }
         return null;
     }
