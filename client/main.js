@@ -67,7 +67,7 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 }
 
 function initRollOver(position) {
-    rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);            // use values higher than 1 for increased collision precision
+    rollOverMesh = buildBoundingMeshFromObject(currentModel, 3, 3, 3);            // use values higher than 1 for increased collision precision
     var ghostModel = cloneModel(currentModel);
     var ghostMaterial = ghostModel.material;
     
