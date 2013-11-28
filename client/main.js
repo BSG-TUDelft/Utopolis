@@ -48,14 +48,11 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
     var width = boundingBox.max.x - boundingBox.min.x;
     var height = boundingBox.max.y - boundingBox.min.y;
     var depth = boundingBox.max.z - boundingBox.min.z;
-    //console.log(width + " - " + height + " - " + depth);
+    console.log(width + " - " + height + " - " + depth);
     var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
     var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
     var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
     
-    var cubeVertex1 = new THREE.Vector3(-bbMesh.geometry.width/2, - bbMesh.geometry.height/2, -bbMesh.geometry.height/2);                       //get lower left corner of the cube
-    var offsetVector = boundingBox.min.clone().sub(cubeVertex1);    
-    bbMesh.offsetY = offsetVector.y;
     bbMesh.visible = true;
     return bbMesh;
 }
@@ -63,8 +60,10 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
 function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
     var boundingBox = new THREE.Box3(); 
     boundingBox.setFromObject(object);
-
-    return buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
+    console.log(boundingBox);
+    var mesh = buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
+    mesh.boundingBox = boundingBox;
+    return mesh;
 }
 
 function initRollOver(position) {
@@ -75,7 +74,7 @@ function initRollOver(position) {
     setMaterial(ghostModel, ghostMaterial.clone());
     setTransparent(ghostModel);     
 
-    ghostModel.position.y = -rollOverMesh.offsetY;
+    ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
     rollOverMesh.add(ghostModel);
       
     scene.add( rollOverMesh );
@@ -83,9 +82,9 @@ function initRollOver(position) {
 
 function setRollOverPosition (intersector) {
     setVoxelPosition( intersector );
-    rollOverMesh.position.x = voxelPosition.x;
-    rollOverMesh.position.y = voxelPosition.y + rollOverMesh.offsetY;
-    rollOverMesh.position.z = voxelPosition.z;
+    rollOverMesh.position.x = voxelPosition.x + rollOverMesh.boundingBox.center().x;
+    rollOverMesh.position.y = voxelPosition.y + rollOverMesh.boundingBox.center().y;
+    rollOverMesh.position.z = voxelPosition.z + rollOverMesh.boundingBox.center().z;
 }
 
 function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
@@ -93,15 +92,13 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     modelBoundingBox.setFromObject(model);
     
     console.log(modelBoundingBox);
-
-    //var tempBox = new THREE.Box3(new THREE.Vector3(modelBoundingBox.min.x-0.1, modelBoundingBox.min.y-0.1, modelBoundingBox.min.z-0.1), new THREE.Vector3(modelBoundingBox.max.x+0.1, modelBoundingBox.max.y+0.1, modelBoundingBox.max.z+0.1));
-    //var tempBox = new THREE.Box3(modelBoundingBox.min, modelBoundingBox.max);
     collidableBoundingBoxes.push(modelBoundingBox);
 
     //showBoundingBox(modelBoundingBox);                //collision debugging
 
     var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
-    modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.offsetY, model.position.z);         //compensate for difference in reference points 
+    console.log(modelBoundingMesh.offsetVector);
+    modelBoundingMesh.position.set(modelBoundingBox.center().x, modelBoundingBox.center().y, modelBoundingBox.center().z);
     scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
     collidableMeshList.push(modelBoundingMesh);
 
@@ -227,7 +224,7 @@ function onDocumentMouseDown( event ) {
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
-                buildings[i] = currentModel.clone();
+                buildings[i] = cloneModel(currentModel);
                 buildings[i].position = intersector.point;
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
