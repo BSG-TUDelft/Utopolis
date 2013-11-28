@@ -54,7 +54,7 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
     var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
     
     var cubeVertex1 = new THREE.Vector3(-bbMesh.geometry.width/2, - bbMesh.geometry.height/2, -bbMesh.geometry.height/2);                       //get lower left corner of the cube
-    var offsetVector = boundingBox.min.sub(cubeVertex1);    
+    var offsetVector = boundingBox.min.clone().sub(cubeVertex1);    
     bbMesh.offsetY = offsetVector.y;
     bbMesh.visible = true;
     return bbMesh;
@@ -92,9 +92,11 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     var modelBoundingBox = new THREE.Box3(); 
     modelBoundingBox.setFromObject(model);
     
-    var tempBox = new THREE.Box3(new THREE.Vector3(modelBoundingBox.min.x-0.1, modelBoundingBox.min.y-0.1, modelBoundingBox.min.z-0.1), new THREE.Vector3(modelBoundingBox.max.x+0.1, modelBoundingBox.max.y+0.1, modelBoundingBox.max.z+0.1));
+    console.log(modelBoundingBox);
+
+    //var tempBox = new THREE.Box3(new THREE.Vector3(modelBoundingBox.min.x-0.1, modelBoundingBox.min.y-0.1, modelBoundingBox.min.z-0.1), new THREE.Vector3(modelBoundingBox.max.x+0.1, modelBoundingBox.max.y+0.1, modelBoundingBox.max.z+0.1));
     //var tempBox = new THREE.Box3(modelBoundingBox.min, modelBoundingBox.max);
-    collidableBoundingBoxes.push(tempBox);
+    collidableBoundingBoxes.push(modelBoundingBox);
 
     //showBoundingBox(modelBoundingBox);                //collision debugging
 
@@ -103,7 +105,7 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
     collidableMeshList.push(modelBoundingMesh);
 
-    model.modelBoundingBox = tempBox;                               //add bounding box to the model (use for deletion)
+    model.modelBoundingBox = modelBoundingBox;                               //add bounding box to the model (use for deletion)
     model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
 
     //console.log(collidableMeshList);
@@ -225,7 +227,7 @@ function onDocumentMouseDown( event ) {
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
-                buildings[i] = cloneModel(currentModel);
+                buildings[i] = currentModel.clone();
                 buildings[i].position = intersector.point;
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
