@@ -21,7 +21,7 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRema
    		setMaterial(dae, material);
    		dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
    		dae.updateMatrix();
-   		this.loadedModels.push(dae);
+   		this.loadedModels.push(new ModelWrapper(dae));
 		  callbackDecRemainingStructures();
 	};
 }

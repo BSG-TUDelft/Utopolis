@@ -68,10 +68,10 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
 
 function initRollOver(position) {
     rollOverMesh = buildBoundingMeshFromObject(currentModel, 3, 3, 3);            // use values higher than 1 for increased collision precision
-    var ghostModel = cloneModel(currentModel);
-    var ghostMaterial = ghostModel.material;
-    
-    setMaterial(ghostModel, ghostMaterial.clone());
+    var ghostModel = currentModel.getClone();
+    var ghostMaterial = ghostModel.material.clone();
+
+    setMaterial(ghostModel, ghostMaterial);
     setTransparent(ghostModel);     
 
     ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
@@ -97,7 +97,6 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     //showBoundingBox(modelBoundingBox);                //collision debugging
 
     var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
-    console.log(modelBoundingMesh.offsetVector);
     modelBoundingMesh.position.set(modelBoundingBox.center().x, modelBoundingBox.center().y, modelBoundingBox.center().z);
     scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
     collidableMeshList.push(modelBoundingMesh);
@@ -105,8 +104,9 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     model.modelBoundingBox = modelBoundingBox;                               //add bounding box to the model (use for deletion)
     model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
 
-    //console.log(collidableMeshList);
-    selectableMeshes.push( getMeshFromModel(model) );                   //TODO fix this!
+    console.log(model);
+    selectableMeshes.push( model.getMesh() );                   //TODO fix this!
+    console.log(selectableMeshes);
 }
 
 function init() {
@@ -224,7 +224,7 @@ function onDocumentMouseDown( event ) {
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
-                buildings[i] = cloneModel(currentModel);
+                buildings[i] = currentModel.getClone();
                 buildings[i].position = intersector.point;
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
@@ -293,16 +293,6 @@ function onKeyDown ( event ) {
             break;
     }
 };
-
-function cloneModel(model) {                                    
-    var clone = model.clone();
-    
-    clone.material = model.material;
-    clone.modelBoundingBox = model.modelBoundingBox;
-    clone.modelBoundingMesh = model.modelBoundingMesh;
-
-    return clone;
-}
 
 function showBoundingBox(modelBoundingBox) {                                                //debugging
     var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
@@ -412,7 +402,7 @@ function update() {
 }
 
 function highlightSelectedModel (model) {
-    selectedModel = model;                            //get the first object intersected;
+    selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
     highlightMaterial.emissive.setHex(0x888888);
@@ -424,22 +414,6 @@ function clearSelectedModel () {
         selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
     }
     selectedModel = null;
-}
-
-function getMeshFromModel (model) {
-    if(model instanceof THREE.Mesh){
-        return model;
-    }
-    if(model.children) {
-        for(var i = 0; i < model.children.length; i++) {
-            var child = model.children[i];
-            var mesh = getMeshFromModel(child);
-            if(mesh instanceof THREE.Mesh)
-                return mesh;
-        }
-        return null;
-    }
-    return null;
 }
 
 function getMouseProjectionOnObjects(objectArray) {
