@@ -6,7 +6,7 @@ ModelWrapper = function (model) {
         return this.getMeshFromModel(this);
     };
 
-    model.getboundingBox = function () {                                                                       
+    model.getBoundingBox = function () {                                                                       
         var boundingBox = new THREE.Box3(); 
         boundingBox.setFromObject(this);
         this.modelBoundingBox = boundingBox;                                                                    //set property to not re-compute when getting bounding mesh (might introduce bugs?)
@@ -15,22 +15,36 @@ ModelWrapper = function (model) {
 
     model.getBoundingMesh = function(widthSegments, heightSegments, depthSegments) {
         if(this.modelBoundingBox == undefined)
-            var boundingBox = this.getboundingBox();                                                            
+            this.getBoundingBox();                                                            
         
         // console.log(boundingBox);
-        var mesh = buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
-        mesh.boundingBox = boundingBox;
+        //var mesh = buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
+        var boundingBox = this.modelBoundingBox;
+        var width = boundingBox.max.x - boundingBox.min.x;
+        var height = boundingBox.max.y - boundingBox.min.y;
+        var depth = boundingBox.max.z - boundingBox.min.z;
+        var bbSize = this.modelBoundingBox.size();
+        console.log(bbSize.x + " - " + bbSize.y + " - " + bbSize.z);
+        console.log(width + " - " + height + " - " + depth);
+        var bbGeometry = new THREE.CubeGeometry( bbSize.x, bbSize.y, bbSize.z, widthSegments, heightSegments, depthSegments );
+        var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
+        var boundingMesh = new THREE.Mesh( bbGeometry, bbMaterial );
+        boundingMesh.visible = false;
+
+        boundingMesh.boundingBox = this.modelBoundingBox;
         
-        model.modelBoundingMesh = mesh;
-        return mesh;
+        model.modelBoundingMesh = boundingMesh;
+        return boundingMesh;
     }
 
     model.getClone = function () {
 		var clone = this.clone();
-        
+          
         clone.material = this.material;
         clone.getMesh = this.getMesh;
         clone.getMeshFromModel = this.getMeshFromModel;
+        clone.getBoundingBox = this.getBoundingBox;
+        clone.getBoundingMesh = this.getBoundingMesh;
         clone.modelBoundingBox = this.modelBoundingBox;
         clone.modelBoundingMesh = this.modelBoundingMesh;
 

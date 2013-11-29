@@ -44,7 +44,7 @@ function initFloor() {
     scene.add(floor);
 }
 
-function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, depthSegments) {
+/*function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, depthSegments) {
     var width = boundingBox.max.x - boundingBox.min.x;
     var height = boundingBox.max.y - boundingBox.min.y;
     var depth = boundingBox.max.z - boundingBox.min.z;
@@ -56,8 +56,8 @@ function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, d
     bbMesh.visible = false;
     return bbMesh;
 }
-
-function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
+*/
+/*function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
     var boundingBox = new THREE.Box3(); 
     boundingBox.setFromObject(object);
     console.log(boundingBox);
@@ -65,9 +65,9 @@ function buildBoundingMeshFromObject (object, widthSegments, heightSegments, dep
     mesh.boundingBox = boundingBox;
     return mesh;
 }
-
+*/
 function initRollOver(position) {
-    rollOverMesh = buildBoundingMeshFromObject(currentModel, 3, 3, 3);            // use values higher than 1 for increased collision precision
+    rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
     var ghostModel = currentModel.getClone();
     var ghostMaterial = ghostModel.material.clone();
 
@@ -88,25 +88,19 @@ function setRollOverPosition (intersector) {
 }
 
 function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
-    var modelBoundingBox = new THREE.Box3(); 
-    modelBoundingBox.setFromObject(model);
-    
-    console.log(modelBoundingBox);
+    modelBoundingBox = model.getBoundingBox();    
     collidableBoundingBoxes.push(modelBoundingBox);
-
     //showBoundingBox(modelBoundingBox);                //collision debugging
-
-    var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
+    
+    var modelBoundingMesh = model.getBoundingMesh(1, 1, 1);
     modelBoundingMesh.position.set(modelBoundingBox.center().x, modelBoundingBox.center().y, modelBoundingBox.center().z);
     scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
     collidableMeshList.push(modelBoundingMesh);
 
-    model.modelBoundingBox = modelBoundingBox;                               //add bounding box to the model (use for deletion)
-    model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
+    //model.modelBoundingBox = modelBoundingBox;                               //add bounding box to the model (use for deletion)
+    //model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
 
-    console.log(model);
     selectableMeshes.push( model.getMesh() );                   //TODO fix this!
-    console.log(selectableMeshes);
 }
 
 function init() {
