@@ -36,3 +36,12 @@ function removeLights(model) {
         }
     }
 }
+
+function setMaterial(node, material) {
+    node.material = material;
+    if (node.children) {
+        for (var i = 0; i < node.children.length; i++) {
+            setMaterial(node.children[i], material);
+        }
+    }
+}

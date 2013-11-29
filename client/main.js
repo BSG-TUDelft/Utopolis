@@ -44,28 +44,6 @@ function initFloor() {
     scene.add(floor);
 }
 
-/*function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, depthSegments) {
-    var width = boundingBox.max.x - boundingBox.min.x;
-    var height = boundingBox.max.y - boundingBox.min.y;
-    var depth = boundingBox.max.z - boundingBox.min.z;
-    console.log(width + " - " + height + " - " + depth);
-    var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
-    var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
-    var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
-    
-    bbMesh.visible = false;
-    return bbMesh;
-}
-*/
-/*function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
-    var boundingBox = new THREE.Box3(); 
-    boundingBox.setFromObject(object);
-    console.log(boundingBox);
-    var mesh = buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
-    mesh.boundingBox = boundingBox;
-    return mesh;
-}
-*/
 function initRollOver(position) {
     rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
     var ghostModel = currentModel.getClone();
@@ -151,7 +129,6 @@ function init() {
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
     document.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'resize', onWindowResize, false );
-
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -288,55 +265,6 @@ function onKeyDown ( event ) {
     }
 };
 
-function showBoundingBox(modelBoundingBox) {                                                //debugging
-    var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
-    var pointMinMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
-    var pointMinMesh = new THREE.Mesh( pointGeometry, pointMinMaterial );
-    pointMinMesh.position.x = modelBoundingBox.min.x;
-    pointMinMesh.position.y = modelBoundingBox.min.y;
-    pointMinMesh.position.z = modelBoundingBox.min.z;
-    //console.log(pointMinMesh.position);
-    scene.add(pointMinMesh);
-    //console.log(pointMinMesh.position);
-
-    var pointMaxMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00} );
-    var pointMaxMesh = new THREE.Mesh( pointGeometry, pointMaxMaterial );
-    pointMaxMesh.position.x = modelBoundingBox.max.x;
-    pointMaxMesh.position.y = modelBoundingBox.max.y;
-    pointMaxMesh.position.z = modelBoundingBox.max.z;
-    scene.add(pointMaxMesh);
-}
-
-function showEmitterOfModel (collider) {                            //collision debugging
-    if (collider) {
-        var originPoint = collider.position.clone();
-        if(pointMesh == null){   
-            //console.log("point");
-            var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
-            var pointMaterial = new THREE.MeshBasicMaterial( { color: 0x000000} );
-            pointMesh = new THREE.Mesh( pointGeometry, pointMaterial );
-            scene.add(pointMesh);
-        }
-        if(pointMesh)
-        {
-            pointMesh.position.x = originPoint.x;
-            pointMesh.position.y = originPoint.y;
-            pointMesh.position.z = originPoint.z;
-        }
-    }
-    else {
-        scene.remove(pointMesh);
-        pointMesh = null;
-    }
-}
-
-function printEmitterOfModel (collider) {                       //keep for collision debugging
-    if(collider) { 
-        var originPoint = collider.position.clone();
-        console.log(originPoint)
-    }
-}
-
 function nextBuilding() {
     var index = loadedModels.indexOf(currentModel);
     if(index != loadedModels.length-1) {
@@ -466,15 +394,6 @@ function setTransparent(node) {
     if (node.children) {
         for (var i = 0; i < node.children.length; i++) {
             setTransparent(node.children[i]);
-        }
-    }
-}
-
-function setMaterial(node, material) {
-    node.material = material;
-    if (node.children) {
-        for (var i = 0; i < node.children.length; i++) {
-            setMaterial(node.children[i], material);
         }
     }
 }

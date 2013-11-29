@@ -9,23 +9,17 @@ ModelWrapper = function (model) {
     model.getBoundingBox = function () {                                                                       
         var boundingBox = new THREE.Box3(); 
         boundingBox.setFromObject(this);
-        this.modelBoundingBox = boundingBox;                                                                    //set property to not re-compute when getting bounding mesh (might introduce bugs?)
+        this.modelBoundingBox = boundingBox;                                                       //set property to avoid needing to re-compute when getting bounding mesh (might introduce bugs?)
         return boundingBox;                                                             
     }
 
-    model.getBoundingMesh = function(widthSegments, heightSegments, depthSegments) {
+    model.getBoundingMesh = function (widthSegments, heightSegments, depthSegments) {
         if(this.modelBoundingBox == undefined)
             this.getBoundingBox();                                                            
         
         // console.log(boundingBox);
         //var mesh = buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
-        var boundingBox = this.modelBoundingBox;
-        var width = boundingBox.max.x - boundingBox.min.x;
-        var height = boundingBox.max.y - boundingBox.min.y;
-        var depth = boundingBox.max.z - boundingBox.min.z;
         var bbSize = this.modelBoundingBox.size();
-        console.log(bbSize.x + " - " + bbSize.y + " - " + bbSize.z);
-        console.log(width + " - " + height + " - " + depth);
         var bbGeometry = new THREE.CubeGeometry( bbSize.x, bbSize.y, bbSize.z, widthSegments, heightSegments, depthSegments );
         var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
         var boundingMesh = new THREE.Mesh( bbGeometry, bbMaterial );
@@ -45,9 +39,7 @@ ModelWrapper = function (model) {
         clone.getMeshFromModel = this.getMeshFromModel;
         clone.getBoundingBox = this.getBoundingBox;
         clone.getBoundingMesh = this.getBoundingMesh;
-        clone.modelBoundingBox = this.modelBoundingBox;
-        clone.modelBoundingMesh = this.modelBoundingMesh;
-
+        
         if(this.modelBoundingBox)
             clone.modelBoundingBox = this.modelBoundingBox;
         else
@@ -58,7 +50,59 @@ ModelWrapper = function (model) {
             clone.modelBoundingMesh = null;
         return clone;
 	};
-	return model;
+
+
+    model.showBoundingBox = function () {                                                //debugging
+        var modelBoundingBox = this.modelBoundingBox;
+        var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
+        var pointMinMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
+        var pointMinMesh = new THREE.Mesh( pointGeometry, pointMinMaterial );
+        pointMinMesh.position.x = modelBoundingBox.min.x;
+        pointMinMesh.position.y = modelBoundingBox.min.y;
+        pointMinMesh.position.z = modelBoundingBox.min.z;
+        //console.log(pointMinMesh.position);
+        scene.add(pointMinMesh);
+        //console.log(pointMinMesh.position);
+
+        var pointMaxMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00} );
+        var pointMaxMesh = new THREE.Mesh( pointGeometry, pointMaxMaterial );
+        pointMaxMesh.position.x = modelBoundingBox.max.x;
+        pointMaxMesh.position.y = modelBoundingBox.max.y;
+        pointMaxMesh.position.z = modelBoundingBox.max.z;
+        scene.add(pointMaxMesh);
+    };
+
+    /*model.showEmitter = function () {                                                   //collision debugging
+        if (collider) {
+            var originPoint = collider.position.clone();
+            if(pointMesh == null){   
+                //console.log("point");
+                var pointGeometry = new THREE.CubeGeometry( 0.3, 0.3, 0.3);
+                var pointMaterial = new THREE.MeshBasicMaterial( { color: 0x000000} );
+                pointMesh = new THREE.Mesh( pointGeometry, pointMaterial );
+                scene.add(pointMesh);
+            }
+            if(pointMesh)
+            {
+                pointMesh.position.x = originPoint.x;
+                pointMesh.position.y = originPoint.y;
+                pointMesh.position.z = originPoint.z;
+            }
+        }
+        else {
+            scene.remove(pointMesh);
+            pointMesh = null;
+        }
+    }*/
+
+    /*function printEmitterOfModel (collider) {                       //keep for collision debugging
+        if(collider) { 
+            var originPoint = collider.position.clone();
+            console.log(originPoint)
+        }
+    }*/
+	
+    return model;
 }
 
 ModelWrapper.prototype.getMeshFromModel = function (model) {
