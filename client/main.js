@@ -28,6 +28,8 @@ var colliderBox;
 var t = 0;
 var clock = new THREE.Clock();
 
+var cameraLookAt, cameraLookAngle, cameraElevationAngle;
+
 init();
 animate();
 
@@ -91,7 +93,8 @@ function init() {
     
     //CAMERA
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-    camera.position.set( 2, 2, 3 );
+    camera.position.set(0, 25, 25 );
+    cameraLookAt = scene.position;
 
     //FLOOR
     initFloor();                
@@ -217,37 +220,37 @@ function onDocumentMouseDown( event ) {
     }
 }
 
-var angle = 0.0;
-
 function onKeyDown ( event ) {
     switch( event.keyCode ) {
         case 87: // w  
-            camera.position.z--; 
+            moveCameraForward();
             break;
         case 83: // s
-            camera.position.z++; 
+            moveCameraBackwards();
             break;
         case 65: // a  
-            camera.position.x--; 
+            moveCameraLeft();
             break;
         case 68: // d
-            camera.position.x++; 
+            moveCameraRight(); 
             break;
         case 69: // e  
-            angle -= 0.05;
-            camera.position.x = Math.cos( angle ) * 10;
-            camera.position.z = Math.sin( angle ) * 10;
+            rotateCameraRight();
             break;
         case 81: // q  
-            angle += 0.05;
-            camera.position.x = Math.cos( angle ) * 10;
-            camera.position.z = Math.sin( angle ) * 10;
+            rotateCameraLeft();
             break;
         case 82: // r
-            camera.position.y++; 
+            increaseCameraElevation(); 
             break;
         case 70: // f  
-            camera.position.y--; 
+            decreaseCameraElevation(); 
+            break;
+        case 107: // +
+            cameraZoomIn();
+            break;
+        case 109: // -
+            cameraZoomOut();
             break;
         case 80: // p  
             togglePlacementMode();
@@ -264,6 +267,167 @@ function onKeyDown ( event ) {
             break;
     }
 };
+
+function getLookAtDirection() {
+    var lookDirection = cameraLookAt.clone();
+    return lookDirection.sub(camera.position);
+}
+
+function getLookAtProjection () {                                                           //get projection of the cameraLookAtPoint on the y = camera.position.y plane.
+    var projectionPoint = cameraLookAt.clone();
+    projectionPoint.y = camera.position.y;
+    return projectionPoint;
+}
+
+function getProjectionDirection() {
+    var projectionPoint = getLookAtProjection();
+    return projectionPoint.sub(camera.position);
+}
+
+function setCameraElevationAngle() {
+    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
+    var elevationAngle = camera.position.angleTo(lookAtReference);
+    cameraElevationAngle = elevationAngle;
+    return elevationAngle;                                      
+}
+
+function setCameraLookAngle() {
+    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
+    var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
+    cameraLookAngle = lookAngle;
+    return lookAngle;
+}
+
+function getProjectionDistance() {                                                        //gets the distance to the projection of the cameraLookAtPoint on the y = camera.position.y plane.
+    var projectionPoint = getLookAtProjection();
+    var projectionDistance = camera.position.distanceTo(projectionPoint);
+    return projectionDistance;
+}
+
+function getNormalizedProjectionDirection() {
+    var projectionDirection = getProjectionDirection();
+    return projectionDirection.normalize();
+}
+
+function rotateCameraRight() {
+    if(cameraLookAngle === undefined)
+        setCameraLookAngle();
+
+    cameraLookAngle -= 0.05;
+    
+    var projectionDistance = getProjectionDistance();
+    camera.position.x = cameraLookAt.x + Math.cos( cameraLookAngle ) * projectionDistance;
+    camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;        
+}
+
+function rotateCameraLeft() {
+    if(cameraLookAngle === undefined)
+        setCameraLookAngle();
+
+    cameraLookAngle += 0.05;
+    
+    var projectionDistance = getProjectionDistance();
+    camera.position.x = cameraLookAt.x + Math.cos( cameraLookAngle ) * projectionDistance;
+    camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;       
+}
+
+
+
+function moveCameraLeft() {
+    var projectionDirection = getNormalizedProjectionDirection();
+    //console.log(projectionDirection);
+    if( Math.abs( cameraLookAt.x + projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.x ) < floor.geometry.height/2 ) {
+        camera.position.x += projectionDirection.z;
+        camera.position.z -= projectionDirection.x;
+        cameraLookAt.x += projectionDirection.z; 
+        cameraLookAt.z -= projectionDirection.x; 
+    }
+}
+
+function moveCameraRight() {
+    var projectionDirection = getNormalizedProjectionDirection();
+    //console.log(projectionDirection);
+    if( Math.abs( cameraLookAt.x - projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.x ) < floor.geometry.height/2 ) {
+        camera.position.x -= projectionDirection.z;
+        camera.position.z += projectionDirection.x;
+        cameraLookAt.x -= projectionDirection.z; 
+        cameraLookAt.z += projectionDirection.x;        
+    }
+}
+
+function moveCameraForward() {
+    var projectionDirection = getNormalizedProjectionDirection();
+    //console.log(projectionDirection);
+    if( Math.abs( cameraLookAt.x + projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.z ) < floor.geometry.height/2 ) {
+        camera.position.x += projectionDirection.x;
+        camera.position.z += projectionDirection.z;
+        cameraLookAt.x += projectionDirection.x; 
+        cameraLookAt.z += projectionDirection.z; 
+    }
+}
+
+function moveCameraBackwards() {
+    var projectionDirection = getNormalizedProjectionDirection();
+    //console.log(projectionDirection);
+    if( Math.abs( cameraLookAt.x - projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.z ) < floor.geometry.height/2 ) {
+        camera.position.x -= projectionDirection.x;
+        camera.position.z -= projectionDirection.z;
+        cameraLookAt.x -= projectionDirection.x; 
+        cameraLookAt.z -= projectionDirection.z; 
+    }
+}
+
+function cameraZoomIn() {
+    var lookDirection = getLookAtDirection().normalize();
+    if(camera.position.distanceTo(cameraLookAt) > 15 ) {
+        camera.position.x += lookDirection.x;
+        camera.position.y += lookDirection.y;
+        camera.position.z += lookDirection.z;
+    }
+}
+
+function cameraZoomOut() {
+    var lookDirection = getLookAtDirection().normalize();
+    if(camera.position.distanceTo(cameraLookAt) < 100 ) {
+        camera.position.x -= lookDirection.x;
+        camera.position.y -= lookDirection.y;
+        camera.position.z -= lookDirection.z;
+    }
+}
+
+function increaseCameraElevation () {
+    if(cameraElevationAngle === undefined)
+        setCameraElevationAngle();
+    if(cameraLookAngle === undefined)
+        setCameraLookAngle();
+
+    if(cameraElevationAngle*180/Math.PI > 35.0) {
+        cameraElevationAngle -= 0.05;
+        var lookDirection = getLookAtDirection().normalize();
+        var lookDistance = camera.position.distanceTo(cameraLookAt);
+        
+        camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
+        camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
+        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;        
+    }
+}
+
+function decreaseCameraElevation () {
+    if(cameraElevationAngle === undefined)
+        setCameraElevationAngle();
+    if(cameraLookAngle === undefined)
+        setCameraLookAngle();
+
+    if(cameraElevationAngle*180/Math.PI < 75) {
+        cameraElevationAngle += 0.05;
+        var lookDirection = getLookAtDirection().normalize();
+        var lookDistance = camera.position.distanceTo(cameraLookAt);
+        
+        camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
+        camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
+        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;           
+    }
+}
 
 function nextBuilding() {
     var index = loadedModels.indexOf(currentModel);
@@ -356,7 +520,7 @@ function getMouseProjectionOnFloor() {
 
 function render() {
     var timer = Date.now() * 0.0005;
-    camera.lookAt( scene.position );
+    camera.lookAt( cameraLookAt );
 
     
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
