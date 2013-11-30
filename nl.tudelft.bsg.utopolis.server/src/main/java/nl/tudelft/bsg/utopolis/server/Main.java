@@ -8,6 +8,9 @@ import java.util.Map;
 import javax.ws.rs.ext.ContextResolver;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
+import nl.tudelft.bsg.utopolis.server.model.Race;
+import nl.tudelft.bsg.utopolis.server.model.Structure;
+import nl.tudelft.bsg.utopolis.server.model.StructureType;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -53,6 +56,19 @@ public class Main {
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
         DBConnector.get();
+
+        Structure s1 = new Structure();
+        s1.setX(1);
+        s1.setY(2);
+        s1.setZ(3);
+        s1.setRotation(45);
+        s1.setScale(0.2);
+        s1.setType(StructureType.CHURCH);
+        s1.setRace(Race.SPARTAN);
+        s1.setMaxCitizens(100);
+        s1.setNumCitizens(13);
+        DBConnector.get().save(s1);
+
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();

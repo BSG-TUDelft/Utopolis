@@ -34,7 +34,8 @@ public class StructureResource extends Resource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateStructure(Structure s) {
-		DBConnector.get().save(s);
+		System.out.println("TESTTTTTT");
+		//DBConnector.get().save(s);
 		return simpleResponse(200);
 	}
 	

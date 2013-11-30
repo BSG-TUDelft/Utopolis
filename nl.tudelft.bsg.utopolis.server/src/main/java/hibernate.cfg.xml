@@ -13,7 +13,7 @@
 		<property name="current_session_context_class">thread</property>
 		<property name="hibernate.cache.use_query_cache">false</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
 		<property name="show_sql">true</property>
 		<!-- Transaction isolation 2 = READ_COMMITTED -->
 		<property name="connection.isolation">4</property>
