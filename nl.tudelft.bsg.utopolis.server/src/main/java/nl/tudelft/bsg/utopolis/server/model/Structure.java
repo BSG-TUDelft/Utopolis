@@ -16,6 +16,7 @@ public class Structure implements Serializable {
 	private int id;
 	@Enumerated
 	private StructureType type;
+	private Race race;
 	private double x;
 	private double y;
 	private double z;
@@ -43,6 +44,14 @@ public class Structure implements Serializable {
 		this.type = type;
 	}
 
+	public Race getRace() {
+		return race;
+	}
+
+	public void setRace(Race race) {
+		this.race = race;
+	}
+	
 	public double getX() {
 		return x;
 	}
