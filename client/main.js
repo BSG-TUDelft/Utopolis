@@ -16,11 +16,11 @@ var intersectorHeightOffset;
 
 var buildings = new Array();
 //bolean
-var allowBuildingPlacement; 		
+var allowBuildingPlacement;         
 
-var floor;					//needed to restrict mouse projection to floor only
-var collidableMeshList = [];	//collidable list
-var collidableBoundingBoxes = [];	//avoid creating a new bounding box every time we check for collision
+var floor;                  //needed to restrict mouse projection to floor only
+var collidableMeshList = [];    //collidable list
+var collidableBoundingBoxes = [];   //avoid creating a new bounding box every time we check for collision
 var selectableMeshes = [];          //merge this with collidableMeshList?       //might slow down collision detection, but we don't keep that many arrays;
 var ghostHeight;
 var colliderBox;
@@ -32,7 +32,7 @@ init();
 animate();
 
 function initFloor() {
-	// FLOOR
+    // FLOOR
     var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
     floorTexture.repeat.set( 10, 10 );
@@ -44,74 +44,57 @@ function initFloor() {
     scene.add(floor);
 }
 
-function buildBoundingMeshFromBox (boundingBox, widthSegments, heightSegments, depthSegments) {
-	var width = boundingBox.max.x - boundingBox.min.x;
-	var height = boundingBox.max.y - boundingBox.min.y;
-	var depth = boundingBox.max.z - boundingBox.min.z;
-    //console.log(width + " - " + height + " - " + depth);
-	var bbGeometry = new THREE.CubeGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
-	var bbMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true} );
-	var bbMesh = new THREE.Mesh( bbGeometry, bbMaterial );
-	bbMesh.visible = false;
-	return bbMesh;
-}
-
-function buildBoundingMeshFromObject (object, widthSegments, heightSegments, depthSegments) {
-	var boundingBox = new THREE.Box3();	
-	boundingBox.setFromObject(object);
-	
-	return buildBoundingMeshFromBox(boundingBox, widthSegments, heightSegments, depthSegments);
-}
-
 function initRollOver(position) {
-	rollOverMesh = buildBoundingMeshFromObject(currentModel, 1, 1, 1);			// use values higher than 1 for increased collision precision
-	ghostHeight = rollOverMesh.geometry.height;	
-	var ghostModel = currentModel.clone();
-	setMaterial(ghostModel, material.clone());
-	setTransparent(ghostModel);		
-	ghostModel.position.set(0, -ghostHeight/2, 0 );			//compensate for the difference in coordinates between the model center and the bounding volume center;	
-	rollOverMesh.add(ghostModel);
-    rollOverMesh.position.x = position.x
-    rollOverMesh.position.z = position.z;	
-	rollOverMesh.position.y = floor.position.y + ghostHeight/2;			//avoid clipping thorugh terrain at the start	
-	scene.add( rollOverMesh );
+    rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
+    var ghostModel = currentModel.getClone();
+    var ghostMaterial = ghostModel.material.clone();
+
+    setMaterial(ghostModel, ghostMaterial);
+    setTransparent(ghostModel);     
+
+    ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
+    rollOverMesh.add(ghostModel);
+      
+    scene.add( rollOverMesh );
 }
 
-function registerCollidableBoundingMesh(model) {			//using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
-	var modelBoundingBox = new THREE.Box3();	
-	modelBoundingBox.setFromObject(model);	
-	//console.log(modelBoundingBox);                           //debugging
-    var modelBoundingMesh = buildBoundingMeshFromBox(modelBoundingBox, 1, 1, 1);
-	modelBoundingMesh.position.set(model.position.x, model.position.y + modelBoundingMesh.geometry.height/2, model.position.z);			//compensate for difference in reference points	
-	scene.add(modelBoundingMesh);								//need to add on the scene otherwise raytracing won't work
-	collidableMeshList.push(modelBoundingMesh);
-	collidableBoundingBoxes.push(modelBoundingBox);
-    selectableMeshes.push( getMeshFromModel(model) );
+function setRollOverPosition (intersector) {
+    setVoxelPosition( intersector );
+    rollOverMesh.position.x = voxelPosition.x + rollOverMesh.boundingBox.center().x;
+    rollOverMesh.position.y = voxelPosition.y + rollOverMesh.boundingBox.center().y;
+    rollOverMesh.position.z = voxelPosition.z + rollOverMesh.boundingBox.center().z;
 }
 
-function getModelWithBoundingMesh(model) {						//testing currently - might be needed in the future if we decide not to go with the registerCollidableBoundingMesh method
-	var daeBB = buildBoundingMeshFromObject(model, 1, 1, 1);
-	daeBB.position.set(0, daeBB.geometry.height/2, 0);			//compensate for difference in reference points*
-	dae.position.set(0, -daeBB.geometry.height/2, 0);				//compensate for difference in reference points*     -   * = not needed when we don't display the bounding boxes
-//	collidableMeshList.push(daeBB);								
-	daeBB.add(model);
-	return daeBB
+function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
+    modelBoundingBox = model.getBoundingBox();    
+    collidableBoundingBoxes.push(modelBoundingBox);
+    //showBoundingBox(modelBoundingBox);                //collision debugging
+    
+    var modelBoundingMesh = model.getBoundingMesh(1, 1, 1);
+    modelBoundingMesh.position.set(modelBoundingBox.center().x, modelBoundingBox.center().y, modelBoundingBox.center().z);
+    scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
+    collidableMeshList.push(modelBoundingMesh);
+
+    //model.modelBoundingBox = modelBoundingBox;                               //add bounding box to the model (use for deletion)
+    //model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
+
+    selectableMeshes.push( model.getMesh() );                   //TODO fix this!
 }
 
 function init() {
-	//CONTAINER    
-	container = document.createElement( 'div' );
-    document.body.appendChild( container );	
+    //CONTAINER    
+    container = document.createElement( 'div' );
+    document.body.appendChild( container ); 
 
-	//SCENE
+    //SCENE
     scene = new THREE.Scene();
-	
-	//CAMERA
+    
+    //CAMERA
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
     camera.position.set( 2, 2, 3 );
 
-	//FLOOR
-	initFloor();				
+    //FLOOR
+    initFloor();                
 
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
@@ -121,80 +104,81 @@ function init() {
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
-	
+    
     // picking
     projector = new THREE.Projector();
     mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
-	
-	//RENDERER
+    
+    //RENDERER
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
-	
-	//STATS
+    
+    //STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
     container.appendChild( stats.domElement );
-	
-	//LOADER
-	var loader = new IberModelLoader();	
-	loader.loadModels();
+    
+    //LOADER
+    var loader = new IberModelLoader(); 
+    loader.loadModels();
 
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
     document.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'resize', onWindowResize, false );
-
 }
 
 function collidablesContainEmitter(colliderOrigin) {
-	for(index = 0; index < collidableBoundingBoxes.length; index ++) {
-		if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){				
+    for(index = 0; index < collidableBoundingBoxes.length; index ++) {
+        if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){               
             return true;
-		}
-	}
-	return false;
+        }
+    }
+    return false;
 }
 
 function changeColliderColor(collider, r, g, b) {
-	collider.children[0].material.ambient.r = r;
-	collider.children[0].material.ambient.g = g;
-	collider.children[0].material.ambient.b = b;
+    collider.children[0].material.ambient.r = r;
+    collider.children[0].material.ambient.g = g;
+    collider.children[0].material.ambient.b = b;
 }
 
-function detectCollision (collider) {			//collider = oject that detects collision (casts rays)
-	if(collider)
+var pointMesh = null;
+
+function detectCollision (collider) {           //collider = oject that detects collision (casts rays)
+    if(collider)
     {
         var collisionFlag = false;
         var originPoint = collider.position.clone();
-    	
-       	for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
+        
+        for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
         {                
-        	var localVertex = collider.geometry.vertices[vertexIndex].clone();
-        	var globalVertex = localVertex.applyMatrix4( collider.matrix );
+            var localVertex = collider.geometry.vertices[vertexIndex].clone();
+            var globalVertex = localVertex.applyMatrix4( collider.matrix );
             var directionVector = globalVertex.sub( collider.position );
                     
             var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
             var collisionResults = ray.intersectObjects( collidableMeshList );
             if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-    			collisionFlag = true; 
-    			break;		
-    		}
-    	}	
+                collisionFlag = true; 
+                break;      
+            }
+        }   
         if(collisionFlag == true) {
-    		changeColliderColor(collider, 255, 0, 0);
+            changeColliderColor(collider, 255, 0, 0);
         }
         else {
-    		if(collidablesContainEmitter(originPoint) == true) {
-    			collisionFlag = true;			
-    			changeColliderColor(collider, 255, 0, 0);
-    		}
-    		else 
-    			changeColliderColor(collider, 0, 255, 0);
+            if(collidablesContainEmitter(originPoint) == true) {
+                collisionFlag = true;           
+                changeColliderColor(collider, 255, 0, 0);
+            }
+            else 
+                changeColliderColor(collider, 0, 255, 0);
         }
-    	allowBuildingPlacement = !collisionFlag;
+        allowBuildingPlacement = !collisionFlag;
     }
 }
 
@@ -206,18 +190,19 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-	if(rollOverMesh) {                                             //if the ghost model is visible     
-		if(allowBuildingPlacement) {                               //and there there is no collision 
+    if(rollOverMesh) {                                             //if the ghost model is visible     
+        if(allowBuildingPlacement) {                               //and there there is no collision 
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
-                buildings[i] = currentModel.clone();
+                buildings[i] = currentModel.getClone();
                 buildings[i].position = intersector.point;
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
+                
             }   
         }
-	}
+    }
     else {                                                          //if the model is not visible, then we are in select building mode
         var intersects = getMouseProjectionOnObjects( selectableMeshes );
         if(intersects.length > 0) {
@@ -275,16 +260,10 @@ function onKeyDown ( event ) {
             break;
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
+            showEmitterOfModel(rollOverMesh);
             break;
     }
 };
-
-function printEmitterOfModel (collider) {                       //keep for collision debugging
-    if(collider) { 
-        var originPoint = collider.position.clone();
-        console.log(originPoint)
-    }
-}
 
 function nextBuilding() {
     var index = loadedModels.indexOf(currentModel);
@@ -334,18 +313,18 @@ function onWindowResize() {
 
 function animate() {
     requestAnimationFrame( animate );
-	update();
+    update();
     render();
 }
 
 function update() {
-	var delta = clock.getDelta();
-	if ( t > 1 ) t = 0;
-	stats.update();
+    var delta = clock.getDelta();
+    if ( t > 1 ) t = 0;
+    stats.update();
 }
 
 function highlightSelectedModel (model) {
-    selectedModel = model;                            //get the first object intersected;
+    selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
     highlightMaterial.emissive.setHex(0x888888);
@@ -357,19 +336,6 @@ function clearSelectedModel () {
         selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
     }
     selectedModel = null;
-}
-
-function getMeshFromModel (model) {
-    if(model.children) {
-        for(var i = 0; i < model.children.length; i++) {
-            var child = model.children[i];
-            if(child instanceof THREE.Mesh) {
-                return child;
-            }
-        }
-        return null;
-    }
-    return null;
 }
 
 function getMouseProjectionOnObjects(objectArray) {
@@ -396,21 +362,19 @@ function render() {
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
         intersector = getMouseProjectionOnFloor();
         if ( intersector ) {
-            intersector.point.y += ghostHeight/2;			//height correction - needed because the bounding volume has the center of mass as a reference point and thus half of it clips through the floor;            
-    		setVoxelPosition( intersector );
-            rollOverMesh.position = voxelPosition;
+            setRollOverPosition(intersector);
         }
     }
 
-	detectCollision(rollOverMesh);	
-	
+    detectCollision(rollOverMesh);  
+    
     renderer.render( scene, camera );
 }
 
 function getRealIntersector( intersects ) {
     for( i = 0; i < intersects.length; i++ ) {
         intersector = intersects[ i ];
-        if ( intersector.object == floor ) {		//otherwise we can build buildings on top of each other when viewing at the right angle
+        if ( intersector.object == floor ) {        //otherwise we can build buildings on top of each other when viewing at the right angle
             return intersector;
         }
     }
@@ -425,20 +389,11 @@ function setVoxelPosition( intersector ) {
 }
 
 function setTransparent(node) {
-	node.material.opacity = 0.5;
-	node.material.transparent = true;
-	if (node.children) {
-        for (var i = 0; i < node.children.length; i++) {
-            setTransparent(node.children[i]);
-        }
-    }
-}
-
-function setMaterial(node, material) {
-    node.material = material;
+    node.material.opacity = 0.5;
+    node.material.transparent = true;
     if (node.children) {
         for (var i = 0; i < node.children.length; i++) {
-            setMaterial(node.children[i], material);
+            setTransparent(node.children[i]);
         }
     }
 }
