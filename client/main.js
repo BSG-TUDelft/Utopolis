@@ -93,7 +93,7 @@ function init() {
     
     //CAMERA
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-    camera.position.set(0, 15, 30 );
+    camera.position.set(0, 25, 25 );
     cameraLookAt = scene.position;
 
     //FLOOR
@@ -331,54 +331,68 @@ function rotateCameraLeft() {
     camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;       
 }
 
+
+
 function moveCameraLeft() {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
-    camera.position.x += projectionDirection.z;
-    camera.position.z -= projectionDirection.x;
-    cameraLookAt.x += projectionDirection.z; 
-    cameraLookAt.z -= projectionDirection.x; 
+    if( Math.abs( cameraLookAt.x + projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.x ) < floor.geometry.height/2 ) {
+        camera.position.x += projectionDirection.z;
+        camera.position.z -= projectionDirection.x;
+        cameraLookAt.x += projectionDirection.z; 
+        cameraLookAt.z -= projectionDirection.x; 
+    }
 }
 
 function moveCameraRight() {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
-    camera.position.x -= projectionDirection.z;
-    camera.position.z += projectionDirection.x;
-    cameraLookAt.x -= projectionDirection.z; 
-    cameraLookAt.z += projectionDirection.x;        
+    if( Math.abs( cameraLookAt.x - projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.x ) < floor.geometry.height/2 ) {
+        camera.position.x -= projectionDirection.z;
+        camera.position.z += projectionDirection.x;
+        cameraLookAt.x -= projectionDirection.z; 
+        cameraLookAt.z += projectionDirection.x;        
+    }
 }
 
 function moveCameraForward() {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
-    camera.position.x += projectionDirection.x;
-    camera.position.z += projectionDirection.z;
-    cameraLookAt.x += projectionDirection.x; 
-    cameraLookAt.z += projectionDirection.z; 
+    if( Math.abs( cameraLookAt.x + projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.z ) < floor.geometry.height/2 ) {
+        camera.position.x += projectionDirection.x;
+        camera.position.z += projectionDirection.z;
+        cameraLookAt.x += projectionDirection.x; 
+        cameraLookAt.z += projectionDirection.z; 
+    }
 }
 
 function moveCameraBackwards() {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
-    camera.position.x -= projectionDirection.x;
-    camera.position.z -= projectionDirection.z;
-    cameraLookAt.x -= projectionDirection.x; 
-    cameraLookAt.z -= projectionDirection.z; 
+    if( Math.abs( cameraLookAt.x - projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.z ) < floor.geometry.height/2 ) {
+        camera.position.x -= projectionDirection.x;
+        camera.position.z -= projectionDirection.z;
+        cameraLookAt.x -= projectionDirection.x; 
+        cameraLookAt.z -= projectionDirection.z; 
+    }
 }
 
 function cameraZoomIn() {
     var lookDirection = getLookAtDirection().normalize();
-    camera.position.x += lookDirection.x;
-    camera.position.y += lookDirection.y;
-    camera.position.z += lookDirection.z;
+    if(camera.position.distanceTo(cameraLookAt) > 15 ) {
+        camera.position.x += lookDirection.x;
+        camera.position.y += lookDirection.y;
+        camera.position.z += lookDirection.z;
+    }
 }
 
 function cameraZoomOut() {
     var lookDirection = getLookAtDirection().normalize();
-    camera.position.x -= lookDirection.x;
-    camera.position.y -= lookDirection.y;
-    camera.position.z -= lookDirection.z;
+    if(camera.position.distanceTo(cameraLookAt) < 100 ) {
+        camera.position.x -= lookDirection.x;
+        camera.position.y -= lookDirection.y;
+        camera.position.z -= lookDirection.z;
+    }
 }
 
 function increaseCameraElevation () {
@@ -387,14 +401,15 @@ function increaseCameraElevation () {
     if(cameraLookAngle === undefined)
         setCameraLookAngle();
 
-    cameraElevationAngle -= 0.05;
-    
-    var lookDirection = getLookAtDirection().normalize();
-    var lookDistance = camera.position.distanceTo(cameraLookAt);
-    
-    camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
-    camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
-    camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;        
+    if(cameraElevationAngle*180/Math.PI > 35.0) {
+        cameraElevationAngle -= 0.05;
+        var lookDirection = getLookAtDirection().normalize();
+        var lookDistance = camera.position.distanceTo(cameraLookAt);
+        
+        camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
+        camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
+        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;        
+    }
 }
 
 function decreaseCameraElevation () {
@@ -403,14 +418,15 @@ function decreaseCameraElevation () {
     if(cameraLookAngle === undefined)
         setCameraLookAngle();
 
-    cameraElevationAngle += 0.05;
-    
-    var lookDirection = getLookAtDirection().normalize();
-    var lookDistance = camera.position.distanceTo(cameraLookAt);
-    
-    camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
-    camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
-    camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;       
+    if(cameraElevationAngle*180/Math.PI < 75) {
+        cameraElevationAngle += 0.05;
+        var lookDirection = getLookAtDirection().normalize();
+        var lookDistance = camera.position.distanceTo(cameraLookAt);
+        
+        camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
+        camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
+        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;           
+    }
 }
 
 function nextBuilding() {
