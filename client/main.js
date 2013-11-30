@@ -246,6 +246,12 @@ function onKeyDown ( event ) {
         case 70: // f  
             camera.position.y--; 
             break;
+        case 107: // +
+            cameraZoomIn();
+            break;
+        case 109: // -
+            cameraZoomOut();
+            break;
         case 80: // p  
             togglePlacementMode();
             break;
@@ -262,11 +268,9 @@ function onKeyDown ( event ) {
     }
 };
 
-function getLookDirection() {
+function getLookAtDirection() {
     var lookDirection = cameraLookAt.clone();
-    lookDirection.y = camera.position.y;
-    lookDirection.sub(camera.position);
-    return lookDirection;
+    return lookDirection.sub(camera.position);
 }
 
 function getLookAtProjection () {                                                           //get projection of the cameraLookAtPoint on the y = camera.position.y plane.
@@ -275,8 +279,12 @@ function getLookAtProjection () {                                               
     return projectionPoint;
 }
 
+function getProjectionDirection() {
+    var projectionPoint = getLookAtProjection();
+    return projectionPoint.sub(camera.position);
+}
+
 function setCameraLookAngle() {
-    
     var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getLookDistance());                                      
     var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
     cameraLookAngle = lookAngle;
@@ -289,9 +297,9 @@ function getLookDistance() {                                                    
     return lookDistance;
 }
 
-function getNormalizedLookDirection() {
-    var lookDirection = getLookDirection();
-    return lookDirection.normalize();
+function getNormalizedProjectionDirection() {
+    var projectionDirection = getProjectionDirection();
+    return projectionDirection.normalize();
 }
 
 function rotateCameraRight() {
@@ -317,7 +325,7 @@ function rotateCameraLeft() {
 }
 
 function moveCameraLeft() {
-    var lookDirection = getNormalizedLookDirection();
+    var lookDirection = getNormalizedProjectionDirection();
     //console.log(lookDirection);
     camera.position.x += lookDirection.z;
     camera.position.z -= lookDirection.x;
@@ -326,7 +334,7 @@ function moveCameraLeft() {
 }
 
 function moveCameraRight() {
-    var lookDirection = getNormalizedLookDirection();
+    var lookDirection = getNormalizedProjectionDirection();
     //console.log(lookDirection);
     camera.position.x -= lookDirection.z;
     camera.position.z += lookDirection.x;
@@ -335,7 +343,7 @@ function moveCameraRight() {
 }
 
 function moveCameraForward() {
-    var lookDirection = getNormalizedLookDirection();
+    var lookDirection = getNormalizedProjectionDirection();
     //console.log(lookDirection);
     camera.position.x += lookDirection.x;
     camera.position.z += lookDirection.z;
@@ -344,12 +352,26 @@ function moveCameraForward() {
 }
 
 function moveCameraBackwards() {
-    var lookDirection = getNormalizedLookDirection();
+    var lookDirection = getNormalizedProjectionDirection();
     //console.log(lookDirection);
     camera.position.x -= lookDirection.x;
     camera.position.z -= lookDirection.z;
     cameraLookAt.x -= lookDirection.x; 
     cameraLookAt.z -= lookDirection.z; 
+}
+
+function cameraZoomIn() {
+    var lookDirection = getLookAtDirection().normalize();
+    camera.position.x += lookDirection.x;
+    camera.position.y += lookDirection.y;
+    camera.position.z += lookDirection.z;
+}
+
+function cameraZoomOut() {
+    var lookDirection = getLookAtDirection().normalize();
+    camera.position.x -= lookDirection.x;
+    camera.position.y -= lookDirection.y;
+    camera.position.z -= lookDirection.z;
 }
 
 function nextBuilding() {
