@@ -35,8 +35,8 @@
 
         <script src="js/Detector.js"></script>
         <script src="js/libs/stats.min.js"></script>
-		<script type="text/javascript" src="js/libs/jquery-1.10.2.js"></script>
-		<script type="text/javascript" src="js/ui/Menu.js"></script>
+		<script src="js/libs/jquery-1.10.2.js"  type="text/javascript"></script>
+		<script src="js/ui/Menu.js" type="text/javascript"></script>
 
 		<script src="ModelLoader.js"></script>
 		<script src="IberModelLoader.js"></script>
@@ -73,43 +73,43 @@
 				tabCss: "tab_iber",
 				structures: [{
 					name: "House",
-					modelId: "iber_house",
+					structureId: "iber_house",
 					iconCss: "iber_house"
 				},{
 					name: "Farm",
-					modelId: "iber_farm",
+					structureId: "iber_farm",
 					iconCss: "iber_farm"
 				},{
 					name: "Corral",
-					modelId: "iber_corral",
+					structureId: "iber_corral",
 					iconCss: "iber_corral"
 				},{
 					name: "Storehouse",
-					modelId: "iber_storehouse",
+					structureId: "iber_storehouse",
 					iconCss: "iber_storehouse"
 				},{
 					name: "Barracks",
-					modelId: "iber_barracks",
+					structureId: "iber_barracks",
 					iconCss: "iber_barracks"
 				},{
 					name: "Blacksmith",
-					modelId: "iber_blacksmith",
+					structureId: "iber_blacksmith",
 					iconCss: "iber_blacksmith"
 				},{
 					name: "Civic center",
-					modelId: "iber_civic",
+					structureId: "iber_civic",
 					iconCss: "iber_civic"
 				},{
 					name: "Tower",
-					modelId: "iber_tower",
+					structureId: "iber_tower",
 					iconCss: "iber_tower"
 				},{
 					name: "Fortress",
-					modelId: "iber_fortress",
+					structureId: "iber_fortress",
 					iconCss: "iber_fortress"
 				},{
 					name: "Temple",
-					modelId: "iber_temple",
+					structureId: "iber_temple",
 					iconCss: "iber_temple"
 				}]
 			}, {
@@ -124,7 +124,14 @@
 		(function() {
 			"use strict";
 
-			new Menu(menuData).init();
+			var menu = new Menu(menuData);
+			menu.init();
+
+			menu.addEventListener(Menu.structureSelected, function(e){
+				console.log("You clicked on " + e.structure.structureId + ", you rascal!");
+			});			menu.addEventListener(Menu.structureSelected, function(e){
+				console.log("You clicked on " + e.structure.structureId + ", you rascal!");
+			});
 
 		}());
 
