@@ -18,7 +18,7 @@ var Menu = function(menuData) {
 	function initTabStrip(){
 		for(var i in data.empires){
 			var li = $("" +
-				"<li class='" + data.empires[i].tabCss + "'>" +
+				"<li class='" + data.empires[i].tabCss + "'  title='" + data.empires[i].name + "' >" +
 				"<div class='top'></div>" +
 				"<div class='middle'><div class='icon'></div></div>"+
 				"<div class='bottom'></div>" +
@@ -50,7 +50,7 @@ var Menu = function(menuData) {
 		for(var i in data.empires[tabIndex].structures){
 			var li = $("" +
 				"<li>" +
-				"<div class='" + data.empires[tabIndex].structures[i].iconCss + "'></div>" +
+				"<div title='" + data.empires[tabIndex].structures[i].name + "' class='" + data.empires[tabIndex].structures[i].iconCss + "'></div>" +
 				"</li>");
 			$("#structures").append(li);
 		}
