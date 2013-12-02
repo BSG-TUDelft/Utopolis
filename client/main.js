@@ -1,5 +1,5 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
+var leftOffset = 250;	// fix this
 var container, stats;
 
 var camera, scene, renderer;
@@ -85,8 +85,7 @@ function registerCollidableBoundingMesh(model) {            //using this method 
 
 function init() {
     //CONTAINER    
-    container = document.createElement( 'div' );
-    document.body.appendChild( container ); 
+    container = document.getElementById( 'main' );
 
     //SCENE
     scene = new THREE.Scene();
@@ -114,7 +113,7 @@ function init() {
     
     //RENDERER
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth - leftOffset, window.innerHeight );
     container.appendChild( renderer.domElement );
     
     //STATS
@@ -187,7 +186,7 @@ function detectCollision (collider) {           //collider = oject that detects 
 
 function onDocumentMouseMove( event ) {
     event.preventDefault();
-    mouse2D.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse2D.x = ( event.clientX / window.innerWidth) * 2 - 1;
     mouse2D.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 

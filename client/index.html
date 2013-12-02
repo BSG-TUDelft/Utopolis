@@ -25,19 +25,111 @@
 
             a { color: skyblue }
         </style>
+		<link type="text/css" rel="stylesheet" href="css/general.css"/>
+		<link type="text/css" rel="stylesheet" href="css/menu.css"/>
     </head>
     <body>
-        <script src="js/three.min.js"></script>
+        <script src="js/three.js"></script>
 
         <script src="js/loaders/ColladaLoader.js"></script>
 
         <script src="js/Detector.js"></script>
         <script src="js/libs/stats.min.js"></script>
-	
-        <script src="ModelLoader.js"></script>
+		<script type="text/javascript" src="js/libs/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="js/ui/Menu.js"></script>
+
+		<script src="ModelLoader.js"></script>
 		<script src="IberModelLoader.js"></script>
 		<script src="ModelArray.js"></script>
         <script src="ModelWrapper.js"></script>
-        <script src="main.js"></script>
-    </body>
+
+	<div id="left">
+		<ul id="tabstrip">
+		</ul>
+		<ul id="structures">
+		</ul>
+		<div class="structures_scroll" id="structures_scroll_up"><div class="arrow"></div></div>
+		<div class="structures_scroll" id="structures_scroll_down"><div class="arrow"></div></div>
+
+	</div>
+	<div id="top"></div>
+	<div id="main">
+	</div>
+	<script type="text/javascript">
+
+		// This should come from the server
+		var menuData = {
+			empires: [{
+				name: "Hellenes",
+				tabCss: "tab_helle"
+			}, {
+				name: "Romans",
+				tabCss: "tab_rome"
+			}, {
+				name: "Carthaginians",
+				tabCss: "tab_kart"
+			}, {
+				name: "Iberians",
+				tabCss: "tab_iber",
+				structures: [{
+					name: "House",
+					modelId: "iber_house",
+					iconCss: "iber_house"
+				},{
+					name: "Farm",
+					modelId: "iber_farm",
+					iconCss: "iber_farm"
+				},{
+					name: "Corral",
+					modelId: "iber_corral",
+					iconCss: "iber_corral"
+				},{
+					name: "Storehouse",
+					modelId: "iber_storehouse",
+					iconCss: "iber_storehouse"
+				},{
+					name: "Barracks",
+					modelId: "iber_barracks",
+					iconCss: "iber_barracks"
+				},{
+					name: "Blacksmith",
+					modelId: "iber_blacksmith",
+					iconCss: "iber_blacksmith"
+				},{
+					name: "Civic center",
+					modelId: "iber_civic",
+					iconCss: "iber_civic"
+				},{
+					name: "Tower",
+					modelId: "iber_tower",
+					iconCss: "iber_tower"
+				},{
+					name: "Fortress",
+					modelId: "iber_fortress",
+					iconCss: "iber_fortress"
+				},{
+					name: "Temple",
+					modelId: "iber_temple",
+					iconCss: "iber_temple"
+				}]
+			}, {
+				name: "Persians",
+				tabCss: "tab_pers"
+			}, {
+				name: "Mauryans",
+				tabCss: "tab_maur"
+			}]
+		};
+
+		(function() {
+			"use strict";
+
+			new Menu(menuData).init();
+
+		}());
+
+	</script>
+	<script src="main.js"></script>
+	</body>
+
 </html>

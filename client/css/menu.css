@@ -1,0 +1,220 @@
+
+#left{
+	float:left;
+	width: 250px;
+	height: 100%;
+	background: url(../images/ui/wood.png) fixed;
+	position: relative;
+	overflow: hidden;
+}
+
+#main{
+	height: 100%;
+	xposition: relative;
+	margin-left: 250px;
+}
+
+#tabstrip {
+	width: 50px;
+	height: 100%;
+	background: url(../images/ui/tabstrip/vertical_tab_bg.png);
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 40px 0 0 0;
+}
+
+#tabstrip li {
+	background: url(../images/ui/wood.png) fixed;
+}
+
+#tabstrip li div {
+	background-image: url(../images/ui/tabstrip/vertical_tabstrip_unselected.png);
+}
+
+#tabstrip .selected div {
+	background-image: url(../images/ui/tabstrip/vertical_tabstrip_selected.png);
+}
+
+#tabstrip .selected .middle {
+	cursor: default;
+}
+
+#tabstrip li .top {
+	background-position: -50px;
+	height: 17px;
+}
+
+#tabstrip li .middle {
+	min-height: 30px;
+	color: white;
+	cursor: pointer;
+}
+
+#tabstrip li .bottom {
+	background-position: -100px;
+	height: 17px;
+}
+
+#tabstrip li div .icon {
+	margin-left: 6px;
+	width: 40px;
+	height: 40px;
+	background: url(../images/ui/tabstrip/icons_240x80.png) no-repeat;
+}
+
+
+#tabstrip .tab_rome div .icon {
+	background-position: 0 -40px
+}
+#tabstrip .tab_rome div .icon:hover, #tabstrip .tab_rome.selected div .icon {
+	background-position: 0 0;
+}
+
+#tabstrip .tab_helle div .icon {
+	background-position: -40px -40px;
+}
+#tabstrip .tab_helle div .icon:hover, #tabstrip .tab_helle.selected div .icon {
+	background-position: -40px 0;
+}
+
+#tabstrip .tab_kart div .icon {
+	background-position: -80px  -40px ;
+}
+#tabstrip .tab_kart div .icon:hover, #tabstrip .tab_kart.selected div .icon {
+	background-position: -80px 0;
+}
+
+#tabstrip .tab_iber div .icon {
+	background-position: -120px -40px;
+}
+#tabstrip .tab_iber div .icon:hover, #tabstrip .tab_iber.selected div .icon {
+	background-position: -120px 0;
+}
+
+#tabstrip .tab_maur div .icon {
+	background-position: -160px -40px;
+}
+#tabstrip .tab_maur div .icon:hover, #tabstrip .tab_maur.selected div .icon {
+	background-position: -160px 0;
+}
+
+#tabstrip .tab_pers div .icon {
+	background-position: -200px -40px;
+}
+#tabstrip .tab_pers div .icon:hover, #tabstrip .tab_pers.selected div .icon {
+	background-position: -200px 0;
+}
+
+
+.structures_scroll {
+	width: 100%;
+	height: 32px;
+	position: absolute;
+	right: 49px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.structures_scroll div.arrow {
+	height: 20px;
+	width: 101px;
+	margin: 4px 0 0 100px;
+	cursor: pointer;
+}
+
+.structures_scroll div.arrow:hover {
+	background-position: -101px 0;
+}
+
+
+#structures_scroll_up {
+	top: 0px;
+	background: url(../images/ui/tabstrip/arrow_bg_1x64.png) repeat-x;
+}
+
+#structures_scroll_up div.arrow {
+	background-image: url(../images/ui/tabstrip/arrow_up_202x21.png);
+}
+
+#structures_scroll_down {
+	background: url(../images/ui/tabstrip/arrow_bg_1x64.png) repeat-x 0 -32px;
+	bottom: 0;
+}
+
+#structures_scroll_down div.arrow {
+	background-image: url(../images/ui/tabstrip/arrow_down_202x21.png);
+}
+
+#structures {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	width: 300px;
+	overflow: hidden;
+}
+
+#structures li {
+	width: 150px;
+	height: 100px;
+	margin-left: 25px;
+	margin-top: 25px;
+	background-image: url(../images/ui/icons/box150x100.png);
+	background-size: 100% 100%;
+
+}
+
+#structures li div {
+	width: 150px;
+	height: 100px;
+	background-size: 100% 100%;
+}
+
+#structures li:hover {
+
+}
+
+#structures li:hover div {
+	width: 170px;
+	height: 120px;
+	margin-left: -10px;
+	background-size: 100% 100%;
+}
+
+#structures .iber_house {
+	background-image: url(../images/ui/icons/iberians/house.png);
+}
+#structures .iber_farm {
+	background-image: url(../images/ui/icons/iberians/farm.png);
+}
+#structures .iber_corral {
+	background-image: url(../images/ui/icons/iberians/corral.png);
+}
+#structures .iber_storehouse {
+	background-image: url(../images/ui/icons/iberians/storehouse.png);
+}
+#structures .iber_barracks {
+	background-image: url(../images/ui/icons/iberians/barracks.png);
+}
+#structures .iber_blacksmith {
+	background-image: url(../images/ui/icons/iberians/blacksmith.png);
+}
+#structures .iber_civic {
+	background-image: url(../images/ui/icons/iberians/civic.png);
+}
+#structures .iber_tower {
+	background-image: url(../images/ui/icons/iberians/tower.png);
+}
+#structures .iber_fortress {
+	background-image: url(../images/ui/icons/iberians/fortress.png);
+}
+#structures .iber_temple {
+	background-image: url(../images/ui/icons/iberians/temple.png);
+}

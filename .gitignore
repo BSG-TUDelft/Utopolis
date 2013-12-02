@@ -2,6 +2,7 @@
 *~
 *.swp
 art-original/
+.resources/
 *.class
 target/
 .classpath
