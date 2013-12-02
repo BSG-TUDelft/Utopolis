@@ -246,10 +246,10 @@ function onKeyDown ( event ) {
         case 70: // f  
             decreaseCameraElevation(); 
             break;
-        case 107: // +
+        case 187: // =
             cameraZoomIn();
             break;
-        case 109: // -
+        case 189: // - (dash)
             cameraZoomOut();
             break;
         case 80: // p  
