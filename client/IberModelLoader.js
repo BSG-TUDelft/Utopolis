@@ -18,7 +18,7 @@ IberModelLoader.prototype.loadModels = function () {
 IberModelLoader.prototype.decreaseRemainingStructures = function () {
 	numModelStructures--;
 	if(numModelStructures == 0) {
-		currentModel = dae;
+		currentModel = loadedModels[0];
 	}
 }
 
