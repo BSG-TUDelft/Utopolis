@@ -60,7 +60,7 @@ Menu.prototype = {
 				"<li>" +
 				"<div title='" +  this.data.empires[tabIndex].structures[i].name + "' class='" +  this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
 				"</li>");
-			li.click(jQuery.proxy( this.structureClick, this,  this.data.empires[tabIndex].structures[i]));
+			li.click($.proxy( this.structureClick, this,  this.data.empires[tabIndex].structures[i]));
 			$("#structures").append(li);
 		}
 
@@ -78,16 +78,16 @@ Menu.prototype = {
 		this.calculateStructuresScroll();
 
 		// Event handlers
-		$("#structures_scroll_up div.arrow").click(function(){
-			if( this.onFirstStructurePage())
+		$("#structures_scroll_up div.arrow").click($.proxy(function(){
+			if(!this.onFirstStructurePage())
 				this.iconsUp--;
 			this.calculateStructuresScroll();
-		});
-		$("#structures_scroll_down div.arrow").click(function(){
-			if(! this.onLastStructurePage())
+		}, this));
+		$("#structures_scroll_down div.arrow").click($.proxy(function(){
+			if(!this.onLastStructurePage())
 				this.iconsUp++;
 			this.calculateStructuresScroll();
-		});
+		}, this));
 	},
 
 	/** Fires when the li element of a structure is clicked */

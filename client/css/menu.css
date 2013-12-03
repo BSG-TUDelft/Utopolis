@@ -187,33 +187,66 @@
 	background-size: 100% 100%;
 }
 
+/*<-- Iberian icons -->*/
 #structures .iber_house {
-	background-image: url(../images/ui/icons/iberians/house.png);
+	background-image: url(../images/ui/icons/iber/house.png);
 }
 #structures .iber_farm {
-	background-image: url(../images/ui/icons/iberians/farm.png);
+	background-image: url(../images/ui/icons/iber/farm.png);
 }
 #structures .iber_corral {
-	background-image: url(../images/ui/icons/iberians/corral.png);
+	background-image: url(../images/ui/icons/iber/corral.png);
 }
 #structures .iber_storehouse {
-	background-image: url(../images/ui/icons/iberians/storehouse.png);
+	background-image: url(../images/ui/icons/iber/storehouse.png);
 }
 #structures .iber_barracks {
-	background-image: url(../images/ui/icons/iberians/barracks.png);
+	background-image: url(../images/ui/icons/iber/barracks.png);
 }
 #structures .iber_blacksmith {
-	background-image: url(../images/ui/icons/iberians/blacksmith.png);
+	background-image: url(../images/ui/icons/iber/blacksmith.png);
 }
 #structures .iber_civic {
-	background-image: url(../images/ui/icons/iberians/civic.png);
+	background-image: url(../images/ui/icons/iber/civic.png);
 }
 #structures .iber_tower {
-	background-image: url(../images/ui/icons/iberians/tower.png);
+	background-image: url(../images/ui/icons/iber/tower.png);
 }
 #structures .iber_fortress {
-	background-image: url(../images/ui/icons/iberians/fortress.png);
+	background-image: url(../images/ui/icons/iber/fortress.png);
 }
 #structures .iber_temple {
-	background-image: url(../images/ui/icons/iberians/temple.png);
+	background-image: url(../images/ui/icons/iber/temple.png);
+}
+
+/*<-- Roman icons -->*/
+#structures .rome_house {
+	background-image: url(../images/ui/icons/rome/house.png);
+}
+#structures .rome_farm {
+	background-image: url(../images/ui/icons/rome/farm.png);
+}
+#structures .rome_corral {
+	background-image: url(../images/ui/icons/rome/corral.png);
+}
+#structures .rome_storehouse {
+	background-image: url(../images/ui/icons/rome/storehouse.png);
+}
+#structures .rome_barracks {
+	background-image: url(../images/ui/icons/rome/barracks.png);
+}
+#structures .rome_blacksmith {
+	background-image: url(../images/ui/icons/rome/blacksmith.png);
+}
+#structures .rome_civic {
+	background-image: url(../images/ui/icons/rome/civic.png);
+}
+#structures .rome_tower {
+	background-image: url(../images/ui/icons/rome/tower.png);
+}
+#structures .rome_fortress {
+	background-image: url(../images/ui/icons/rome/fortress.png);
+}
+#structures .rome_temple {
+	background-image: url(../images/ui/icons/rome/temple.png);
 }
