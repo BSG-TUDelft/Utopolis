@@ -16,7 +16,9 @@
 #tabstrip {
 	width: 50px;
 	height: 100%;
-	background: url(../images/ui/tabstrip/vertical_tab_bg.png);
+	background-image: url(../images/ui/topbar/top_60x38.png), url(../images/ui/tabstrip/vertical_tab_bg.png);
+	background-position: 9px 0, 0 0;
+	background-repeat: no-repeat, repeat;
 	position: absolute;
 	right: 0;
 	top: 0;

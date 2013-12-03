@@ -28,6 +28,7 @@
 		<link type="text/css" rel="stylesheet" href="css/general.css"/>
 		<link type="text/css" rel="stylesheet" href="css/menu.css"/>
 		<link type="text/css" rel="stylesheet" href="css/menu_icons.css"/>
+		<link type="text/css" rel="stylesheet" href="css/topbar.css"/>
     </head>
     <body>
         <script src="js/three.js"></script>
@@ -38,6 +39,7 @@
         <script src="js/libs/stats.min.js"></script>
 		<script src="js/libs/jquery-1.10.2.js"  type="text/javascript"></script>
 		<script src="js/ui/Menu.js" type="text/javascript"></script>
+		<script src="js/ui/Topbar.js" type="text/javascript"></script>
 
 		<script src="ModelLoader.js"></script>
 		<script src="IberModelLoader.js"></script>
@@ -53,7 +55,12 @@
 		<div class="structures_scroll" id="structures_scroll_down"><div class="arrow"></div></div>
 
 	</div>
-	<div id="top"></div>
+	<div id="topbar">
+		<ul id="resources">
+
+		</ul>
+
+	</div>
 	<div id="main">
 	</div>
 	<script type="text/javascript">
@@ -245,15 +252,64 @@
 			}]
 		};
 
+		var topbarData = {
+			resources: [{
+				resourceId: 'wood',
+				name: 'Wood',
+				iconCss: 'wood'
+			}, {
+				resourceId: 'stone',
+				name: 'Stone',
+				iconCss: 'stone'
+			}, {
+				resourceId: 'metal',
+				name: 'Metal',
+				iconCss: 'metal'
+			}, {
+				resourceId: 'food',
+				name: 'Food',
+				iconCss: 'food'
+			}]
+		};
+
+
 		(function() {
 			"use strict";
 
 			var menu = new Menu(menuData);
 			menu.init();
 
+			var topbar = new Topbar(topbarData);
+			topbar.init();
+
+			// Example use:
 			menu.addEventListener(Menu.structureSelected, function(e){
 				console.log("You clicked on " + e.structure.structureId + ", you rascal!");
 			});
+
+			// Set values directly (the property names have to correspond those you used in topbarData ctr)
+			topbar.setResourceValues({
+				wood: 25,
+				stone: 15,
+				metal: 2,
+				food: 200
+			});
+
+			// Incrementing example (client side)
+			var res = {
+				wood: 0,
+				stone: 0,
+				metal: 0,
+				food: 0
+			}
+			setInterval(function(){
+				res.wood += .75;
+				res.stone += .5;
+				res.metal += .25;
+				res.food += 1;
+				topbar.setResourceValues(res);
+			}, 500)
+
 
 		}());
 

@@ -35,7 +35,7 @@ Menu.prototype = {
 				"<div class='bottom'></div>" +
 				"</li>");
 
-			li.click(jQuery.proxy(this.selectTab, this, i));
+			li.click($.proxy(this.selectTab, this, i));
 
 			$("#tabstrip").append(li);
 		}

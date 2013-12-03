@@ -1,0 +1,42 @@
+#topbar {
+	height: 38px;
+	background: url(../images/ui/topbar/top_60x38.png);
+	position: relative;
+	margin-left: 250px	
+}
+
+#topbar #resources {
+	position: absolute;
+	right: 5px;
+	bottom: 2px;
+}
+
+#topbar #resources li {
+	border: 1px solid #726c5a;
+	border-bottom-color: #595548;
+	border-left-color: #595548;
+
+	background: rgba(0, 0, 0, .5) no-repeat 4px 2px;
+	color: #faffbb;
+	float: left;
+	padding: 1px 10px 2px 32px;
+	margin: 2px 0 0 5px;
+	min-width: 40px;
+	text-align: right;
+}
+
+#topbar #resources li.wood {
+	background-image: url(../images/ui/topbar/resources/wood_small.png);
+}
+
+#topbar #resources li.food {
+	background-image: url(../images/ui/topbar/resources/food_small.png);
+}
+
+#topbar #resources li.metal {
+	background-image: url(../images/ui/topbar/resources/metal_small.png);
+}
+
+#topbar #resources li.stone {
+	background-image: url(../images/ui/topbar/resources/stone_small.png);
+}
