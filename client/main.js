@@ -33,7 +33,7 @@ var cameraLookAt, cameraLookAngle, cameraElevationAngle;
 init();
 animate();
 
-function initFloor() {
+/*function initFloor() {
     // FLOOR
     var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
@@ -44,6 +44,11 @@ function initFloor() {
     floor.position.y = 0;
     floor.rotation.x = Math.PI / 2;
     scene.add(floor);
+}*/
+
+function initFloor() {
+    var loader = new TerrainLoader();
+    loader.load();
 }
 
 function initRollOver(position) {
@@ -56,7 +61,7 @@ function initRollOver(position) {
 
     ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
     rollOverMesh.add(ghostModel);
-      
+
     scene.add( rollOverMesh );
 }
 
@@ -102,7 +107,7 @@ function init() {
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
     var directionalLight = new THREE.DirectionalLight(/*Math.random() * 0xffffff*/0xeeeeee );
     directionalLight.position.x = Math.random() - 0.5;
-    directionalLight.position.y = Math.random() - 0.5;
+    directionalLight.position.y = Math.random() + 0.5;
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
@@ -199,6 +204,7 @@ function onDocumentMouseDown( event ) {
                 var i = buildings.length - 1;
                 buildings[i] = currentModel.getClone();
                 buildings[i].position = intersector.point;
+                console.log(intersector.point);
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
                 
@@ -245,10 +251,10 @@ function onKeyDown ( event ) {
         case 70: // f  
             decreaseCameraElevation(); 
             break;
-        case 107: // +
+        case 190: // .
             cameraZoomIn();
             break;
-        case 109: // -
+        case 188: // ,
             cameraZoomOut();
             break;
         case 80: // p  
@@ -475,6 +481,7 @@ function togglePlacementMode () {
     else {
         clearSelectedModel();                 //clear selected model
         var intersector = getMouseProjectionOnFloor();
+        //console.log(intersector);
         if(intersector)                                     //avoid errors when mouse is outside the floor area
             initRollOver(intersector); 
     }
@@ -521,7 +528,7 @@ function getMouseProjectionOnObjects(objectArray) {
 
 function getMouseProjectionOnFloor() {
     raycaster = projector.pickingRay( mouse2D.clone(), camera );
-    var intersects = raycaster.intersectObject( floor );
+    var intersects = raycaster.intersectObject( floor.getMesh() );
     if ( intersects.length > 0 ) {
         intersector = getRealIntersector( intersects );
         return intersector;
@@ -549,7 +556,7 @@ function render() {
 function getRealIntersector( intersects ) {
     for( i = 0; i < intersects.length; i++ ) {
         intersector = intersects[ i ];
-        if ( intersector.object == floor ) {        //otherwise we can build buildings on top of each other when viewing at the right angle
+        if ( intersector.object == floor.getMesh() ) {        //otherwise we can build buildings on top of each other when viewing at the right angle
             return intersector;
         }
     }
