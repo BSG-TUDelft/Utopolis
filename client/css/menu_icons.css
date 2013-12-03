@@ -1,3 +1,35 @@
+/*<-- Hellenes icons -->*/
+#structures .hele_house {
+	background-image: url(../images/ui/icons/hele/house.png);
+}
+#structures .hele_farm {
+	background-image: url(../images/ui/icons/hele/farm.png);
+}
+#structures .hele_corral {
+	background-image: url(../images/ui/icons/hele/corral.png);
+}
+#structures .hele_storehouse {
+	background-image: url(../images/ui/icons/hele/storehouse.png);
+}
+#structures .hele_barracks {
+	background-image: url(../images/ui/icons/hele/barracks.png);
+}
+#structures .hele_blacksmith {
+	background-image: url(../images/ui/icons/hele/blacksmith.png);
+}
+#structures .hele_civic {
+	background-image: url(../images/ui/icons/hele/civic.png);
+}
+#structures .hele_tower {
+	background-image: url(../images/ui/icons/hele/tower.png);
+}
+#structures .hele_fortress {
+	background-image: url(../images/ui/icons/hele/fortress.png);
+}
+#structures .hele_temple {
+	background-image: url(../images/ui/icons/hele/temple.png);
+}
+
 /*<-- Iberian icons -->*/
 #structures .iber_house {
 	background-image: url(../images/ui/icons/iber/house.png);

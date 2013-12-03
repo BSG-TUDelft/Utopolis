@@ -69,7 +69,48 @@
 		var menuData = {
 			empires: [{
 				name: "Hellenes",
-				tabCss: "tab_helle"
+				tabCss: "tab_helle",
+				structures: [{
+					name: "House",
+					structureId: "hele_house",
+					iconCss: "hele_house"
+				},{
+					name: "Farm",
+					structureId: "hele_farm",
+					iconCss: "hele_farm"
+//				},{
+//					name: "Corral",
+//					structureId: "hele_corral",
+//					iconCss: "hele_corral"
+				},{
+					name: "Storehouse",
+					structureId: "hele_storehouse",
+					iconCss: "hele_storehouse"
+//				},{
+//					name: "Barracks",
+//					structureId: "hele_barracks",
+//					iconCss: "hele_barracks"
+				},{
+					name: "Blacksmith",
+					structureId: "hele_blacksmith",
+					iconCss: "hele_blacksmith"
+//				},{
+//					name: "Civic center",
+//					structureId: "hele_civic",
+//					iconCss: "hele_civic"
+				},{
+					name: "Tower",
+					structureId: "hele_tower",
+					iconCss: "hele_tower"
+				},{
+					name: "Fortress",
+					structureId: "hele_fortress",
+					iconCss: "hele_fortress"
+//				},{
+//					name: "Temple",
+//					structureId: "hele_temple",
+//					iconCss: "hele_temple"
+				}]
 			}, {
 				name: "Romans",
 				tabCss: "tab_rome",
@@ -284,7 +325,7 @@
 
 			// Example use:
 			menu.addEventListener(Menu.structureSelected, function(e){
-				console.log("You clicked on " + e.structure.structureId + ", you rascal!");
+				console.log("You clicked on " + e.structure.structureId + "");
 			});
 
 			// Set values directly (the property names have to correspond those you used in topbarData ctr)
