@@ -91,17 +91,17 @@
 	background-position: -120px 0;
 }
 
-#tabstrip .tab_maur div .icon {
+#tabstrip .tab_pers div .icon {
 	background-position: -160px -40px;
 }
-#tabstrip .tab_maur div .icon:hover, #tabstrip .tab_maur.selected div .icon {
+#tabstrip .tab_pers div .icon:hover, #tabstrip .tab_pers.selected div .icon {
 	background-position: -160px 0;
 }
 
-#tabstrip .tab_pers div .icon {
+#tabstrip .tab_maur div .icon {
 	background-position: -200px -40px;
 }
-#tabstrip .tab_pers div .icon:hover, #tabstrip .tab_pers.selected div .icon {
+#tabstrip .tab_maur div .icon:hover, #tabstrip .tab_maur.selected div .icon {
 	background-position: -200px 0;
 }
 
@@ -249,4 +249,36 @@
 }
 #structures .rome_temple {
 	background-image: url(../images/ui/icons/rome/temple.png);
+}
+
+/*<-- Persian icons -->*/
+#structures .pers_house {
+	background-image: url(../images/ui/icons/pers/house.png);
+}
+#structures .pers_farm {
+	background-image: url(../images/ui/icons/pers/farm.png);
+}
+#structures .pers_corral {
+	background-image: url(../images/ui/icons/pers/corral.png);
+}
+#structures .pers_storehouse {
+	background-image: url(../images/ui/icons/pers/storehouse.png);
+}
+#structures .pers_barracks {
+	background-image: url(../images/ui/icons/pers/barracks.png);
+}
+#structures .pers_blacksmith {
+	background-image: url(../images/ui/icons/pers/blacksmith.png);
+}
+#structures .pers_civic {
+	background-image: url(../images/ui/icons/pers/civic.png);
+}
+#structures .pers_tower {
+	background-image: url(../images/ui/icons/pers/tower.png);
+}
+#structures .pers_fortress {
+	background-image: url(../images/ui/icons/pers/fortress.png);
+}
+#structures .pers_temple {
+	background-image: url(../images/ui/icons/pers/temple.png);
 }
