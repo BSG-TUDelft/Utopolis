@@ -52,7 +52,6 @@ function initFloor() {
 }
 
 function initRollOver(position) {
-    console.log(currentModel);
     rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
     var ghostModel = currentModel.getClone();
     var ghostMaterial = ghostModel.material.clone();
@@ -62,8 +61,6 @@ function initRollOver(position) {
 
     ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
     rollOverMesh.add(ghostModel);
-    
-    console.log(rollOverMesh);
 
     scene.add( rollOverMesh );
 }
@@ -208,6 +205,7 @@ function onDocumentMouseDown( event ) {
                 var i = buildings.length - 1;
                 buildings[i] = currentModel.getClone();
                 buildings[i].position = intersector.point;
+                console.log(intersector.point);
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
                 
@@ -484,7 +482,7 @@ function togglePlacementMode () {
     else {
         clearSelectedModel();                 //clear selected model
         var intersector = getMouseProjectionOnFloor();
-        console.log(intersector);
+        //console.log(intersector);
         if(intersector)                                     //avoid errors when mouse is outside the floor area
             initRollOver(intersector); 
     }
