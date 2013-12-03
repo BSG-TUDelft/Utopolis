@@ -1,0 +1,127 @@
+/*<-- Iberian icons -->*/
+#structures .iber_house {
+	background-image: url(../images/ui/icons/iber/house.png);
+}
+#structures .iber_farm {
+	background-image: url(../images/ui/icons/iber/farm.png);
+}
+#structures .iber_corral {
+	background-image: url(../images/ui/icons/iber/corral.png);
+}
+#structures .iber_storehouse {
+	background-image: url(../images/ui/icons/iber/storehouse.png);
+}
+#structures .iber_barracks {
+	background-image: url(../images/ui/icons/iber/barracks.png);
+}
+#structures .iber_blacksmith {
+	background-image: url(../images/ui/icons/iber/blacksmith.png);
+}
+#structures .iber_civic {
+	background-image: url(../images/ui/icons/iber/civic.png);
+}
+#structures .iber_tower {
+	background-image: url(../images/ui/icons/iber/tower.png);
+}
+#structures .iber_fortress {
+	background-image: url(../images/ui/icons/iber/fortress.png);
+}
+#structures .iber_temple {
+	background-image: url(../images/ui/icons/iber/temple.png);
+}
+
+/*<-- Roman icons -->*/
+#structures .rome_house {
+	background-image: url(../images/ui/icons/rome/house.png);
+}
+#structures .rome_farm {
+	background-image: url(../images/ui/icons/rome/farm.png);
+}
+#structures .rome_corral {
+	background-image: url(../images/ui/icons/rome/corral.png);
+}
+#structures .rome_storehouse {
+	background-image: url(../images/ui/icons/rome/storehouse.png);
+}
+#structures .rome_barracks {
+	background-image: url(../images/ui/icons/rome/barracks.png);
+}
+#structures .rome_blacksmith {
+	background-image: url(../images/ui/icons/rome/blacksmith.png);
+}
+#structures .rome_civic {
+	background-image: url(../images/ui/icons/rome/civic.png);
+}
+#structures .rome_tower {
+	background-image: url(../images/ui/icons/rome/tower.png);
+}
+#structures .rome_fortress {
+	background-image: url(../images/ui/icons/rome/fortress.png);
+}
+#structures .rome_temple {
+	background-image: url(../images/ui/icons/rome/temple.png);
+}
+
+/*<-- Carthagenian icons -->*/
+#structures .kart_house {
+	background-image: url(../images/ui/icons/kart/house.png);
+}
+#structures .kart_farm {
+	background-image: url(../images/ui/icons/kart/farm.png);
+}
+#structures .kart_corral {
+	background-image: url(../images/ui/icons/kart/corral.png);
+}
+#structures .kart_storehouse {
+	background-image: url(../images/ui/icons/kart/storehouse.png);
+}
+#structures .kart_barracks {
+	background-image: url(../images/ui/icons/kart/barracks.png);
+}
+#structures .kart_blacksmith {
+	background-image: url(../images/ui/icons/kart/blacksmith.png);
+}
+#structures .kart_civic {
+	background-image: url(../images/ui/icons/kart/civic.png);
+}
+#structures .kart_tower {
+	background-image: url(../images/ui/icons/kart/tower.png);
+}
+#structures .kart_fortress {
+	background-image: url(../images/ui/icons/kart/fortress.png);
+}
+#structures .kart_temple {
+	background-image: url(../images/ui/icons/kart/temple.png);
+}
+
+/*<-- Persian icons -->*/
+#structures .pers_house {
+	background-image: url(../images/ui/icons/pers/house.png);
+}
+#structures .pers_farm {
+	background-image: url(../images/ui/icons/pers/farm.png);
+}
+#structures .pers_corral {
+	background-image: url(../images/ui/icons/pers/corral.png);
+}
+#structures .pers_storehouse {
+	background-image: url(../images/ui/icons/pers/storehouse.png);
+}
+#structures .pers_barracks {
+	background-image: url(../images/ui/icons/pers/barracks.png);
+}
+#structures .pers_blacksmith {
+	background-image: url(../images/ui/icons/pers/blacksmith.png);
+}
+#structures .pers_civic {
+	background-image: url(../images/ui/icons/pers/civic.png);
+}
+#structures .pers_tower {
+	background-image: url(../images/ui/icons/pers/tower.png);
+}
+#structures .pers_fortress {
+	background-image: url(../images/ui/icons/pers/fortress.png);
+}
+#structures .pers_temple {
+	background-image: url(../images/ui/icons/pers/temple.png);
+}
