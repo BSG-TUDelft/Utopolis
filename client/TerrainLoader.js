@@ -5,14 +5,11 @@ TerrainLoader.prototype.loader = new THREE.ColladaLoader();
 TerrainLoader.prototype.loader.options.convertUpAxis = true;
 
 TerrainLoader.prototype.load = function () {
-	this.loader.load( './art/textures/terrain/types/grass1-terrain.dae', function ( collada ) {  	
+	this.loader.load( './art/textures/terrain/types/terrain-grass.dae', function ( collada ) {  	
 		
 		dae = collada.scene;
   		removeLights(dae);
-   		var texture = THREE.ImageUtils.loadTexture('./art/textures/terrain/types/grass1.png');
-   		material = new THREE.MeshLambertMaterial({map: texture});
-   		dae.material = material;
-   		dae.scale.x = dae.scale.y = dae.scale.z = 20;
+   		dae.scale.x = dae.scale.y = dae.scale.z = 10;
    		dae.updateMatrix();
    		floor = new ModelWrapper(dae);
 		var floorSize = floor.getBoundingBox().size();
