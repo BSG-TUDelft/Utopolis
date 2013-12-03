@@ -167,8 +167,11 @@
 	height: 100px;
 	margin-left: 25px;
 	margin-top: 25px;
+	background-color: #000000;
 	background-image: url(../images/ui/icons/box150x100.png);
 	background-size: 100% 100%;
+	cursor: pointer;
+	opacity: 0.8;
 
 }
 
@@ -176,16 +179,17 @@
 	width: 150px;
 	height: 100px;
 	background-size: 100% 100%;
+
 }
 
 #structures li:hover {
-
+	opacity: 1 !important;
 }
 
 #structures li:hover div {
-	width: 170px;
-	height: 120px;
-	margin-left: -10px;
-	background-size: 100% 100%;
+	xwidth: 170px;
+	xheight: 120px;
+	xmargin-left: -10px;
+	xbackground-size: 100% 100%;
 }
 
