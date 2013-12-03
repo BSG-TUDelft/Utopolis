@@ -1,5 +1,4 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-var leftOffset = 250;	// fix this
 var container, stats;
 
 var camera, scene, renderer;
@@ -9,6 +8,7 @@ var currentModel;
 var selectedModel;
 
 var mouse2D, mouse3D, raycaster, rollOveredFace;
+var mouseOffsetX, mouseOffsetY;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
 var i, intersector;
@@ -91,12 +91,13 @@ function registerCollidableBoundingMesh(model) {            //using this method 
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
+    setMouseOffset();
 
     //SCENE
     scene = new THREE.Scene();
     
     //CAMERA
-    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
     camera.position.set(0, 25, 25 );
     cameraLookAt = scene.position;
 
@@ -118,7 +119,7 @@ function init() {
     
     //RENDERER
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth - leftOffset, window.innerHeight );
+    renderer.setSize( container.offsetWidth, container.offsetHeight );
     container.appendChild( renderer.domElement );
     
     //STATS
@@ -189,10 +190,25 @@ function detectCollision (collider) {           //collider = oject that detects 
     }
 }
 
+function setMouseOffset() {
+    var curleft = curtop = 0;
+    if (container.offsetParent) { 
+        var currentObj = container;
+        do {
+           curleft += currentObj.offsetLeft;
+           curtop += currentObj.offsetTop; 
+        } while (currentObj = currentObj.offsetParent);
+    }
+    //return { x : curleft, y : curtop };
+    mouseOffsetX = -curleft;
+    mouseOffsetY = -curtop;
+};
+
 function onDocumentMouseMove( event ) {
     event.preventDefault();
-    mouse2D.x = ( event.clientX / window.innerWidth) * 2 - 1;
-    mouse2D.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    mouse2D.x = ( (event.clientX + mouseOffsetX) / container.offsetWidth) * 2 - 1;
+    mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
+    //console.log(mouse2D);
 }
 
 function onDocumentMouseDown( event ) {
@@ -204,7 +220,7 @@ function onDocumentMouseDown( event ) {
                 var i = buildings.length - 1;
                 buildings[i] = currentModel.getClone();
                 buildings[i].position = intersector.point;
-                console.log(intersector.point);
+                //console.log(intersector.point);
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
                 
@@ -488,9 +504,9 @@ function togglePlacementMode () {
 }                         
 
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( container.offsetWidth, container.offsetHeight );
 }
 
 function animate() {
