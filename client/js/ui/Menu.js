@@ -60,7 +60,7 @@ Menu.prototype = {
 				"<li>" +
 				"<div title='" +  this.data.empires[tabIndex].structures[i].name + "' class='" +  this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
 				"</li>");
-			li.click($.proxy( this.structureClick, this,  this.data.empires[tabIndex].structures[i]));
+			li.click($.proxy( this.structureClick, this, li, this.data.empires[tabIndex].structures[i]));
 			$("#structures").append(li);
 		}
 
@@ -91,7 +91,9 @@ Menu.prototype = {
 	},
 
 	/** Fires when the li element of a structure is clicked */
-	structureClick: function(structure){
+	structureClick: function(li, structure){
+		$("#structures li").removeClass("selected");
+		li.addClass("selected");
 		this.dispatchEvent( { type: Menu.structureSelected, structure: structure } );
 	},
 
