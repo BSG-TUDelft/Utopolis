@@ -41,7 +41,8 @@ Topbar.prototype = {
 			this.resources[this.data.resources[i].resourceId] = {
 				name:  this.data.resources[i].name,
 				elem: li,
-				value: 0
+				value: 0,
+				formatter: this.data.resources[i].formatter
 			};
 			$("#resources").append(li);
 		}
@@ -51,8 +52,12 @@ Topbar.prototype = {
 	/** Visually updates */
 	update: function(){
 		for(var i in this.resources){
-			// Update value (round down)
-			this.resources[i].elem.html(Math.floor(this.resources[i].value));
+			// If formatter value is present, execute it to retrieve the formatted value
+			var displayValue = typeof(this.resources[i].formatter == 'function') ? this.resources[i].formatter(this.resources[i].value) : this.resources[i].value;
+
+			// Update value
+			this.resources[i].elem.html(displayValue);
+
 			// Update tooltips
 			this.resources[i].elem.prop('title', this.resources[i].name + ": " + Math.floor(this.resources[i].value));
 		}

@@ -38,6 +38,7 @@
         <script src="js/Detector.js"></script>
         <script src="js/libs/stats.min.js"></script>
 		<script src="js/libs/jquery-1.10.2.js"  type="text/javascript"></script>
+		<script src="js/libs/jquery-string-format.js" type="text/javascript"></script>
 		<script src="js/ui/Menu.js" type="text/javascript"></script>
 		<script src="js/ui/Topbar.js" type="text/javascript"></script>
 
@@ -57,7 +58,6 @@
 	</div>
 	<div id="topbar">
 		<ul id="resources">
-
 		</ul>
 
 	</div>
@@ -295,21 +295,30 @@
 
 		var topbarData = {
 			resources: [{
+				resourceId: 'civilians',
+				name: 'Idle civilians',
+				iconCss: 'civilians',
+				formatter: function(val) { return $.format('{0} idle civilians', val); }
+			}, {
 				resourceId: 'wood',
 				name: 'Wood',
-				iconCss: 'wood'
+				iconCss: 'wood',
+				formatter: function(val) { return Math.floor(val); }
 			}, {
 				resourceId: 'stone',
 				name: 'Stone',
-				iconCss: 'stone'
+				iconCss: 'stone',
+				formatter: function(val) { return Math.floor(val); }
 			}, {
 				resourceId: 'metal',
 				name: 'Metal',
-				iconCss: 'metal'
+				iconCss: 'metal',
+				formatter: function(val) { return Math.floor(val); }
 			}, {
 				resourceId: 'food',
 				name: 'Food',
-				iconCss: 'food'
+				iconCss: 'food',
+				formatter: function(val) { return Math.floor(val); }
 			}]
 		};
 
@@ -341,13 +350,15 @@
 				wood: 0,
 				stone: 0,
 				metal: 0,
-				food: 0
+				food: 0,
+				civilians: 0
 			}
 			setInterval(function(){
 				res.wood += .75;
 				res.stone += .5;
 				res.metal += .25;
 				res.food += 1;
+				res.civilians = Math.floor(Math.random() * 25);
 				topbar.setResourceValues(res);
 			}, 500)
 
