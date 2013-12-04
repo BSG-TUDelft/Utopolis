@@ -1,0 +1,17 @@
+.popup {
+	border-image-source: url(../images/ui/popup/border_89x89.png);
+	border-image-slice: 13 13 13 13;
+	border-image-width: 13px 13px 13px 13px;
+	border-image-outset: 10px 10px 10px 10px;
+	border-image-repeat: repeat repeat;
+
+
+	position: absolute;
+	left: 100px;
+	top: 100px;
+	background: url(../images/ui/common/wood.png);
+	min-width: 500px;
+	min-height: 400px;
+
+	display: none;
+}

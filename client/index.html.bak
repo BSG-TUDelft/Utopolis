@@ -62,15 +62,13 @@
 				<ul id="tabstrip"></ul>
 				<ul id="structures"></ul>
 			</div>
-			<div class="structures_scroll" id="structures_scroll_up"><div class="arrow"></div></div>
-			<div class="structures_scroll" id="structures_scroll_down"><div class="arrow"></div></div>
+		<div class="structures_scroll" id="structures_scroll_up"><div class="arrow"></div></div>
+		<div class="structures_scroll" id="structures_scroll_down"><div class="arrow"></div></div>
 
 		</div>
 		<div id="topbar">
-			<div class="inner">
-				<ul id="resources">
-				</ul>
-			</div>
+			<ul id="resources">
+			</ul>
 		</div>
 		<div id="leaderboard" class="popup">
 			

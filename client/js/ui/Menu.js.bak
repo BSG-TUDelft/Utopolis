@@ -103,7 +103,7 @@ Menu.prototype = {
 		var iconSize = 125; // soo ugly :(
 		var scroll = iconSize * this.iconsUp;
 
-		$("#structures").css("top", -scroll + topMargin);
+		$("#structures").css("margin-top", -scroll + topMargin);
 
 		// Hide arrows if necessary
 		if( this.onFirstStructurePage())

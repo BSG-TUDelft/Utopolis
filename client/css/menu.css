@@ -1,35 +1,37 @@
 
-#left{
-	float:left;
-	width: 250px;
+#left_menu{
+	width: 244px;
 	height: 100%;
-	background: url(../images/ui/wood.png) fixed;
-	position: relative;
+	position: absolute;
+	top: 0;
 	overflow: hidden;
+	padding-right: 6px;
 }
 
-#main{
+#left_menu .inner {
+	background: url(../images/ui/common/wood.png) fixed;
+	width: 100%;
 	height: 100%;
-	margin-left: 250px;
 }
 
 #tabstrip {
-	width: 50px;
-	height: 100%;
-	background-image: url(../images/ui/topbar/top_60x38.png), url(../images/ui/tabstrip/vertical_tab_bg.png);
-	background-position: 9px 0, 0 0;
-	background-repeat: no-repeat, repeat;
+   width: 44px;
+   height: 100%;
+   background-image: url(../images/ui/topbar/top_60x38.png), url(../images/ui/tabstrip/vertical_tab_bg.png);
+   background-position: 9px 0, 0 0;
+   background-repeat: no-repeat, repeat;
 	position: absolute;
-	right: 0;
-	top: 0;
-	padding: 40px 0 0 0;
+	right: 6px;
+  	top: 0;
+	padding: 60px 0 0 0;
 }
 
 #tabstrip li {
-	background: url(../images/ui/wood.png) fixed;
+	background: url(../images/ui/common/wood.png) fixed;
 }
 
 #tabstrip li div {
+	margin-right: -6px;
 	background-image: url(../images/ui/tabstrip/vertical_tabstrip_unselected.png);
 }
 
@@ -124,7 +126,7 @@
 .structures_scroll div.arrow {
 	height: 20px;
 	width: 101px;
-	margin: 4px 0 0 100px;
+	margin: 4px 0 0 94px;
 	cursor: pointer;
 }
 
@@ -158,8 +160,9 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	width: 300px;
+	width: 200px;
 	overflow: hidden;
+	position: relative;
 }
 
 #structures li {

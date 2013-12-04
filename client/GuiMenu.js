@@ -227,21 +227,30 @@ var menuData = {
 
 var topbarData = {
 	resources: [{
+		resourceId: 'citizens',
+		name: 'Idle citizens',
+		iconCss: 'citizens',
+		formatter: function(val) { return $.format('{0} idle citizens', val); }
+	}, {
 		resourceId: 'wood',
 		name: 'Wood',
-		iconCss: 'wood'
+		iconCss: 'wood',
+		formatter: function(val) { return Math.floor(val); }
 	}, {
 		resourceId: 'stone',
 		name: 'Stone',
-		iconCss: 'stone'
+		iconCss: 'stone',
+		formatter: function(val) { return Math.floor(val); }
 	}, {
 		resourceId: 'metal',
 		name: 'Metal',
-		iconCss: 'metal'
+		iconCss: 'metal',
+		formatter: function(val) { return Math.floor(val); }
 	}, {
 		resourceId: 'food',
 		name: 'Food',
-		iconCss: 'food'
+		iconCss: 'food',
+		formatter: function(val) { return Math.floor(val); }
 	}]
 };
 
@@ -273,8 +282,6 @@ function initGui() {
 	// Set values directly (the property names have to correspond those you used in topbarData ctr)
 	topbar.setResourceValues({
 		wood: 25,
-		stone: 15,
-		metal: 2,
 		food: 200
 	});
 
@@ -283,13 +290,15 @@ function initGui() {
 		wood: 0,
 		stone: 0,
 		metal: 0,
-		food: 0
+		food: 0,
+		citizens: 0
 	}
 	setInterval(function(){
 		res.wood += .75;
 		res.stone += .5;
 		res.metal += .25;
 		res.food += 1;
+		res.citizens = Math.floor(Math.random() * 25);
 		topbar.setResourceValues(res);
 	}, 500)
 

@@ -1,14 +1,21 @@
 #topbar {
 	height: 38px;
+	position: absolute;
+	top: 0;
+	left: 244px;
 	background: url(../images/ui/topbar/top_60x38.png);
-	position: relative;
-	margin-left: 250px	
+	width: 100%;
+}
+
+#topbar .inner {
+
 }
 
 #topbar #resources {
 	position: absolute;
-	right: 5px;
+	right: 250px;
 	bottom: 2px;
+	width: 100%;
 }
 
 #topbar #resources li {
@@ -18,12 +25,19 @@
 
 	background: rgba(0, 0, 0, .5) no-repeat 4px 2px;
 	color: #faffbb;
-	float: left;
+	float: right;
 	padding: 1px 10px 2px 32px;
 	margin: 2px 0 0 5px;
 	min-width: 40px;
 	text-align: right;
 }
+
+#topbar #resources li.citizens {
+	float: left;
+	margin-left: 250px;
+	background-image: url(../images/ui/topbar/resources/citizens_small.png);
+}
+
 
 #topbar #resources li.wood {
 	background-image: url(../images/ui/topbar/resources/wood_small.png);
