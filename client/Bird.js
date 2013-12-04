@@ -6,7 +6,8 @@ var bird;
 var morphs = [];
 var tweenM, tweenR;
 var position = { x : 0, y: 15, z: 0 };
-var target = { x : 0, y: 15, z: 0 };
+var target = { x : 15, y: 15, z: 0 };
+var currentRotation = Math.PI/2;
 
 
 function initBirds(scene) {
@@ -27,8 +28,10 @@ function initBirds(scene) {
 		meshAnim.scale.set( 0.008, 0.008, 0.008 );
 		bird = new Bird(meshAnim);
 		bird.obj.position = position;
+		//bird.obj.rotateY(Math.PI/2);
+		
 		console.log(bird.obj);
-		target = generatePos();
+		//target = generatePos();
 		//console.log("Initial rotation: " + bird.obj.rotation.y);
 		//console.log("target: " + target.x + "/" + target.z);
 		
@@ -75,13 +78,16 @@ function getRotation(){
 	var dx = target.x - position.x;
 	var theta = Math.atan2(dz, dx);
 	
-	console.log(position);
+	//console.log(position);
 	var positionVector = new THREE.Vector3(position.x, position.y, position.z);
 	var targetVector = new THREE.Vector3(target.x, target.y, target.z);
-	console.log(positionVector);
-	console.log(targetVector);
-
-	console.log(targetVector.sub(positionVector));
+	//console.log(positionVector);
+	//console.log(targetVector);
+	var directionVector = targetVector.clone().sub(positionVector);
+	console.log(directionVector);
+	var rotation = directionVector.angleTo(new THREE.Vector3(1, 0, 0));
+	console.log(rotation * 180/Math.PI);
+	currentRotation += rotation;
 	//console.log(targetVector.angleTo(new THREE.Vector3(0, 0, 0)));
 
 	var rot;
@@ -103,7 +109,7 @@ function getRotation(){
 	}
 	//console.log("theta: " + theta);
 	//console.log("rot: " + rot);
-	return rot;
+	return currentRotation;
 }
 
 function spinBird(angle) {
@@ -129,7 +135,7 @@ function updateBirds(delta){
 function generatePos(bird){
     var pos = {x: 0, y: 0, z: 0};
 	pos.x = Math.round(-20 + Math.random()*40);
-	pos.y = 8;
+	pos.y = 15;
 	pos.z = Math.round(-20 + Math.random()*40);
 	return pos;
 }
