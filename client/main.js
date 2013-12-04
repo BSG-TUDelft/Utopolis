@@ -109,8 +109,11 @@ function init() {
     cameraLookAt = scene.position;
 
     //FLOOR
-    initFloor();                
-
+    initFloor(); 
+    
+    //BIRD
+    initBirds(scene);                
+    
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
     var directionalLight = new THREE.DirectionalLight(/*Math.random() * 0xffffff*/0xeeeeee );
@@ -526,12 +529,14 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame( animate );
     update();
+    TWEEN.update();
     render();
 }
 
 function update() {
     var delta = clock.getDelta();
     if ( t > 1 ) t = 0;
+    updateBirds(delta);
     stats.update();
 }
 
