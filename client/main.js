@@ -98,7 +98,7 @@ function init() {
     
     //CAMERA
     camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
-    camera.position.set(0, 25, 25 );
+    camera.position.set(0, 25, 50 );
     cameraLookAt = scene.position;
 
     //FLOOR
@@ -403,7 +403,7 @@ function moveCameraBackwards() {
 
 function cameraZoomIn() {
     var lookDirection = getLookAtDirection().normalize();
-    if(camera.position.distanceTo(cameraLookAt) > 15 ) {
+    if(camera.position.distanceTo(cameraLookAt) > 35 ) {
         camera.position.x += lookDirection.x;
         camera.position.y += lookDirection.y;
         camera.position.z += lookDirection.z;
@@ -412,7 +412,7 @@ function cameraZoomIn() {
 
 function cameraZoomOut() {
     var lookDirection = getLookAtDirection().normalize();
-    if(camera.position.distanceTo(cameraLookAt) < 100 ) {
+    if(camera.position.distanceTo(cameraLookAt) < 75 ) {
         camera.position.x -= lookDirection.x;
         camera.position.y -= lookDirection.y;
         camera.position.z -= lookDirection.z;
@@ -442,7 +442,7 @@ function decreaseCameraElevation () {
     if(cameraLookAngle === undefined)
         setCameraLookAngle();
 
-    if(cameraElevationAngle*180/Math.PI < 75) {
+    if(cameraElevationAngle*180/Math.PI < 60) {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
