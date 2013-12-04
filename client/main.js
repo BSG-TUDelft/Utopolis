@@ -1,5 +1,5 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-var leftOffset = 250;	// fix this
+var leftOffset = 244;	// fix this
 var container, stats;
 
 var camera, scene, renderer;

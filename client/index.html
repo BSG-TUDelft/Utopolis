@@ -26,9 +26,12 @@
             a { color: skyblue }
         </style>
 		<link type="text/css" rel="stylesheet" href="css/general.css"/>
+		<link type="text/css" rel="stylesheet" href="css/main.css"/>
 		<link type="text/css" rel="stylesheet" href="css/menu.css"/>
 		<link type="text/css" rel="stylesheet" href="css/menu_icons.css"/>
 		<link type="text/css" rel="stylesheet" href="css/topbar.css"/>
+		<link type="text/css" rel="stylesheet" href="css/popup.css"/>
+
     </head>
     <body>
         <script src="js/three.js"></script>
@@ -39,6 +42,7 @@
         <script src="js/libs/stats.min.js"></script>
 		<script src="js/libs/jquery-1.10.2.js"  type="text/javascript"></script>
 		<script src="js/libs/jquery-string-format.js" type="text/javascript"></script>
+		<script src="js/libs/jquery-ui.js" type="text/javascript"></script>
 		<script src="js/ui/Menu.js" type="text/javascript"></script>
 		<script src="js/ui/Topbar.js" type="text/javascript"></script>
 
@@ -47,7 +51,8 @@
 		<script src="ModelArray.js"></script>
         <script src="ModelWrapper.js"></script>
 
-	<div id="left">
+		<div id="main">	</div>
+		<div id="left_menu">
 		<ul id="tabstrip">
 		</ul>
 		<ul id="structures">
@@ -55,14 +60,14 @@
 		<div class="structures_scroll" id="structures_scroll_up"><div class="arrow"></div></div>
 		<div class="structures_scroll" id="structures_scroll_down"><div class="arrow"></div></div>
 
-	</div>
-	<div id="topbar">
-		<ul id="resources">
-		</ul>
-
-	</div>
-	<div id="main">
-	</div>
+		</div>
+		<div id="topbar">
+			<ul id="resources">
+			</ul>
+		</div>
+		<div id=toet" class="popup">
+			blabla
+		</div>
 	<script type="text/javascript">
 
 		// This should come from the server
@@ -362,7 +367,8 @@
 				topbar.setResourceValues(res);
 			}, 500)
 
-
+			$(".popup").draggable();
+			$(".popup").resizable();
 		}());
 
 	</script>
