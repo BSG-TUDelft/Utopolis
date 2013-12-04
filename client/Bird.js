@@ -27,6 +27,7 @@ function initBirds(scene) {
 		meshAnim.scale.set( 0.008, 0.008, 0.008 );
 		bird = new Bird(meshAnim);
 		bird.obj.position = position;
+		console.log(bird.obj);
 		target = generatePos();
 		//console.log("Initial rotation: " + bird.obj.rotation.y);
 		//console.log("target: " + target.x + "/" + target.z);
@@ -74,6 +75,15 @@ function getRotation(){
 	var dx = target.x - position.x;
 	var theta = Math.atan2(dz, dx);
 	
+	console.log(position);
+	var positionVector = new THREE.Vector3(position.x, position.y, position.z);
+	var targetVector = new THREE.Vector3(target.x, target.y, target.z);
+	console.log(positionVector);
+	console.log(targetVector);
+
+	console.log(targetVector.sub(positionVector));
+	//console.log(targetVector.angleTo(new THREE.Vector3(0, 0, 0)));
+
 	var rot;
 	if(target.z > position.z && target.x > position.x){
 		rot = theta;
@@ -97,6 +107,8 @@ function getRotation(){
 }
 
 function spinBird(angle) {
+  console.log(angle);
+
   tweenR = new TWEEN.Tween( { y: bird.obj.rotation.y } )
       .to( { y: angle }, 500)
       .delay(200)
@@ -104,8 +116,6 @@ function spinBird(angle) {
           bird.obj.rotation.y = this.y;
       }).start();
 }
-
-
 
 function updateBirds(delta){
 	if(bird){	
