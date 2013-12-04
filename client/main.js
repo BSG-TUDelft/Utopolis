@@ -52,17 +52,21 @@ function initFloor() {
 }
 
 function initRollOver(position) {
-    rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
-    var ghostModel = currentModel.getClone();
-    var ghostMaterial = ghostModel.material.clone();
+    if(currentModel){
+        rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
+        var ghostModel = currentModel.getClone();
+        var ghostMaterial = ghostModel.material.clone();
 
-    setMaterial(ghostModel, ghostMaterial);
-    setTransparent(ghostModel);     
+        setMaterial(ghostModel, ghostMaterial);
+        setTransparent(ghostModel);     
 
-    ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
-    rollOverMesh.add(ghostModel);
+        ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
+        rollOverMesh.add(ghostModel);
 
-    scene.add( rollOverMesh );
+        rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
+
+        scene.add( rollOverMesh );
+    }
 }
 
 function setRollOverPosition (intersector) {
@@ -92,6 +96,9 @@ function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
     setMouseOffset();
+
+    //GUI
+    initGui();
 
     //SCENE
     scene = new THREE.Scene();
@@ -223,7 +230,6 @@ function onDocumentMouseDown( event ) {
                 //console.log(intersector.point);
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
-                
             }   
         }
     }
@@ -276,12 +282,12 @@ function onKeyDown ( event ) {
         case 80: // p  
             togglePlacementMode();
             break;
-        case 219: // [, {
+        /*case 219: // [, {
             previousBuilding();
             break;
         case 221: // ], }
             nextBuilding();           
-            break;
+            break;*/
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
             showEmitterOfModel(rollOverMesh);
@@ -442,7 +448,7 @@ function decreaseCameraElevation () {
     if(cameraLookAngle === undefined)
         setCameraLookAngle();
 
-    if(cameraElevationAngle*180/Math.PI < 60) {
+    if(cameraElevationAngle*180/Math.PI < 65) {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
@@ -453,7 +459,7 @@ function decreaseCameraElevation () {
     }
 }
 
-function nextBuilding() {
+/*function nextBuilding() {
     var index = loadedModels.indexOf(currentModel);
     if(index != loadedModels.length-1) {
         index++;
@@ -472,6 +478,7 @@ function previousBuilding() {
         //console.log(index);
     }
 }
+*/
 
 function removeSelectedModel() {
     for (var i = 0; i < scene.children.length; i++) {
@@ -499,7 +506,14 @@ function togglePlacementMode () {
         var intersector = getMouseProjectionOnFloor();
         //console.log(intersector);
         if(intersector)                                     //avoid errors when mouse is outside the floor area
-            initRollOver(intersector); 
+            initRollOver(intersector);
+        else {
+            var projectionDirection = getNormalizedProjectionDirection();
+            var floorSize = floor.modelBoundingBox.size(); 
+            initRollOver(new THREE.Vector3(+projectionDirection.z * floorSize.x, 0, -projectionDirection.x * floorSize.z));            //force init at edge of the map if mouse projection is outside the floor surface 
+        }
+            
+        console.log(floor.modelBoundingBox.size());
     }
 }                         
 
@@ -556,10 +570,10 @@ function render() {
     var timer = Date.now() * 0.0005;
     camera.lookAt( cameraLookAt );
 
-    
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
         intersector = getMouseProjectionOnFloor();
         if ( intersector ) {
+            //console.log(intersector);
             setRollOverPosition(intersector);
         }
     }

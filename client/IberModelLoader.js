@@ -10,7 +10,7 @@ IberModelLoader.prototype.loader = new ModelLoader('./art/textures/skins/structu
 IberModelLoader.prototype.loadModels = function () {
 	for (var key in this.modelStructuresArray) {
 	  	if (this.modelStructuresArray.hasOwnProperty(key)) {				//check if the property does not come from the constructor - i think we can safely remove this after some testing.
-    		this.loader.load(this.modelStructuresArray[key], this.decreaseRemainingStructures);	
+    		this.loader.load(key, this.modelStructuresArray, this.decreaseRemainingStructures);	
   		}
 	}
 }
@@ -18,7 +18,7 @@ IberModelLoader.prototype.loadModels = function () {
 IberModelLoader.prototype.decreaseRemainingStructures = function () {
 	numModelStructures--;
 	if(numModelStructures == 0) {
-		currentModel = loadedModels[0];
+		//currentModel = loadedModels[0];
 	}
 }
 

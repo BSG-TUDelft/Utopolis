@@ -7,11 +7,11 @@ ModelLoader = function ( file ) {
 ModelLoader.prototype.loader = new THREE.ColladaLoader();
 ModelLoader.prototype.loader.options.convertUpAxis = true;
 
-ModelLoader.prototype.load = function (modelFile, callbackDecRemainingStructures) {
-	this.loader.load( modelFile, this.setTextureOnModel(this.textureFile, callbackDecRemainingStructures) );
+ModelLoader.prototype.load = function (key, map, callbackDecRemainingStructures) {
+	this.loader.load( map[key], this.setTextureOnModel(key, this.textureFile, callbackDecRemainingStructures) );
 }
 
-ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRemainingStructures) {
+ModelLoader.prototype.setTextureOnModel = function (key, textureFile, callbackDecRemainingStructures) {
 	
 	return function ( collada ) {  	
 		  dae = collada.scene;
@@ -21,7 +21,8 @@ ModelLoader.prototype.setTextureOnModel = function (textureFile, callbackDecRema
    		setMaterial(dae, material);
    		dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
    		dae.updateMatrix();
-   		this.loadedModels.push(new ModelWrapper(dae));
+   		//this.loadedModels.push(new ModelWrapper(dae));
+      this.loadedModels[key] = new ModelWrapper(dae);
 		  callbackDecRemainingStructures();
 	};
 }
