@@ -125,7 +125,8 @@ function init() {
     //STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
+    stats.domElement.style.top = '50px';
+    stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
     
     //LOADER
