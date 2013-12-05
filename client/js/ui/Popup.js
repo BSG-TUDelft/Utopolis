@@ -1,6 +1,9 @@
 var Popup = function(parent) {
 	this.parent = $(parent);
 
+
+
+
 	this.parent .html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
 	$('#example').dataTable( {
 		"aaData": [
@@ -19,13 +22,17 @@ var Popup = function(parent) {
 			[ "Webkit", "Safari 3.0", "OSX.4+", 522.1, "A" ]
 		],
 		"aoColumns": [
-			{ "sTitle": "Engine" },
-			{ "sTitle": "Browser" },
-			{ "sTitle": "Platform" },
-			{ "sTitle": "Version", "sClass": "center" },
-			{ "sTitle": "Grade", "sClass": "center" }
+			{ "sTitle": "Name" },
+			{ "sTitle": "Citizens" },
+			{ "sTitle": "Culture" },
+			{ "sTitle": "Economy", "sClass": "center" },
+			{ "sTitle": "Knowledge", "sClass": "center" }
 		]
 	} );
+
+	var closeButton = $("<div class='close_button'></div>");
+	this.parent.append(closeButton);
+
 }
 Popup.prototype = {
 

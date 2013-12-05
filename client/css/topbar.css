@@ -12,10 +12,12 @@
 }
 
 #topbar #resources {
-	position: absolute;
-	right: 250px;
-	bottom: 2px;
+	margin-left: -250px;
 	width: 100%;
+}
+
+#topbar .inner {
+	margin: 11px 0 0 250px;
 }
 
 #topbar #resources li {
@@ -34,7 +36,7 @@
 
 #topbar #resources li.citizens {
 	float: left;
-	margin-left: 250px;
+	xmargin-left: 250px;
 	background-image: url(../images/ui/topbar/resources/citizens_small.png);
 }
 
