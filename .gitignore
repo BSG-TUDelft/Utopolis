@@ -10,3 +10,5 @@ target/
 .project
 .settings/
 .idea
+*.bak
+
