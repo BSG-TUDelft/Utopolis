@@ -489,6 +489,8 @@ function removeSelectedModel() {
     for (var i = 0; i < scene.children.length; i++) {
         if (getMeshFromModel(scene.children[i]) == selectedModel) {
             scene.remove(scene.children[i]);
+            scene.remove(selectedModel.modelBoundingMesh);
+            
             break;
         }
     }
