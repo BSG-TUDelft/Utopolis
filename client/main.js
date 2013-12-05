@@ -232,6 +232,7 @@ function onDocumentMouseDown( event ) {
                 var i = buildings.length - 1;
                 buildings[i] = currentModel.getClone();
                 buildings[i].position = intersector.point;
+                buildings[i].rotation = rollOverMesh.rotation.clone();
                 //console.log(intersector.point);
                 scene.add(buildings[i]);
                 registerCollidableBoundingMesh(buildings[i]);
@@ -287,12 +288,12 @@ function onKeyDown ( event ) {
         case 80: // p  
             togglePlacementMode();
             break;
-        /*case 219: // [, {
-            previousBuilding();
+        case 219: // [, {
+            rotateRollOverCCW();
             break;
         case 221: // ], }
-            nextBuilding();           
-            break;*/
+            rotateRollOverCW();           
+            break;
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
             showEmitterOfModel(rollOverMesh);
@@ -484,6 +485,18 @@ function previousBuilding() {
     }
 }
 */
+
+function rotateRollOverCW() {
+    if(rollOverMesh) {
+        rollOverMesh.rotation.y += Math.PI/2;
+    }
+}
+
+function rotateRollOverCCW() {
+    if(rollOverMesh) {
+        rollOverMesh.rotation.y -= Math.PI/2;      
+    }
+}
 
 function removeSelectedModel() {
     for (var i = 0; i < scene.children.length; i++) {
