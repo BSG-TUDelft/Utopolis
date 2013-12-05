@@ -266,11 +266,7 @@ function initGui() {
 
 	// Example use:
 	menu.addEventListener(Menu.structureSelected, function(e){
-		console.log("You clicked on " + e.structure.structureId + "");
-		console.log(loadedModels);
 		currentModel = loadedModels[e.structure.structureId];
-		console.log(currentModel);
-		console.log(rollOverMesh);
 		if(rollOverMesh) {
 			refreshRollover();
 		}
