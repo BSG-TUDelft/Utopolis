@@ -7,12 +7,8 @@ var morphs = [];
 var tweenM, tweenR;
 var position = { x : 0, y: 15, z: 0 };
 var target = { x : 15, y: 15, z: 0 };
-var currentRotation = Math.PI/2;
-
 
 function initBirds(scene) {
-
-
 	var loader = new THREE.JSONLoader();
 
 	loader.load( "flamingo.js", function( geometry ) {
@@ -28,18 +24,13 @@ function initBirds(scene) {
 		meshAnim.scale.set( 0.008, 0.008, 0.008 );
 		bird = new Bird(meshAnim);
 		bird.obj.position = position;
-		//bird.obj.rotateY(Math.PI/2);
 		
-		console.log(bird.obj);
-		//target = generatePos();
-		//console.log("Initial rotation: " + bird.obj.rotation.y);
-		//console.log("target: " + target.x + "/" + target.z);
-		
+		target = generatePos();
 		spinBird(getRotation());
+
 		tweenMoveBird(lineDistance(position, target));
 		scene.add( bird.obj );
 		morphs.push( bird.obj );
-
 	} );
 
 }
@@ -64,62 +55,42 @@ function tweenMoveBird(d){
 		})
 		.onComplete(function(){
 			target = generatePos();
-			console.log("current pos: " + position.x + "/" + position.z);
-			console.log("new target: " + target.x + "/" + target.z);
-			//spinBird(0); 
-			bird.obj.rotation.y = 0; //reset rotation.y value
+			//bird.obj.rotation.y = 0; 										//reset rotation.y value
 			spinBird(getRotation());
 			tweenMoveBird(lineDistance(target, position));
 		}).start();
 }
 
-function getRotation(){
-	var dz = target.z - position.z;
-	var dx = target.x - position.x;
-	var theta = Math.atan2(dz, dx);
-	
-	//console.log(position);
+function showPoint(vector3) {
+		var pointGeometry = new THREE.CubeGeometry( 0.1, 0.1, 0.1);
+		var pointMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000} );
+        var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial );
+        pointMesh.position.x = vector3.x;
+        pointMesh.position.y = vector3.y;
+        pointMesh.position.z = vector3.z;
+        scene.add(pointMesh);
+}
+
+function getRotation() {
 	var positionVector = new THREE.Vector3(position.x, position.y, position.z);
 	var targetVector = new THREE.Vector3(target.x, target.y, target.z);
-	//console.log(positionVector);
-	//console.log(targetVector);
 	var directionVector = targetVector.clone().sub(positionVector);
-	console.log(directionVector);
-	var rotation = directionVector.angleTo(new THREE.Vector3(1, 0, 0));
-	console.log(rotation * 180/Math.PI);
-	currentRotation += rotation;
-	//console.log(targetVector.angleTo(new THREE.Vector3(0, 0, 0)));
+	var rotation = directionVector.angleTo(new THREE.Vector3(0, 0, 1));
+	
+	if(directionVector.x < 0)
+		rotation = - rotation;
 
-	var rot;
-	if(target.z > position.z && target.x > position.x){
-		rot = theta;
-		//console.log("z2 > z1 | x2 > x1");
-	}	
-	else if(target.z < position.z && target.x < position.x){
-		rot = Math.PI + theta;
-		//console.log("z2 < z1 | x2 < x1");
-	}	
-	else if(target.z > position.z && target.x < position.x){
-		rot = - theta;
-		//console.log("z2 > z1 | x2 < x1");
-	}
-	else if(target.z < position.z && target.x > position.x){
-		rot = Math.PI - theta;
-		//console.log("z2 < z1 | x2 > x1");
-	}
-	//console.log("theta: " + theta);
-	//console.log("rot: " + rot);
-	return currentRotation;
+	return rotation - bird.obj.rotation.y;
 }
 
 function spinBird(angle) {
-  console.log(angle);
+  initial = bird.obj.rotation.y;
 
   tweenR = new TWEEN.Tween( { y: bird.obj.rotation.y } )
       .to( { y: angle }, 500)
       .delay(200)
       .onUpdate( function () {
-          bird.obj.rotation.y = this.y;
+          bird.obj.rotation.y = initial + this.y;
       }).start();
 }
 
@@ -133,10 +104,11 @@ function updateBirds(delta){
 }
 
 function generatePos(bird){
-    var pos = {x: 0, y: 0, z: 0};
-	pos.x = Math.round(-20 + Math.random()*40);
+    var pos = {x: 5, y: 15, z: 7};
+	pos.x = Math.round( - floor.geometry.width/2 + Math.random() * floor.geometry.width);
 	pos.y = 15;
-	pos.z = Math.round(-20 + Math.random()*40);
+	pos.z = Math.round( - floor.geometry.height/2 + Math.random() * floor.geometry.height);
+	//showPoint(pos);
 	return pos;
 }
     
@@ -155,7 +127,7 @@ function lineDistance( point1, point2 )
 }
 
 function getMovementTime(d){
-	return d * 1000; //1 second per pixel
+	return d * 370; //1 second per pixel
 }
 
 

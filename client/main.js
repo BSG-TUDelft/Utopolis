@@ -92,6 +92,13 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     selectableMeshes.push( model.getMesh() );                   //TODO fix this!
 }
 
+function onTerrainLoad() {
+    scene.add(floor);
+
+    //BIRD
+    initBirds(scene);  
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -109,10 +116,7 @@ function init() {
     cameraLookAt = scene.position;
 
     //FLOOR
-    initFloor(); 
-    
-    //BIRD
-    initBirds(scene);                
+    initFloor();               
     
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );

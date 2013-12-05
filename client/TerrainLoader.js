@@ -16,6 +16,6 @@ TerrainLoader.prototype.load = function () {
 		floor.geometry = floor.getMesh().geometry;
 		floor.geometry.width = floorSize.x;
 		floor.geometry.height = floorSize.z;
-		scene.add(floor);
+		onTerrainLoad();
 	});
 }
