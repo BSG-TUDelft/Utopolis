@@ -234,6 +234,7 @@ function onDocumentMouseDown( event ) {
                 buildings[i].position = intersector.point;
                 //console.log(intersector.point);
                 scene.add(buildings[i]);
+
                 registerCollidableBoundingMesh(buildings[i]);
             }   
         }
@@ -486,13 +487,25 @@ function previousBuilding() {
 */
 
 function removeSelectedModel() {
-    for (var i = 0; i < scene.children.length; i++) {
-        if (getMeshFromModel(scene.children[i]) == selectedModel) {
-            scene.remove(scene.children[i]);
-            scene.remove(selectedModel.modelBoundingMesh);
-            
-            break;
+    if(selectedModel){
+        for (var i = 0; i < scene.children.length; i++) {
+            var child = scene.children[i];
+            if(child.getMesh) {
+                if (child.getMesh() == selectedModel) {                
+                    scene.remove(child);                                            
+                    scene.remove(selectedModel.modelBoundingMesh);
+
+                    var meshIndex = collidableMeshList.indexOf(selectedModel.modelBoundingMesh);
+                    collidableMeshList.splice(meshIndex, 1);
+                    var bboxIndex = collidableBoundingBoxes.indexOf(selectedModel.modelBoundingBox);
+                    collidableBoundingBoxes.splice(bboxIndex, 1);
+                    var selectableIndex = selectableMeshes.indexOf(selectedModel);
+                    selectableMeshes.splice(selectableIndex, 1);
+                    break;
+                }    
+            }   
         }
+        selectedModel = null;
     }
 }
 
@@ -519,8 +532,6 @@ function togglePlacementMode () {
             var floorSize = floor.modelBoundingBox.size(); 
             initRollOver(new THREE.Vector3(+projectionDirection.z * floorSize.x, 0, -projectionDirection.x * floorSize.z));            //force init at edge of the map if mouse projection is outside the floor surface 
         }
-            
-        console.log(floor.modelBoundingBox.size());
     }
 }                         
 
