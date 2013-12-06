@@ -3,6 +3,7 @@ package nl.tudelft.bsg.utopolis.server.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ public class Province implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL})
 	private List<City> cities;
 	private String name;
 
