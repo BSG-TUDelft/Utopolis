@@ -47,7 +47,7 @@ public class DBBootstrap {
 			City c1 = new City();
 			c1.setName("Sparta");
 			c1.setPlayer(p1);
-			c1.setBuildings(Arrays.asList(structs1));
+			c1.setStructures(Arrays.asList(structs1));
 			DBConnector.get().save(c1);
 
 			City[] cities1 = { c1 };

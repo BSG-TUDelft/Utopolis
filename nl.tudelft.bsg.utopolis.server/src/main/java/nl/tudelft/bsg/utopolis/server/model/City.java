@@ -19,7 +19,7 @@ public class City implements Serializable {
 	@OneToOne
 	private Player player;
 	@OneToMany
-	private List<Structure> buildings;
+	private List<Structure> structures;
 	private String name;
 
 	public City() {
@@ -41,12 +41,12 @@ public class City implements Serializable {
 		this.player = player;
 	}
 
-	public List<Structure> getBuildings() {
-		return buildings;
+	public List<Structure> getStructures() {
+		return structures;
 	}
 
-	public void setBuildings(List<Structure> buildings) {
-		this.buildings = buildings;
+	public void setStructures(List<Structure> structures) {
+		this.structures = structures;
 	}
 
 	public String getName() {
