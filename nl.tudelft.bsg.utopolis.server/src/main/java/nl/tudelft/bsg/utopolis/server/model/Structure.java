@@ -15,7 +15,8 @@ public class Structure implements Serializable {
 	@GeneratedValue
 	private int id;
 	@Enumerated
-	private StructureType type;
+	private StructureType structType;
+	@Enumerated
 	private Race race;
 	private double x;
 	private double y;
@@ -25,9 +26,6 @@ public class Structure implements Serializable {
 	private int numCitizens;
 	private int maxCitizens;
 
-	public Structure() {
-	}
-	
 	public int getId() {
 		return id;
 	}
@@ -36,12 +34,12 @@ public class Structure implements Serializable {
 		this.id = id;
 	}
 
-	public StructureType getType() {
-		return type;
+	public StructureType getStructType() {
+		return structType;
 	}
 
-	public void setType(StructureType type) {
-		this.type = type;
+	public void setStructType(StructureType structType) {
+		this.structType = structType;
 	}
 
 	public Race getRace() {

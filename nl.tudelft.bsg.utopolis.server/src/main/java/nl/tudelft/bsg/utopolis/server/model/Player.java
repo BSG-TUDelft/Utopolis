@@ -17,9 +17,6 @@ public class Player implements Serializable {
 	private String nick;
 	private String password;
 	
-	public Player() {
-	}
-	
 	public int getId() {
 		return id;
 	}

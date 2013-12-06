@@ -21,9 +21,6 @@ public class City implements Serializable {
 	@OneToMany
 	private List<Structure> structures;
 	private String name;
-
-	public City() {
-	}
 	
 	public int getId() {
 		return id;

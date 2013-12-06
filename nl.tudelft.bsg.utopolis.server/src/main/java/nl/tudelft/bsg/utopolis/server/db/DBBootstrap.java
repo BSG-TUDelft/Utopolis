@@ -18,7 +18,7 @@ public class DBBootstrap {
 			s1.setZ(3);
 			s1.setRotation(90);
 			s1.setScale(0.2);
-			s1.setType(StructureType.TEMPLE);
+			s1.setStructType(StructureType.TEMPLE);
 			s1.setRace(Race.IBERIANS);
 			s1.setMaxCitizens(100);
 			s1.setNumCitizens(13);
@@ -30,7 +30,7 @@ public class DBBootstrap {
 			s2.setZ(30);
 			s2.setRotation(180);
 			s2.setScale(0.4);
-			s2.setType(StructureType.BARRACKS);
+			s2.setStructType(StructureType.BARRACKS);
 			s2.setRace(Race.IBERIANS);
 			s2.setMaxCitizens(200);
 			s2.setNumCitizens(133);

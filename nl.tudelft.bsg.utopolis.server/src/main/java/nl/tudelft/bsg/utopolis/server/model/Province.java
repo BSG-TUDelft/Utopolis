@@ -19,9 +19,6 @@ public class Province implements Serializable {
 	private List<City> cities;
 	private String name;
 
-	public Province() {
-	}
-
 	public int getId() {
 		return id;
 	}
