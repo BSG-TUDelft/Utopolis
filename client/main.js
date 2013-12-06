@@ -147,6 +147,25 @@ function init() {
     var loader = new IberModelLoader(); 
     loader.loadModels();
 
+    // load city from server
+    request = $.ajax({
+        url: 'http://localhost:8080/api/application.wadl',
+        type: 'GET'
+        // success: function(data, textStatus, jqXHR) { console.log("FTW"); },
+        // error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); console.log(textStatus); console.log(errorThrown); }
+    });
+
+    request.done(function (response, textStatus, jqXHR){
+        console.log("Hooray, it worked!");
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+    });
+
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
