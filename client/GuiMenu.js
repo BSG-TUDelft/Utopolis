@@ -302,7 +302,6 @@ function initGui() {
 		topbar.setResourceValues(res);
 	}, 500)
 
-	$(".popup").draggable({ containment: "window" });
-	$(".popup").resizable();
-	new Popup(".popup");
+
+	new Popup($("body"));
 }

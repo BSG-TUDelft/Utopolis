@@ -13,7 +13,8 @@
 	min-width: 500px;
 	min-height: 400px;
 
-	xdisplay: none;
+	width: 80%;
+	height: 80%;
 }
 
 .popup .close_button{
@@ -21,7 +22,7 @@
 	height: 22px;
 	position: absolute;
 	left: 6px;
-	top: -18px;
+	top: -19px;
 	background: url(../images/ui/popup/close44x22.png);
 	cursor: pointer;
 }
@@ -29,3 +30,5 @@
 .popup .close_button:hover {
 	background-position: -22px 0;
 }
+
+

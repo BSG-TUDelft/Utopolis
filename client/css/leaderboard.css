@@ -1,0 +1,67 @@
+/* todo: rename to generic table*/
+.leaderboard {
+	border-right: 1px solid #696245;
+	width: 100%;
+}
+
+.leaderboard td, .leaderboard th {
+	text-align: left;
+	height: 27px;
+	padding: 0 6px 0 6px;
+	border-left: 1px solid #696245;
+}
+
+.leaderboard td {
+	border-bottom: 1px solid #696245;
+	background: rgba(0, 0, 0, .75);
+}
+
+
+.leaderboard th {
+	background: #313127;
+	background-image: url(../images/ui/table/header_bg.png), url(../images/ui/table/header_bg.png), url(../images/ui/table/header_bg.png);
+	background-position:  left 0, right -54px, 0 -27px;
+	background-repeat: no-repeat, no-repeat, repeat-x;
+}
+
+.rightAlign {
+	text-align: right;
+}
+
+.leaderboard .medals {
+	float: right;
+}
+
+.leaderboard .medals div {
+	float: left;
+	width: 16px;
+	height: 16px;
+}
+
+.leaderboard .medals .medal_bronze1 {
+	background-image: url(../images/ui/leaderboard/medals/medal_bronze_1.png);
+}
+.leaderboard .medals .medal_bronze2 {
+	background-image: url(../images/ui/leaderboard/medals/medal_bronze_2.png);
+}
+.leaderboard .medals .medal_bronze3 {
+	background-image: url(../images/ui/leaderboard/medals/medal_bronze_3.png);
+}
+.leaderboard .medals .medal_silver1 {
+	background-image: url(../images/ui/leaderboard/medals/medal_silver_1.png);
+}
+.leaderboard .medals .medal_silver2 {
+	background-image: url(../images/ui/leaderboard/medals/medal_silver_2.png);
+}
+.leaderboard .medals .medal_silver3 {
+	background-image: url(../images/ui/leaderboard/medals/medal_silver_3.png);
+}
+.leaderboard .medals .medal_gold1 {
+	background-image: url(../images/ui/leaderboard/medals/medal_gold_1.png);
+}
+.leaderboard .medals .medal_gold2 {
+	background-image: url(../images/ui/leaderboard/medals/medal_gold_2.png);
+}
+.leaderboard .medals .medal_gold3 {
+	background-image: url(../images/ui/leaderboard/medals/medal_gold_3.png);
+}
