@@ -14,17 +14,18 @@ import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 @Path("city")
 public class CityResource extends Resource {
-	
+
 	@GET
 	@Path("/{playerId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public City getCity(@PathParam("playerId") int playerId) {
 		return DBConnector.get().getCity(playerId);
 	}
-	
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -32,18 +33,29 @@ public class CityResource extends Resource {
 		DBConnector.get().save(c);
 		return c;
 	}
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateCity(City c) {
 		DBConnector.get().save(c);
 		return simpleResponse(200);
 	}
-	
+
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<City> listCities() {
 		return DBConnector.get().getCities();
+	}
+
+	@PUT
+	@Path("/{playerId}/structure")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createStructure(@PathParam("playerId") int playerId,
+			Structure s) {
+		City c = DBConnector.get().getCity(playerId);
+		c.getStructures().add(s);
+		DBConnector.get().save(c);
+		return simpleResponse(200);
 	}
 }
