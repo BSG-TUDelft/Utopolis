@@ -178,6 +178,12 @@ function init() {
 	})
 	kartLoader.loadModels();
 
+	var persLoader = new PersModelLoader();
+	persLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Persians");
+	})
+
+	persLoader.loadModels();
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
@@ -237,8 +243,22 @@ function detectCollision (collider) {           //collider = oject that detects 
 }
 
 function setMouseOffset() {
-	mouseOffsetX = $(container).offset().left
-	mouseOffsetY = $(container).offset().top
+    var curleft = 0;
+	var curtop = 0;
+    if (container.offsetParent) {
+        var currentObj = container;
+        do {
+           curleft += currentObj.offsetLeft;
+           curtop += currentObj.offsetTop;
+        } while (currentObj = currentObj.offsetParent);
+    }
+    //return { x : curleft, y : curtop };
+    mouseOffsetX = -curleft;
+    mouseOffsetY = -curtop;
+	/**
+	 * mouseOffsetX = $(container).offset().left
+	 * mouseOffsetY = $(container).offset().top
+	 */
 };
 
 function onDocumentMouseMove( event ) {
