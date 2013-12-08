@@ -23,12 +23,13 @@ Popup.prototype = {
 		this.el.position({ my: "center center", of: $(window)});
 	},
 
-	/** */
+	/** Shows this popup */
 	show: function() {
 		this.center();
 		this.el.show();
 	},
 
+	/** Hides this popup */
 	hide: function(){
 		this.el.hide("slow");
 	},
