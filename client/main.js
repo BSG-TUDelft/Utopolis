@@ -237,21 +237,8 @@ function detectCollision (collider) {           //collider = oject that detects 
 }
 
 function setMouseOffset() {
-    var curleft = curtop = 0;
-    if (container.offsetParent) { 
-        var currentObj = container;
-        do {
-           curleft += currentObj.offsetLeft;
-           curtop += currentObj.offsetTop; 
-        } while (currentObj = currentObj.offsetParent);
-    }
-    //return { x : curleft, y : curtop };
-    mouseOffsetX = -curleft;
-    mouseOffsetY = -curtop;
-	/**
-	 * mouseOffsetX = $(container).offset().left
-	 * mouseOffsetY = $(container).offset().top
-	 */
+	mouseOffsetX = $(container).offset().left
+	mouseOffsetY = $(container).offset().top
 };
 
 function onDocumentMouseMove( event ) {
