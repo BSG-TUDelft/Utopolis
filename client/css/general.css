@@ -6,6 +6,8 @@ body {
 	margin: 0;
 	height: 100%;
 	font-family: acuta,"Bell MT","BellMT","Georgia",sans-serif;
+	color: #faffbb;
+	text-shadow: 2px 2px #000000;
 }
 
 ul {

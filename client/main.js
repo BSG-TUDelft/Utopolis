@@ -126,7 +126,17 @@ function init() {
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
-    
+
+	var skybox = Skybox.get([
+		'art/skybox/sky16/frontw3.jpg',
+		'art/skybox/sky16/backw3.jpg',
+		'art/skybox/sky16/topw3.jpg',
+		'art/skybox/sky16/topw3.jpg',
+		'art/skybox/sky16/leftw3.jpg',
+		'art/skybox/sky16/rightw3.jpg',
+	]);
+	scene.add(skybox);
+
     // picking
     projector = new THREE.Projector();
     mouse2D = new THREE.Vector3( 0, 10000, 0.5 );

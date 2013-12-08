@@ -109,6 +109,13 @@
 	background-position: -200px 0;
 }
 
+#tabstrip .tab_gaia div .icon {
+	background-position: -240px -40px;
+}
+#tabstrip .tab_gaia div .icon:hover, #tabstrip .tab_gaia.selected div .icon {
+	background-position: -240px 0;
+}
+
 
 .structures_scroll {
 	width: 100%;
