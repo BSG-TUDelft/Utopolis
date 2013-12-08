@@ -153,10 +153,37 @@ function init() {
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
     
-    //LOADER
-    var loader = new IberModelLoader(); 
-    loader.loadModels();
+    //MODEL LOADERS
+	var iberLoader = new IberModelLoader();
+	iberLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Iberians");
+	})
+	iberLoader.loadModels();
 
+	var romeLoader = new RomeModelLoader();
+	romeLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Romans");
+	})
+	romeLoader.loadModels();
+
+	var heleLoader = new HeleModelLoader();
+	heleLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Hellenes");
+	})
+	heleLoader.loadModels();
+
+	var kartLoader = new KartModelLoader();
+	kartLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Carthaginians");
+	})
+	kartLoader.loadModels();
+
+	var persLoader = new PersModelLoader();
+	persLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Persians");
+	})
+
+	persLoader.loadModels();
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
@@ -216,12 +243,13 @@ function detectCollision (collider) {           //collider = oject that detects 
 }
 
 function setMouseOffset() {
-    var curleft = curtop = 0;
-    if (container.offsetParent) { 
+    var curleft = 0;
+	var curtop = 0;
+    if (container.offsetParent) {
         var currentObj = container;
         do {
            curleft += currentObj.offsetLeft;
-           curtop += currentObj.offsetTop; 
+           curtop += currentObj.offsetTop;
         } while (currentObj = currentObj.offsetParent);
     }
     //return { x : curleft, y : curtop };

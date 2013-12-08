@@ -70,10 +70,10 @@ var menuData = {
 			name: "Blacksmith",
 			structureId: "rome_blacksmith",
 			iconCss: "rome_blacksmith"
-//				},{
-//					name: "Civic center",
-//					structureId: "rome_civic",
-//					iconCss: "rome_civic"
+				},{
+					name: "Civic center",
+					structureId: "rome_civic",
+					iconCss: "rome_civic"
 		},{
 			name: "Tower",
 			structureId: "rome_tower",
@@ -219,9 +219,9 @@ var menuData = {
 			structureId: "pers_temple",
 			iconCss: "pers_temple"
 		}]
-	}, {
-		name: "Mauryans",
-		tabCss: "tab_maur"
+	//}, {
+	//	name: "Mauryans",
+	//	tabCss: "tab_maur"
 	}, {
 		name: "Gaia",
 		tabCss: "tab_gaia"
@@ -269,13 +269,20 @@ function initGui() {
 
 	// Example use:
 	menu.addEventListener(Menu.structureSelected, function(e){
-		currentModel = loadedModels[e.structure.structureId];
-		if(rollOverMesh) {
-			refreshRollover();
-		}
-		if(rollOverMesh == undefined)
+
+		// Clicked on the same structure again means disable placement mode
+		if(e.structure == null){
 			togglePlacementMode();
-		
+		}
+		else {
+			currentModel = loadedModels[e.structure.structureId];
+
+			if(rollOverMesh) {
+				refreshRollover();
+			}
+			if(rollOverMesh == undefined)
+				togglePlacementMode();
+		}
 	});
 
 	// Set values directly (the property names have to correspond those you used in topbarData ctr)
