@@ -168,9 +168,15 @@ function init() {
 
 	var heleLoader = new HeleModelLoader();
 	heleLoader.addEventListener(ModelLoader.doneLoading, function(){
-		console.log("Done loading Romans");
+		console.log("Done loading Hellenes");
 	})
 	heleLoader.loadModels();
+
+	var kartLoader = new KartModelLoader();
+	kartLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Carthaginians");
+	})
+	kartLoader.loadModels();
 
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
