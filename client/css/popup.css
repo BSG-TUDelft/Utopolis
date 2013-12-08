@@ -11,10 +11,9 @@
 	top: 100px;
 	background: url(../images/ui/common/wood.png);
 	min-width: 500px;
-	min-height: 400px;
+	min-height: 300px;
 
 	width: 80%;
-	height: 80%;
 }
 
 .popup .close_button{

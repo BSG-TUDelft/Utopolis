@@ -1,5 +1,21 @@
 /* todo: rename to generic table*/
+.popup {
+	padding: 20px 4px 4px 4px;
+}
+
 .leaderboard {
+	background-image: url(../images/ui/common/steel.png);
+	padding: 60 6px 6px 6px;
+	border: 1px solid #151515;
+	height: 100%;
+}
+
+.leaderboard h1 {
+	text-align: center;
+	margin: 10px 0 10px;
+}
+
+.leaderboard table {
 	border-right: 1px solid #696245;
 	width: 100%;
 }
@@ -18,13 +34,34 @@
 
 
 .leaderboard th {
+	line-height: 26px;
 	background: #313127;
 	background-image: url(../images/ui/table/header_bg.png), url(../images/ui/table/header_bg.png), url(../images/ui/table/header_bg.png);
 	background-position:  left 0, right -54px, 0 -27px;
 	background-repeat: no-repeat, no-repeat, repeat-x;
+	cursor: pointer;
 }
 
-.rightAlign {
+.leaderboard th div {
+	float: right;
+	width: 13px;
+	height: 100%;
+	background-position: 0;
+	background-repeat: no-repeat;
+}
+
+.leaderboard th.right_align div {
+	float: left;	/* show sorting indicator on the left */
+}
+
+.leaderboard .sorting_desc div {
+	background-image: url(../images/ui/table/sort_down.png);
+}
+.leaderboard .sorting_asc div{
+	background-image: url(../images/ui/table/sort_up.png);
+}
+
+.leaderboard .right_align {
 	text-align: right;
 }
 
