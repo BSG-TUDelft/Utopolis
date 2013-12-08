@@ -269,13 +269,20 @@ function initGui() {
 
 	// Example use:
 	menu.addEventListener(Menu.structureSelected, function(e){
-		currentModel = loadedModels[e.structure.structureId];
-		if(rollOverMesh) {
-			refreshRollover();
-		}
-		if(rollOverMesh == undefined)
+
+		// Clicked on the same structure again means disable placement mode
+		if(e.structure == null){
 			togglePlacementMode();
-		
+		}
+		else {
+			currentModel = loadedModels[e.structure.structureId];
+
+			if(rollOverMesh) {
+				refreshRollover();
+			}
+			if(rollOverMesh == undefined)
+				togglePlacementMode();
+		}
 	});
 
 	// Set values directly (the property names have to correspond those you used in topbarData ctr)

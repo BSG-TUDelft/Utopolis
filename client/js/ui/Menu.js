@@ -93,8 +93,15 @@ Menu.prototype = {
 	/** Fires when the li element of a structure is clicked */
 	structureClick: function(li, structure){
 		$("#structures li").removeClass("selected");
-		li.addClass("selected");
-		this.dispatchEvent( { type: Menu.structureSelected, structure: structure } );
+		if(structure.structureId == this.selectedStructureId){
+			this.selectedStructureId = null;
+			this.dispatchEvent( { type: Menu.structureSelected, structure: null } );
+		}
+		else {
+			li.addClass("selected");
+			this.selectedStructureId = structure.structureId;
+			this.dispatchEvent( { type: Menu.structureSelected, structure: structure } );
+		}
 	},
 
 	/** Calculates scrolling for structures  */
