@@ -36,7 +36,6 @@
 
 #topbar #resources li.citizens {
 	float: left;
-	xmargin-left: 250px;
 	background-image: url(../images/ui/topbar/resources/citizens_small.png);
 }
 

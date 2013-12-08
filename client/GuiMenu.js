@@ -222,6 +222,9 @@ var menuData = {
 	}, {
 		name: "Mauryans",
 		tabCss: "tab_maur"
+	}, {
+		name: "Gaia",
+		tabCss: "tab_gaia"
 	}]
 };
 
