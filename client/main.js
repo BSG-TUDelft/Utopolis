@@ -153,9 +153,18 @@ function init() {
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
     
-    //LOADER
-    var loader = new IberModelLoader(); 
-    loader.loadModels();
+    //MODEL LOADERS
+	var iberLoader = new IberModelLoader();
+	iberLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Iberians");
+	})
+	iberLoader.loadModels();
+
+	var romeLoader = new RomeModelLoader();
+	romeLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Romans");
+	})
+	romeLoader.loadModels();
 
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );

@@ -70,10 +70,10 @@ var menuData = {
 			name: "Blacksmith",
 			structureId: "rome_blacksmith",
 			iconCss: "rome_blacksmith"
-//				},{
-//					name: "Civic center",
-//					structureId: "rome_civic",
-//					iconCss: "rome_civic"
+				},{
+					name: "Civic center",
+					structureId: "rome_civic",
+					iconCss: "rome_civic"
 		},{
 			name: "Tower",
 			structureId: "rome_tower",
