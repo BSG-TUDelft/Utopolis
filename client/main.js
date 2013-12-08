@@ -166,6 +166,12 @@ function init() {
 	})
 	romeLoader.loadModels();
 
+	var heleLoader = new HeleModelLoader();
+	heleLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Romans");
+	})
+	heleLoader.loadModels();
+
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
