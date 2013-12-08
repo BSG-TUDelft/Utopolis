@@ -26,7 +26,7 @@ HeleModelLoader.prototype.decreaseRemainingStructures = function () {
 
 HeleModelLoader.prototype.modelStructuresArray = {
 	"hele_house":"./art/meshes/structural/hele_house_a.dae",
-	"hele_farmstead":"./art/meshes/structural/hele_farmstead.dae",
+	"hele_farm":"./art/meshes/structural/hele_farmstead.dae",
 	"hele_corral":"./art/meshes/structural/hele_corral.dae",
 	"hele_storehouse":"./art/meshes/structural/hele_storehouse.dae",
 	"hele_blacksmith":"./art/meshes/structural/hele_blacksmith_struct_b.dae",
