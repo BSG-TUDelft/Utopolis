@@ -23,7 +23,7 @@ ModelLoader.prototype.setTextureOnModel = function (key, textureFile, callbackDe
    		var texture = THREE.ImageUtils.loadTexture(textureFile);
    		var material = new THREE.MeshLambertMaterial({map: texture});
    		setMaterial(dae, material);
-   		dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
+   		dae.scale.x = dae.scale.y = dae.scale.z = 0.4;
    		dae.updateMatrix();
       	this.loadedModels[key] = new ModelWrapper(dae);
 		callbackDecRemainingStructures();
