@@ -1,17 +1,103 @@
-function Bird(object){
-	this.obj = object;	
+var Bird = function(object, position){
+	this.obj = object;
+
+	if(position == null)
+		this.position = this.generatePos();
+	else
+		this.position = position;
+	this.obj.position = this.position;
 }
 
-var bird;
-var morphs = [];
-var tweenM, tweenR;
-var position = { x : 0, y: 15, z: 0 };
-var target = { x : 15, y: 15, z: 0 };
+Bird.prototype = {
+	constructor: Bird,
+
+
+	position: new THREE.Vector3( 0, 15, 0),
+	tweenM: null,
+	tweenR: null,
+	target: null,
+
+	getRotation: function(){
+		var positionVector = new THREE.Vector3(this.position.x, this.position.y, this.position.z);
+		var targetVector = new THREE.Vector3(this.target.x, this.target.y, this.target.z);
+		var directionVector = targetVector.clone().sub(positionVector);
+		var rotation = directionVector.angleTo(new THREE.Vector3(0, 0, 1));
+
+		if(directionVector.x < 0)
+			rotation = - rotation;
+
+		return rotation - this.obj.rotation.y;
+	},
+
+	spin: function() {
+		var angle = this.getRotation();
+		var initial = this.obj.rotation.y;
+		var me = this;
+
+		this.tweenR = new TWEEN.Tween( { y: this.obj.rotation.y } )
+			.to( { y: angle }, 500)
+			.delay(200)
+			.onUpdate(function() {
+				me.obj.rotation.y = initial + this.y;
+			}).start();
+	},
+
+	tweenMove: function(){
+		function getMovementTime(d){
+			return d * 370; //1 second per pixel
+		}
+		var d = this.lineDistance(this.obj.position, this.target)
+		this.tweenM = new TWEEN.Tween(this.position)
+			.to(this.target, getMovementTime(d))
+			.delay(100)
+			.onUpdate($.proxy(function(){//console.log(this.position)
+				this.obj.position.x = this.position.x;
+				this.obj.position.z = this.position.z;
+			}, this))
+			.onComplete($.proxy(function(){
+				this.target = this.generatePos();
+				this.spin();
+				this.tweenMove();
+			},this)).start();
+	},
+
+	generatePos: function(){
+		var pos = {
+			x:  Math.round( - floor.geometry.width/2 + Math.random() * floor.geometry.width),
+			y: Math.round(Math.random() * 5) + 10,
+			z: Math.round( - floor.geometry.height/2 + Math.random() * floor.geometry.height)};
+
+		return pos;
+	},
+
+	lineDistance: function ( point1, point2 ){
+		var xs = point2.x - point1.x;
+		xs = xs * xs;
+
+		var zs = point2.z - point1.z;
+		zs = zs * zs;
+
+		return Math.sqrt( xs + zs );
+	}
+};
+
+var birds = [];
+
 
 function initBirds(scene) {
 	var loader = new THREE.JSONLoader();
 
 	loader.load( "flamingo.js", function( geometry ) {
+
+		function morphColorsToFaceColors( geometry ) {
+			if ( geometry.morphColors && geometry.morphColors.length ) {
+				var colorMap = geometry.morphColors[ 0 ];
+				for ( var i = 0; i < colorMap.colors.length; i ++ ) {
+					geometry.faces[ i ].color = colorMap.colors[ i ];
+					geometry.faces[ i ].color.offsetHSL( 0, 0.3, 0 );
+				}
+			}
+		}
 
 		morphColorsToFaceColors( geometry );
 		geometry.computeMorphNormals();
@@ -20,46 +106,25 @@ function initBirds(scene) {
 		var meshAnim = new THREE.MorphAnimMesh( geometry, material );
 
 		meshAnim.duration = 4000;
-
 		meshAnim.scale.set( 0.008, 0.008, 0.008 );
-		bird = new Bird(meshAnim);
-		bird.obj.position = position;
-		
-		target = generatePos();
-		spinBird(getRotation());
 
-		tweenMoveBird(lineDistance(position, target));
-		scene.add( bird.obj );
-		morphs.push( bird.obj );
+		for(var i = 0; i < 25; i++){
+			var mesh = meshAnim.clone();
+			var bird = new Bird(mesh, null);
+
+			bird.target = bird.generatePos();
+			bird.spin();
+			bird.tweenMove();
+
+			scene.add( bird.obj );
+
+			birds.push(bird)
+		}
 	} );
 
 }
 
-function morphColorsToFaceColors( geometry ) {
-	if ( geometry.morphColors && geometry.morphColors.length ) {
-		var colorMap = geometry.morphColors[ 0 ];
-		for ( var i = 0; i < colorMap.colors.length; i ++ ) {
-			geometry.faces[ i ].color = colorMap.colors[ i ];
-			geometry.faces[ i ].color.offsetHSL( 0, 0.3, 0 );
-		}
-	}
-}
 
-function tweenMoveBird(d){ 
-	tweenM = new TWEEN.Tween(position)
-		.to(target, getMovementTime(d))
-		.delay(100)
-		.onUpdate(function(){
-		    bird.obj.position.x = position.x;
-		    bird.obj.position.z = position.z;
-		})
-		.onComplete(function(){
-			target = generatePos();
-			//bird.obj.rotation.y = 0; 										//reset rotation.y value
-			spinBird(getRotation());
-			tweenMoveBird(lineDistance(target, position));
-		}).start();
-}
 
 function showPoint(vector3) {
 		var pointGeometry = new THREE.CubeGeometry( 0.1, 0.1, 0.1);
@@ -71,64 +136,15 @@ function showPoint(vector3) {
         scene.add(pointMesh);
 }
 
-function getRotation() {
-	var positionVector = new THREE.Vector3(position.x, position.y, position.z);
-	var targetVector = new THREE.Vector3(target.x, target.y, target.z);
-	var directionVector = targetVector.clone().sub(positionVector);
-	var rotation = directionVector.angleTo(new THREE.Vector3(0, 0, 1));
-	
-	if(directionVector.x < 0)
-		rotation = - rotation;
 
-	return rotation - bird.obj.rotation.y;
-}
-
-function spinBird(angle) {
-  initial = bird.obj.rotation.y;
-
-  tweenR = new TWEEN.Tween( { y: bird.obj.rotation.y } )
-      .to( { y: angle }, 500)
-      .delay(200)
-      .onUpdate( function () {
-          bird.obj.rotation.y = initial + this.y;
-      }).start();
-}
 
 function updateBirds(delta){
-	if(bird){	
-		for ( var i = 0; i < morphs.length; i ++ ) {
-			morph = morphs[ i ];
-			morph.updateAnimation( 1000 * delta );
-		}
+	for(var i = 0; i < birds.length; i++){
+		birds[i].obj.updateAnimation( 1000 * delta );
 	}
 }
 
-function generatePos(bird){
-    var pos = {x: 5, y: 15, z: 7};
-	pos.x = Math.round( - floor.geometry.width/2 + Math.random() * floor.geometry.width);
-	pos.y = 15;
-	pos.z = Math.round( - floor.geometry.height/2 + Math.random() * floor.geometry.height);
-	//showPoint(pos);
-	return pos;
-}
-    
-function lineDistance( point1, point2 )
-{
-    var xs = 0;
-    var zs = 0;
-     
-    xs = point2.x - point1.x;
-    xs = xs * xs;
-     
-    zs = point2.z - point1.z;
-    zs = zs * zs;
-     
-    return Math.sqrt( xs + zs );
-}
 
-function getMovementTime(d){
-	return d * 370; //1 second per pixel
-}
 
 
 

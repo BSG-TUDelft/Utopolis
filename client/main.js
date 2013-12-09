@@ -116,7 +116,7 @@ function init() {
     cameraLookAt = scene.position;
 
     //FLOOR
-    initFloor();               
+    initFloor();
     
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
