@@ -87,7 +87,7 @@ var birds = [];
 function initBirds(scene) {
 	var loader = new THREE.JSONLoader();
 
-	loader.load( "flamingo.js", function( geometry ) {
+	loader.load( "bsg/flamingo.js", function( geometry ) {
 
 		function morphColorsToFaceColors( geometry ) {
 			if ( geometry.morphColors && geometry.morphColors.length ) {
