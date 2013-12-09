@@ -116,7 +116,7 @@ function init() {
     cameraLookAt = scene.position;
 
     //FLOOR
-    initFloor();               
+    initFloor();
     
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
@@ -461,20 +461,20 @@ function moveCameraBackwards() {
 
 function cameraZoomIn() {
     var lookDirection = getLookAtDirection().normalize();
-    if(camera.position.distanceTo(cameraLookAt) > 35 ) {
+    //if(camera.position.distanceTo(cameraLookAt) > 35 ) {
         camera.position.x += lookDirection.x;
         camera.position.y += lookDirection.y;
         camera.position.z += lookDirection.z;
-    }
+   // }
 }
 
 function cameraZoomOut() {
     var lookDirection = getLookAtDirection().normalize();
-    if(camera.position.distanceTo(cameraLookAt) < 75 ) {
+   // if(camera.position.distanceTo(cameraLookAt) < 75 ) {
         camera.position.x -= lookDirection.x;
         camera.position.y -= lookDirection.y;
         camera.position.z -= lookDirection.z;
-    }
+   // }
 }
 
 function increaseCameraElevation () {
@@ -483,7 +483,7 @@ function increaseCameraElevation () {
     if(cameraLookAngle === undefined)
         setCameraLookAngle();
 
-    if(cameraElevationAngle*180/Math.PI > 35.0) {
+   // if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
         var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
@@ -491,7 +491,7 @@ function increaseCameraElevation () {
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
         camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
         camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;        
-    }
+  //  }
 }
 
 function decreaseCameraElevation () {
@@ -500,7 +500,7 @@ function decreaseCameraElevation () {
     if(cameraLookAngle === undefined)
         setCameraLookAngle();
 
-    if(cameraElevationAngle*180/Math.PI < 65) {
+   // if(cameraElevationAngle*180/Math.PI < 65) {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
@@ -508,7 +508,7 @@ function decreaseCameraElevation () {
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
         camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
         camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;           
-    }
+   // }
 }
 
 /*function nextBuilding() {

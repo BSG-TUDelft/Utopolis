@@ -219,9 +219,9 @@ var menuData = {
 			structureId: "pers_temple",
 			iconCss: "pers_temple"
 		}]
-	}, {
-		name: "Mauryans",
-		tabCss: "tab_maur"
+	//}, {
+	//	name: "Mauryans",
+	//	tabCss: "tab_maur"
 	}, {
 		name: "Gaia",
 		tabCss: "tab_gaia"
