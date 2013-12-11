@@ -200,3 +200,57 @@
 #structures li:hover div {
 }
 
+div.structure_infobox {
+	width: 100px;
+	min-height: 20px;
+	padding: 0;
+}
+
+.structure_infobox h2 {
+	background-image: url(../images/ui/common/steel.png);
+	padding-left: 4px;
+}
+
+.structure_infobox li {
+	background-color: rgba(0, 0, 0, .5);
+	padding: 2px;
+	margin: 2px;
+}
+
+.structure_infobox li span {
+	float: right;
+	padding-right: 20px;
+	background: no-repeat right 0;
+}
+
+.structure_infobox .insufficient {
+	color: red;
+}
+
+.structure_infobox li.time span{
+	background-image: url(../images/ui/topbar/resources/time_small.png);
+}
+
+.structure_infobox li.wood span {
+	background-image: url(../images/ui/topbar/resources/wood_small.png);
+}
+
+.structure_infobox li.food span {
+	background-image: url(../images/ui/topbar/resources/food_small.png);
+}
+
+.structure_infobox  li.metal span {
+	background-image: url(../images/ui/topbar/resources/metal_small.png);
+}
+
+.structure_infobox li.stone span {
+	background-image: url(../images/ui/topbar/resources/stone_small.png);
+}
+
+.structure_infobox  li.knowledge span {
+	background-image: url(../images/ui/topbar/resources/knowledge_small.png);
+}
+
+.structure_infobox li.culture span {
+	background-image: url(../images/ui/topbar/resources/culture_small.png);
+}
