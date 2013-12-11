@@ -16,6 +16,7 @@
 	width: 80%;
 }
 
+/** Close button */
 .popup .close_button{
 	width: 22px;
 	height: 22px;
@@ -29,5 +30,17 @@
 .popup .close_button:hover {
 	background-position: -22px 0;
 }
+
+/** Left arrow pointer thingy */
+.popup .arrow_left{
+	background-image: url(../images/ui/popup/arrow_left.png);
+	width: 33px;
+	height: 23px;
+	position: absolute;
+	left: -36px;
+}
+
+
+
 
 
