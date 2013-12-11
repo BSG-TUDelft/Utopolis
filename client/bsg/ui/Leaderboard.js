@@ -64,4 +64,11 @@ Leaderboard.prototype.update = function(data){
 		$('#leaderboard').dataTable().fnUpdate(data[i], i);
 	}
 }
+
+Leaderboard.prototype.show = function(){
+	Popup.prototype.show.call(this);
+	this.center();
+}
+
+
 Leaderboard.prototype.constructor = Leaderboard;

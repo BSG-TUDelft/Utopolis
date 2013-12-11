@@ -128,12 +128,18 @@ function init() {
     scene.add( directionalLight );
 
 	var skybox = Skybox.get([
-		'art/skybox/sky16/frontw3.jpg',
-		'art/skybox/sky16/backw3.jpg',
-		'art/skybox/sky16/topw3.jpg',
-		'art/skybox/sky16/topw3.jpg',
-		'art/skybox/sky16/leftw3.jpg',
-		'art/skybox/sky16/rightw3.jpg',
+		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
+		'art/skybox/cloudy_0/yellowcloud_bk.jpg',
+		'art/skybox/cloudy_0/yellowcloud_up.jpg',
+		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
+		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
+		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
+		/*'art/skybox/cloudy_0/bluecloud_ft.jpg',
+		'art/skybox/cloudy_0/bluecloud_bk.jpg',
+		'art/skybox/cloudy_0/bluecloud_up.jpg',
+		'art/skybox/cloudy_0/bluecloud_dn.jpg',
+		'art/skybox/cloudy_0/bluecloud_rt.jpg',
+		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
 	]);
 	scene.add(skybox);
 
