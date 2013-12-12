@@ -111,7 +111,7 @@ function init() {
     scene = new THREE.Scene();
     
     //CAMERA
-    camera = new THREE.PerspectiveCamera( 110, container.offsetWidth / container.offsetHeight, 1, 2000 );
+    camera = new THREE.PerspectiveCamera( 90, container.offsetWidth / container.offsetHeight, 1, 2000 );
     camera.position.set(0, 25, 50 );
     cameraLookAt = scene.position;
     setCameraLookAngle();                               //init
