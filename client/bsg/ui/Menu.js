@@ -48,7 +48,7 @@ Menu.prototype = {
 	initInfoPopup: function() {
 		// Info popup
 		this.popup = new Popup($("body"), { noClose: true, noDrag: true, animation: 0});
-		this.popup.el.addClass("structure_infobox");
+		this.popup.el.addClass("structure_infobox thin");
 		this.popup.hide();
 	},
 
