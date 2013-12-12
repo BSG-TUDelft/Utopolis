@@ -99,6 +99,15 @@ function onTerrainLoad() {
     initBirds(scene);  
 }
 
+function initCamera() {
+    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
+    camera.position.set(0, 25, 50 );
+    cameraLookAt = scene.position;
+
+    setCameraLookAngle();
+    setCameraElevationAngle()
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -111,9 +120,7 @@ function init() {
     scene = new THREE.Scene();
     
     //CAMERA
-    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
-    camera.position.set(0, 25, 50 );
-    cameraLookAt = scene.position;
+    initCamera();
 
     //FLOOR
     initFloor();
@@ -373,16 +380,20 @@ function getProjectionDirection() {
 }
 
 function setCameraElevationAngle() {
-    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
-    var elevationAngle = camera.position.angleTo(lookAtReference);
-    cameraElevationAngle = elevationAngle;
+    if(cameraElevationAngle === undefined){
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
+        var elevationAngle = camera.position.angleTo(lookAtReference);
+        cameraElevationAngle = elevationAngle;
+    }
     return elevationAngle;                                      
 }
 
 function setCameraLookAngle() {
-    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
-    var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
-    cameraLookAngle = lookAngle;
+    if(cameraLookAngle === undefined) {
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
+        var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
+        cameraLookAngle = lookAngle;
+    }
     return lookAngle;
 }
 
@@ -398,9 +409,6 @@ function getNormalizedProjectionDirection() {
 }
 
 function rotateCameraRight() {
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     cameraLookAngle -= 0.05;
     
     var projectionDistance = getProjectionDistance();
@@ -409,9 +417,6 @@ function rotateCameraRight() {
 }
 
 function rotateCameraLeft() {
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     cameraLookAngle += 0.05;
     
     var projectionDistance = getProjectionDistance();
@@ -484,11 +489,6 @@ function cameraZoomOut() {
 }
 
 function increaseCameraElevation () {
-    if(cameraElevationAngle === undefined)
-        setCameraElevationAngle();
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
         var lookDirection = getLookAtDirection().normalize();
@@ -501,11 +501,6 @@ function increaseCameraElevation () {
 }
 
 function decreaseCameraElevation () {
-    if(cameraElevationAngle === undefined)
-        setCameraElevationAngle();
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     if(cameraElevationAngle*180/Math.PI < 65) {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();
