@@ -274,17 +274,25 @@ function setMouseOffset() {
 	 */
 };
 
-function onDocumentMouseMove( event ) {
+function onDocumentMouseMove( event ) {                                  // do we need to compute this on every movement?           
     event.preventDefault();
     mouse2D.x = ( (event.clientX + mouseOffsetX) / container.offsetWidth) * 2 - 1;
     mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
     //console.log(mouse2D);
 }
 
+function buildingPlacementAllowed() {                                     // true = can place buildings
+    var mousePosValid = false;
+    if(mouse2D.x > -1 && mouse2D.x < 1 && mouse2D.y > -1 && mouse2D.y < 1){                
+        mousePosValid = true;
+    }
+    return allowBuildingPlacement && mousePosValid;
+}
+
 function onDocumentMouseDown( event ) {
     event.preventDefault();
     if(rollOverMesh) {                                             //if the ghost model is visible     
-        if(allowBuildingPlacement) {                               //and there there is no collision 
+        if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
