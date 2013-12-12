@@ -1,7 +1,7 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var container, stats;
 
-var camera, scene, renderer;
+var camera, scene, renderer, effect;
 var material, dae, skin;
 
 var currentModel;
@@ -111,9 +111,11 @@ function init() {
     scene = new THREE.Scene();
     
     //CAMERA
-    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
+    camera = new THREE.PerspectiveCamera( 110, container.offsetWidth / container.offsetHeight, 1, 2000 );
     camera.position.set(0, 25, 50 );
     cameraLookAt = scene.position;
+    setCameraLookAngle();                               //init
+    setCameraElevationAngle();                          //init
 
     //FLOOR
     initFloor();
@@ -146,6 +148,24 @@ function init() {
     renderer.setSize( container.offsetWidth, container.offsetHeight );
     container.appendChild( renderer.domElement );
     
+    //OCULUS RIFT EFFECT
+    effect = new THREE.OculusRiftEffect( renderer, {worldFactor: 1, HMD:{   //hResolution: 1280,
+                                                                            //vResolution: 800,
+                                                                            hResolution: container.offsetWidth,
+                                                                            vResolution: container.offsetHeight,
+                                                                            hScreenSize: 0.14976,
+                                                                            vScreenSize: 0.09356,
+                                                                            interpupillaryDistance: 0.057,
+                                                                            lensSeparationDistance: 0.0635,
+                                                                            eyeToScreenDistance: 0.041, 
+                                                                            distortionK : [1.0, 0.22, 0.24, 0.0],
+                                                                            chromaAbParameter: [ 0.996, -0.004, 1.014, 0.0] }} );
+    effect.setSize( container.offsetWidth, container.offsetHeight );
+    //console.log(effect.HMD.interpupillaryDistance);
+    //effect.separation = 20;
+    //effect.distortion = 0.1;
+    //effect.fov = 75;
+
     //STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
@@ -597,6 +617,7 @@ function onWindowResize() {
     camera.aspect = container.offsetWidth / container.offsetHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( container.offsetWidth, container.offsetHeight );
+    effect.setSize( container.offsetWidth, container.offsetHeight );
 }
 
 function animate() {
@@ -658,7 +679,8 @@ function render() {
 
     detectCollision(rollOverMesh);  
     
-    renderer.render( scene, camera );
+    //renderer.render( scene, camera );
+    effect.render( scene, camera );
 }
 
 function getRealIntersector( intersects ) {
