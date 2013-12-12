@@ -285,7 +285,7 @@ function buildingPlacementAllowed() {                                     // tru
 function onDocumentMouseDown( event ) {
     event.preventDefault();
     if(rollOverMesh) {                                             //if the ghost model is visible     
-        if( buildingPlacementAllowed() ) {                               //and there there is no collision 
+        if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
