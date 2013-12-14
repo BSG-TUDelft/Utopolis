@@ -441,7 +441,6 @@ var topbarData = {
 	}]
 };
 
-
 function initGui() {
 	"use strict";
 
@@ -453,20 +452,27 @@ function initGui() {
 
 	// Example use:
 	menu.addEventListener(Menu.structureSelected, function(e){
-
 		// Clicked on the same structure again means disable placement mode
-		if(e.structure == null){
+		if(e.structure == null) {
 			togglePlacementMode();
 		}
 		else {
-			currentModel = loadedModels[e.structure.structureId];
+			if(enoughResources(menuData.structureTypes[e.structure.structureType])) {
+				currentModel = loadedModels[e.structure.structureId];
 
-			if(rollOverMesh) {
-				refreshRollover();
+				if(rollOverMesh) {
+					refreshRollover();
+				}
+				if(rollOverMesh == undefined)
+					togglePlacementMode();
 			}
-			if(rollOverMesh == undefined)
-				togglePlacementMode();
+			else {																		//if not enough resources, deselect building.
+				$("#structures li").removeClass("selected");
+				menu.selectedStructureId = null;
+			}
 		}
+		
+
 	});
 
 	// Set values directly (the property names have to correspond those you used in topbarData ctr)
@@ -494,7 +500,34 @@ function initGui() {
 		menu.setResourceValues(res);
 	}, 500)
 
+	var enoughResources = function (structureType) {
+	if(structureType.cost.wood) {
+		if(res.wood < structureType.cost.wood)
+			return false;
+	}
+	if(structureType.cost.stone) {
+		if(res.stone < structureType.cost.stone)
+			return false;
+	}
+	if(structureType.cost.food) {
+		if(res.food < structureType.cost.food)
+			return false;
+	}
+	if(structureType.cost.metal) {
+		if(res.metal < structureType.cost.metal)
+			return false;
+	}
+	if(structureType.requirements.knowledge) {
+		if(res.knowledge < structureType.requirements.knowledge)
+			return false;
+	}
+	if(structureType.requirements.culture) {
+		if(res.culture < structureType.requirements.culture)
+			return false;
+	}
+	return true;
 
+}
 
 	/** Leaderboard*/
 	var getRndInt = function(max){

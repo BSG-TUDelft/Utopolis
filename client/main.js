@@ -16,7 +16,7 @@ var intersectorHeightOffset;
 
 var buildings = new Array();
 //bolean
-var allowBuildingPlacement;         
+var noCollision;         
 
 var floor;                  //needed to restrict mouse projection to floor only
 var collidableMeshList = [];    //collidable list
@@ -251,7 +251,7 @@ function detectCollision (collider) {           //collider = oject that detects 
             else 
                 changeColliderColor(collider, 0, 255, 0);
         }
-        allowBuildingPlacement = !collisionFlag;
+        noCollision = !collisionFlag;
     }
 }
 
@@ -286,7 +286,8 @@ function buildingPlacementAllowed() {                                     // tru
     if(mouse2D.x > -1 && mouse2D.x < 1 && mouse2D.y > -1 && mouse2D.y < 1){                
         mousePosValid = true;
     }
-    return allowBuildingPlacement && mousePosValid;
+
+    return noCollision && mousePosValid;
 }
 
 function onDocumentMouseDown( event ) {
