@@ -16,6 +16,15 @@
 	width: 80%;
 }
 
+.popup.thin {
+	border-image-source: url(../images/ui/popup/border_thin_77x77.png);
+	border-image-slice: 7 7 7 7;
+	border-image-width: 7px 7px 7px 7px;
+	border-image-outset: 5px 5px 5px 5px;
+	border-image-repeat: repeat repeat;
+}
+
+
 /** Close button */
 .popup .close_button{
 	width: 22px;
