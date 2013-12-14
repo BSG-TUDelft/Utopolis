@@ -19,10 +19,10 @@ Topbar.prototype = {
 
 	/** Updates the resource indication area
 	 * @param resources	 object containing key-value pairs. The keys should correspond to resourceId property of resources object in topbarData constructor param */
-	setResourceValues: function(newResources){
-		for(var i in newResources){
+	setResourceValues: function(resources){
+		for(var i in resources){
 			if(this.resources[i] != null){
-				this.resources[i].value = newResources[i];
+				this.resources[i].value = resources[i];
 			}
 		}
 		this.update();
@@ -34,6 +34,7 @@ Topbar.prototype = {
 	/** Initializes resource indication area */
 	initResources: function(){
 		for(var i in this.data.resources){
+			i
 			var li = $("" +
 				"<li class='" +  this.data.resources[i].iconCss + "' >" +
 				"</li>");
