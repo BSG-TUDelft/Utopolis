@@ -215,7 +215,7 @@ div.structure_infobox {
 .structure_infobox li {
 	background-color: rgba(0, 0, 0, .5);
 	padding: 2px;
-	margin: 2px;
+	margin: 1px;
 }
 
 .structure_infobox li span {
@@ -291,4 +291,7 @@ div.structure_infobox {
 
 .structure_infobox li.diplomacy span{
 	background-image: url(../images/ui/topbar/resources/diplomacy_small.png);
+}
+.structure_infobox li.spirituality span{
+	background-image: url(../images/ui/topbar/resources/spirituality_small.png);
 }

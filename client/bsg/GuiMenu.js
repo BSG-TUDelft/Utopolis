@@ -469,7 +469,8 @@ var menuData = {
 		culture: { name: "Culture", iconCss: "culture"},
 		economy: { name: "Economy", iconCss: "economy"},
 		peace: { name: "Peace", iconCss: "peace"},
-		diplomacy: { name: "Diplomacy", iconCss: "diplomacy"}
+		diplomacy: { name: "Diplomacy", iconCss: "diplomacy"},
+		spirituality: { name: "Spirituality", iconCss: "spirituality"}
 	}
 };
 
