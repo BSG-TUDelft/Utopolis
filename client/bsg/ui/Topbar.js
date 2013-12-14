@@ -47,6 +47,7 @@ Topbar.prototype = {
 			$("#resources").append(li);
 		}
 		this.update();
+
 	},
 
 	/** Visually updates */

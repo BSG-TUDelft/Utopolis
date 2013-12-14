@@ -16,7 +16,7 @@ var intersectorHeightOffset;
 
 var buildings = new Array();
 //bolean
-var allowBuildingPlacement;         
+var noCollision;         
 
 var floor;                  //needed to restrict mouse projection to floor only
 var collidableMeshList = [];    //collidable list
@@ -99,6 +99,15 @@ function onTerrainLoad() {
     initBirds(scene);  
 }
 
+function initCamera() {
+    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
+    camera.position.set(0, 25, 50 );
+    cameraLookAt = scene.position;
+
+    setCameraLookAngle();
+    setCameraElevationAngle()
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -111,12 +120,10 @@ function init() {
     scene = new THREE.Scene();
     
     //CAMERA
-    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
-    camera.position.set(0, 25, 50 );
-    cameraLookAt = scene.position;
+    initCamera();
 
     //FLOOR
-    initFloor();               
+    initFloor();
     
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
@@ -128,12 +135,18 @@ function init() {
     scene.add( directionalLight );
 
 	var skybox = Skybox.get([
-		'art/skybox/sky16/frontw3.jpg',
-		'art/skybox/sky16/backw3.jpg',
-		'art/skybox/sky16/topw3.jpg',
-		'art/skybox/sky16/topw3.jpg',
-		'art/skybox/sky16/leftw3.jpg',
-		'art/skybox/sky16/rightw3.jpg',
+		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
+		'art/skybox/cloudy_0/yellowcloud_bk.jpg',
+		'art/skybox/cloudy_0/yellowcloud_up.jpg',
+		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
+		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
+		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
+		/*'art/skybox/cloudy_0/bluecloud_ft.jpg',
+		'art/skybox/cloudy_0/bluecloud_bk.jpg',
+		'art/skybox/cloudy_0/bluecloud_up.jpg',
+		'art/skybox/cloudy_0/bluecloud_dn.jpg',
+		'art/skybox/cloudy_0/bluecloud_rt.jpg',
+		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
 	]);
 	scene.add(skybox);
 
@@ -153,10 +166,6 @@ function init() {
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
     
-    //LOADER
-    var loader = new IberModelLoader(); 
-    loader.loadModels();
-
     // load city from server
     request = $.ajax({
         url: 'http://localhost:8080/api/application.wadl',
@@ -176,6 +185,38 @@ function init() {
         );
     });
 
+    //MODEL LOADERS
+	var iberLoader = new IberModelLoader();
+	iberLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Iberians");
+	})
+	iberLoader.loadModels();
+
+	var romeLoader = new RomeModelLoader();
+	romeLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Romans");
+	})
+	romeLoader.loadModels();
+
+	var heleLoader = new HeleModelLoader();
+	heleLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Hellenes");
+	})
+	heleLoader.loadModels();
+
+	var kartLoader = new KartModelLoader();
+	kartLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Carthaginians");
+	})
+	kartLoader.loadModels();
+
+	var persLoader = new PersModelLoader();
+	persLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Persians");
+	})
+
+	persLoader.loadModels();
+    
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
@@ -230,17 +271,18 @@ function detectCollision (collider) {           //collider = oject that detects 
             else 
                 changeColliderColor(collider, 0, 255, 0);
         }
-        allowBuildingPlacement = !collisionFlag;
+        noCollision = !collisionFlag;
     }
 }
 
 function setMouseOffset() {
-    var curleft = curtop = 0;
-    if (container.offsetParent) { 
+    var curleft = 0;
+	var curtop = 0;
+    if (container.offsetParent) {
         var currentObj = container;
         do {
            curleft += currentObj.offsetLeft;
-           curtop += currentObj.offsetTop; 
+           curtop += currentObj.offsetTop;
         } while (currentObj = currentObj.offsetParent);
     }
     //return { x : curleft, y : curtop };
@@ -252,17 +294,26 @@ function setMouseOffset() {
 	 */
 };
 
-function onDocumentMouseMove( event ) {
+function onDocumentMouseMove( event ) {                                  // do we need to compute this on every movement?           
     event.preventDefault();
     mouse2D.x = ( (event.clientX + mouseOffsetX) / container.offsetWidth) * 2 - 1;
     mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
     //console.log(mouse2D);
 }
 
+function buildingPlacementAllowed() {                                     // true = can place buildings
+    var mousePosValid = false;
+    if(mouse2D.x > -1 && mouse2D.x < 1 && mouse2D.y > -1 && mouse2D.y < 1){                
+        mousePosValid = true;
+    }
+
+    return noCollision && mousePosValid;
+}
+
 function onDocumentMouseDown( event ) {
     event.preventDefault();
     if(rollOverMesh) {                                             //if the ghost model is visible     
-        if(allowBuildingPlacement) {                               //and there there is no collision 
+        if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
@@ -358,16 +409,20 @@ function getProjectionDirection() {
 }
 
 function setCameraElevationAngle() {
-    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
-    var elevationAngle = camera.position.angleTo(lookAtReference);
-    cameraElevationAngle = elevationAngle;
+    if(cameraElevationAngle === undefined){
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
+        var elevationAngle = camera.position.angleTo(lookAtReference);
+        cameraElevationAngle = elevationAngle;
+    }
     return elevationAngle;                                      
 }
 
 function setCameraLookAngle() {
-    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
-    var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
-    cameraLookAngle = lookAngle;
+    if(cameraLookAngle === undefined) {
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
+        var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
+        cameraLookAngle = lookAngle;
+    }
     return lookAngle;
 }
 
@@ -383,9 +438,6 @@ function getNormalizedProjectionDirection() {
 }
 
 function rotateCameraRight() {
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     cameraLookAngle -= 0.05;
     
     var projectionDistance = getProjectionDistance();
@@ -394,9 +446,6 @@ function rotateCameraRight() {
 }
 
 function rotateCameraLeft() {
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     cameraLookAngle += 0.05;
     
     var projectionDistance = getProjectionDistance();
@@ -469,11 +518,6 @@ function cameraZoomOut() {
 }
 
 function increaseCameraElevation () {
-    if(cameraElevationAngle === undefined)
-        setCameraElevationAngle();
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
         var lookDirection = getLookAtDirection().normalize();
@@ -486,11 +530,6 @@ function increaseCameraElevation () {
 }
 
 function decreaseCameraElevation () {
-    if(cameraElevationAngle === undefined)
-        setCameraElevationAngle();
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     if(cameraElevationAngle*180/Math.PI < 65) {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();

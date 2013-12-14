@@ -12,18 +12,6 @@
                 overflow: hidden;
             }
 
-            #info {
-                color: #fff;
-                position: absolute;
-                top: 10px;
-                width: 100%;
-                text-align: center;
-                z-index: 100;
-                display:block;
-
-            }
-
-            a { color: skyblue }
         </style>
 		<link type="text/css" rel="stylesheet" href="css/general.css"/>
 		<link type="text/css" rel="stylesheet" href="css/main.css"/>
@@ -32,7 +20,6 @@
 		<link type="text/css" rel="stylesheet" href="css/topbar.css"/>
 		<link type="text/css" rel="stylesheet" href="css/popup.css"/>
 		<link type="text/css" rel="stylesheet" href="css/leaderboard.css"/>
-
     </head>
     <body>
 
@@ -47,22 +34,26 @@
 		<script src="js/libs/jquery-ui.js" type="text/javascript"></script>
 		<script src="js/libs/jquery.dataTables.min.js" type="text/javascript"></script>
 
-		<script src="js/ui/Menu.js" type="text/javascript"></script>
-		<script src="js/ui/Topbar.js" type="text/javascript"></script>
-		<script src="js/ui/Popup.js" type="text/javascript"></script>
-		<script src="js/ui/Popup.js" type="text/javascript"></script>
-		<script src="js/ui/Leaderboard.js" type="text/javascript"></script>
+		<script src="bsg/ui/Menu.js" type="text/javascript"></script>
+		<script src="bsg/ui/Topbar.js" type="text/javascript"></script>
+		<script src="bsg/ui/Popup.js" type="text/javascript"></script>
+		<script src="bsg/ui/Popup.js" type="text/javascript"></script>
+		<script src="bsg/ui/Leaderboard.js" type="text/javascript"></script>
 
-        <script src="js/tween.min.js"></script>
-        <script src="Bird.js"></script>
+        <script src="js/libs/tween.min.js"></script>
+        <script src="bsg/Bird.js"></script>
         
-		<script src="ModelLoader.js"></script>
-		<script src="IberModelLoader.js"></script>
-        <script src="TerrainLoader.js"></script>
-		<script src="ModelArray.js"></script>
-        <script src="ModelWrapper.js"></script>
-        <script src="GuiMenu.js"></script>
-		<script src="js/sky/Skybox.js" type="text/javascript"></script>
+		<script src="bsg/loaders/ModelLoader.js"></script>
+		<script src="bsg/loaders/IberModelLoader.js"></script>
+		<script src="bsg/loaders/RomeModelLoader.js"></script>
+		<script src="bsg/loaders/HeleModelLoader.js"></script>
+		<script src="bsg/loaders/KartModelLoader.js"></script>
+		<script src="bsg/loaders/PersModelLoader.js"></script>
+        <script src="bsg/TerrainLoader.js"></script>
+		<script src="bsg/ModelArray.js"></script>
+        <script src="bsg/ModelWrapper.js"></script>
+        <script src="bsg/GuiMenu.js"></script>
+		<script src="bsg/sky/Skybox.js" type="text/javascript"></script>
 
 		<div id="main">	</div>
 		<div id="left_menu">

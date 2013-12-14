@@ -3,6 +3,10 @@ var loadedModels = [];
 ModelLoader = function ( file ) {
 	this.textureFile = file;
 }
+ModelLoader.prototype = {
+	// Public events
+	doneLoading: "DONE_LOADING"
+}
 
 ModelLoader.prototype.loader = new THREE.ColladaLoader();
 ModelLoader.prototype.loader.options.convertUpAxis = true;
@@ -14,16 +18,15 @@ ModelLoader.prototype.load = function (key, map, callbackDecRemainingStructures)
 ModelLoader.prototype.setTextureOnModel = function (key, textureFile, callbackDecRemainingStructures) {
 	
 	return function ( collada ) {  	
-		  dae = collada.scene;
+		var dae = collada.scene;
   		removeLights(dae);
    		var texture = THREE.ImageUtils.loadTexture(textureFile);
-   		material = new THREE.MeshLambertMaterial({map: texture});
+   		var material = new THREE.MeshLambertMaterial({map: texture});
    		setMaterial(dae, material);
-   		dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
+   		dae.scale.x = dae.scale.y = dae.scale.z = 0.4;
    		dae.updateMatrix();
-   		//this.loadedModels.push(new ModelWrapper(dae));
-      this.loadedModels[key] = new ModelWrapper(dae);
-		  callbackDecRemainingStructures();
+      	this.loadedModels[key] = new ModelWrapper(dae);
+		callbackDecRemainingStructures();
 	};
 }
 

@@ -1,8 +1,7 @@
 //number of remaining structures to load
-var numModelStructures;								// --- WARNING!!! --- make sure to change this number if you want to load more/less models 
 
-IberModelLoader = function () {
-	numModelStructures = this.getSize(this.modelStructuresArray);
+var IberModelLoader = function () {
+	this.numModelStructures = this.getSize(this.modelStructuresArray);
 }
 
 IberModelLoader.prototype.loader = new ModelLoader('./art/textures/skins/structural/iber_struct.png');
@@ -10,15 +9,18 @@ IberModelLoader.prototype.loader = new ModelLoader('./art/textures/skins/structu
 IberModelLoader.prototype.loadModels = function () {
 	for (var key in this.modelStructuresArray) {
 	  	if (this.modelStructuresArray.hasOwnProperty(key)) {				//check if the property does not come from the constructor - i think we can safely remove this after some testing.
-    		this.loader.load(key, this.modelStructuresArray, this.decreaseRemainingStructures);	
+    		this.loader.load(key,
+				this.modelStructuresArray,
+				$.proxy(this.decreaseRemainingStructures, this)		// Pass context to all callback functions because JS gets weird
+			);
   		}
 	}
 }
 
 IberModelLoader.prototype.decreaseRemainingStructures = function () {
-	numModelStructures--;
-	if(numModelStructures == 0) {
-		//currentModel = loadedModels[0];
+	this.numModelStructures--;
+	if(this.numModelStructures == 0) {
+		this.dispatchEvent( { type: ModelLoader.doneLoading })
 	}
 }
 
@@ -54,4 +56,6 @@ IberModelLoader.prototype.getSize = function(obj) {
     }
     return size;
 }
+THREE.EventDispatcher.prototype.apply( IberModelLoader.prototype );
+
 
