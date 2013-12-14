@@ -16,7 +16,7 @@ var intersectorHeightOffset;
 
 var buildings = new Array();
 //bolean
-var allowBuildingPlacement;         
+var noCollision;         
 
 var floor;                  //needed to restrict mouse projection to floor only
 var collidableMeshList = [];    //collidable list
@@ -99,6 +99,15 @@ function onTerrainLoad() {
     initBirds(scene);  
 }
 
+function initCamera() {
+    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
+    camera.position.set(0, 25, 50 );
+    cameraLookAt = scene.position;
+
+    setCameraLookAngle();
+    setCameraElevationAngle()
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -111,9 +120,7 @@ function init() {
     scene = new THREE.Scene();
     
     //CAMERA
-    camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 2000 );
-    camera.position.set(0, 25, 50 );
-    cameraLookAt = scene.position;
+    initCamera();
 
     //FLOOR
     initFloor();
@@ -244,7 +251,7 @@ function detectCollision (collider) {           //collider = oject that detects 
             else 
                 changeColliderColor(collider, 0, 255, 0);
         }
-        allowBuildingPlacement = !collisionFlag;
+        noCollision = !collisionFlag;
     }
 }
 
@@ -267,17 +274,26 @@ function setMouseOffset() {
 	 */
 };
 
-function onDocumentMouseMove( event ) {
+function onDocumentMouseMove( event ) {                                  // do we need to compute this on every movement?           
     event.preventDefault();
     mouse2D.x = ( (event.clientX + mouseOffsetX) / container.offsetWidth) * 2 - 1;
     mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
     //console.log(mouse2D);
 }
 
+function buildingPlacementAllowed() {                                     // true = can place buildings
+    var mousePosValid = false;
+    if(mouse2D.x > -1 && mouse2D.x < 1 && mouse2D.y > -1 && mouse2D.y < 1){                
+        mousePosValid = true;
+    }
+
+    return noCollision && mousePosValid;
+}
+
 function onDocumentMouseDown( event ) {
     event.preventDefault();
     if(rollOverMesh) {                                             //if the ghost model is visible     
-        if(allowBuildingPlacement) {                               //and there there is no collision 
+        if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
                 var i = buildings.length - 1;
@@ -373,16 +389,20 @@ function getProjectionDirection() {
 }
 
 function setCameraElevationAngle() {
-    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
-    var elevationAngle = camera.position.angleTo(lookAtReference);
-    cameraElevationAngle = elevationAngle;
+    if(cameraElevationAngle === undefined){
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
+        var elevationAngle = camera.position.angleTo(lookAtReference);
+        cameraElevationAngle = elevationAngle;
+    }
     return elevationAngle;                                      
 }
 
 function setCameraLookAngle() {
-    var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
-    var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
-    cameraLookAngle = lookAngle;
+    if(cameraLookAngle === undefined) {
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
+        var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
+        cameraLookAngle = lookAngle;
+    }
     return lookAngle;
 }
 
@@ -398,9 +418,6 @@ function getNormalizedProjectionDirection() {
 }
 
 function rotateCameraRight() {
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     cameraLookAngle -= 0.05;
     
     var projectionDistance = getProjectionDistance();
@@ -409,9 +426,6 @@ function rotateCameraRight() {
 }
 
 function rotateCameraLeft() {
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     cameraLookAngle += 0.05;
     
     var projectionDistance = getProjectionDistance();
@@ -484,11 +498,6 @@ function cameraZoomOut() {
 }
 
 function increaseCameraElevation () {
-    if(cameraElevationAngle === undefined)
-        setCameraElevationAngle();
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
         var lookDirection = getLookAtDirection().normalize();
@@ -501,11 +510,6 @@ function increaseCameraElevation () {
 }
 
 function decreaseCameraElevation () {
-    if(cameraElevationAngle === undefined)
-        setCameraElevationAngle();
-    if(cameraLookAngle === undefined)
-        setCameraLookAngle();
-
     if(cameraElevationAngle*180/Math.PI < 65) {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();
