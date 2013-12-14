@@ -194,7 +194,8 @@ var menuData = {
 		},{
 			name: "Barracks",
 			structureId: "iber_barracks",
-			iconCss: "iber_barracks"
+			iconCss: "iber_barracks",
+			structureType: "barracks"
 		},{
 			name: "Blacksmith",
 			structureId: "iber_blacksmith_struct",
@@ -204,7 +205,7 @@ var menuData = {
 			name: "Civic center",
 			structureId: "iber_civic_centre",
 			iconCss: "iber_civic",
-			structureType: "centre"
+			structureType: "civic"
 		},{
 			name: "Tower",
 			structureId: "iber_scout_tower",
@@ -471,7 +472,6 @@ function initGui() {
 				menu.selectedStructureId = null;
 			}
 		}
-		
 
 	});
 
@@ -501,33 +501,32 @@ function initGui() {
 	}, 500)
 
 	var enoughResources = function (structureType) {
-	if(structureType.cost.wood) {
-		if(res.wood < structureType.cost.wood)
-			return false;
+		if(structureType.cost.wood) {
+			if(res.wood < structureType.cost.wood)
+				return false;
+		}
+		if(structureType.cost.stone) {
+			if(res.stone < structureType.cost.stone)
+				return false;
+		}
+		if(structureType.cost.food) {
+			if(res.food < structureType.cost.food)
+				return false;
+		}
+		if(structureType.cost.metal) {
+			if(res.metal < structureType.cost.metal)
+				return false;
+		}
+		if(structureType.requirements.knowledge) {
+			if(res.knowledge < structureType.requirements.knowledge)
+				return false;
+		}
+		if(structureType.requirements.culture) {
+			if(res.culture < structureType.requirements.culture)
+				return false;
+		}
+		return true;
 	}
-	if(structureType.cost.stone) {
-		if(res.stone < structureType.cost.stone)
-			return false;
-	}
-	if(structureType.cost.food) {
-		if(res.food < structureType.cost.food)
-			return false;
-	}
-	if(structureType.cost.metal) {
-		if(res.metal < structureType.cost.metal)
-			return false;
-	}
-	if(structureType.requirements.knowledge) {
-		if(res.knowledge < structureType.requirements.knowledge)
-			return false;
-	}
-	if(structureType.requirements.culture) {
-		if(res.culture < structureType.requirements.culture)
-			return false;
-	}
-	return true;
-
-}
 
 	/** Leaderboard*/
 	var getRndInt = function(max){
