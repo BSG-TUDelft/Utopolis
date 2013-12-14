@@ -295,7 +295,13 @@ var menuData = {
 				culture: 4,
 				knowledge: 4
 			},
-			buildTime: 30000
+			buildTime: 30000,
+			generates: {
+				wood: 1,
+				metal: 1,
+				stone: 1,
+				safety: 1
+			}
 		},
 		"farm": {
 			cost: {
@@ -306,7 +312,11 @@ var menuData = {
 				knowledge: 4,
 				culture: 4
 			},
-			buildTime: 30000
+			buildTime: 30000,
+			generates: {
+				food: 2,
+				health: 1
+			}
 		},
 		"corral": {
 			cost: {
@@ -317,7 +327,11 @@ var menuData = {
 				knowledge: 4,
 				culture: 4
 			},
-			buildTime: 30000
+			buildTime: 30000,
+			generates: {
+				food: 4,
+				health: 1
+			}
 		},
 		"storehouse": {
 			cost: {
@@ -328,7 +342,15 @@ var menuData = {
 				knowledge: 4,
 				culture: 4
 			},
-			buildTime: 120000
+			buildTime: 120000,
+			generates: {
+				stone: 6,
+				metal: 6,
+				wood: 6,
+				food: 8,
+				economy: 3
+			}
+
 		},
 		"barracks": {
 			cost: {
@@ -349,7 +371,15 @@ var menuData = {
 			requirements: {
 
 			},
-			buildTime: 240000
+			buildTime: 240000,
+			generates: {
+				wood: 10,
+				metal: 10,
+				stone: 10,
+				safety: 5,
+				peace: 5
+			}
+
 		},
 		"tower": {
 			cost: {
@@ -361,7 +391,13 @@ var menuData = {
 				knowledge: 25,
 				culture: 25
 			},
-			buildTime: 120000
+			buildTime: 120000,
+			generates: {
+				stone: 15,
+				knowledge: 5,
+				safety: 2
+			}
+
 		},
 		"civic": {
 			cost: {
@@ -373,7 +409,13 @@ var menuData = {
 				knowledge: 4,
 				culture: 4
 			},
-			buildTime: 30000
+			buildTime: 30000,
+			generates: {
+				knowledge: 1,
+				culture: 1,
+				peace: 1
+			}
+
 		},
 		"fortress": {
 			cost: {
@@ -385,7 +427,15 @@ var menuData = {
 				knowledge: 500,
 				culture: 500
 			},
-			buildTime: 300000
+			buildTime: 300000,
+			generates: {
+				culture: 35,
+				knowledge: 35,
+				safety: 5,
+				peace: 5,
+				diplomacy: 5
+			}
+
 		},
 		"temple": {
 			cost: {
@@ -396,7 +446,12 @@ var menuData = {
 				knowledge: 250,
 				culture: 250
 			},
-			buildTime: 600000
+			buildTime: 600000,
+			generates: {
+				culture: 35,
+				spirituality: 15
+			}
+
 		}
 	},
 
@@ -407,8 +462,13 @@ var menuData = {
 		stone: { name: "Stone", iconCss: "stone"},
 		metal: { name: "Metal", iconCss: "metal"},
 		time: { name: "Time", iconCss: "time"},
+		safety: { name: "Safety", iconCss: "safety"},
+		health: { name: "Health", iconCss: "health"},
 		knowledge: { name: "Knowledge", iconCss: "knowledge"},
-		culture: { name: "Culture", iconCss: "culture"}
+		culture: { name: "Culture", iconCss: "culture"},
+		economy: { name: "Economy", iconCss: "economy"},
+		peace: { name: "Peace", iconCss: "peace"},
+		diplomacy: { name: "Diplomacy", iconCss: "diplomacy"}
 	}
 };
 
