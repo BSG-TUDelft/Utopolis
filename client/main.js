@@ -165,25 +165,6 @@ function init() {
     stats.domElement.style.top = '60px';
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
-    
-    // load city from server
-    request = $.ajax({
-        url: 'http://localhost:8080/api/application.wadl',
-        type: 'GET'
-        // success: function(data, textStatus, jqXHR) { console.log("FTW"); },
-        // error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); console.log(textStatus); console.log(errorThrown); }
-    });
-
-    request.done(function (response, textStatus, jqXHR){
-        console.log("Hooray, it worked!");
-    });
-
-    request.fail(function (jqXHR, textStatus, errorThrown){
-        console.error(
-            "The following error occured: " +
-            textStatus, errorThrown
-        );
-    });
 
     //MODEL LOADERS
 	var iberLoader = new IberModelLoader();
@@ -214,8 +195,26 @@ function init() {
 	persLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Persians");
 	})
-
 	persLoader.loadModels();
+
+    // load city from server
+    request = $.ajax({
+        url: 'http://localhost:8080/api/application.wadl',
+        type: 'GET'
+        // success: function(data, textStatus, jqXHR) { console.log("FTW"); },
+        // error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); console.log(textStatus); console.log(errorThrown); }
+    });
+
+    request.done(function (response, textStatus, jqXHR){
+        console.log("Hooray, it worked!");
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+    });
     
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
