@@ -1,6 +1,6 @@
-var Menu = function(menuData) {
+var Menu = function (menuData) {
 	this.data = menuData;
-}
+};
 Menu.prototype = {
 
 	// Ctor
@@ -30,6 +30,7 @@ Menu.prototype = {
 	/** Initiates tab strip with categories (empires) */
 	initTabStrip : function (){
 		for(var i in this.data.empires){
+			if(!this.data.empires.hasOwnProperty(i)) continue;
 			var li = $("" +
 				"<li class='" +  this.data.empires[i].tabCss + "'  title='" +  this.data.empires[i].name + "' >" +
 				"<div class='top'></div>" +
@@ -45,17 +46,18 @@ Menu.prototype = {
 		this.selectTab(0);
 	},
 
+	/** Initializes popup window */
 	initInfoPopup: function() {
 		// Info popup
 		this.popup = new Popup($("body"), { noClose: true, noDrag: true, animation: 0});
-		this.popup.el.addClass("structure_infobox");
+		this.popup.el.addClass("structure_infobox thin"); // show thin border
 		this.popup.hide();
 	},
 
 	/** Selects a tab by its index */
 	selectTab : function(tabIndex){
 		// Display visual style of selected tab
-		$("#tabstrip li").each(function(index, el){
+		$("#tabstrip").find("li").each(function(index, el){
 			if(index == tabIndex)
 				$(el).addClass("selected");
 			else
@@ -69,13 +71,11 @@ Menu.prototype = {
 			if(e.pageY + this.popup.el.height() + topOffset * 4 < $(window).height()){
 				// Lock tooltip in place if lower than threshold
 				this.popup.el.css({
-					left:  200,
 					top: e.pageY + topOffset
 				});
 			}
 			else {
 				this.popup.el.css({
-					left:  200,
 					top:   $(window).height() - (this.popup.el.height() + topOffset * 4)
 				});
 			}
@@ -84,7 +84,8 @@ Menu.prototype = {
 
 		// Show structure icons
 		$("#structures").empty();
-		for(var i in  this.data.empires[tabIndex].structures){
+		for(var i in this.data.empires[tabIndex].structures){
+			if(!this.data.empires[tabIndex].structures.hasOwnProperty(i)) continue;
 			var li = $("" +
 				"<li>" +
 				"<div title='" +  this.data.empires[tabIndex].structures[i].name + "' class='" +  this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
@@ -124,12 +125,12 @@ Menu.prototype = {
 		this.calculateStructuresScroll();
 
 		// Event handlers
-		$("#structures_scroll_up div.arrow").click($.proxy(function(){
+		$("#structures_scroll_up").find("div.arrow").click($.proxy(function(){
 			if(!this.onFirstStructurePage())
 				this.iconsUp--;
 			this.calculateStructuresScroll();
 		}, this));
-		$("#structures_scroll_down div.arrow").click($.proxy(function(){
+		$("#structures_scroll_down").find("div.arrow").click($.proxy(function(){
 			if(!this.onLastStructurePage())
 				this.iconsUp++;
 			this.calculateStructuresScroll();
@@ -147,7 +148,7 @@ Menu.prototype = {
 
 	/** Fires when the li element of a structure is clicked */
 	structureClick: function(li, structure){
-		$("#structures li").removeClass("selected");
+		$("#structures").find("li").removeClass("selected");
 		if(structure.structureId == this.selectedStructureId){
 			this.selectedStructureId = null;
 			this.dispatchEvent( { type: Menu.structureSelected, structure: null } );
@@ -184,11 +185,14 @@ Menu.prototype = {
 		var structureType = this.data.structureTypes[structureInfo.structureType];
 		var html = ["" +
 			"<h2>" + structureInfo.name + "</h2>" +
+			"<div class='left'>" +
+			"<h3>Requirements: </h3>" +
 			"<ul class='resources'>" +
 			"<li class='time'>Time: <span>" + msToTime(structureType.buildTime) + "</span> </li>"];
 
 		// Add costs
 		for(var i in structureType.cost){
+			if(!structureType.cost.hasOwnProperty(i)) continue;
 			var insufficient = (this.resources[i] && this.resources[i] < structureType.cost[i]) ? 'insufficient ' : '';
 			html.push("<li class='" + insufficient + this.data.resources[i].iconCss + "'>" + this.data.resources[i].name + ": <span>" + structureType.cost[i] + "</span></li>")
 		}
@@ -196,13 +200,29 @@ Menu.prototype = {
 			"<ul class='requirements'>");
 
 		// Add requirements
-		for(var i in structureType.requirements){
+		for(i in structureType.requirements){
+			if(!structureType.requirements.hasOwnProperty(i)) continue;
 			html.push("<li class='" + this.data.resources[i].iconCss + "'>" + this.data.resources[i].name + ": <span>" + structureType.requirements[i] + "</span></li>")
 		}
 
-		html.push("</ul>")
+		html.push("</ul>" +
+			"</div>" +
+			"<div class='right'>" +
+			"<h3>Generates (per citizen assigned): </h3>" +
+			"<ul class='generates'>");
+
+		// Add revenue
+		for(i in structureType.generates) {
+			if(!structureType.generates.hasOwnProperty(i)) continue;
+
+			html.push("<li class='" + this.data.resources[i].iconCss + "' >" + this.data.resources[i].name + ": <span>" + structureType.generates[i] + "</span></li>")
+		}
+
+		html.push("</div>" +
+			"</ul>");
 		this.popup.el.html(html.join(""));
 
+		// Formats time
 		function msToTime(s) {
 			var ms = s % 1000;
 			s = (s - ms) / 1000;
