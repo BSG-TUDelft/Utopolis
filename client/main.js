@@ -135,18 +135,18 @@ function init() {
     scene.add( directionalLight );
 
 	var skybox = Skybox.get([
-		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
+		/*'art/skybox/cloudy_0/yellowcloud_ft.jpg',
 		'art/skybox/cloudy_0/yellowcloud_bk.jpg',
 		'art/skybox/cloudy_0/yellowcloud_up.jpg',
 		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
 		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
-		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
-		/*'art/skybox/cloudy_0/bluecloud_ft.jpg',
+		'art/skybox/cloudy_0/yellowcloud_lf.jpg'*/
+		'art/skybox/cloudy_0/bluecloud_ft.jpg',
 		'art/skybox/cloudy_0/bluecloud_bk.jpg',
 		'art/skybox/cloudy_0/bluecloud_up.jpg',
 		'art/skybox/cloudy_0/bluecloud_dn.jpg',
 		'art/skybox/cloudy_0/bluecloud_rt.jpg',
-		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
+		'art/skybox/cloudy_0/bluecloud_lf.jpg'
 	]);
 	scene.add(skybox);
 
@@ -624,6 +624,7 @@ function update() {
 }
 
 function highlightSelectedModel (model) {
+	Gui.buildingSelected(model.id);										// Inform the GUI we've selected a building
     selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted

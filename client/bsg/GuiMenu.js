@@ -1,3 +1,4 @@
+"use strict";
 var menuData = {
 	empires: [{
 		name: "Hellenes",
@@ -302,7 +303,8 @@ var menuData = {
 				metal: 1,
 				stone: 1,
 				safety: 1
-			}
+			},
+			citizenCap: 4
 		},
 		"farm": {
 			cost: {
@@ -317,7 +319,8 @@ var menuData = {
 			generates: {
 				food: 2,
 				health: 1
-			}
+			},
+			citizenCap: 6
 		},
 		"corral": {
 			cost: {
@@ -332,7 +335,8 @@ var menuData = {
 			generates: {
 				food: 4,
 				health: 1
-			}
+			},
+			citizenCap: 6
 		},
 		"storehouse": {
 			cost: {
@@ -350,8 +354,8 @@ var menuData = {
 				wood: 6,
 				food: 8,
 				economy: 3
-			}
-
+			},
+			citizenCap: 8
 		},
 		"barracks": {
 			cost: {
@@ -362,7 +366,8 @@ var menuData = {
 				knowledge: 40,
 				culture: 40
 			},
-			buildTime: 120000
+			buildTime: 120000,
+			citizenCap: 10
 		},
 		"blacksmith": {
 			cost: {
@@ -379,8 +384,8 @@ var menuData = {
 				stone: 10,
 				safety: 5,
 				peace: 5
-			}
-
+			},
+			citizenCap: 8
 		},
 		"tower": {
 			cost: {
@@ -397,8 +402,8 @@ var menuData = {
 				stone: 15,
 				knowledge: 5,
 				safety: 2
-			}
-
+			},
+			citizenCap: 10
 		},
 		"civic": {
 			cost: {
@@ -415,8 +420,8 @@ var menuData = {
 				knowledge: 1,
 				culture: 1,
 				peace: 1
-			}
-
+			},
+			citizenCap: 20
 		},
 		"fortress": {
 			cost: {
@@ -435,8 +440,8 @@ var menuData = {
 				safety: 5,
 				peace: 5,
 				diplomacy: 5
-			}
-
+			},
+			citizenCap: 25
 		},
 		"temple": {
 			cost: {
@@ -451,8 +456,8 @@ var menuData = {
 			generates: {
 				culture: 35,
 				spirituality: 15
-			}
-
+			},
+			citizenCap: 30
 		}
 	},
 
@@ -529,7 +534,7 @@ function initGui() {
 					togglePlacementMode();
 			}
 			else {																		//if not enough resources, deselect building.
-				$("#structures li").removeClass("selected");
+				$("#structures").find("li").removeClass("selected");
 				menu.selectedStructureId = null;
 			}
 		}
@@ -549,7 +554,7 @@ function initGui() {
 		metal: 0,
 		food: 0,
 		citizens: 0
-	}
+	};
 	setInterval(function(){
 		res.wood += .75;
 		res.stone += .5;
@@ -559,7 +564,7 @@ function initGui() {
 		topbar.setResourceValues(res);
 
 		menu.setResourceValues(res);
-	}, 500)
+	}, 500);
 
 	var enoughResources = function (structureType) {
 		if(structureType.cost.wood) {
@@ -587,12 +592,12 @@ function initGui() {
 				return false;
 		}
 		return true;
-	}
+	};
 
 	/** Leaderboard*/
 	var getRndInt = function(max){
 		return Math.floor(Math.random() * max);
-	}
+	};
 
 	var getRndIcons = function() {
 		return {
@@ -606,7 +611,7 @@ function initGui() {
 			gold2: Math.random() < .5,
 			gold3: Math.random() < .5
 		};
-	}
+	};
 
 	var data = [
 		[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
@@ -644,4 +649,10 @@ function initGui() {
 				break;
 		}
 	});
+}
+
+var Gui = {
+	buildingSelected: function(buildingId){
+		console.log(buildingId);
+	}
 }
