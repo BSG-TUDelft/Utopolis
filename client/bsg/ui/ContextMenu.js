@@ -32,7 +32,8 @@ ContextMenu.prototype = {
 			console.log("No structure info found with structureId " + structure.name);
 		var structureTypeInfo = this.data.structureTypes[structureInfo.structureType];
 
-		var html = "<h2>" + structure.name + "</h2>" +
+		var html = "<h2>" + structureInfo.name + "</h2>" +
+			"<div class='structureicon " + structureInfo.iconCss + "'></div>" +
 			"<span id='citizencounter'>" + citizenFormatter() + "</span>" +
 			"<div id='structureslider'></div>";
 
