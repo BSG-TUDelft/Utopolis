@@ -290,7 +290,12 @@ function buildingPlacementAllowed() {                                     // tru
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-    if(rollOverMesh) {                                             //if the ghost model is visible     
+	if((event.target || event.srcElement).nodeName != "CANVAS"){
+		// We did not click on a canvas (so on the GUI instead)
+		return;
+	}
+
+    if(rollOverMesh) {                                             //if the ghost model is visible
         if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
@@ -302,10 +307,18 @@ function onDocumentMouseDown( event ) {
 				registerCollidableBoundingMesh(model);
 
 				// Create a structure
-				var structName = model.name.substring(5);		// Todo: find a cleaner way to do this
-				var structure = new Structure(structName, model);
-
+				var structure = new Structure(model.name, model);
                 structureCollection.add(structure);
+
+				// Now select what we just made (this is sort of ugly I suppose, but it works)
+				togglePlacementMode();
+				var intersects = getMouseProjectionOnObjects( selectableMeshes );
+				if(intersects.length > 0) {
+					if (selectedModel != intersects[0].object) {                    //we have a new selection
+						clearSelectedModel();
+						highlightSelectedModel (intersects[0].object);
+					}
+				}
             }
         }
     }
@@ -582,7 +595,7 @@ function removeSelectedModel() {
 
 function refreshRollover() {
     if(rollOverMesh) {                                //check if it is set
-        togglePlacementMode();
+        togglePlacementMode();					// why twice?
         togglePlacementMode();
     }
 }

@@ -1,10 +1,11 @@
-var Menu = function (menuData) {
+var BuildMenu = function (parent, menuData) {
+	this.parent = parent;
 	this.data = menuData;
 };
-Menu.prototype = {
+BuildMenu.prototype = {
 
 	// Ctor
-	constructor: Menu,
+	constructor: BuildMenu,
 
 	data: {},
 	popup: null,					// Info popup
@@ -20,14 +21,27 @@ Menu.prototype = {
 	// Public methods
 	/** Initiates the menu */
 	init : function() {
-
+		this.initMenu();
 		this.initTabStrip();
 		this.initStructureIcons();
 		this.initInfoPopup();
 	},
 
+
 	// Private
-	/** Initiates tab strip with categories (empires) */
+	/** Initializes the menu, creates dom elements */
+	initMenu: function(){
+		this.parent.append('' +
+		'<div class="inner">' +
+			'<ul id="tabstrip"></ul>' +
+			'<ul id="structures"></ul>' +
+			'</div>' +
+		'<div class="structures_scroll" id="structures_scroll_up"><div class="arrow"></div></div>' +
+		'<div class="structures_scroll" id="structures_scroll_down"><div class="arrow"></div></div>');
+	},
+
+
+	/** Initializes tab strip with categories (empires) */
 	initTabStrip : function (){
 		for(var i in this.data.empires){
 			if(!this.data.empires.hasOwnProperty(i)) continue;
@@ -88,7 +102,7 @@ Menu.prototype = {
 			if(!this.data.empires[tabIndex].structures.hasOwnProperty(i)) continue;
 			var li = $("" +
 				"<li>" +
-				"<div title='" +  this.data.empires[tabIndex].structures[i].name + "' class='" +  this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
+				"<div title='" +  this.data.empires[tabIndex].structures[i].name + "' class='structureicon " +  this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
 				"</li>");
 			li.click($.proxy( this.structureClick, this, li, this.data.empires[tabIndex].structures[i]));
 
@@ -151,12 +165,12 @@ Menu.prototype = {
 		$("#structures").find("li").removeClass("selected");
 		if(structure.structureId == this.selectedStructureId){
 			this.selectedStructureId = null;
-			this.dispatchEvent( { type: Menu.structureSelected, structure: null } );
+			this.dispatchEvent( { type: BuildMenu.structureSelected, structure: null } );
 		}
 		else {
 			li.addClass("selected");
 			this.selectedStructureId = structure.structureId;
-			this.dispatchEvent( { type: Menu.structureSelected, structure: structure } );
+			this.dispatchEvent( { type: BuildMenu.structureSelected, structure: structure } );
 		}
 	},
 
@@ -208,7 +222,7 @@ Menu.prototype = {
 		html.push("</ul>" +
 			"</div>" +
 			"<div class='right'>" +
-			"<h3>Generates (per citizen assigned): </h3>" +
+			"<h3>Generates (per citizen allocated): </h3>" +
 			"<ul class='generates'>");
 
 		// Add revenue
@@ -252,4 +266,4 @@ Menu.prototype = {
 		return this.iconsCount == 0 || this.iconsUp == this.iconsCount - this.minStructureIconVisible;
 	}
 };
-THREE.EventDispatcher.prototype.apply( Menu.prototype );
+THREE.EventDispatcher.prototype.apply( BuildMenu.prototype );

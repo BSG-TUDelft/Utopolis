@@ -1,6 +1,6 @@
-var Leaderboard = function(parent, data){
+var Leaderboard = function(parent, data, config){
 	// Call parent constructor
-	Popup.prototype.constructor.call(this, parent);
+	Popup.prototype.constructor.call(this, parent, config);
 
 	this.el.append( '' +
 		'<div class="leaderboard"> ' +
