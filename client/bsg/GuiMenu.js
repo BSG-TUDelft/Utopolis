@@ -1,4 +1,208 @@
 "use strict";
+
+var Gui = {
+	structurePopup: null,
+	structureTypes: {
+		"house": {
+			cost: {
+				wood: 1,
+				food: 2
+			},
+			requirements: {
+				culture: 4,
+				knowledge: 4
+			},
+			buildTime: 30000,
+			generates: {
+				wood: 1,
+				metal: 1,
+				stone: 1,
+				safety: 1
+			},
+			citizenCap: 4
+		},
+		"farm": {
+			cost: {
+				metal: 2,
+				food: 2
+			},
+			requirements: {
+				knowledge: 4,
+				culture: 4
+			},
+			buildTime: 30000,
+			generates: {
+				food: 2,
+				health: 1
+			},
+			citizenCap: 6
+		},
+		"corral": {
+			cost: {
+				metal: 4,
+				food: 2
+			},
+			requirements: {
+				knowledge: 4,
+				culture: 4
+			},
+			buildTime: 30000,
+			generates: {
+				food: 4,
+				health: 1
+			},
+			citizenCap: 6
+		},
+		"storehouse": {
+			cost: {
+				wood: 3,
+				stone: 6
+			},
+			requirements: {
+				knowledge: 4,
+				culture: 4
+			},
+			buildTime: 120000,
+			generates: {
+				stone: 6,
+				metal: 6,
+				wood: 6,
+				food: 8,
+				economy: 3
+			},
+			citizenCap: 8
+		},
+		"barracks": {
+			cost: {
+				wood: 100,
+				food: 250
+			},
+			requirements: {
+				knowledge: 40,
+				culture: 40
+			},
+			buildTime: 120000,
+			citizenCap: 10
+		},
+		"blacksmith": {
+			cost: {
+				wood: 100,
+				food: 100
+			},
+			requirements: {
+
+			},
+			buildTime: 240000,
+			generates: {
+				wood: 10,
+				metal: 10,
+				stone: 10,
+				safety: 5,
+				peace: 5
+			},
+			citizenCap: 8
+		},
+		"tower": {
+			cost: {
+				stone: 25,
+				metal: 25,
+				food: 40
+			},
+			requirements: {
+				knowledge: 25,
+				culture: 25
+			},
+			buildTime: 120000,
+			generates: {
+				stone: 15,
+				knowledge: 5,
+				safety: 2
+			},
+			citizenCap: 10
+		},
+		"civic": {
+			cost: {
+				stone: 1,
+				metal: 1,
+				food: 2
+			},
+			requirements: {
+				knowledge: 4,
+				culture: 4
+			},
+			buildTime: 30000,
+			generates: {
+				knowledge: 1,
+				culture: 1,
+				peace: 1
+			},
+			citizenCap: 20
+		},
+		"fortress": {
+			cost: {
+				stone: 500,
+				metal: 200,
+				food: 1000
+			},
+			requirements: {
+				knowledge: 500,
+				culture: 500
+			},
+			buildTime: 300000,
+			generates: {
+				culture: 35,
+				knowledge: 35,
+				safety: 5,
+				peace: 5,
+				diplomacy: 5
+			},
+			citizenCap: 25
+		},
+		"temple": {
+			cost: {
+				stone: 500,
+				food: 5000
+			},
+			requirements: {
+				knowledge: 250,
+				culture: 250
+			},
+			buildTime: 600000,
+			generates: {
+				culture: 35,
+				spirituality: 15
+			},
+			citizenCap: 30
+		}
+	},
+
+	/**
+	 * @param structure (Structure) that was selected
+	 */
+	structureSelected: function (structure) {
+		console.log(structure.name);
+		var html = "<h2>" + structure.name + "</h2>" +
+			"<div id='structureslider'></div>";
+
+		Gui.structurePopup.el.html(html);
+
+		$( "#structureslider" ).slider({
+			value:100,
+			min: 0,
+			max: 500,
+			step: 50,
+			slide: function( event, ui ) {
+				//$( "#amount" ).val( "$" + ui.value );
+			}
+		});
+		Gui.structurePopup.show();
+	},
+
+	structureUnselected: function () {
+		Gui.structurePopup.hide();
+	}
+};
+
 var menuData = {
 	empires: [{
 		name: "Hellenes",
@@ -287,179 +491,7 @@ var menuData = {
 	],
 
 	/** Contains definitions for structure types. Note that keys under 'cost' and 'requirements' refer to keys in the resources collection */
-	structureTypes: {
-		"house": {
-			cost: {
-				wood: 1,
-				food: 2
-			},
-			requirements: {
-				culture: 4,
-				knowledge: 4
-			},
-			buildTime: 30000,
-			generates: {
-				wood: 1,
-				metal: 1,
-				stone: 1,
-				safety: 1
-			},
-			citizenCap: 4
-		},
-		"farm": {
-			cost: {
-				metal: 2,
-				food: 2
-			},
-			requirements: {
-				knowledge: 4,
-				culture: 4
-			},
-			buildTime: 30000,
-			generates: {
-				food: 2,
-				health: 1
-			},
-			citizenCap: 6
-		},
-		"corral": {
-			cost: {
-				metal: 4,
-				food: 2
-			},
-			requirements: {
-				knowledge: 4,
-				culture: 4
-			},
-			buildTime: 30000,
-			generates: {
-				food: 4,
-				health: 1
-			},
-			citizenCap: 6
-		},
-		"storehouse": {
-			cost: {
-				wood: 3,
-				stone: 6
-			},
-			requirements: {
-				knowledge: 4,
-				culture: 4
-			},
-			buildTime: 120000,
-			generates: {
-				stone: 6,
-				metal: 6,
-				wood: 6,
-				food: 8,
-				economy: 3
-			},
-			citizenCap: 8
-		},
-		"barracks": {
-			cost: {
-				wood: 100,
-				food: 250
-			},
-			requirements: {
-				knowledge: 40,
-				culture: 40
-			},
-			buildTime: 120000,
-			citizenCap: 10
-		},
-		"blacksmith": {
-			cost: {
-				wood: 100,
-				food: 100
-			},
-			requirements: {
-
-			},
-			buildTime: 240000,
-			generates: {
-				wood: 10,
-				metal: 10,
-				stone: 10,
-				safety: 5,
-				peace: 5
-			},
-			citizenCap: 8
-		},
-		"tower": {
-			cost: {
-				stone: 25,
-				metal: 25,
-				food: 40
-			},
-			requirements: {
-				knowledge: 25,
-				culture: 25
-			},
-			buildTime: 120000,
-			generates: {
-				stone: 15,
-				knowledge: 5,
-				safety: 2
-			},
-			citizenCap: 10
-		},
-		"civic": {
-			cost: {
-				stone: 1,
-				metal: 1,
-				food: 2
-			},
-			requirements: {
-				knowledge: 4,
-				culture: 4
-			},
-			buildTime: 30000,
-			generates: {
-				knowledge: 1,
-				culture: 1,
-				peace: 1
-			},
-			citizenCap: 20
-		},
-		"fortress": {
-			cost: {
-				stone: 500,
-				metal: 200,
-				food: 1000
-			},
-			requirements: {
-				knowledge: 500,
-				culture: 500
-			},
-			buildTime: 300000,
-			generates: {
-				culture: 35,
-				knowledge: 35,
-				safety: 5,
-				peace: 5,
-				diplomacy: 5
-			},
-			citizenCap: 25
-		},
-		"temple": {
-			cost: {
-				stone: 500,
-				food: 5000
-			},
-			requirements: {
-				knowledge: 250,
-				culture: 250
-			},
-			buildTime: 600000,
-			generates: {
-				culture: 35,
-				spirituality: 15
-			},
-			citizenCap: 30
-		}
-	},
+	structureTypes: Gui.structureTypes,
 
 	/** Strings */
 	resources: {
@@ -649,10 +681,9 @@ function initGui() {
 				break;
 		}
 	});
+
+	Gui.structurePopup = new Popup($("body"), { noClose: true });
+	Gui.structurePopup.el.addClass("structurepopup thin");
+	Gui.structurePopup.hide();
 }
 
-var Gui = {
-	buildingSelected: function(buildingId){
-		console.log(buildingId);
-	}
-}

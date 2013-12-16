@@ -1,0 +1,8 @@
+.structurepopup {
+	left: 200px;
+	top: inherit;
+	bottom: 0;
+	width: 100%;
+	min-height: inherit;
+	height: 100px;
+}
