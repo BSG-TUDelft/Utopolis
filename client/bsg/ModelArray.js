@@ -9,6 +9,10 @@ ModelArray.prototype = {
 	
 	add: function ( object ) {
 		this.objects.push(object);
+	},
+
+	get: function(index){
+		return this.objects[index];
 	}
 }
 

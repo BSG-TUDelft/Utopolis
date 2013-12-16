@@ -7,29 +7,24 @@ var material, dae, skin;
 var currentModel;
 var selectedModel;
 
-var mouse2D, mouse3D, raycaster, rollOveredFace;
+var mouse2D, raycaster;
 var mouseOffsetX, mouseOffsetY;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
 var i, intersector;
-var intersectorHeightOffset;
 
-var buildings = new Array();
-//bolean
-var noCollision;         
+var noCollision;
 
 var floor;                  //needed to restrict mouse projection to floor only
 var collidableMeshList = [];    //collidable list
 var collidableBoundingBoxes = [];   //avoid creating a new bounding box every time we check for collision
 var selectableMeshes = [];          //merge this with collidableMeshList?       //might slow down collision detection, but we don't keep that many arrays;
-var ghostHeight;
-var colliderBox;
 
 var t = 0;
 var clock = new THREE.Clock();
 
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
-
+var structureCollection;
 init();
 animate();
 
@@ -135,18 +130,18 @@ function init() {
     scene.add( directionalLight );
 
 	var skybox = Skybox.get([
-		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
+		/*'art/skybox/cloudy_0/yellowcloud_ft.jpg',
 		'art/skybox/cloudy_0/yellowcloud_bk.jpg',
 		'art/skybox/cloudy_0/yellowcloud_up.jpg',
 		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
 		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
-		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
-		/*'art/skybox/cloudy_0/bluecloud_ft.jpg',
+		'art/skybox/cloudy_0/yellowcloud_lf.jpg'*/
+		'art/skybox/cloudy_0/bluecloud_ft.jpg',
 		'art/skybox/cloudy_0/bluecloud_bk.jpg',
 		'art/skybox/cloudy_0/bluecloud_up.jpg',
 		'art/skybox/cloudy_0/bluecloud_dn.jpg',
 		'art/skybox/cloudy_0/bluecloud_rt.jpg',
-		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
+		'art/skybox/cloudy_0/bluecloud_lf.jpg'
 	]);
 	scene.add(skybox);
 
@@ -165,38 +160,41 @@ function init() {
     stats.domElement.style.top = '60px';
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
-    
+
     //MODEL LOADERS
 	var iberLoader = new IberModelLoader();
-	iberLoader.addEventListener(ModelLoader.doneLoading, function(){
+	iberLoader.addEventListener(ModelLoader.doneLoading, function () {
 		console.log("Done loading Iberians");
-	})
+	});
 	iberLoader.loadModels();
 
 	var romeLoader = new RomeModelLoader();
 	romeLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Romans");
-	})
+	});
 	romeLoader.loadModels();
 
 	var heleLoader = new HeleModelLoader();
 	heleLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Hellenes");
-	})
+	});
 	heleLoader.loadModels();
 
 	var kartLoader = new KartModelLoader();
 	kartLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Carthaginians");
-	})
+	});
 	kartLoader.loadModels();
 
 	var persLoader = new PersModelLoader();
 	persLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Persians");
-	})
-
+	});
 	persLoader.loadModels();
+
+	// COLLECTION OF STRUCTURES
+	structureCollection = new ModelArray();
+
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
@@ -292,19 +290,36 @@ function buildingPlacementAllowed() {                                     // tru
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-    if(rollOverMesh) {                                             //if the ghost model is visible     
+	if((event.target || event.srcElement).nodeName != "CANVAS"){
+		// We did not click on a canvas (so on the GUI instead)
+		return;
+	}
+
+    if(rollOverMesh) {                                             //if the ghost model is visible
         if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
             if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
-                var i = buildings.length - 1;
-                buildings[i] = currentModel.getClone();
-                buildings[i].position = intersector.point;
-                buildings[i].rotation = rollOverMesh.rotation.clone();
-                //console.log(intersector.point);
-                scene.add(buildings[i]);
+                var model = currentModel.getClone();
+				model.position = intersector.point;
+				model.rotation = rollOverMesh.rotation.clone();
 
-                registerCollidableBoundingMesh(buildings[i]);
-            }   
+				scene.add(model);
+				registerCollidableBoundingMesh(model);
+
+				// Create a structure
+				var structure = new Structure(model.name, model);
+                structureCollection.add(structure);
+
+				// Now select what we just made (this is sort of ugly I suppose, but it works)
+				togglePlacementMode();
+				var intersects = getMouseProjectionOnObjects( selectableMeshes );
+				if(intersects.length > 0) {
+					if (selectedModel != intersects[0].object) {                    //we have a new selection
+						clearSelectedModel();
+						highlightSelectedModel (intersects[0].object);
+					}
+				}
+            }
         }
     }
     else {                                                          //if the model is not visible, then we are in select building mode
@@ -317,7 +332,8 @@ function onDocumentMouseDown( event ) {
         }   
         else {                                                                      //not selected anything 
             clearSelectedModel();
-        }            
+
+        }
     }
 }
 
@@ -579,7 +595,7 @@ function removeSelectedModel() {
 
 function refreshRollover() {
     if(rollOverMesh) {                                //check if it is set
-        togglePlacementMode();
+        togglePlacementMode();					// why twice?
         togglePlacementMode();
     }
 }
@@ -624,6 +640,9 @@ function update() {
 }
 
 function highlightSelectedModel (model) {
+	// model.id does not give the right id!
+	Gui.structureSelected(structureCollection.get(0));										// Inform the GUI we've selected a building
+
     selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
@@ -632,6 +651,8 @@ function highlightSelectedModel (model) {
 }
 
 function clearSelectedModel () {
+	Gui.structureUnselected();
+
     if(selectedModel) {                                         //if we already have a model selected
         selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
     }
@@ -655,7 +676,6 @@ function getMouseProjectionOnFloor() {
 }
 
 function render() {
-    var timer = Date.now() * 0.0005;
     camera.lookAt( cameraLookAt );
 
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 

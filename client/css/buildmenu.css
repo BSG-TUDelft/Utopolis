@@ -15,11 +15,11 @@
 }
 
 #tabstrip {
-   width: 44px;
-   height: 100%;
-   background-image: url(../images/ui/topbar/top_60x38.png), url(../images/ui/tabstrip/vertical_tab_bg.png);
-   background-position: 9px 0, 0 0;
-   background-repeat: no-repeat, repeat;
+	width: 44px;
+	height: 100%;
+	background-image: url(../images/ui/topbar/top_60x38.png), url(../images/ui/tabstrip/vertical_tab_bg.png);
+	background-position: 9px 0, 0 0;
+  	background-repeat: no-repeat, repeat;
 	position: absolute;
 	right: 6px;
   	top: 0;
@@ -215,7 +215,7 @@ div.structure_infobox {
 .structure_infobox li {
 	background-color: rgba(0, 0, 0, .5);
 	padding: 2px;
-	margin: 2px;
+	margin: 1px;
 }
 
 .structure_infobox li span {
@@ -291,4 +291,7 @@ div.structure_infobox {
 
 .structure_infobox li.diplomacy span{
 	background-image: url(../images/ui/topbar/resources/diplomacy_small.png);
+}
+.structure_infobox li.spirituality span{
+	background-image: url(../images/ui/topbar/resources/spirituality_small.png);
 }

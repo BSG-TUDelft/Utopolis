@@ -1,0 +1,43 @@
+#right_menu {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 200px;
+	height: 100%;
+}
+
+
+
+.contextmenu {
+	border-image-source: url(../images/ui/popup/border_89x89.png);
+	border-image-slice: 13 13 13 13;
+	border-image-width: 13px 13px 13px 13px;
+	border-image-outset: 10px 10px 10px 10px;
+	border-image-repeat: repeat repeat;
+
+	position: absolute;
+	right: 0;
+	top: 35px;
+	width: 250px;
+	height: 100%;
+
+	background: url(../images/ui/common/wood.png);
+
+}
+
+.contextmenu #structureslider {
+	margin: 10px;
+}
+
+
+.contextmenu.thin {
+	border-image-source: url(../images/ui/popup/border_thin_77x77.png);
+	border-image-slice: 7 7 7 7;
+	border-image-width: 7px 7px 7px 7px;
+	border-image-outset: 5px 5px 5px 5px;
+	border-image-repeat: repeat repeat;
+}
+
+
+
+

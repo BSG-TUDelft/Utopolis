@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @param parent parent element to add popup to
  * @param options Options object, valid
@@ -39,7 +40,7 @@ Popup.prototype = {
 	constructor: Popup,
 
 	el: null,
-	animation: "slow",
+	animation: 0,
 
 	/** Positions this popup in the center of the window (viewport) */
 	center: function(){

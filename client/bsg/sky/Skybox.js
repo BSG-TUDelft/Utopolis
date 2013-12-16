@@ -1,3 +1,4 @@
+"use strict";
 var Skybox = {
 
 	get: function(urls) {
