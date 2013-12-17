@@ -497,7 +497,7 @@ function moveCameraBackwards() {
 
 function cameraZoomIn() {
     var lookDirection = getLookAtDirection().normalize();
-    if(camera.position.distanceTo(cameraLookAt) > 35 ) {
+    if(camera.position.distanceTo(cameraLookAt) > 25 ) {
         camera.position.x += lookDirection.x;
         camera.position.y += lookDirection.y;
         camera.position.z += lookDirection.z;
