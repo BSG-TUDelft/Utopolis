@@ -197,7 +197,12 @@
 	opacity: 1 !important;
 }
 
-#structures li:hover div {
+#structures .disabled {
+	opacity: .5;
+}
+
+#structures li.disabled:hover {
+	opacity: .5 !important;
 }
 
 div.structure_infobox {

@@ -39,13 +39,46 @@ var Gui = {
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
-	 * @param resources (Object) nameless object containing key-value pairs of resources eg: { wood: 12, metal: 10 }	 */
+	 * @param resources {Object} nameless object containing key-value pairs of resources eg: { wood: 12, metal: 10 }	 */
 	updatePlayerResources: function(resources){
 		Gui.topbar.setResourceValues(resources);
 
 		Gui.buildMenu.setResourceValues(resources);
 	},
 
+	/** Returns true if the structure described by structureType can be afforded, based on resources in param playerResources
+	 * @param playerResources {Object} nameless object containing key-value pairs of resources eg: { wood: 12, metal: 10 }
+	 * @param structureType {Object} nameless object containing: cost, requirements, buildTime etc
+	 * @returns {boolean}	 */
+	enoughResources: function (playerResources, structureType) {
+		//var cost = ["wood", "stone", "food", "metal"],
+		//	reqs = ["knowledge", ""]
+		if(structureType.cost.wood) {
+			if(playerResources.wood < structureType.cost.wood)
+				return false;
+		}
+		if(structureType.cost.stone) {
+			if(playerResources.stone < structureType.cost.stone)
+				return false;
+		}
+		if(structureType.cost.food) {
+			if(playerResources.food < structureType.cost.food)
+				return false;
+		}
+		if(structureType.cost.metal) {
+			if(playerResources.metal < structureType.cost.metal)
+				return false;
+		}
+		if(structureType.requirements.knowledge) {
+			if(playerResources.knowledge < structureType.requirements.knowledge)
+				return false;
+		}
+		if(structureType.requirements.culture) {
+			if(playerResources.culture < structureType.requirements.culture)
+				return false;
+		}
+		return true;
+	}
 };
 
 
@@ -570,7 +603,7 @@ function initGui() {
 			togglePlacementMode();
 		}
 		else {
-			if(enoughResources(menuData.structureTypes[e.structure.structureType])) {
+			if(Gui.enoughResources(res, menuData.structureTypes[e.structure.structureType])) {
 				currentModel = loadedModels[e.structure.structureId];
 
 				if(rollOverMesh) {
@@ -604,34 +637,6 @@ function initGui() {
 
 		Gui.updatePlayerResources(res);
 	}, 1500);
-
-	var enoughResources = function (structureType) {
-		if(structureType.cost.wood) {
-			if(res.wood < structureType.cost.wood)
-				return false;
-		}
-		if(structureType.cost.stone) {
-			if(res.stone < structureType.cost.stone)
-				return false;
-		}
-		if(structureType.cost.food) {
-			if(res.food < structureType.cost.food)
-				return false;
-		}
-		if(structureType.cost.metal) {
-			if(res.metal < structureType.cost.metal)
-				return false;
-		}
-		if(structureType.requirements.knowledge) {
-			if(res.knowledge < structureType.requirements.knowledge)
-				return false;
-		}
-		if(structureType.requirements.culture) {
-			if(res.culture < structureType.requirements.culture)
-				return false;
-		}
-		return true;
-	};
 
 	/** Leaderboard*/
 	var getRndInt = function(max){

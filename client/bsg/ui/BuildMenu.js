@@ -101,8 +101,10 @@ BuildMenu.prototype = {
 		for(var i in this.data.empires[tabIndex].structures){
 			if(!this.data.empires[tabIndex].structures.hasOwnProperty(i)) continue;
 			var li = $("" +
-				"<li>" +
-				"<div title='" +  this.data.empires[tabIndex].structures[i].name + "' class='structureicon " +  this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
+				"<li type='" + this.data.empires[tabIndex].structures[i].structureType + "'>" +
+				"<div " +
+					"title='" +	this.data.empires[tabIndex].structures[i].name + "' " +
+					"class='structureicon " + this.data.empires[tabIndex].structures[i].iconCss + "'></div>" +
 				"</li>");
 			li.click($.proxy( this.structureClick, this, li, this.data.empires[tabIndex].structures[i]));
 
@@ -132,6 +134,8 @@ BuildMenu.prototype = {
 			this.iconsCount =  this.data.empires[tabIndex].structures.length;
 		this.calculateStructuresScroll();
 
+		// Disable icons that we can't afford
+		this.updateStructureIcons();
 	},
 
 	/** Initiates the scrollable structure icons region */
@@ -151,10 +155,10 @@ BuildMenu.prototype = {
 		}, this));
 	},
 
-	/** Updates the players resources, used in the info popup */
+	/** Updates the players resources */
 	setResourceValues: function(data){
 		this.resources = data;
-
+		this.updateStructureIcons();
 		if(this.popup && this.currentInfo){
 			this.updatePopup(this.currentInfo);
 		}
@@ -194,7 +198,7 @@ BuildMenu.prototype = {
 			$("#structures_scroll_down").show();
 	},
 
-	/** */
+	/** Updates the structure icon tooltip */
 	updatePopup: function(structureInfo) {
 		var structureType = this.data.structureTypes[structureInfo.structureType];
 		var html = ["" +
@@ -254,6 +258,16 @@ BuildMenu.prototype = {
 				res.push(secs + " secs");
 			return res.join(",");
 		}
+	},
+
+	/** Checks if the player has sufficient resources for each building and updates the icon css accordingly */
+	updateStructureIcons: function(){
+		var structureTypes = this.data.structureTypes;
+		var resources = this.resources;
+		$("#structures").find("li").each(function(index, element){
+			// Are we able to afford this building
+			element.className = Gui.enoughResources(resources, structureTypes[element.type]) ? "" : "disabled";
+		});
 	},
 
 	/** True if we're on the first page of structures */
