@@ -19,7 +19,7 @@ var Popup = function(parent, options) {
 
 	if(options.noDrag !== true){
 		this.el.draggable({ containment: "window" });
-		this.el.resizable();
+		//this.el.resizable();
 	}
 
 	if(options.noClose !== true){
