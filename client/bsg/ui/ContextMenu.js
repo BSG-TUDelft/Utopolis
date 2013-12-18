@@ -22,7 +22,7 @@ ContextMenu.prototype = {
 	animation: 0,
 
 	/** Shows this ContextMenu with structure info
-	 * @param structure	(Structure) */
+	 * @param structure	{Structure} */
 	show: function(structure) {
 		function citizenFormatter(){
 			return $.format('Citizens allocated: {0}', structure.citizens);
@@ -30,6 +30,10 @@ ContextMenu.prototype = {
 		var structureInfo = this.getStructureInfo(structure.name);
 		if(structureInfo === null)
 			console.log("No structure info found with structureId " + structure.name);
+
+		var sound = sounds.selected[structureInfo.structureType];
+		sound.play();
+
 		var structureTypeInfo = this.data.structureTypes[structureInfo.structureType];
 
 		var html = "<h2>" + structureInfo.name + "</h2>" +

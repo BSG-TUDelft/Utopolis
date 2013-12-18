@@ -106,6 +106,18 @@ function initCamera() {
 
 function initSound(){
 	sounds.error = new Sound(['audio/game/error.mp3'], { loop: false});
+	sounds.selected = {
+		barracks: new Sound(['audio/selected/sel_barracks.ogg']),
+		blacksmith: new Sound(['audio/selected/sel_blacksmith.ogg']),
+		civic: new Sound(['audio/selected/sel_civ_center.ogg']),
+		corral: new Sound(['audio/selected/sel_corral.ogg']),
+		farm: new Sound(['audio/selected/sel_farmstead.ogg']),
+		fortress: new Sound(['audio/selected/sel_fortress.ogg']),
+		house: new Sound(['audio/selected/sel_house.ogg']),
+		storehouse: new Sound(['audio/selected/sel_storehouse.ogg']),
+		temple: new Sound(['audio/selected/sel_temple.ogg']),
+		tower: new Sound(['audio/selected/sel_tower.ogg'])
+	}
 }
 
 function init() {
@@ -665,7 +677,8 @@ function update() {
 
 function highlightSelectedModel (model) {
 	// model.id does not give the right id!
-	Gui.structureSelected(structureCollection.get(0));										// Inform the GUI we've selected a building
+	Gui.structureSelected(structureCollection.get(0));										// Inform the GUI we've selected a building. Will also play sound
+
 
     selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;

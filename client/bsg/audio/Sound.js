@@ -28,13 +28,15 @@ var Sound = function ( sources, config ) {
 	var currentIndex = 0;
 	var paused = false;
 	var config = config || {};
-	var loop = config.loop || true;
+	var loop = config.loop === true;
 	var playMode = config.playMode || Sound.playMode.sequential;
-	var verbose = config.verbose || false;
+	var verbose = config.verbose === true;
+	var volume = config.volume != null ? config.volume : 1;
 
 	if(config.audio != null){
 		$.extend(audio, config.audio);
 	}
+	audio.volume = volume;
 
 	// PRIVATE METHODS
 	function load(){
@@ -61,6 +63,7 @@ var Sound = function ( sources, config ) {
 	}
 
 	// PUBLIC METHODS
+	/** Plays the audio */
 	this.play = function () {
 		load.call(this);
 		if(verbose)
@@ -69,6 +72,7 @@ var Sound = function ( sources, config ) {
 		audio.play();
 	};
 
+	/** Pauses playback */
 	this.pause = function () {
 		paused = true;
 		audio.pause();
@@ -80,6 +84,13 @@ var Sound = function ( sources, config ) {
 			this.play();
 		else
 			this.pause();
+	}
+
+	/** Set volume of sound
+	 * @param vol {Number} indicating value (0 to 1) */
+	this.setVolume = function(vol){
+		volume = vol;
+		audio.volume = volume;
 	}
 
 	/** Indicates whether the audio is currently paused
