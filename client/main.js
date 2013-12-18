@@ -25,6 +25,7 @@ var clock = new THREE.Clock();
 
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
 var structureCollection;
+var sounds = {};
 init();
 animate();
 
@@ -103,6 +104,10 @@ function initCamera() {
     setCameraElevationAngle()
 }
 
+function initSound(){
+	sounds.error = new Sound(['audio/game/error.mp3'], { loop: false});
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -111,9 +116,15 @@ function init() {
     //GUI
     initGui();
 
+	//MUSIC
+	Music.initMusic();
+
+	//SOUND
+	initSound();
+
     //SCENE
     scene = new THREE.Scene();
-    
+
     //CAMERA
     initCamera();
 
@@ -135,13 +146,19 @@ function init() {
 		'art/skybox/cloudy_0/yellowcloud_up.jpg',
 		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
 		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
-		'art/skybox/cloudy_0/yellowcloud_lf.jpg'*/
+		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
 		'art/skybox/cloudy_0/bluecloud_ft.jpg',
 		'art/skybox/cloudy_0/bluecloud_bk.jpg',
 		'art/skybox/cloudy_0/bluecloud_up.jpg',
 		'art/skybox/cloudy_0/bluecloud_dn.jpg',
 		'art/skybox/cloudy_0/bluecloud_rt.jpg',
-		'art/skybox/cloudy_0/bluecloud_lf.jpg'
+		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
+		'art/skybox/cloudy_0/graycloud_ft.jpg',
+		'art/skybox/cloudy_0/graycloud_bk.jpg',
+		'art/skybox/cloudy_0/graycloud_up.jpg',
+		'art/skybox/cloudy_0/graycloud_dn.jpg',
+		'art/skybox/cloudy_0/graycloud_rt.jpg',
+		'art/skybox/cloudy_0/graycloud_lf.jpg'
 	]);
 	scene.add(skybox);
 
@@ -321,6 +338,9 @@ function onDocumentMouseDown( event ) {
 				}
             }
         }
+		else {
+			sounds.error.play();
+		}
     }
     else {                                                          //if the model is not visible, then we are in select building mode
         var intersects = getMouseProjectionOnObjects( selectableMeshes );
@@ -384,7 +404,11 @@ function onKeyDown ( event ) {
             break;
         case 88: // x
             removeSelectedModel();
-            break
+            break;
+		case 77: // "m"
+			Music.toggle();
+			break;
+
     }
 };
 
