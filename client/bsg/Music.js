@@ -4,7 +4,8 @@
  * Date: 17-12-13
  * Time: 23:18
  * To change this template use File | Settings | File Templates.
- * 'audio/game/error.mp3',
+ * 'audio/game/error.mp3',this.music = new Sound([
+ 'audio/music/An_old_Warhorse_goes_to_Pasture.ogg'
  'audio/game/wrong_placement.ogg'], {
 
  */

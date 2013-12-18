@@ -27,6 +27,7 @@ var Sound = function ( sources, config ) {
 
 	var currentIndex = 0;
 	var paused = false;
+	var config = config || {};
 	var loop = config.loop || true;
 	var playMode = config.playMode || Sound.playMode.sequential;
 	var verbose = config.verbose || false;

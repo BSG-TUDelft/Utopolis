@@ -25,6 +25,7 @@ var clock = new THREE.Clock();
 
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
 var structureCollection;
+var sounds = {};
 init();
 animate();
 
@@ -103,6 +104,10 @@ function initCamera() {
     setCameraElevationAngle()
 }
 
+function initSound(){
+	sounds.error = new Sound(['audio/game/error.mp3'], { loop: false});
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -113,6 +118,9 @@ function init() {
 
 	//MUSIC
 	Music.initMusic();
+
+	//SOUND
+	initSound();
 
     //SCENE
     scene = new THREE.Scene();
@@ -330,6 +338,9 @@ function onDocumentMouseDown( event ) {
 				}
             }
         }
+		else {
+			sounds.error.play();
+		}
     }
     else {                                                          //if the model is not visible, then we are in select building mode
         var intersects = getMouseProjectionOnObjects( selectableMeshes );
