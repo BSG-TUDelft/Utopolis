@@ -122,7 +122,6 @@
 	height: 32px;
 	position: absolute;
 	right: 49px;
-	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -161,7 +160,6 @@
 }
 
 #structures {
-	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
