@@ -652,7 +652,7 @@ function initGui() {
 		if(e.structure == null) {
 			togglePlacementMode();
 		}
-		else if(e.structure.structureId == "flag"){
+		else if(e.structure.structureId == "flag" && flag_placed == false){
 				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
 
 				if(rollOverMesh) {
@@ -661,6 +661,9 @@ function initGui() {
 				if(rollOverMesh == undefined)
 					togglePlacementMode();
 			}
+		else if(e.structure.structureId == "flag" && flag_placed == true){
+			return;
+		}
 		else {
 			if(Gui.enoughResources(res, menuData.structureTypes[e.structure.structureType])) {
 				currentModel = loadedModels[e.structure.structureId];
