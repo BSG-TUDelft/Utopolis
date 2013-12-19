@@ -1,6 +1,8 @@
-var Topbar = function(topbarData) {
+/** Gui element at the top */
+var Topbar = function (topbarData) {
 	this.data = topbarData;
-}
+};
+
 Topbar.prototype = {
 
 	// Ctor
@@ -21,6 +23,7 @@ Topbar.prototype = {
 	 * @param resources	 object containing key-value pairs. The keys should correspond to resourceId property of resources object in topbarData constructor param */
 	setResourceValues: function(resources){
 		for(var i in resources){
+			if(!resources.hasOwnProperty(i)) continue;
 			if(this.resources[i] != null){
 				this.resources[i].value = resources[i];
 			}
@@ -34,7 +37,8 @@ Topbar.prototype = {
 	/** Initializes resource indication area */
 	initResources: function(){
 		for(var i in this.data.resources){
-			i
+			if(!this.data.resources.hasOwnProperty(i)) continue;
+
 			var li = $("" +
 				"<li class='" +  this.data.resources[i].iconCss + "' >" +
 				"</li>");
@@ -54,6 +58,8 @@ Topbar.prototype = {
 	/** Visually updates */
 	update: function(){
 		for(var i in this.resources){
+			if(!this.resources.hasOwnProperty(i)) continue;
+
 			// If formatter value is present, execute it to retrieve the formatted value
 			var displayValue = typeof(this.resources[i].formatter == 'function') ? this.resources[i].formatter(this.resources[i].value) : this.resources[i].value;
 
@@ -64,4 +70,4 @@ Topbar.prototype = {
 			this.resources[i].elem.prop('title', this.resources[i].name + ": " + Math.floor(this.resources[i].value));
 		}
 	}
-}
+};
