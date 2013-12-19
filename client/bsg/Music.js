@@ -40,7 +40,8 @@ var Music = {
 			'audio/music/Calm_Before_the_Storm.ogg'], {
 			loop: true,
 			playMode: Sound.playMode.random,
-			verbose: true
+			verbose: true,
+			volume: .3
 		});
 		this.music.play();
 	},

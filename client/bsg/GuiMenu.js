@@ -28,7 +28,7 @@ var Gui = {
 
 
 	/** Gets called from Main whenever a structure in the 3d world is selected
-	 * @param structure (Structure) that was selected  */
+	 * @param structure {Structure} that was selected  */
 	structureSelected: function (structure) {
 		Gui.contextMenu.show(structure);
 	},
