@@ -4,5 +4,15 @@
 	position: absolute;
 	margin-left: 260px;
 	bottom: 0px;
+	pointer-events:none;
 
+}
+
+.console ul li {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
 }

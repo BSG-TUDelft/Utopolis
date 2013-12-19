@@ -236,7 +236,7 @@ function init() {
 }
 
 function collidablesContainEmitter(colliderOrigin) {
-    for(index = 0; index < collidableBoundingBoxes.length; index ++) {
+    for(var index = 0; index < collidableBoundingBoxes.length; index ++) {
         if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){               
             return true;
         }
@@ -249,8 +249,6 @@ function changeColliderColor(collider, r, g, b) {
     collider.children[0].material.ambient.g = g;
     collider.children[0].material.ambient.b = b;
 }
-
-var pointMesh = null;
 
 function detectCollision (collider) {           //collider = oject that detects collision (casts rays)
     if(collider)
@@ -430,8 +428,7 @@ function onKeyDown ( event ) {
 			break;
 
     }
-};
-
+}
 function getLookAtDirection() {
     var lookDirection = cameraLookAt.clone();
     return lookDirection.sub(camera.position);
@@ -560,7 +557,6 @@ function cameraZoomOut() {
 function increaseCameraElevation () {
     if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
-        var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
         
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
