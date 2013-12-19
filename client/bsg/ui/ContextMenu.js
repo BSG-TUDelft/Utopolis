@@ -30,28 +30,34 @@ ContextMenu.prototype = {
 		var structureInfo = this.getStructureInfo(structure.name);
 		if(structureInfo === null)
 			console.log("No structure info found with structureId " + structure.name);
+		var structureTypeInfo = this.data.structureTypes[structureInfo.structureType];
 
+		// Play selected sound
 		var sound = sounds.selected[structureInfo.structureType];
 		sound.play();
 
-		var structureTypeInfo = this.data.structureTypes[structureInfo.structureType];
-
-		var html = "<h2>" + structureInfo.name + "</h2>" +
-			"<div class='structureicon " + structureInfo.iconCss + "'></div>" +
-			"<span id='citizencounter'>" + citizenFormatter() + "</span>" +
-			"<div id='structureslider'></div>";
+		var html = ["<h2>" + structureInfo.name + "</h2>",
+			"<div class='structureicon " + structureInfo.iconCss + "'></div>",
+			"<span id='citizencounter'>" + citizenFormatter() + "</span>",
+			"<div id='structureslider'></div>",
+			"<h3>Generates (every X time): </h3>",
+			"<ul class='generates'>",
+			"</div>",
+			"</ul>"];
 
 		this.el.html(html);
+		this.updateRevenue(structureTypeInfo, structure);
 
-		$( "#structureslider" ).slider({
+		$("#structureslider").slider({
 			value: structure.citizens,
 			min: 0,
 			max: structureTypeInfo.citizenCap,
 			step: 1,
-			slide: function( event, ui ) {
+			slide: $.proxy(function (event, ui) {
 				structure.citizens = ui.value;
-				$( "#citizencounter" ).html(citizenFormatter());
-			}
+				this.updateRevenue(structureTypeInfo, structure);
+				$("#citizencounter").html(citizenFormatter());
+			}, this)
 		});
 		this.el.show();
 	},
@@ -80,6 +86,21 @@ ContextMenu.prototype = {
 					return this.data.empires[e].structures[s];
 			}
 		}
+	},
+
+	/** Updates the list of expected revenue by the selected building */
+	updateRevenue: function(structureType, structure) {
+		// Add revenue
+		var html = [];
+		for (var i in structureType.generates) {
+			if (!structureType.generates.hasOwnProperty(i)) continue;
+
+			html.push("<li class='" + this.data.resources[i].iconCss + "' >",
+				this.data.resources[i].name + ": <span>",
+				structureType.generates[i] * structure.citizens,
+				"</span></li>");
+		}
+		this.el.find(".generates").html(html.join(''));
 	}
 }
 
