@@ -8,6 +8,8 @@
  'audio/music/An_old_Warhorse_goes_to_Pasture.ogg'
  'audio/game/wrong_placement.ogg'], {
 
+
+	Depends on jquery-cookie
  */
 var Music = {
 	initMusic: function() {
@@ -43,10 +45,13 @@ var Music = {
 			verbose: true,
 			volume: .3
 		});
-		this.music.play();
+		if($.cookie("no_music") !== "true"){
+			this.music.play();
+		}
 	},
 
 	toggle : function(){
-		this.music.toggle();
+		var paused = this.music.toggle();
+		$.cookie("no_music", paused);
 	}
 }

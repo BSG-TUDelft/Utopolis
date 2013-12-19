@@ -7,10 +7,17 @@ var Gui = {
 	topbar: null,				// Top bar menu element
 	buildMenu: null,			// Build menu on the left
 	contextMenu: null,			// Context menu on the right
+	console: null,				// Console to display text
 
 
 	// METHODS
 	initGui: function (menuData, topbarData){
+		this.menuData = menuData;
+
+		// Initialize console, has to be done first so other stuff can overlay
+		Gui.console = new Console($("body"));
+		Gui.console.printText("Initializing ...", null);
+
 		// Initialize build menu on the left
 		Gui.buildMenu = new BuildMenu($("#left_menu"), menuData);
 		Gui.buildMenu.init();
@@ -23,7 +30,6 @@ var Gui = {
 		Gui.contextMenu = new ContextMenu($("#right_menu"), menuData);
 		Gui.contextMenu.el.addClass("");
 		Gui.contextMenu.hide();
-
 	},
 
 
@@ -36,6 +42,18 @@ var Gui = {
 	/** Gets called from Main whenever a structure in the 3d world is deselected */
 	structureUnselected: function () {
 		Gui.contextMenu.hide();
+	},
+
+	/** Gets called from Main whenever a structure is just constructed */
+	structureConstructed: function(structure){
+		// Undo 'selected state' of icon in menu
+		Gui.buildMenu.unselectStructure();
+
+		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
+		var structureTypeInfo = this.menuData.structureTypes[structureInfo.structureType];
+		var eta = new Date($.now() + structureTypeInfo.buildTime );
+		Gui.console.printText("You have started constructing a " + structureInfo.name +
+			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
@@ -78,6 +96,20 @@ var Gui = {
 				return false;
 		}
 		return true;
+	},
+
+	/** Returns structure info based on structure type id *
+	 * @param id {String} Structure type id, eg: "hele_house"
+	 * @returns {Object}	 */
+	getStructureInfoByTypeId: function(id){
+		for(var e in this.menuData.empires){
+			if(!this.menuData.empires.hasOwnProperty(e)) continue;
+			for(var s in this.menuData.empires[e].structures){
+				if(this.menuData.empires[e].structures[s].structureId == id)
+					return this.menuData.empires[e].structures[s];
+			}
+		}
+		return null;
 	}
 };
 

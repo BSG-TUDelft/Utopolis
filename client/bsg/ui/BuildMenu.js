@@ -178,6 +178,12 @@ BuildMenu.prototype = {
 		}
 	},
 
+	/** Forces unselect of structure icon */
+	unselectStructure: function(){
+		this.selectedStructureId = null;
+		$("#structures").find("li").removeClass("selected");
+	},
+
 	/** Calculates scrolling for structures  */
 	calculateStructuresScroll: function(){
 		var topMargin = 10;	// soo ugly :(

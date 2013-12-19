@@ -229,6 +229,10 @@ function init() {
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
     document.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'resize', onWindowResize, false );
+
+	$( document ).ready(function() {
+		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
+	});
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -344,6 +348,10 @@ function onDocumentMouseDown( event ) {
 				var intersects = getMouseProjectionOnObjects( selectableMeshes );
 				if(intersects.length > 0) {
 					if (selectedModel != intersects[0].object) {                    //we have a new selection
+						var topLevelMesh = getTopLevelMesh(model);
+						Gui.structureConstructed(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've constructed a building.
+
+						// Highlight selected model
 						clearSelectedModel();
 						highlightSelectedModel (intersects[0].object);
 					}

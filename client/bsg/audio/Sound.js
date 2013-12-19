@@ -78,12 +78,14 @@ var Sound = function ( sources, config ) {
 		audio.pause();
 	};
 
-	/** Toggles play / pause */
+	/** Toggles play / pause
+	 * @returns {boolean} The new state (true for paused) */
 	this.toggle = function() {
 		if(paused)
 			this.play();
 		else
 			this.pause();
+		return paused;
 	}
 
 	/** Set volume of sound
