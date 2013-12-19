@@ -25,7 +25,7 @@ ContextMenu.prototype = {
 	 * @param structure	{Structure} */
 	show: function(structure) {
 		function citizenFormatter(){
-			return $.format('Citizens allocated: {0}', structure.citizens);
+			return $.format('Citizens allocated: {0}/{1}', structure.citizens,  structureTypeInfo.citizenCap);
 		}
 		var structureInfo = this.getStructureInfo(structure.name);
 		if(structureInfo === null)
