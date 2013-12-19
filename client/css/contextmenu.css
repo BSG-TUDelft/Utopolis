@@ -1,0 +1,125 @@
+#right_menu {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 200px;
+	height: 100%;
+}
+
+
+
+.contextmenu {
+	border-image-source: url(../images/ui/popup/border_89x89.png);
+	border-image-slice: 13 13 13 13;
+	border-image-width: 13px 13px 13px 13px;
+	border-image-outset: 10px 10px 10px 10px;
+	border-image-repeat: repeat repeat;
+
+	position: absolute;
+	right: 0;
+	top: 35px;
+	width: 250px;
+	height: 100%;
+
+	background: url(../images/ui/common/wood.png);
+
+}
+
+.contextmenu h2 {
+	text-align: center;
+}
+
+.contextmenu .structureicon {
+	width: 150px;
+	height: 100px;
+	background-size: 100% 100%;
+	margin: auto;
+}
+
+.contextmenu #structureslider {
+	margin: 10px;
+}
+
+
+.contextmenu.thin {
+	border-image-source: url(../images/ui/popup/border_thin_77x77.png);
+	border-image-slice: 7 7 7 7;
+	border-image-width: 7px 7px 7px 7px;
+	border-image-outset: 5px 5px 5px 5px;
+	border-image-repeat: repeat repeat;
+}
+
+.contextmenu li {
+	background-color: rgba(0, 0, 0, .5);
+	padding: 2px;
+	margin: 1px;
+}
+
+.contextmenu li span {
+	float: right;
+	padding-right: 20px;
+	background: no-repeat right 0;
+}
+
+.contextmenu h3 {
+	margin: 0;
+	font-size: 10pt;
+	padding: 3px 0 0 6px;
+}
+
+/** Icons */
+.contextmenu li.wood span {
+	background-image: url(../images/ui/topbar/resources/wood_small.png);
+}
+
+.contextmenu li.food span {
+	background-image: url(../images/ui/topbar/resources/food_small.png);
+}
+
+.contextmenu li.stone span {
+	background-image: url(../images/ui/topbar/resources/stone_small.png);
+}
+
+.contextmenu  li.metal span {
+	background-image: url(../images/ui/topbar/resources/metal_small.png);
+}
+
+.contextmenu li.time span{
+	background-image: url(../images/ui/topbar/resources/time_small.png);
+}
+
+.contextmenu li.safety span{
+	background-image: url(../images/ui/topbar/resources/safety_small.png);
+}
+
+.contextmenu li.health span{
+	background-image: url(../images/ui/topbar/resources/health_small.png);
+}
+
+.contextmenu  li.knowledge span {
+	background-image: url(../images/ui/topbar/resources/knowledge_small.png);
+}
+
+.contextmenu li.culture span {
+	background-image: url(../images/ui/topbar/resources/culture_small.png);
+}
+
+.contextmenu li.economy span{
+	background-image: url(../images/ui/topbar/resources/economy_small.png);
+}
+
+.contextmenu li.peace span{
+	background-image: url(../images/ui/topbar/resources/peace_small.png);
+}
+
+.contextmenu li.diplomacy span{
+	background-image: url(../images/ui/topbar/resources/diplomacy_small.png);
+}
+.contextmenu li.spirituality span{
+	background-image: url(../images/ui/topbar/resources/spirituality_small.png);
+}
+
+
+
+
+

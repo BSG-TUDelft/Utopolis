@@ -19,6 +19,7 @@ ModelLoader.prototype.setTextureOnModel = function (key, textureFile, callbackDe
 	
 	return function ( collada ) {  	
 		var dae = collada.scene;
+		dae.name = key;		
   		removeLights(dae);
    		var texture = THREE.ImageUtils.loadTexture(textureFile);
    		var material = new THREE.MeshLambertMaterial({map: texture});

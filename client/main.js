@@ -7,29 +7,28 @@ var material, dae, skin;
 var currentModel;
 var selectedModel;
 
-var mouse2D, mouse3D, raycaster, rollOveredFace;
+var mouse2D, raycaster;
 var mouseOffsetX, mouseOffsetY;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
 var i, intersector;
-var intersectorHeightOffset;
 
-var buildings = new Array();
-//bolean
-var noCollision;         
+var noCollision;
 
 var floor;                  //needed to restrict mouse projection to floor only
 var collidableMeshList = [];    //collidable list
 var collidableBoundingBoxes = [];   //avoid creating a new bounding box every time we check for collision
 var selectableMeshes = [];          //merge this with collidableMeshList?       //might slow down collision detection, but we don't keep that many arrays;
-var ghostHeight;
-var colliderBox;
+
+var flag_placed = false;
+var handling_flag = false;
 
 var t = 0;
 var clock = new THREE.Clock();
 
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
-
+var structureCollection;
+var sounds = {};
 init();
 animate();
 
@@ -53,19 +52,30 @@ function initFloor() {
 
 function initRollOver(position) {
     if(currentModel){
-        rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
-        var ghostModel = currentModel.getClone();
-        var ghostMaterial = ghostModel.material.clone();
+        if(currentModel.material == null && getFlag() == null){
+            rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
+            var ghostModel = currentModel.getClone();
+            ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
+            rollOverMesh.add(ghostModel);
+            rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
+            scene.add( rollOverMesh );
+            
+        }
+        else if(currentModel.material != null){
+            rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
+            var ghostModel = currentModel.getClone();
+            var ghostMaterial = ghostModel.material.clone();
 
-        setMaterial(ghostModel, ghostMaterial);
-        setTransparent(ghostModel);     
+            setMaterial(ghostModel, ghostMaterial);
+            setTransparent(ghostModel);     
 
-        ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
-        rollOverMesh.add(ghostModel);
+            ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
+            rollOverMesh.add(ghostModel);
 
-        rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
+            rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
 
-        scene.add( rollOverMesh );
+            scene.add( rollOverMesh );
+        }
     }
 }
 
@@ -108,6 +118,22 @@ function initCamera() {
     setCameraElevationAngle()
 }
 
+function initSound(){
+	sounds.error = new Sound(['audio/game/error.mp3'], { loop: false});
+	sounds.selected = {
+		barracks: new Sound(['audio/selected/sel_barracks.ogg']),
+		blacksmith: new Sound(['audio/selected/sel_blacksmith.ogg']),
+		civic: new Sound(['audio/selected/sel_civ_center.ogg']),
+		corral: new Sound(['audio/selected/sel_corral.ogg']),
+		farm: new Sound(['audio/selected/sel_farmstead.ogg']),
+		fortress: new Sound(['audio/selected/sel_fortress.ogg']),
+		house: new Sound(['audio/selected/sel_house.ogg']),
+		storehouse: new Sound(['audio/selected/sel_storehouse.ogg']),
+		temple: new Sound(['audio/selected/sel_temple.ogg']),
+		tower: new Sound(['audio/selected/sel_tower.ogg'])
+	}
+}
+
 function init() {
     //CONTAINER    
     container = document.getElementById( 'main' );
@@ -116,9 +142,15 @@ function init() {
     //GUI
     initGui();
 
+	//MUSIC
+	Music.initMusic();
+
+	//SOUND
+	initSound();
+
     //SCENE
     scene = new THREE.Scene();
-    
+
     //CAMERA
     initCamera();
 
@@ -135,18 +167,24 @@ function init() {
     scene.add( directionalLight );
 
 	var skybox = Skybox.get([
-		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
+		/*'art/skybox/cloudy_0/yellowcloud_ft.jpg',
 		'art/skybox/cloudy_0/yellowcloud_bk.jpg',
 		'art/skybox/cloudy_0/yellowcloud_up.jpg',
 		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
 		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
 		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
-		/*'art/skybox/cloudy_0/bluecloud_ft.jpg',
+		'art/skybox/cloudy_0/bluecloud_ft.jpg',
 		'art/skybox/cloudy_0/bluecloud_bk.jpg',
 		'art/skybox/cloudy_0/bluecloud_up.jpg',
 		'art/skybox/cloudy_0/bluecloud_dn.jpg',
 		'art/skybox/cloudy_0/bluecloud_rt.jpg',
 		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
+		'art/skybox/cloudy_0/graycloud_ft.jpg',
+		'art/skybox/cloudy_0/graycloud_bk.jpg',
+		'art/skybox/cloudy_0/graycloud_up.jpg',
+		'art/skybox/cloudy_0/graycloud_dn.jpg',
+		'art/skybox/cloudy_0/graycloud_rt.jpg',
+		'art/skybox/cloudy_0/graycloud_lf.jpg'
 	]);
 	scene.add(skybox);
 
@@ -168,41 +206,50 @@ function init() {
 
     //MODEL LOADERS
 	var iberLoader = new IberModelLoader();
-	iberLoader.addEventListener(ModelLoader.doneLoading, function(){
+	iberLoader.addEventListener(ModelLoader.doneLoading, function () {
 		console.log("Done loading Iberians");
-	})
+	});
 	iberLoader.loadModels();
 
 	var romeLoader = new RomeModelLoader();
 	romeLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Romans");
-	})
+	});
 	romeLoader.loadModels();
 
 	var heleLoader = new HeleModelLoader();
 	heleLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Hellenes");
-	})
+	});
 	heleLoader.loadModels();
 
 	var kartLoader = new KartModelLoader();
 	kartLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Carthaginians");
-	})
+	});
 	kartLoader.loadModels();
 
 	var persLoader = new PersModelLoader();
 	persLoader.addEventListener(ModelLoader.doneLoading, function(){
 		console.log("Done loading Persians");
-	})
+	});
 	persLoader.loadModels();
+
+	var gaiaLoader = new GaiaModelLoader();
+	gaiaLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Gaia");
+	});
+	gaiaLoader.loadModels();
+
+	// COLLECTION OF STRUCTURES
+	structureCollection = new ModelArray();
 
     // load city from server
     request = $.ajax({
-        url: 'http://localhost:8080/api/application.wadl',
+        url: 'http://localhost:8080/api/city/1',
         type: 'GET'
-        // success: function(data, textStatus, jqXHR) { console.log("FTW"); },
-        // error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); console.log(textStatus); console.log(errorThrown); }
+        //success: function(data, textStatus, jqXHR) { console.log("FTW"); },
+        //error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); console.log(textStatus); console.log(errorThrown); }
     });
 
     request.done(function (response, textStatus, jqXHR){
@@ -215,16 +262,20 @@ function init() {
             textStatus, errorThrown
         );
     });
-    
+
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
     document.addEventListener( 'keydown', onKeyDown, false );
     window.addEventListener( 'resize', onWindowResize, false );
+
+	$( document ).ready(function() {
+		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
+	});
 }
 
 function collidablesContainEmitter(colliderOrigin) {
-    for(index = 0; index < collidableBoundingBoxes.length; index ++) {
+    for(var index = 0; index < collidableBoundingBoxes.length; index ++) {
         if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){               
             return true;
         }
@@ -233,12 +284,12 @@ function collidablesContainEmitter(colliderOrigin) {
 }
 
 function changeColliderColor(collider, r, g, b) {
-    collider.children[0].material.ambient.r = r;
-    collider.children[0].material.ambient.g = g;
-    collider.children[0].material.ambient.b = b;
+    if(collider.children[0].material != null ){
+        collider.children[0].material.ambient.r = r;
+        collider.children[0].material.ambient.g = g;
+        collider.children[0].material.ambient.b = b;
+    }
 }
-
-var pointMesh = null;
 
 function detectCollision (collider) {           //collider = oject that detects collision (casts rays)
     if(collider)
@@ -311,20 +362,55 @@ function buildingPlacementAllowed() {                                     // tru
 
 function onDocumentMouseDown( event ) {
     event.preventDefault();
-    if(rollOverMesh) {                                             //if the ghost model is visible     
+	if((event.target || event.srcElement).nodeName != "CANVAS"){
+		// We did not click on a canvas (so on the GUI instead)
+		return;
+	}
+
+    if(rollOverMesh) {                                             //if the ghost model is visible
         if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
-            if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
-                var i = buildings.length - 1;
-                buildings[i] = currentModel.getClone();
-                buildings[i].position = intersector.point;
-                buildings[i].rotation = rollOverMesh.rotation.clone();
-                //console.log(intersector.point);
-                scene.add(buildings[i]);
+            if(intersector) {
+                var model;                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
+                if(handling_flag){
+                    model = currentModel;
+                    model.position = intersector.point;
+                    model.rotation = rollOverMesh.rotation.clone();
 
-                registerCollidableBoundingMesh(buildings[i]);
-            }   
+                    scene.add(model);
+                    registerCollidableBoundingMesh(model);
+                }
+                else{
+                    model = currentModel.getClone();
+    				model.position = intersector.point;
+    				model.rotation = rollOverMesh.rotation.clone();
+
+    				scene.add(model);
+    				registerCollidableBoundingMesh(model);
+
+    				// Create a structure
+    				var structure = new Structure(model.name, model);
+                    structureCollection.add(structure);
+
+    				// Now select what we just made (this is sort of ugly I suppose, but it works)
+    				togglePlacementMode();
+    				var intersects = getMouseProjectionOnObjects( selectableMeshes );
+    				if(intersects.length > 0) {
+    					if (selectedModel != intersects[0].object) {                    //we have a new selection
+    						var topLevelMesh = getTopLevelMesh(model);
+    						Gui.structureConstructed(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've constructed a building.
+
+    						// Highlight selected model
+    						clearSelectedModel();
+    						highlightSelectedModel (intersects[0].object);
+    					}
+    				}
+                }
+            }
         }
+		else {
+			sounds.error.play();
+		}
     }
     else {                                                          //if the model is not visible, then we are in select building mode
         var intersects = getMouseProjectionOnObjects( selectableMeshes );
@@ -336,7 +422,11 @@ function onDocumentMouseDown( event ) {
         }   
         else {                                                                      //not selected anything 
             clearSelectedModel();
-        }            
+
+        }
+    }
+    if(flag_placed){
+        togglePlacementMode();
     }
 }
 
@@ -387,10 +477,13 @@ function onKeyDown ( event ) {
             break;
         case 88: // x
             removeSelectedModel();
-            break
-    }
-};
+            break;
+		case 77: // "m"
+			Music.toggle();
+			break;
 
+    }
+}
 function getLookAtDirection() {
     var lookDirection = cameraLookAt.clone();
     return lookDirection.sub(camera.position);
@@ -500,7 +593,7 @@ function moveCameraBackwards() {
 
 function cameraZoomIn() {
     var lookDirection = getLookAtDirection().normalize();
-    if(camera.position.distanceTo(cameraLookAt) > 35 ) {
+    if(camera.position.distanceTo(cameraLookAt) > 25 ) {
         camera.position.x += lookDirection.x;
         camera.position.y += lookDirection.y;
         camera.position.z += lookDirection.z;
@@ -519,7 +612,6 @@ function cameraZoomOut() {
 function increaseCameraElevation () {
     if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
-        var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
         
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
@@ -598,7 +690,7 @@ function removeSelectedModel() {
 
 function refreshRollover() {
     if(rollOverMesh) {                                //check if it is set
-        togglePlacementMode();
+        togglePlacementMode();					// why twice?
         togglePlacementMode();
     }
 }
@@ -639,10 +731,15 @@ function update() {
     var delta = clock.getDelta();
     if ( t > 1 ) t = 0;
     updateBirds(delta);
+    updateFlag(delta);
     stats.update();
 }
 
 function highlightSelectedModel (model) {
+	var topLevelMesh = getTopLevelMesh(model);
+	Gui.structureSelected(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've selected a building. Will also play sound
+
+
     selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
@@ -651,6 +748,8 @@ function highlightSelectedModel (model) {
 }
 
 function clearSelectedModel () {
+	Gui.structureUnselected();
+
     if(selectedModel) {                                         //if we already have a model selected
         selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
     }
@@ -674,7 +773,6 @@ function getMouseProjectionOnFloor() {
 }
 
 function render() {
-    var timer = Date.now() * 0.0005;
     camera.lookAt( cameraLookAt );
 
     if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
@@ -698,6 +796,13 @@ function getRealIntersector( intersects ) {
         }
     }
     return null;
+}
+
+/** Travels up the model hierarchy until it finds a mesh whose parent is a scene*/
+function getTopLevelMesh(object){
+	if(object.parent instanceof THREE.Scene)
+		return object;
+	return getTopLevelMesh(object.parent);
 }
 
 function setVoxelPosition( intersector ) {

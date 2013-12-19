@@ -1,159 +1,167 @@
 /*<-- Hellenes icons -->*/
-#structures .hele_house {
+.structureicon.hele_house {
 	background-image: url(../images/ui/icons/hele/house.png);
 }
-#structures .hele_farm {
+.structureicon.hele_farm {
 	background-image: url(../images/ui/icons/hele/farm.png);
 }
-#structures .hele_corral {
+.structureicon.hele_corral {
 	background-image: url(../images/ui/icons/hele/corral.png);
 }
-#structures .hele_storehouse {
+.structureicon.hele_storehouse {
 	background-image: url(../images/ui/icons/hele/storehouse.png);
 }
-#structures .hele_barracks {
+.structureicon.hele_barracks {
 	background-image: url(../images/ui/icons/hele/barracks.png);
 }
-#structures .hele_blacksmith {
+.structureicon.hele_blacksmith {
 	background-image: url(../images/ui/icons/hele/blacksmith.png);
 }
-#structures .hele_civic {
+.structureicon.hele_civic {
 	background-image: url(../images/ui/icons/hele/civic.png);
 }
-#structures .hele_tower {
+.structureicon.hele_tower {
 	background-image: url(../images/ui/icons/hele/tower.png);
 }
-#structures .hele_fortress {
+.structureicon.hele_fortress {
 	background-image: url(../images/ui/icons/hele/fortress.png);
 }
-#structures .hele_temple {
+.structureicon.hele_temple {
 	background-image: url(../images/ui/icons/hele/temple.png);
 }
 
 /*<-- Iberian icons -->*/
-#structures .iber_house {
+.structureicon.iber_house {
 	background-image: url(../images/ui/icons/iber/house.png);
 }
-#structures .iber_farm {
+.structureicon.iber_farm {
 	background-image: url(../images/ui/icons/iber/farm.png);
 }
-#structures .iber_corral {
+.structureicon.iber_corral {
 	background-image: url(../images/ui/icons/iber/corral.png);
 }
-#structures .iber_storehouse {
+.structureicon.iber_storehouse {
 	background-image: url(../images/ui/icons/iber/storehouse.png);
 }
-#structures .iber_barracks {
+.structureicon.iber_barracks {
 	background-image: url(../images/ui/icons/iber/barracks.png);
 }
-#structures .iber_blacksmith {
+.structureicon.iber_blacksmith {
 	background-image: url(../images/ui/icons/iber/blacksmith.png);
 }
-#structures .iber_civic {
+.structureicon.iber_civic {
 	background-image: url(../images/ui/icons/iber/civic.png);
 }
-#structures .iber_tower {
+.structureicon.iber_tower {
 	background-image: url(../images/ui/icons/iber/tower.png);
 }
-#structures .iber_fortress {
+.structureicon.iber_fortress {
 	background-image: url(../images/ui/icons/iber/fortress.png);
 }
-#structures .iber_temple {
+.structureicon.iber_temple {
 	background-image: url(../images/ui/icons/iber/temple.png);
 }
 
 /*<-- Roman icons -->*/
-#structures .rome_house {
+.structureicon.rome_house {
 	background-image: url(../images/ui/icons/rome/house.png);
 }
-#structures .rome_farm {
+.structureicon.rome_farm {
 	background-image: url(../images/ui/icons/rome/farm.png);
 }
-#structures .rome_corral {
+.structureicon.rome_corral {
 	background-image: url(../images/ui/icons/rome/corral.png);
 }
-#structures .rome_storehouse {
+.structureicon.rome_storehouse {
 	background-image: url(../images/ui/icons/rome/storehouse.png);
 }
-#structures .rome_barracks {
+.structureicon.rome_barracks {
 	background-image: url(../images/ui/icons/rome/barracks.png);
 }
-#structures .rome_blacksmith {
+.structureicon.rome_blacksmith {
 	background-image: url(../images/ui/icons/rome/blacksmith.png);
 }
-#structures .rome_civic {
+.structureicon.rome_civic {
 	background-image: url(../images/ui/icons/rome/civic.png);
 }
-#structures .rome_tower {
+.structureicon.rome_tower {
 	background-image: url(../images/ui/icons/rome/tower.png);
 }
-#structures .rome_fortress {
+.structureicon.rome_fortress {
 	background-image: url(../images/ui/icons/rome/fortress.png);
 }
-#structures .rome_temple {
+.structureicon.rome_temple {
 	background-image: url(../images/ui/icons/rome/temple.png);
 }
 
 /*<-- Carthagenian icons -->*/
-#structures .kart_house {
+.structureicon.kart_house {
 	background-image: url(../images/ui/icons/kart/house.png);
 }
-#structures .kart_farm {
+.structureicon.kart_farm {
 	background-image: url(../images/ui/icons/kart/farm.png);
 }
-#structures .kart_corral {
+.structureicon.kart_corral {
 	background-image: url(../images/ui/icons/kart/corral.png);
 }
-#structures .kart_storehouse {
+.structureicon.kart_storehouse {
 	background-image: url(../images/ui/icons/kart/storehouse.png);
 }
-#structures .kart_barracks {
+.structureicon.kart_barracks {
 	background-image: url(../images/ui/icons/kart/barracks.png);
 }
-#structures .kart_blacksmith {
+.structureicon.kart_blacksmith {
 	background-image: url(../images/ui/icons/kart/blacksmith.png);
 }
-#structures .kart_civic {
+.structureicon.kart_civic {
 	background-image: url(../images/ui/icons/kart/civic.png);
 }
-#structures .kart_tower {
+.structureicon.kart_tower {
 	background-image: url(../images/ui/icons/kart/tower.png);
 }
-#structures .kart_fortress {
+.structureicon.kart_fortress {
 	background-image: url(../images/ui/icons/kart/fortress.png);
 }
-#structures .kart_temple {
+.structureicon.kart_temple {
 	background-image: url(../images/ui/icons/kart/temple.png);
 }
 
 /*<-- Persian icons -->*/
-#structures .pers_house {
+.structureicon.pers_house {
 	background-image: url(../images/ui/icons/pers/house.png);
 }
-#structures .pers_farm {
+.structureicon.pers_farm {
 	background-image: url(../images/ui/icons/pers/farm.png);
 }
-#structures .pers_corral {
+.structureicon.pers_corral {
 	background-image: url(../images/ui/icons/pers/corral.png);
 }
-#structures .pers_storehouse {
+.structureicon.pers_storehouse {
 	background-image: url(../images/ui/icons/pers/storehouse.png);
 }
-#structures .pers_barracks {
+.structureicon.pers_barracks {
 	background-image: url(../images/ui/icons/pers/barracks.png);
 }
-#structures .pers_blacksmith {
+.structureicon.pers_blacksmith {
 	background-image: url(../images/ui/icons/pers/blacksmith.png);
 }
-#structures .pers_civic {
+.structureicon.pers_civic {
 	background-image: url(../images/ui/icons/pers/civic.png);
 }
-#structures .pers_tower {
+.structureicon.pers_tower {
 	background-image: url(../images/ui/icons/pers/tower.png);
 }
-#structures .pers_fortress {
+.structureicon.pers_fortress {
 	background-image: url(../images/ui/icons/pers/fortress.png);
 }
-#structures .pers_temple {
+.structureicon.pers_temple {
 	background-image: url(../images/ui/icons/pers/temple.png);
+}
+
+/*<-- Gaia icons -->*/
+.structureicon.gaia_aleppo_pine {
+	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);
+}
+.structureicon.flag {
+	background-image: url(../images/flag/flag-icon.png);
 }
