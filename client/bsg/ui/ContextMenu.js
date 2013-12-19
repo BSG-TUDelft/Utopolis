@@ -32,7 +32,7 @@ ContextMenu.prototype = {
 
 		// Play selected sound
 		var sound = sounds.selected[structureInfo.structureType];
-		sound.play();
+		if(sound) sound.play();
 
 		var html = ["<h2>" + structureInfo.name + "</h2>",
 			"<div class='structureicon " + structureInfo.iconCss + "'></div>",

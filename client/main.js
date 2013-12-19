@@ -235,6 +235,12 @@ function init() {
 	});
 	persLoader.loadModels();
 
+	var gaiaLoader = new GaiaModelLoader();
+	gaiaLoader.addEventListener(ModelLoader.doneLoading, function(){
+		console.log("Done loading Gaia");
+	});
+	gaiaLoader.loadModels();
+
 	// COLLECTION OF STRUCTURES
 	structureCollection = new ModelArray();
 

@@ -159,6 +159,9 @@
 }
 
 /*<-- Gaia icons -->*/
+.structureicon.gaia_aleppo_pine {
+	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);
+}
 .structureicon.flag {
 	background-image: url(../images/flag/flag-icon.png);
 }

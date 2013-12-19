@@ -36,6 +36,10 @@ var Gui = {
 	/** Gets called from Main whenever a structure in the 3d world is selected
 	 * @param structure {Structure} that was selected  */
 	structureSelected: function (structure) {
+		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
+		if(structureInfo.structureType === "tree")
+			return;
+
 		Gui.contextMenu.show(structure);
 	},
 
@@ -50,6 +54,9 @@ var Gui = {
 		Gui.buildMenu.unselectStructure();
 
 		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
+		if(structureInfo.structureType === "tree")
+			return;
+
 		var structureTypeInfo = this.menuData.structureTypes[structureInfo.structureType];
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
 		Gui.console.printText("You have started constructing a " + structureInfo.name +
@@ -72,6 +79,9 @@ var Gui = {
 	enoughResources: function (playerResources, structureType) {
 		//var cost = ["wood", "stone", "food", "metal"],
 		//	reqs = ["knowledge", ""]
+		if(!structureType.cost)
+			return true;
+
 		if(structureType.cost.wood) {
 			if(playerResources.wood < structureType.cost.wood)
 				return false;
@@ -408,6 +418,11 @@ function initGui() {
 				structureId: "flag",
 				iconCss: "flag",
 				structureType: "flag"
+			},{
+				name: "Aleppo Pine",
+				structureId: "gaia_aleppo_pine",
+				iconCss: "gaia_aleppo_pine",
+				structureType: "tree"
 			}]
 		}],
 
@@ -594,7 +609,8 @@ function initGui() {
 					culture: 0
 				},
 				buildTime: 100000
-			}
+			},
+			"tree": {}
 		},
 
 		/** Strings */
