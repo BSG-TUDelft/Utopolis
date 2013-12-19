@@ -157,3 +157,8 @@
 .structureicon.pers_temple {
 	background-image: url(../images/ui/icons/pers/temple.png);
 }
+
+/*<-- Gaia icons -->*/
+.structureicon.gaia_aleppo_pine {
+	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);
+}
