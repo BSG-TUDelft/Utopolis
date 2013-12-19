@@ -11,7 +11,7 @@ var BaseModelLoader = function () {
 	this.numModelStructures = this.getSize(this.modelStructuresArray);
 	this.colladaLoader = new THREE.ColladaLoader();
 	this.colladaLoader.options.convertUpAxis = true;
-}
+};
 
 
 BaseModelLoader.prototype = {
@@ -22,22 +22,35 @@ BaseModelLoader.prototype = {
 	numModelStructures: 0,
 	colladaLoader: null,
 
+	loadActorXml: function (actorXml) {
+		$.ajax({
+			type: "GET",
+			url: actorXml,
+			dataType: "xml",
+			success: function (xml) {
+
+			}
+
+
+		});
+	},
+
 	loadModels: function () {
 		for (var key in this.modelStructuresArray) {
 			if (!this.modelStructuresArray.hasOwnProperty(key)) continue;
 			this.load(key,
 				this.modelStructuresArray,
-				$.proxy(this.decreaseRemainingStructures, this)			// Pass context to all callback functions because JS gets weird
-			);
+				$.proxy(this.decreaseRemainingStructures, this)
+			);		// Pass context to all callback functions because JS gets weird
 		}
 	},
 
 	load: function (key, map, callbackDecRemainingStructures) {
-		this.colladaLoader.load( map[key], this.setTextureOnModel(key, this.textureFile, callbackDecRemainingStructures) );
+		this.colladaLoader.load(map[key], this.setTextureOnModel(key, this.textureFile, callbackDecRemainingStructures));
 	},
 
-	setTextureOnModel : function (key, textureFile, callbackDecRemainingStructures) {
-		return function ( collada ) {
+	setTextureOnModel: function (key, textureFile, callbackDecRemainingStructures) {
+		return function (collada) {
 			function removeLights(model) {
 				if (model.children) {
 					for (var j = 0; j < model.children.length; j++) {
@@ -48,6 +61,7 @@ BaseModelLoader.prototype = {
 					}
 				}
 			}
+
 			function setMaterial(node, material) {
 				node.material = material;
 				if (node.children) {
@@ -56,6 +70,7 @@ BaseModelLoader.prototype = {
 					}
 				}
 			}
+
 			var dae = collada.scene;
 			dae.name = key;
 			removeLights(dae);
@@ -75,13 +90,13 @@ BaseModelLoader.prototype = {
 
 	decreaseRemainingStructures: function () {
 		this.numModelStructures--;
-		if(this.numModelStructures == 0) {
+		if (this.numModelStructures == 0) {
 			// Will dispatch event when done loading all the models
-			this.dispatchEvent( { type: ModelLoader.doneLoading })
+			this.dispatchEvent({ type: ModelLoader.doneLoading })
 		}
 	},
 
-	getSize: function(obj) {
+	getSize: function (obj) {
 		var size = 0, key;
 		for (key in obj) {
 			if (obj.hasOwnProperty(key))
@@ -89,7 +104,7 @@ BaseModelLoader.prototype = {
 		}
 		return size;
 	}
-}
+};
 
 THREE.EventDispatcher.prototype.apply( BaseModelLoader.prototype );
 

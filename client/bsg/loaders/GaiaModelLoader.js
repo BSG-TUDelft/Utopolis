@@ -6,6 +6,8 @@ var GaiaModelLoader = function () {
 	this.textureFile = './art/textures/skins/gaia/aleppo_pine.png';
 
 	BaseModelLoader.prototype.constructor.call();
+
+	this.loadActorXml('./art/actors/flora/trees/aleppo_pine.xml')
 }
 
 GaiaModelLoader.prototype = new BaseModelLoader();
