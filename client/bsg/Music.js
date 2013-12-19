@@ -52,6 +52,7 @@ var Music = {
 
 	toggle : function(){
 		var paused = this.music.toggle();
+		Gui.console.printText("You have turned the music " + (paused ? "off" : "on"), null);
 		$.cookie("no_music", paused);
 	}
 }
