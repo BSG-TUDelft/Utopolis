@@ -22,8 +22,10 @@ public class CityResource extends Resource {
 	@GET
 	@Path("/{playerId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public City getCity(@PathParam("playerId") int playerId) {
-		return DBConnector.get().getCity(playerId);
+	public Response getCity(@PathParam("playerId") int playerId) {
+		Response response = Response.ok(DBConnector.get().getCity(playerId)).build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	@PUT
