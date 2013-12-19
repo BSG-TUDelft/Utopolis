@@ -28,10 +28,6 @@ a {
 	background-color: #CCCCCC;
 	float: left;
 	display: flex;
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
 }
 
 /*menu*/
