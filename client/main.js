@@ -676,8 +676,8 @@ function update() {
 }
 
 function highlightSelectedModel (model) {
-	// model.id does not give the right id!
-	Gui.structureSelected(structureCollection.get(0));										// Inform the GUI we've selected a building. Will also play sound
+	var topLevelMesh = getTopLevelMesh(model);
+	Gui.structureSelected(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've selected a building. Will also play sound
 
 
     selectedModel = model;                                              //get the first object intersected;
@@ -736,6 +736,13 @@ function getRealIntersector( intersects ) {
         }
     }
     return null;
+}
+
+/** Travels up the model hierarchy until it finds a mesh whose parent is a scene*/
+function getTopLevelMesh(object){
+	if(object.parent instanceof THREE.Scene)
+		return object;
+	return getTopLevelMesh(object.parent);
 }
 
 function setVoxelPosition( intersector ) {
