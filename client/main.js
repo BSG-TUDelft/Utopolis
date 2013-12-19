@@ -253,7 +253,8 @@ function init() {
     });
 
     request.done(function (response, textStatus, jqXHR){
-        console.log("Hooray, it worked!");
+        console.log("SERVER RESPONSE: Hooray, it worked!");
+        console.log(response);
     });
 
     request.fail(function (jqXHR, textStatus, errorThrown){

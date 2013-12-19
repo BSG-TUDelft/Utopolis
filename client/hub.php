@@ -1,4 +1,0 @@
-<?php
-	$HTTP_METHOD = $_SERVER['REQUEST_METHOD']
-	
-?>
