@@ -20,6 +20,9 @@ var collidableMeshList = [];    //collidable list
 var collidableBoundingBoxes = [];   //avoid creating a new bounding box every time we check for collision
 var selectableMeshes = [];          //merge this with collidableMeshList?       //might slow down collision detection, but we don't keep that many arrays;
 
+var flag_placed = false;
+var handling_flag = false;
+
 var t = 0;
 var clock = new THREE.Clock();
 
@@ -49,19 +52,30 @@ function initFloor() {
 
 function initRollOver(position) {
     if(currentModel){
-        rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
-        var ghostModel = currentModel.getClone();
-        var ghostMaterial = ghostModel.material.clone();
+        if(currentModel.material == null && getFlag() == null){
+            rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
+            var ghostModel = currentModel.getClone();
+            ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
+            rollOverMesh.add(ghostModel);
+            rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
+            scene.add( rollOverMesh );
+            
+        }
+        else if(currentModel.material != null){
+            rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
+            var ghostModel = currentModel.getClone();
+            var ghostMaterial = ghostModel.material.clone();
 
-        setMaterial(ghostModel, ghostMaterial);
-        setTransparent(ghostModel);     
+            setMaterial(ghostModel, ghostMaterial);
+            setTransparent(ghostModel);     
 
-        ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
-        rollOverMesh.add(ghostModel);
+            ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
+            rollOverMesh.add(ghostModel);
 
-        rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
+            rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
 
-        scene.add( rollOverMesh );
+            scene.add( rollOverMesh );
+        }
     }
 }
 
@@ -245,9 +259,11 @@ function collidablesContainEmitter(colliderOrigin) {
 }
 
 function changeColliderColor(collider, r, g, b) {
-    collider.children[0].material.ambient.r = r;
-    collider.children[0].material.ambient.g = g;
-    collider.children[0].material.ambient.b = b;
+    if(collider.children[0].material != null ){
+        collider.children[0].material.ambient.r = r;
+        collider.children[0].material.ambient.g = g;
+        collider.children[0].material.ambient.b = b;
+    }
 }
 
 var pointMesh = null;
@@ -331,31 +347,42 @@ function onDocumentMouseDown( event ) {
     if(rollOverMesh) {                                             //if the ghost model is visible
         if( buildingPlacementAllowed() ) {                               
             intersector = getMouseProjectionOnFloor();
-            if(intersector) {                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
-                var model = currentModel.getClone();
-				model.position = intersector.point;
-				model.rotation = rollOverMesh.rotation.clone();
+            if(intersector) {
+                var model;                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
+                if(handling_flag){
+                    model = currentModel;
+                    model.position = intersector.point;
+                    model.rotation = rollOverMesh.rotation.clone();
 
-				scene.add(model);
-				registerCollidableBoundingMesh(model);
+                    scene.add(model);
+                    registerCollidableBoundingMesh(model);
+                }
+                else{
+                    model = currentModel.getClone();
+    				model.position = intersector.point;
+    				model.rotation = rollOverMesh.rotation.clone();
 
-				// Create a structure
-				var structure = new Structure(model.name, model);
-                structureCollection.add(structure);
+    				scene.add(model);
+    				registerCollidableBoundingMesh(model);
 
-				// Now select what we just made (this is sort of ugly I suppose, but it works)
-				togglePlacementMode();
-				var intersects = getMouseProjectionOnObjects( selectableMeshes );
-				if(intersects.length > 0) {
-					if (selectedModel != intersects[0].object) {                    //we have a new selection
-						var topLevelMesh = getTopLevelMesh(model);
-						Gui.structureConstructed(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've constructed a building.
+    				// Create a structure
+    				var structure = new Structure(model.name, model);
+                    structureCollection.add(structure);
 
-						// Highlight selected model
-						clearSelectedModel();
-						highlightSelectedModel (intersects[0].object);
-					}
-				}
+    				// Now select what we just made (this is sort of ugly I suppose, but it works)
+    				togglePlacementMode();
+    				var intersects = getMouseProjectionOnObjects( selectableMeshes );
+    				if(intersects.length > 0) {
+    					if (selectedModel != intersects[0].object) {                    //we have a new selection
+    						var topLevelMesh = getTopLevelMesh(model);
+    						Gui.structureConstructed(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've constructed a building.
+
+    						// Highlight selected model
+    						clearSelectedModel();
+    						highlightSelectedModel (intersects[0].object);
+    					}
+    				}
+                }
             }
         }
 		else {
@@ -374,6 +401,9 @@ function onDocumentMouseDown( event ) {
             clearSelectedModel();
 
         }
+    }
+    if(flag_placed){
+        togglePlacementMode();
     }
 }
 
@@ -680,6 +710,7 @@ function update() {
     var delta = clock.getDelta();
     if ( t > 1 ) t = 0;
     updateBirds(delta);
+    updateFlag(delta);
     stats.update();
 }
 
