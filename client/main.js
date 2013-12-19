@@ -380,16 +380,16 @@ function onDocumentMouseDown( event ) {
 function onKeyDown ( event ) {
     switch( event.keyCode ) {
         case 87: // w  
-            moveCameraForward();
+            moveCameraForward(1);
             break;
         case 83: // s
-            moveCameraBackwards();
+            moveCameraBackwards(1);
             break;
         case 65: // a  
-            moveCameraLeft();
+            moveCameraLeft(1);
             break;
         case 68: // d
-            moveCameraRight(); 
+            moveCameraRight(1); 
             break;
         case 69: // e  
             rotateCameraRight();
@@ -493,49 +493,47 @@ function rotateCameraLeft() {
     camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;       
 }
 
-
-
-function moveCameraLeft() {
+function moveCameraLeft(factor) {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
     if( Math.abs( cameraLookAt.x + projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.x ) < floor.geometry.height/2 ) {
-        camera.position.x += projectionDirection.z;
-        camera.position.z -= projectionDirection.x;
-        cameraLookAt.x += projectionDirection.z; 
-        cameraLookAt.z -= projectionDirection.x; 
+        camera.position.x += projectionDirection.z*factor;
+        camera.position.z -= projectionDirection.x*factor;
+        cameraLookAt.x += projectionDirection.z*factor; 
+        cameraLookAt.z -= projectionDirection.x*factor; 
     }
 }
 
-function moveCameraRight() {
+function moveCameraRight(factor) {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
     if( Math.abs( cameraLookAt.x - projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.x ) < floor.geometry.height/2 ) {
-        camera.position.x -= projectionDirection.z;
-        camera.position.z += projectionDirection.x;
-        cameraLookAt.x -= projectionDirection.z; 
-        cameraLookAt.z += projectionDirection.x;        
+        camera.position.x -= projectionDirection.z*factor;
+        camera.position.z += projectionDirection.x*factor;
+        cameraLookAt.x -= projectionDirection.z*factor; 
+        cameraLookAt.z += projectionDirection.x*factor;        
     }
 }
 
-function moveCameraForward() {
+function moveCameraForward(factor) {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
     if( Math.abs( cameraLookAt.x + projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.z ) < floor.geometry.height/2 ) {
-        camera.position.x += projectionDirection.x;
-        camera.position.z += projectionDirection.z;
-        cameraLookAt.x += projectionDirection.x; 
-        cameraLookAt.z += projectionDirection.z; 
+        camera.position.x += projectionDirection.x*factor;
+        camera.position.z += projectionDirection.z*factor;
+        cameraLookAt.x += projectionDirection.x*factor; 
+        cameraLookAt.z += projectionDirection.z*factor; 
     }
 }
 
-function moveCameraBackwards() {
+function moveCameraBackwards(factor) {
     var projectionDirection = getNormalizedProjectionDirection();
     //console.log(projectionDirection);
     if( Math.abs( cameraLookAt.x - projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.z ) < floor.geometry.height/2 ) {
-        camera.position.x -= projectionDirection.x;
-        camera.position.z -= projectionDirection.z;
-        cameraLookAt.x -= projectionDirection.x; 
-        cameraLookAt.z -= projectionDirection.z; 
+        camera.position.x -= projectionDirection.x*factor;
+        camera.position.z -= projectionDirection.z*factor;
+        cameraLookAt.x -= projectionDirection.x*factor; 
+        cameraLookAt.z -= projectionDirection.z*factor; 
     }
 }
 
@@ -681,6 +679,15 @@ function update() {
     if ( t > 1 ) t = 0;
     updateBirds(delta);
     stats.update();
+
+    if(mouse2D.x > 0.85 && mouse2D.x < 1)
+        moveCameraRight(0.5);
+    if(mouse2D.x < -0.85 && mouse2D.x > -1)
+        moveCameraLeft(0.5);
+    if(mouse2D.y > 0.85 && mouse2D.y < 1.1)
+        moveCameraForward(0.5);
+    if(mouse2D.y < -0.75 && mouse2D.y > -1)
+        moveCameraBackwards(0.5);
 }
 
 function highlightSelectedModel (model) {
