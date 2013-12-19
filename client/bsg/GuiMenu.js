@@ -54,6 +54,7 @@ var Gui = {
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
 		Gui.console.printText("You have started constructing a " + structureInfo.name +
 			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
+		
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
@@ -401,7 +402,13 @@ function initGui() {
 			//	tabCss: "tab_maur"
 		}, {
 			name: "Gaia",
-			tabCss: "tab_gaia"
+			tabCss: "tab_gaia",
+			structures: [{
+				name: "Flag",
+				structureId: "flag",
+				iconCss: "flag",
+				structureType: "flag"
+			}]
 		}],
 
 		/** Contains definitions for structure types. Note that keys under 'cost' and 'requirements' refer to keys in the resources collection */
@@ -576,6 +583,17 @@ function initGui() {
 					spirituality: 15
 				},
 				citizenCap: 30
+			},
+			"flag": {
+				cost: {
+					stone: 0,
+					food: 0
+				},
+				requirements: {
+					knowledge: 0,
+					culture: 0
+				},
+				buildTime: 100000
 			}
 		},
 
@@ -634,6 +652,15 @@ function initGui() {
 		if(e.structure == null) {
 			togglePlacementMode();
 		}
+		else if(e.structure.structureId == "flag"){
+				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
+
+				if(rollOverMesh) {
+					refreshRollover();
+				}
+				if(rollOverMesh == undefined)
+					togglePlacementMode();
+			}
 		else {
 			if(Gui.enoughResources(res, menuData.structureTypes[e.structure.structureType])) {
 				currentModel = loadedModels[e.structure.structureId];
