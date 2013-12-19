@@ -157,3 +157,8 @@
 .structureicon.pers_temple {
 	background-image: url(../images/ui/icons/pers/temple.png);
 }
+
+/*<-- Gaia icons -->*/
+.structureicon.flag {
+	background-image: url(../images/flag/flag-icon.png);
+}
