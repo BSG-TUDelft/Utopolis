@@ -23,6 +23,7 @@ public class City implements Serializable {
 	@OneToMany(cascade={CascadeType.ALL})
 	private List<Structure> structures;
 	private String name;
+	private int numCitizens;
 	
 	public int getId() {
 		return id;
@@ -54,6 +55,14 @@ public class City implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getNumCitizens() {
+		return numCitizens;
+	}
+
+	public void setNumCitizens(int numCitizens) {
+		this.numCitizens = numCitizens;
 	}
 	
 }
