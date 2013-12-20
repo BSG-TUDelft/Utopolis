@@ -297,12 +297,12 @@ function placeStructure(struct) {
  	model.position = new THREE.Vector3( struct.x, struct.y, struct.z )
  	//model.rotation = new THREE.Vector3( 0, struct.rotation, 0 )
 
-     scene.add(model);
-     registerCollidableBoundingMesh(model);
+    scene.add(model);
+    registerCollidableBoundingMesh(model);
 
-     // Create a structure
-     var structure = new Structure(model.name, model);
-     structureCollection.add(structure);
+    // Create a structure
+    var structure = new Structure(model.name, model);
+    structureCollection.add(structure);
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -423,6 +423,8 @@ function onDocumentMouseDown( event ) {
     				var structure = new Structure(model.name, model);
                     structureCollection.add(structure);
 
+                    saveStructureOnServer(structure);
+
     				// Now select what we just made (this is sort of ugly I suppose, but it works)
     				togglePlacementMode();
     				var intersects = getMouseProjectionOnObjects( selectableMeshes );
@@ -459,6 +461,35 @@ function onDocumentMouseDown( event ) {
     if(flag_placed){
         togglePlacementMode();
     }
+}
+
+function saveStructureOnServer( structure ) {
+    var struct = {
+        maxCitizens: 100,
+        numCitizens: structure.citizens,
+        structureId: structure.name,
+        x: structure.model.position.x,
+        y: structure.model.position.y,
+        z: structure.model.position.z
+    }
+
+    var request = $.ajax({
+        url: 'http://localhost:8080/api/city/1/structure',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(struct)
+    });
+
+    request.done(function (response, textStatus, jqXHR){
+        console.log("SERVER RESPONSE: new structure saved");
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+    });
 }
 
 function onKeyDown ( event ) {

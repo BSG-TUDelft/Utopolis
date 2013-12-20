@@ -5,40 +5,39 @@ import java.util.Arrays;
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
-import nl.tudelft.bsg.utopolis.server.model.Race;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
-import nl.tudelft.bsg.utopolis.server.model.StructureType;
 
 public class DBBootstrap {
 	public static void init() {
 		if (DBConnector.get().getPlayers().size() == 0) {
-			Structure s1 = new Structure();
-			s1.setX(1);
-			s1.setY(2);
-			s1.setZ(3);
-			s1.setRotation(90);
-			s1.setScale(0.2);
-			s1.setStructType(StructureType.barracks);
-			s1.setRace(Race.iber);
-			s1.setStructureId("iber_barracks");
-			s1.setMaxCitizens(100);
-			s1.setNumCitizens(13);
-			DBConnector.get().save(s1);
-
-			Structure s2 = new Structure();
-			s2.setX(10);
-			s2.setY(20);
-			s2.setZ(30);
-			s2.setRotation(180);
-			s2.setScale(0.4);
-			s2.setStructType(StructureType.blacksmith);
-			s2.setRace(Race.iber);
-			s2.setStructureId("iber_blacksmith_struct");
-			s2.setMaxCitizens(200);
-			s2.setNumCitizens(133);
-			DBConnector.get().save(s2);
-
-			Structure[] structs1 = { s1, s2 };
+//			Structure s1 = new Structure();
+//			s1.setX(1);
+//			s1.setY(2);
+//			s1.setZ(3);
+//			s1.setRotation(90);
+//			s1.setScale(0.2);
+//			s1.setStructType(StructureType.barracks);
+//			s1.setRace(Race.iber);
+//			s1.setStructureId("iber_barracks");
+//			s1.setMaxCitizens(100);
+//			s1.setNumCitizens(13);
+//			DBConnector.get().save(s1);
+//
+//			Structure s2 = new Structure();
+//			s2.setX(10);
+//			s2.setY(20);
+//			s2.setZ(30);
+//			s2.setRotation(180);
+//			s2.setScale(0.4);
+//			s2.setStructType(StructureType.blacksmith);
+//			s2.setRace(Race.iber);
+//			s2.setStructureId("iber_blacksmith_struct");
+//			s2.setMaxCitizens(200);
+//			s2.setNumCitizens(133);
+//			DBConnector.get().save(s2);
+//
+//			Structure[] structs1 = { s1, s2 };
+			Structure[] structs1 = { };
 
 			Player p1 = new Player();
 			p1.setName("John Doe");
