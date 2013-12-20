@@ -430,7 +430,7 @@ function onDocumentMouseDown( event ) {
 	}
 
     if(rollOverMesh) {                                             //if the ghost model is visible
-        if( buildingPlacementAllowed() ) {                               
+        if( buildingPlacementAllowed() ) { 
             intersector = getMouseProjectionOnFloor();
             if(intersector) {
                 var model;                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
@@ -719,13 +719,13 @@ function previousBuilding() {
 
 function rotateRollOverCW() {
     if(rollOverMesh) {
-        rollOverMesh.rotation.y += Math.PI/2;
+        rollOverMesh.rotation.y += Math.PI/13;
     }
 }
 
 function rotateRollOverCCW() {
     if(rollOverMesh) {
-        rollOverMesh.rotation.y -= Math.PI/2;      
+        rollOverMesh.rotation.y -= Math.PI/13;      
     }
 }
 
