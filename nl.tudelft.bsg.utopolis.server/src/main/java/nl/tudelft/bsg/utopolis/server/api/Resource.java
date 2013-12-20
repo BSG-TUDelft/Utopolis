@@ -46,26 +46,10 @@ public class Resource {
 	@Context
 	private UriInfo uriInfo;
 
-	/**
-	 * Translates a content byte array to a proper response.
-	 * 
-	 * @param content
-	 *            The content byte array.
-	 * @return The proper Response containing the content.
-	 */
-	protected Response responseJson(byte[] content) {
-		return responseJson(new String(content));
-	}
-
-	/**
-	 * Translates a JSON String to a proper response.
-	 * 
-	 * @param content
-	 *            The content String.
-	 * @return The proper Response containing the content.
-	 */
-	protected Response responseJson(String content) {
-		return Response.ok(content, MediaType.APPLICATION_JSON).build();
+	protected Response buildResponse(Object o) {
+		Response response = Response.ok(o).build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**
@@ -76,7 +60,10 @@ public class Resource {
 	 * @return Simple response with no body.
 	 */
 	protected Response simpleResponse(int status) {
-		return Response.status(status).type(MediaType.WILDCARD).build();
+		Response response = Response.status(status).type(MediaType.WILDCARD)
+				.build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**

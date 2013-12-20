@@ -1,7 +1,5 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,17 +21,15 @@ public class CityResource extends Resource {
 	@Path("/{playerId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCity(@PathParam("playerId") int playerId) {
-		Response response = Response.ok(DBConnector.get().getCity(playerId)).build();
-		response.getHeaders().add("Access-Control-Allow-Origin", "*");
-		return response;
+		return buildResponse(DBConnector.get().getCity(playerId));
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public City createCity(City c) {
+	public Response createCity(City c) {
 		DBConnector.get().save(c);
-		return c;
+		return buildResponse(c);
 	}
 
 	@POST
@@ -46,8 +42,8 @@ public class CityResource extends Resource {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<City> listCities() {
-		return DBConnector.get().getCities();
+	public Response listCities() {
+		return buildResponse(DBConnector.get().getCities());
 	}
 
 	@PUT
