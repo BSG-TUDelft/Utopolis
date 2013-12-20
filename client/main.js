@@ -292,17 +292,17 @@ function placeStructure(struct) {
     console.log(struct);
     var structure = Gui.getStructureInfoByTypeId(struct.structureId);
     console.log(structure);
-    // model = currentModel.getClone();
-    // model.position = intersector.point;
-    // model.rotation = rollOverMesh.rotation.clone();
 
-    // scene.add(model);
-    // registerCollidableBoundingMesh(model);
+    var model = loadedModels[struct.structureId].getClone();
+ 	model.position = new THREE.Vector3( struct.x, struct.y, struct.z )
+ 	//model.rotation = new THREE.Vector3( 0, struct.rotation, 0 )
 
-    // // Create a structure
-    // var structure = new Structure(model.name, model);
-    // structureCollection.add(structure);
+     scene.add(model);
+     registerCollidableBoundingMesh(model);
 
+     // Create a structure
+     var structure = new Structure(model.name, model);
+     structureCollection.add(structure);
 }
 
 function collidablesContainEmitter(colliderOrigin) {
