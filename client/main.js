@@ -1,4 +1,7 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+var host = "http://localhost:8080/api/"
+
 var container, stats;
 
 var camera, scene, renderer;
@@ -263,12 +266,12 @@ function init() {
 
 function requestCity() {
     request = $.ajax({
-        url: 'http://localhost:8080/api/city/1',
+        url: host + 'city/1',
         type: 'GET'
     });
 
     request.done(function (response, textStatus, jqXHR){
-        console.log("SERVER RESPONSE: Hooray, it worked!");
+        console.log("SERVER RESPONSE: city retrieved successfully");
         city = response;
         console.log(city);
         placeCity();
@@ -289,13 +292,11 @@ function placeCity() {
 }
 
 function placeStructure(struct) {
-    console.log(struct);
     var structure = Gui.getStructureInfoByTypeId(struct.structureId);
-    console.log(structure);
 
     var model = loadedModels[struct.structureId].getClone();
- 	model.position = new THREE.Vector3( struct.x, struct.y, struct.z )
- 	//model.rotation = new THREE.Vector3( 0, struct.rotation, 0 )
+ 	model.position = new THREE.Vector3( struct.x, struct.y, struct.z );
+ 	model.rotation.y = struct.rotation;
 
     scene.add(model);
     registerCollidableBoundingMesh(model);
@@ -303,6 +304,36 @@ function placeStructure(struct) {
     // Create a structure
     var structure = new Structure(model.name, model);
     structureCollection.add(structure);
+}
+
+function saveStructure( structure ) {
+    var struct = {
+        maxCitizens: 100,
+        numCitizens: structure.citizens,
+        structureId: structure.name,
+        x: structure.model.position.x,
+        y: structure.model.position.y,
+        z: structure.model.position.z,
+        rotation: structure.model.rotation.y
+    }
+
+    var request = $.ajax({
+        url: host + 'city/1/structure',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(struct)
+    });
+
+    request.done(function (response, textStatus, jqXHR){
+        console.log("SERVER RESPONSE: new structure saved");
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+    });
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -423,7 +454,7 @@ function onDocumentMouseDown( event ) {
     				var structure = new Structure(model.name, model);
                     structureCollection.add(structure);
 
-                    saveStructureOnServer(structure);
+                    saveStructure(structure);
 
     				// Now select what we just made (this is sort of ugly I suppose, but it works)
     				togglePlacementMode();
@@ -461,35 +492,6 @@ function onDocumentMouseDown( event ) {
     if(flag_placed){
         togglePlacementMode();
     }
-}
-
-function saveStructureOnServer( structure ) {
-    var struct = {
-        maxCitizens: 100,
-        numCitizens: structure.citizens,
-        structureId: structure.name,
-        x: structure.model.position.x,
-        y: structure.model.position.y,
-        z: structure.model.position.z
-    }
-
-    var request = $.ajax({
-        url: 'http://localhost:8080/api/city/1/structure',
-        type: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(struct)
-    });
-
-    request.done(function (response, textStatus, jqXHR){
-        console.log("SERVER RESPONSE: new structure saved");
-    });
-
-    request.fail(function (jqXHR, textStatus, errorThrown){
-        console.error(
-            "The following error occured: " +
-            textStatus, errorThrown
-        );
-    });
 }
 
 function onKeyDown ( event ) {
