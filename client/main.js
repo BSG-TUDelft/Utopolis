@@ -198,7 +198,7 @@ function init() {
 	persLoader.loadModels();
 
     // load city from server
-    request = $.ajax({
+    var request = $.ajax({
         url: 'http://localhost:8080/api/application.wadl',
         type: 'GET'
         // success: function(data, textStatus, jqXHR) { console.log("FTW"); },
@@ -215,12 +215,15 @@ function init() {
             textStatus, errorThrown
         );
     });
-    
-    // register event handlers
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
-    document.addEventListener( 'keydown', onKeyDown, false );
-    window.addEventListener( 'resize', onWindowResize, false );
+
+}
+/** Starts the game, registers event handlers */
+function startGame(){
+	// register event handlers
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	document.addEventListener( 'keydown', onKeyDown, false );
+	window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function collidablesContainEmitter(colliderOrigin) {

@@ -1,0 +1,61 @@
+.button-medium,  .button-big{
+	cursor: pointer;
+}
+
+
+.button-medium {
+	height: 32px;
+}
+
+.button-medium .inner {
+	background-image: url(../images/ui/common/button_32x96.png), url(../images/ui/common/button_32x96.png), url(../images/ui/common/button_32x96.png);
+	background-position:  left 0, right -64px, 0 -32px;
+	background-repeat: no-repeat, no-repeat, repeat-x;
+	min-width: 64px;
+	text-align: center;
+	font-size: 20px;
+	line-height: 28px;
+}
+
+.button-big {
+	height: 48px;
+}
+
+.button-big .inner{
+	background-image: url(../images/ui/common/button_48x432.png), url(../images/ui/common/button_48x432.png), url(../images/ui/common/button_48x432.png);
+	background-position:  left 0, right -96px, 0 -48px;
+	background-repeat: no-repeat, no-repeat, repeat-x;
+	min-width: 64px;
+
+	text-align: center;
+	font-size: 20px;
+	line-height: 48px;
+}
+
+.button-big:hover .inner{
+	background-position:  left -144px, right -240px, 0 -192px;
+}
+
+.button-big:active .inner{
+	color: #1e1d15;
+	background-position:  left -288px, right -384px, 0 -336px;
+	margin: 1px;
+}
+
+.button-big:not(:active) .inner {
+	/* now keep red background for 200ms */
+	transition: color 200ms step-end;
+	transition: background-position 200ms step-end;
+	transition: margin 200ms step end;
+}
+
+.button-big:active {
+	padding-left: 2px;
+	padding-right: 1px;
+}
+
+button-big:not(:active) {
+	transition: padding-left 200ms step-end;
+	transition: padding-right 200ms step-end;
+
+}

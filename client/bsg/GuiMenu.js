@@ -583,4 +583,39 @@ function initGui() {
 				break;
 		}
 	});
+
+	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
+	login.el.addClass("login");
+	login.el.append("<h1>Login</h1>" +
+		"<div style='padding: 20px'>" +
+			"<label>Username</label><input type='text' id='username'/>" +
+		"</div>" +
+		"<div style='padding: 20px'>" +
+			"<label>Password</label><input type='password' id='password'/>" +
+		"</div>" +
+		"<div class='button-big' id='login-submit' style='width: 100px; float: right; margin: 30px 20px'><div class='inner'>login</div></div>"
+	);
+
+	// Listen to click and ENTER
+	$("#login-submit").click(function(){
+		submitLogin();
+	});
+	login.el.keypress(function( event ) {
+		if ( event.which == 13 ) { submitLogin(); }
+	});
+
+	function submitLogin(){
+		var params = {
+			name: $("#username").val(),
+			password: $("#password").val()
+		};
+		$.post("INSERT_URL_HERE", params)
+			.done(function( data ) {
+				alert( "Data Loaded: " + data );
+			});
+	}
+
+	login.center();
+	login.show();
+	$("#username").focus();
 }
