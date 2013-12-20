@@ -611,8 +611,13 @@ function initGui() {
 		};
 		$.post("INSERT_URL_HERE", params)
 			.done(function( data ) {
-				alert( "Data Loaded: " + data );
-			});
+				// if login successful
+				login.hide();
+		});
+
+		// THIS LINE (AND THE LINE UNDER IT)
+		login.hide();
+
 	}
 
 	login.center();

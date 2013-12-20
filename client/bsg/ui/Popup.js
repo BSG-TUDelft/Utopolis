@@ -61,6 +61,9 @@ Popup.prototype = {
 	/** Hides this popup */
 	hide: function(){
 		this.el.hide(this.animation);
+		if(this.options.modal === true){
+			this.modalBlock.fadeOut(this.animation);
+		}
 	},
 
 	/** Toggles visibility */
