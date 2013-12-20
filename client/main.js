@@ -311,7 +311,6 @@ function onDocumentMouseMove( event ) {                                  // do w
     mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
     mouse2D.ax = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse2D.ay = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    console.log(mouse2D.ax + " - " + mouse2D.ay);
 }
 
 function buildingPlacementAllowed() {                                     // true = can place buildings
@@ -682,13 +681,13 @@ function update() {
     updateBirds(delta);
     stats.update();
 
-    if(mouse2D.ax > 0.9 && mouse2D.ax <= 1)
+    if(mouse2D.ax > 0.9)
         moveCameraRight(0.5);
-    if(mouse2D.ax < -0.95 && mouse2D.ax >= -1)
+    if(mouse2D.ax < -0.95)
         moveCameraLeft(0.5);
-    if(mouse2D.ay > 0.9 && mouse2D.ay <= 1)
+    if(mouse2D.ay > 0.9)
         moveCameraForward(0.5);
-    if(mouse2D.ay < -0.9 && mouse2D.ay >= -1)
+    if(mouse2D.ay < -0.9)
         moveCameraBackwards(0.5);
 }
 
