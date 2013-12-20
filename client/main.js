@@ -29,6 +29,9 @@ var clock = new THREE.Clock();
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
 var structureCollection;
 var sounds = {};
+
+var city;
+
 init();
 animate();
 
@@ -245,24 +248,7 @@ function init() {
 	structureCollection = new ModelArray();
 
     // load city from server
-    request = $.ajax({
-        url: 'http://localhost:8080/api/city/1',
-        type: 'GET'
-        //success: function(data, textStatus, jqXHR) { console.log("FTW"); },
-        //error: function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); console.log(textStatus); console.log(errorThrown); }
-    });
-
-    request.done(function (response, textStatus, jqXHR){
-        console.log("SERVER RESPONSE: Hooray, it worked!");
-        console.log(response);
-    });
-
-    request.fail(function (jqXHR, textStatus, errorThrown){
-        console.error(
-            "The following error occured: " +
-            textStatus, errorThrown
-        );
-    });
+    requestCity();
 
     // register event handlers
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -273,6 +259,50 @@ function init() {
 	$( document ).ready(function() {
 		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
 	});
+}
+
+function requestCity() {
+    request = $.ajax({
+        url: 'http://localhost:8080/api/city/1',
+        type: 'GET'
+    });
+
+    request.done(function (response, textStatus, jqXHR){
+        console.log("SERVER RESPONSE: Hooray, it worked!");
+        city = response;
+        console.log(city);
+        placeCity();
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+    });
+}
+
+function placeCity() {
+    city.structures.forEach(function(structure) {
+        placeStructure(structure);
+    });
+}
+
+function placeStructure(struct) {
+    console.log(struct);
+    var structure = Gui.getStructureInfoByTypeId(struct.structureId);
+    console.log(structure);
+    // model = currentModel.getClone();
+    // model.position = intersector.point;
+    // model.rotation = rollOverMesh.rotation.clone();
+
+    // scene.add(model);
+    // registerCollidableBoundingMesh(model);
+
+    // // Create a structure
+    // var structure = new Structure(model.name, model);
+    // structureCollection.add(structure);
+
 }
 
 function collidablesContainEmitter(colliderOrigin) {

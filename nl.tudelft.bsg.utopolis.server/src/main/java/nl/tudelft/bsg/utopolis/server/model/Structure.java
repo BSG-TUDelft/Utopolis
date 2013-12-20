@@ -18,6 +18,7 @@ public class Structure implements Serializable {
 	private StructureType structType;
 	@Enumerated
 	private Race race;
+	private String structureId;
 	private double x;
 	private double y;
 	private double z;
@@ -50,6 +51,14 @@ public class Structure implements Serializable {
 		this.race = race;
 	}
 	
+	public String getStructureId() {
+		return structureId;
+	}
+
+	public void setStructureId(String structureId) {
+		this.structureId = structureId;
+	}
+
 	public double getX() {
 		return x;
 	}

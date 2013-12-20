@@ -1,5 +1,5 @@
 package nl.tudelft.bsg.utopolis.server.model;
 
 public enum Race {
-	HELLENES, ROMANS, CARTHAGINIANS, IBERIANS, PERSIANS, MAURYANS
+	hele, rome, kart, iber, pers, gaia
 }
