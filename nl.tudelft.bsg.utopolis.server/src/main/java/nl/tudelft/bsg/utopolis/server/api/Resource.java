@@ -75,7 +75,9 @@ public class Resource {
 	 * @return Simple response with the given message in the body.
 	 */
 	protected Response simpleResponse(String msg) {
-		return Response.ok(msg, MediaType.TEXT_PLAIN).build();
+		Response response = Response.ok(msg, MediaType.TEXT_PLAIN).build(); 
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**
@@ -88,8 +90,10 @@ public class Resource {
 	 * @return Simple response with the given message in the body.
 	 */
 	protected Response simpleResponse(int status, String msg) {
-		return Response.status(status).type(MediaType.TEXT_PLAIN).entity(msg)
+		Response response = Response.status(status).type(MediaType.TEXT_PLAIN).entity(msg)
 				.build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**
