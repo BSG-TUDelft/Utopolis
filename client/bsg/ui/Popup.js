@@ -2,37 +2,44 @@
 /**
  * @param parent parent element to add popup to
  * @param options Options object, valid
- *        options are:
- *    * noDrag (Boolean)
- *    * noClose (Boolean)
+ * 		options are:
+ * 	* noDrag {Boolean}
+ * 	* noClose {Boolean}
+ * 	* modal {Boolean}
  * @constructor
  */
 var Popup = function (parent, options) {
 	this.el = $("<div class='popup'></div>");
 	$(parent).append(this.el);
 
-	options = options || {};
+	this.options = options || {};
 
-	if (options.animation != null) {
-		this.animation = options.animation;
+	if(this.options.animation != null){
+		this.animation = this.options.animation;
 	}
 
-	if (options.noDrag !== true) {
+	if(this.options.noDrag !== true){
 		this.el.draggable({ containment: "window" });
-		//this.el.resizable();
 	}
 
-	if (options.noClose !== true) {
+	if(this.options.noClose !== true){
 		var closeButton = $("<div class='close_button'></div>");
 		closeButton.click($.proxy(this.hide, this));
 		this.el.append(closeButton);
 	}
 
-	if (options.arrowLeft === true) {
+	if(this.options.arrowLeft === true){
 		this.arrowLeft = $("<div class='arrow_left'></div>");
 		this.el.append(this.arrowLeft);
 	}
-};
+
+	if(this.options.modal === true){
+		this.modalBlock = $("<div class='modalBlock'></div>");
+		this.modalBlock.insertBefore(this.el);
+	}
+
+
+}
 
 Popup.prototype = {
 
@@ -55,6 +62,9 @@ Popup.prototype = {
 	/** Hides this popup */
 	hide: function () {
 		this.el.hide(this.animation);
+		if(this.options.modal === true){
+			this.modalBlock.fadeOut(this.animation);
+		}
 	},
 
 	/** Toggles visibility */

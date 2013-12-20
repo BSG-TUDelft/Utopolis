@@ -265,7 +265,7 @@ function init() {
 }
 
 function requestCity() {
-    request = $.ajax({
+    var request = $.ajax({
         url: host + 'city/1',
         type: 'GET'
     });
@@ -334,6 +334,16 @@ function saveStructure( structure ) {
             textStatus, errorThrown
         );
     });
+
+}
+
+/** Starts the game, registers event handlers */
+function startGame(){
+	// register event handlers
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	document.addEventListener( 'keydown', onKeyDown, false );
+	window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function collidablesContainEmitter(colliderOrigin) {

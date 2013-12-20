@@ -1,0 +1,37 @@
+.login {
+	width: inherit;
+}
+
+.login h1 {
+	text-align: center;
+}
+
+.login div {
+	clear: both;
+}
+
+.login label {
+	width: 30%;
+	text-align: right;
+	float: left;
+	display: block;
+	line-height: 24px;
+	font-size: 24px;
+}
+
+.login input {
+	width: 60%;
+	float: right;
+	background-color: rgba(0, 0, 0, .5);
+	line-height: 24px;
+	font-size: 24px;
+	color: #FFFFFF;
+	padding-left: 6px;
+
+	border-image-source: url(../images/ui/common/border_thin_77x77.png);
+	border-image-slice: 7 7 7 7;
+	border-image-width: 7px 7px 7px 7px;
+	border-image-outset: 5px 5px 5px 5px;
+	border-image-repeat: repeat repeat;
+
+}
