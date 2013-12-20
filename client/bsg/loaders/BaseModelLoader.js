@@ -22,27 +22,6 @@ BaseModelLoader.prototype = {
 	numModelStructures: 0,
 	colladaLoader: null,
 
-	loadActorXml: function (actorXml) {
-		$.ajax({
-			type: "GET",
-			url: actorXml,
-			dataType: "xml",
-			success: function (xml) {
-				//$(xml).find("variant[name*='Texture-Branches-1']").find("texture[name*='baseTex']").attr("file")
-				//$(xml).find("variant[name*='Texture-Branches-1'] texture[name*='baseTex']").attr("file")
-				var texture = $(xml).find("texture[name*='baseTex']").attr("file");
-				if(texture.match(/dds/)){
-					console.log("Warning! The actor xml [" + actorXml + "] asked me to load a texture [" + texture + "] but this is a DirectDrawSurface (.dds) file which WebGL can't handle! I've taken the liberty of interpreting it as a .png file, so that had better be there!");
-					texture = texture.substring(0, texture.length - 3) + "png";
-				}
-
-				console.log(texture);
-			}
-
-
-		});
-	},
-
 	loadModels: function () {
 		for (var key in this.modelStructuresArray) {
 			if (!this.modelStructuresArray.hasOwnProperty(key)) continue;
