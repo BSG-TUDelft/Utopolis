@@ -1,7 +1,5 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,16 +19,16 @@ public class ProvinceResource extends Resource {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Province getProvince(@PathParam("id") int id) {
-		return DBConnector.get().getProvince(id);
+	public Response getProvince(@PathParam("id") int id) {
+		return buildResponse(DBConnector.get().getProvince(id));
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Province createStructure(Province p) {
+	public Response createStructure(Province p) {
 		DBConnector.get().save(p);
-		return p;
+		return buildResponse(p);
 	}
 	
 	@POST
@@ -43,8 +41,8 @@ public class ProvinceResource extends Resource {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Province> listProvinces() {
-		return DBConnector.get().getProvinces();
+	public Response listProvinces() {
+		return buildResponse(DBConnector.get().getProvinces());
 	}
 
 }

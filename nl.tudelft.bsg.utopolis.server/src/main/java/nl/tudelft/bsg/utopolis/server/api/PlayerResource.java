@@ -1,7 +1,5 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,16 +19,16 @@ public class PlayerResource extends Resource {
 	@GET
 	@Path("/{nick}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Player getPlayer(@PathParam("nick") String nick) {
-		return DBConnector.get().getPlayer(nick, "");
+	public Response getPlayer(@PathParam("nick") String nick) {
+		return buildResponse(DBConnector.get().getPlayer(nick, ""));
 	}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Player createPlayer(Player p) {
+	public Response createPlayer(Player p) {
 		DBConnector.get().save(p);
-		return p;
+		return buildResponse(p);
 	}
 	
 	@POST
@@ -43,7 +41,7 @@ public class PlayerResource extends Resource {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Player> listPlayers() {
-		return DBConnector.get().getPlayers();
+	public Response listPlayers() {
+		return buildResponse(DBConnector.get().getPlayers());
 	}
 }

@@ -15,27 +15,27 @@ import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 @Path("structure")
 public class StructureResource extends Resource {
-	
+
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Structure getStructure(@PathParam("id") int id) {
-		return DBConnector.get().getStructure(id);
+	public Response getStructure(@PathParam("id") int id) {
+		return buildResponse(DBConnector.get().getStructure(id));
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Structure createStructure(Structure s) {
+	public Response createStructure(Structure s) {
 		DBConnector.get().save(s);
-		return s;
+		return buildResponse(s);
 	}
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateStructure(Structure s) {
 		DBConnector.get().save(s);
 		return simpleResponse(200);
 	}
-	
+
 }
