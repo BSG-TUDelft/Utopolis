@@ -309,7 +309,9 @@ function onDocumentMouseMove( event ) {                                  // do w
     event.preventDefault();
     mouse2D.x = ( (event.clientX + mouseOffsetX) / container.offsetWidth) * 2 - 1;
     mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
-    //console.log(mouse2D);
+    mouse2D.ax = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse2D.ay = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    console.log(mouse2D.ax + " - " + mouse2D.ay);
 }
 
 function buildingPlacementAllowed() {                                     // true = can place buildings
@@ -680,13 +682,13 @@ function update() {
     updateBirds(delta);
     stats.update();
 
-    if(mouse2D.x > 0.85 && mouse2D.x < 1)
+    if(mouse2D.ax > 0.9 && mouse2D.ax <= 1)
         moveCameraRight(0.5);
-    if(mouse2D.x < -0.85 && mouse2D.x > -1)
+    if(mouse2D.ax < -0.95 && mouse2D.ax >= -1)
         moveCameraLeft(0.5);
-    if(mouse2D.y > 0.85 && mouse2D.y < 1.1)
+    if(mouse2D.ay > 0.9 && mouse2D.ay <= 1)
         moveCameraForward(0.5);
-    if(mouse2D.y < -0.75 && mouse2D.y > -1)
+    if(mouse2D.ay < -0.9 && mouse2D.ay >= -1)
         moveCameraBackwards(0.5);
 }
 
