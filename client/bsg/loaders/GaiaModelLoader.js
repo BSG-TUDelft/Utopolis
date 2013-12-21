@@ -17,8 +17,9 @@ var GaiaModelLoader = function () {
 		testLoader.loadActorXml(name, xml);
 
 	}
-	load('gaia_aleppo_pine', './art/actors/flora/trees/aleppo_pine.xml');
-	load('hele_blacksmith', './art/actors/structures/hellenes/blacksmith.xml');
+	load('gaia_aleppo_pine', 'flora/trees/aleppo_pine.xml');
+	load('hele_blacksmith', 'structures/hellenes/blacksmith.xml');
+	load('hele_farm', 'structures/hellenes/farmstead_new.xml');
 
 }
 

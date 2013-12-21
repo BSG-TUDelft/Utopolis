@@ -702,7 +702,7 @@ function initGui() {
 	var res = {
 		wood: 0,
 		stone: 0,
-		metal: 0,
+		metal: 2,
 		food: 0,
 		citizens: 0
 	};
