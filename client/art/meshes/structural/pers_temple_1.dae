@@ -15,15 +15,15 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__4-image" name="Map__4">
     </image>
-  </library_images>
-  <library_materials>
+  </library_images_UNUSED>
+  <library_materials_UNUSED>
     <material id="_0225151___Default" name="_0225151___Default">
       <instance_effect url="#_0225151___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_0225151___Default-fx" name="_0225151___Default">
       <profile_COMMON>

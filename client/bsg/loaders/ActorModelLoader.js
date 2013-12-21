@@ -81,7 +81,7 @@ var ActorModelLoader = function () {
 		var mesh = collada.scene;
 
 		var texture = THREE.ImageUtils.loadTexture(propTextureUrl);
-		var material = new THREE.MeshLambertMaterial({map: texture});
+		var material = new THREE.MeshBasicMaterial({map: texture});
 
 		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
 		material.transparent = true;
@@ -144,7 +144,6 @@ var ActorModelLoader = function () {
 			});
 		}
 	}
-
 	/** If the mesh contains instances of THREE.Light, remove them */
 	function removeLights(mesh) {
 		if (mesh.children) {
@@ -156,6 +155,7 @@ var ActorModelLoader = function () {
 			}
 		}
 	}
+
 
 	/** Recursively set material on children */
 	function setMaterial(node, material) {

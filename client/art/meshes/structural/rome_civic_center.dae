@@ -15,16 +15,16 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__379-image" name="Map__379">
       <init_from>file://C:\0 AD\binaries\data\mods\internal\art\textures\skins\structural\rome_struct.dds</init_from>
     </image>
-  </library_images>
-  <library_materials>
+  </library_images_UNUSED>
+  <library_materials_UNUSED>
     <material id="Material__5749" name="Material__5749">
       <instance_effect url="#Material__5749-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material__5749-fx" name="Material__5749">
       <profile_COMMON>
