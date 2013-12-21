@@ -62,8 +62,8 @@ var ActorModelLoader = function () {
 		var material = new THREE.MeshLambertMaterial({map: texture});
 
 		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
-		//material.transparent = true;
-		//material.blending = THREE["AdditiveAlphaBlending"];
+		material.transparent = true;
+		material.blending = THREE["AdditiveAlphaBlending"];
 
 		setMaterial(me.scene, material);
 		me.scene.scale.x = me.scene.scale.y = me.scene.scale.z = me.scale;
@@ -83,11 +83,12 @@ var ActorModelLoader = function () {
 		var material = new THREE.MeshLambertMaterial({map: texture});
 
 		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
-		//material.transparent = true;
-		//material.blending = THREE["AdditiveAlphaBlending"];
+		material.transparent = true;
+		material.blending = THREE["AdditiveAlphaBlending"];
 
-		setMaterial(mesh, material);
+		//setMaterial(mesh, material);
 		me.scene.add(mesh);
+		me.scene.updateMatrix();
 
 
 		checkIfDone();
@@ -171,7 +172,9 @@ var ActorModelLoader = function () {
 
 	function checkTextureUrl(actorXml, textureUrl){
 		if(textureUrl.match(/dds/)){
-			console.warn("ActorModelLoader.loadActorXml: The actor xml [" + actorXml + "] asked me to load a texture [" + textureUrl + "] but this appears to be a DirectDrawSurface (.dds) file which WebGL can't handle! I've taken the liberty of interpreting it as a .png file, so that had better be there!");
+			if(!me.suppressDDSWarning){
+				console.warn("ActorModelLoader.loadActorXml: The actor xml [" + actorXml + "] asked me to load a texture [" + textureUrl + "] but this appears to be a DirectDrawSurface (.dds) file which WebGL can't handle! I've taken the liberty of interpreting it as a .png file, so that had better be there!");
+			}
 			return textureUrl.substring(0, textureUrl.length - 3) + "png";
 		}
 		return textureUrl;
@@ -191,7 +194,8 @@ ActorModelLoader.prototype = {
 	modelName: null,
 	textureUrl: null,
 	props: [],
-	scene: null
+	scene: null,
+	suppressDDSWarning: true
 };
 
 // Public events
