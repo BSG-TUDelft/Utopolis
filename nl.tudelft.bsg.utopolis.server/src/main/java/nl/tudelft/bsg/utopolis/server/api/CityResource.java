@@ -50,11 +50,7 @@ public class CityResource extends Resource {
 	@OPTIONS
 	@Path("/{playerId}/structure")
 	public Response createStructureOptions() {
-		Response response = simpleResponse(200);
-		response.getHeaders().add("Access-Control-Allow-Methods", "PUT");
-		response.getHeaders().add("Access-Control-Allow-Headers",
-				"Content-Type, Accept, x-requested-with");
-		return response;
+		return optionsResponse();
 	}
 
 	@PUT

@@ -711,10 +711,19 @@ function initGui() {
 		res.stone += .5;
 		res.metal += .25;
 		res.food += 1;
-		res.citizens = Math.floor(Math.random() * 25);
+		// res.citizens = Math.floor(Math.random() * 25);
+		res.citizens = getNumIdleCitizens(city);
 
 		Gui.updatePlayerResources(res);
 	}, 1500);
+
+	var getNumIdleCitizens = function(city) {
+		var sum = city.numCitizens;
+		city.structures.forEach(function (structure) {
+			sum -= structure.numCitizens;
+		});
+		return sum;
+	}
 
 	/** Leaderboard*/
 	var getRndInt = function(max){

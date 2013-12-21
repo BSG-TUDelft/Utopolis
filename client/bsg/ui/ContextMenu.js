@@ -45,6 +45,9 @@ ContextMenu.prototype = {
 
 		this.el.html(html);
 		this.updateRevenue(structureTypeInfo, structure);
+		
+		console.log("WTF");
+		console.log(structure);
 
 		$("#structureslider").slider({
 			value: structure.citizens,
@@ -55,7 +58,24 @@ ContextMenu.prototype = {
 				structure.citizens = ui.value;
 				this.updateRevenue(structureTypeInfo, structure);
 				$("#citizencounter").html(citizenFormatter());
-			}, this)
+			}, this),
+			change: $.proxy(function (event, ui) {
+                var request = $.ajax({
+			        url: host + 'structure/' + structure.id + '/citizens/' + ui.value,
+			        type: 'GET'
+			    });
+
+			    request.done(function (response, textStatus, jqXHR){
+			        console.log("SERVER RESPONSE: updated citizens");
+			    });
+
+			    request.fail(function (jqXHR, textStatus, errorThrown){
+			        console.error(
+			            "The following error occured: " +
+			            textStatus, errorThrown
+			        );
+			    });
+            }, this)
 		});
 		this.el.show();
 	},

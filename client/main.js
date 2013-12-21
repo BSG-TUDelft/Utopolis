@@ -303,6 +303,7 @@ function placeStructure(struct) {
 
     // Create a structure
     var structure = new Structure(model.name, model);
+    structure.id = struct.id;
     structureCollection.add(structure);
 }
 

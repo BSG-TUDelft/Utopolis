@@ -2,6 +2,7 @@ package nl.tudelft.bsg.utopolis.server.api;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -38,4 +39,18 @@ public class StructureResource extends Resource {
 		return simpleResponse(200);
 	}
 
+	@OPTIONS
+	public Response createStructureOptions() {
+		return optionsResponse();
+	}
+
+	@GET
+	@Path("/{id}/citizens/{numCitizens}")
+	public Response updateCitizens(@PathParam("id") int id,
+			@PathParam("numCitizens") int numCitizens) {
+		Structure s = DBConnector.get().getStructure(id);
+		s.setNumCitizens(numCitizens);
+		DBConnector.get().save(s);
+		return simpleResponse(200);
+	}
 }

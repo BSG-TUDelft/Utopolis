@@ -51,6 +51,14 @@ public class Resource {
 		response.getHeaders().add("Access-Control-Allow-Origin", "*");
 		return response;
 	}
+	
+	protected Response optionsResponse() {
+		Response response = simpleResponse(200);
+		response.getHeaders().add("Access-Control-Allow-Methods", "PUT, POST");
+		response.getHeaders().add("Access-Control-Allow-Headers",
+				"Content-Type, Accept, x-requested-with");
+		return response;
+	}
 
 	/**
 	 * Generates a simple response with no body.
