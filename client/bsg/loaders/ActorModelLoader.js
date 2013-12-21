@@ -76,6 +76,7 @@ var ActorModelLoader = function () {
 		checkIfDone();
 	}
 
+	/** Fires when a prop is done loading */
 	function doneLoadingProp(collada, propTextureUrl){
 		var mesh = collada.scene;
 
@@ -86,7 +87,9 @@ var ActorModelLoader = function () {
 		material.transparent = true;
 		material.blending = THREE["AdditiveAlphaBlending"];
 
-		//setMaterial(mesh, material);
+		setMaterial(mesh, material);
+		mesh.scale.x = mesh.scale.y = mesh.scale.z = 1;	// Set scale to 1 because children are recursively scaled for some arcane reason
+
 		me.scene.add(mesh);
 		me.scene.updateMatrix();
 
@@ -106,7 +109,7 @@ var ActorModelLoader = function () {
 					// create closure for reqUrl
 					return function (xml) {
 					if($(xml).find("actor group variant mesh").size() === 0){
-						// There's noo mesh, we dont know how to handle this. Keep calm and parse on.
+						// There's no mesh, we dont know how to handle this. Keep calm and parse on.
 						me.props.splice( $.inArray(reqUrl, me.props), 1 );
 						checkIfDone();
 						return;
@@ -128,6 +131,7 @@ var ActorModelLoader = function () {
 						return function(collada) {
 							// Remove prop from loading queue
 							me.props.splice( $.inArray(reqUrl, me.props), 1 );
+
 							doneLoadingProp(collada, propTextureUrl);
 					}}(propTextureUrl));
 
@@ -170,6 +174,7 @@ var ActorModelLoader = function () {
 		}
 	}
 
+	/** Helper function to convert path ending with .dds to .png. */
 	function checkTextureUrl(actorXml, textureUrl){
 		if(textureUrl.match(/dds/)){
 			if(!me.suppressDDSWarning){

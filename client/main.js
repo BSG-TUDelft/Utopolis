@@ -362,7 +362,7 @@ function onDocumentMouseDown( event ) {
                     registerCollidableBoundingMesh(model);
                 }
                 else{
-                    model = currentModel.getClone(model, true);
+                    model = currentModel.getClone();
     				model.position = intersector.point;
     				model.rotation = rollOverMesh.rotation.clone();
 

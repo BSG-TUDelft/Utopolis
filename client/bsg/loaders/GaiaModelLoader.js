@@ -17,9 +17,10 @@ var GaiaModelLoader = function () {
 		testLoader.loadActorXml(name, xml);
 
 	}
-	load('gaia_aleppo_pine', 'flora/trees/aleppo_pine.xml');
+	//load('gaia_aleppo_pine', 'flora/trees/aleppo_pine.xml');
 	load('hele_blacksmith', 'structures/hellenes/blacksmith.xml');
 	load('hele_farm', 'structures/hellenes/farmstead_new.xml');
+	load('hele_house', 'structures/hellenes/house_new.xml');
 
 }
 
