@@ -225,11 +225,11 @@ function initGui() {
 				structureId: "rome_blacksmith",
 				iconCss: "rome_blacksmith",
 				structureType: "blacksmith"
-//		},{
-//			name: "Civic center",
-//			structureId: "rome_civic",
-//			iconCss: "rome_civic",
-//			structureType: "civic"
+			},{
+				name: "Civic center",
+				structureId: "rome_civic",
+				iconCss: "rome_civic",
+				structureType: "civic"
 			},{
 				name: "Tower",
 				structureId: "rome_tower",

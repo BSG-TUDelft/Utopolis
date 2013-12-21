@@ -32,11 +32,23 @@ var GaiaModelLoader = function () {
 		"hele_fortress": "structures/hellenes/fortress_new.xml",
 		"hele_tower": "structures/hellenes/wall_tower.xml",
 		"hele_civic": "structures/hellenes/civic_centre_new.xml",
-		"hele_temple": "structures/hellenes/temple_new.xml"
+		"hele_temple": "structures/hellenes/temple_new.xml",
+
+		'rome_house': 'structures/romans/house.xml',
+		'rome_farm': 'structures/romans/farmstead.xml',
+		'rome_corral': 'structures/romans/corral.xml',
+		'rome_storehouse': 'structures/romans/storehouse.xml',
+		'rome_barracks': 'structures/romans/barracks.xml',
+		'rome_blacksmith': 'structures/romans/blacksmith.xml',
+		'rome_fortress': 'structures/romans/fortress.xml',
+		'rome_tower': 'structures/romans/wall_tower.xml',
+		'rome_civic': 'structures/romans/civic_centre.xml',
+		'rome_temple': 'structures/romans/temple_new.xml'
+
+
 	}
 	for(var i in actors){
 		load(i, actors[i]);
-
 	}
 
 	//Gui.enoughResources = function() { return true; }	// use this for testing
