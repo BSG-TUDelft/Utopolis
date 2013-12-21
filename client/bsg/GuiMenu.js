@@ -143,38 +143,31 @@ function initGui() {
 				structureId: "hele_farm",
 				iconCss: "hele_farm",
 				structureType: "farm"
-//				},{
-//					name: "Corral",
-//					structureId: "hele_corral",
-//					iconCss: "hele_corral"
+			},{
+				name: "Corral",
+				structureId: "hele_corral",
+				iconCss: "hele_corral",
+				structureType: "corral"
 			},{
 				name: "Storehouse",
 				structureId: "hele_storehouse",
 				iconCss: "hele_storehouse",
 				structureType: "storehouse"
-//				},{
-//					name: "Barracks",
-//					structureId: "hele_barracks",
-//					iconCss: "hele_barracks"
+			},{
+				name: "Barracks",
+				structureId: "hele_barracks",
+				iconCss: "hele_barracks",
+				structureType: "barracks"
 			},{
 				name: "Blacksmith",
 				structureId: "hele_blacksmith",
 				iconCss: "hele_blacksmith",
 				structureType: "blacksmith"
-//				},{
-//					name: "Civic center",
-//					structureId: "hele_civic",
-//					iconCss: "hele_civic"
-				/*			cost: {
-				 stone: 1,
-				 metal: 1,
-				 food: 2
-				 },
-				 requirements: {
-				 culture: 4,
-				 knowledge: 4
-				 },
-				 buildTime: 30000 */
+			},{
+				name: "Civic center",
+				structureId: "hele_civic",
+				iconCss: "hele_civic",
+				structureType: "civic"
 			},{
 				name: "Tower",
 				structureId: "hele_tower",
@@ -186,11 +179,11 @@ function initGui() {
 				structureId: "hele_fortress",
 				iconCss: "hele_fortress",
 				structureType: "fortress"
-
-//				},{
-//					name: "Temple",
-//					structureId: "hele_temple",
-//					iconCss: "hele_temple"
+			},{
+				name: "Temple",
+				structureId: "hele_temple",
+				iconCss: "hele_temple",
+				structureType: "temple"
 			}]
 		}, {
 			name: "Romans",
