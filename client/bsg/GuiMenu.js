@@ -247,10 +247,11 @@ function initGui() {
 				structureId: "kart_house",
 				iconCss: "kart_house",
 				structureType: "house"
-//				},{
-//					name: "Farm",
-//					structureId: "kart_farm",
-//					iconCss: "kart_farm"
+			},{
+				name: "Farm",
+				structureId: "kart_farm",
+				iconCss: "kart_farm",
+				structureType: "house"
 			},{
 				name: "Corral",
 				structureId: "kart_corral",
