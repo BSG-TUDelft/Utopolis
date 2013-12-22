@@ -45,7 +45,7 @@ var ActorModelLoader = function () {
 				colladaLoader.load(meshUrl, doneLoadingScene);
 			},
 			error: function(xhr, status, error){
-				console.error("ActorModelLoader.loadActorXml: Error loading xml [" + url + "]. Error message: " + error);
+				console.error("ActorModelLoader.loadActorXml: Error loading xml [" + url + "]. Name: [" + name + "]. Error message: " + error);
 			}
 		});
 	}
@@ -139,7 +139,7 @@ var ActorModelLoader = function () {
 				error: function(reqUrl) {
 					// create closeure for reqUrl
 					return function(xhr, status, error){
-					console.error("ActorModelLoader.loadActorXml: Error loading prop xml [" + reqUrl + "]. Error message: " + error);
+					console.error("ActorModelLoader.loadProps: Error loading prop xml [" + reqUrl + "]. Error message: " + error);
 				}}(url)
 			});
 		}

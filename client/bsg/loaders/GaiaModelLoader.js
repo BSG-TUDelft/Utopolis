@@ -44,8 +44,18 @@ var GaiaModelLoader = function () {
 		'rome_fortress': 'structures/romans/fortress.xml',
 		'rome_tower': 'structures/romans/wall_tower.xml',
 		'rome_civic': 'structures/romans/civic_centre.xml',
-		'rome_temple': 'structures/romans/temple_new.xml'
+		'rome_temple': 'structures/romans/temple_new.xml',
 
+		'kart_house': 'structures/carthaginians/house.xml',
+		'kart_farm': 'structures/carthaginians/farmstead.xml',
+		'kart_corral': 'structures/carthaginians/corral.xml',
+		'kart_storehouse': 'structures/carthaginians/storehouse.xml',
+		'kart_barracks': 'structures/carthaginians/barracks.xml',
+		'kart_blacksmith': 'structures/carthaginians/blacksmith.xml',
+		'kart_fortress': 'structures/carthaginians/fortress.xml',
+		'kart_tower': 'structures/carthaginians/wall_tower.xml',
+		'kart_civic': 'structures/carthaginians/civil_centre.xml',
+		'kart_temple': 'structures/carthaginians/temple_big.xml'
 
 	}
 	for(var i in actors){
