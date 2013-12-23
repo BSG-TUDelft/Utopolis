@@ -108,33 +108,37 @@ var ActorModelLoader = function () {
 				success: function(reqUrl) {
 					// create closure for reqUrl
 					return function (xml) {
-					if($(xml).find("actor group variant mesh").size() === 0){
-						// There's no mesh, we dont know how to handle this. Keep calm and parse on.
-						me.props.splice( $.inArray(reqUrl, me.props), 1 );
-						checkIfDone();
-						return;
-					}
-					if($(xml).find("actor group variant textures texture[name*='baseTex']").size() === 0){
-						console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. We will not load this prop");
-						checkIfDone();
-						return;
-					}
+						if($(xml).find("actor group variant mesh").size() > 0){
+							// This is a regular mesh prop, load collada model and texture
+							var propMeshUrl = meshUrlPrefix + $(xml).find("actor group variant mesh").first().text();
+							var propTextureUrl = textureUrlPrefix + $(xml).find("actor group variant textures texture[name*='baseTex']").first().attr("file");
+							propTextureUrl = checkTextureUrl(reqUrl, propTextureUrl);
 
-					var propMeshUrl = meshUrlPrefix + $(xml).find("actor group variant mesh").first().text();
-					var propTextureUrl = textureUrlPrefix + $(xml).find("actor group variant textures texture[name*='baseTex']").first().attr("file");
-					propTextureUrl = checkTextureUrl(reqUrl, propTextureUrl);
+							var propLoader = new THREE.ColladaLoader();
+							propLoader.options.convertUpAxis = true;
+							propLoader.load(propMeshUrl, function( prTU) {
+								// Create closure for propTextureUrl
+								return function(collada) {
+									// Remove prop from loading queue
+									me.props.splice( $.inArray(reqUrl, me.props), 1 );
 
-					var propLoader = new THREE.ColladaLoader();
-					propLoader.options.convertUpAxis = true;
-					propLoader.load(propMeshUrl, function( prTU) {
-						// Create closure for propTextureUrl
-						return function(collada) {
-							// Remove prop from loading queue
-							me.props.splice( $.inArray(reqUrl, me.props), 1 );
+									doneLoadingProp(collada, prTU);
+								}}(propTextureUrl));
+						}
+						if ($(xml).find("actor group variant decal").size() > 0){
+							// This is a decal prop
+							var width = $(xml).find("actor group variant decal").attr("width");
+							var textureUrl = textureUrlPrefix + $(xml).find("actor group variant decal ~ textures texture[name*=baseTex]").attr("file");
+							textureUrl = checkTextureUrl(reqUrl, textureUrl);
 
-							doneLoadingProp(collada, propTextureUrl);
-					}}(propTextureUrl));
+							loadDecal(textureUrl, width);
+						}
 
+						if($(xml).find("actor group variant textures texture[name*='baseTex']").size() === 0){
+							console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. We will not load this prop");
+							checkIfDone();
+							return;
+						}
 				}}(url),
 				error: function(reqUrl) {
 					// create closeure for reqUrl
@@ -144,6 +148,13 @@ var ActorModelLoader = function () {
 			});
 		}
 	}
+
+	/** Loads a decal (TODO) */
+	function loadDecal(textureUrl, width){
+		console.log("Loading decal: " + width + ", " + textureUrl);
+		// TODO: ATTACH TO FLOOR SOMEHOW
+	}
+
 	/** If the mesh contains instances of THREE.Light, remove them */
 	function removeLights(mesh) {
 		if (mesh.children) {
@@ -187,7 +198,6 @@ var ActorModelLoader = function () {
 
 	// PUBLIC INTERFACE
 	// Public methods
-
 	/** Loads a model and its textures by providing the actor XML file */
 	this.loadActorXml = loadActorXml;
 };
@@ -207,79 +217,3 @@ ActorModelLoader.prototype = {
 ActorModelLoader.doneLoading = "DONE_LOADING";
 
 THREE.EventDispatcher.prototype.apply( ActorModelLoader.prototype );
-
-/*
-	loadModels: function () {
-		for (var key in this.modelStructuresArray) {
-			if (!this.modelStructuresArray.hasOwnProperty(key)) continue;
-			this.load(key,
-				this.modelStructuresArray,
-				$.proxy(this.decreaseRemainingStructures, this)
-			);		// Pass context to all callback functions because JS gets weird
-		}
-	},
-
-	load: function (key, map, callbackDecRemainingStructures) {
-		this.colladaLoader.load(map[key], this.setTextureOnModel(key, this.textureFile, callbackDecRemainingStructures));
-	},
-
-	setTextureOnModel: function (key, textureFile, callbackDecRemainingStructures) {
-		return function (collada) {
-			function removeLights(model) {
-				if (model.children) {
-					for (var j = 0; j < model.children.length; j++) {
-						var child = model.children[j];
-						if (child instanceof THREE.Light) {
-							model.children.splice(j, 1);
-						}
-					}
-				}
-			}
-
-			function setMaterial(node, material) {
-				node.material = material;
-				if (node.children) {
-					for (var i = 0; i < node.children.length; i++) {
-						setMaterial(node.children[i], material);
-					}
-				}
-			}
-
-			var dae = collada.scene;
-			dae.name = key;
-			removeLights(dae);
-			var texture = THREE.ImageUtils.loadTexture(textureFile);
-			var material = new THREE.MeshLambertMaterial({map: texture});
-
-			material.transparent = true;
-			material.blending = THREE.AdditiveAlphaBlending;
-
-			setMaterial(dae, material);
-			dae.scale.x = dae.scale.y = dae.scale.z = 0.4;
-			dae.updateMatrix();
-			this.loadedModels[key] = new ModelWrapper(dae);
-			callbackDecRemainingStructures();
-		};
-	},
-
-	decreaseRemainingStructures: function () {
-		this.numModelStructures--;
-		if (this.numModelStructures == 0) {
-			// Will dispatch event when done loading all the models
-			this.dispatchEvent({ type: ModelLoader.doneLoading })
-		}
-	},
-
-	getSize: function (obj) {
-		var size = 0, key;
-		for (key in obj) {
-			if (obj.hasOwnProperty(key))
-				size++;
-		}
-		return size;
-	}*/
-
-
-
-
-
