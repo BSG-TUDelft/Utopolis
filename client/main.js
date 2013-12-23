@@ -40,7 +40,7 @@ init();
 /*function initFloor() {
     // FLOOR
     var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
     floorTexture.repeat.set( 10, 10 );
     var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
     var floorGeometry = new THREE.PlaneGeometry(40, 40, 10, 10);
@@ -156,7 +156,7 @@ function initRollOver(position) {
             rollOverMesh.add(ghostModel);
             rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
             scene.add( rollOverMesh );
-            
+
         }
         else if(currentModel.material != null){
             rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
@@ -164,7 +164,7 @@ function initRollOver(position) {
             var ghostMaterial = ghostModel.material.clone();
 
             setMaterial(ghostModel, ghostMaterial);
-            setTransparent(ghostModel);     
+            setTransparent(ghostModel);
 
             ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
             rollOverMesh.add(ghostModel);
@@ -184,10 +184,10 @@ function setRollOverPosition (intersector) {
 }
 
 function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
-    modelBoundingBox = model.getBoundingBox();    
+    modelBoundingBox = model.getBoundingBox();
     collidableBoundingBoxes.push(modelBoundingBox);
     //showBoundingBox(modelBoundingBox);                //collision debugging
-    
+
     var modelBoundingMesh = model.getBoundingMesh(1, 1, 1);
     modelBoundingMesh.position.set(modelBoundingBox.center().x, modelBoundingBox.center().y, modelBoundingBox.center().z);
     scene.add(modelBoundingMesh);                               //need to add on the scene otherwise raytracing won't work
@@ -203,7 +203,7 @@ function onTerrainLoad() {
     scene.add(floor);
 
     //BIRD
-    initBirds(scene);  
+    initBirds(scene);
 }
 
 function initCamera() {
@@ -232,7 +232,7 @@ function initSound(){
 }
 
 function init() {
-    //CONTAINER    
+    //CONTAINER
     container = document.getElementById( 'main' );
     setMouseOffset();
 
@@ -253,7 +253,7 @@ function init() {
 
     //FLOOR
     initFloor();
-    
+
     // LIGHTS
     scene.add( new THREE.AmbientLight( 0xcccccc ) );
     var directionalLight = new THREE.DirectionalLight(/*Math.random() * 0xffffff*/0xeeeeee );
@@ -288,12 +288,12 @@ function init() {
     // picking
     projector = new THREE.Projector();
     mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
-    
+
     //RENDERER
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( container.offsetWidth, container.offsetHeight );
     container.appendChild( renderer.domElement );
-    
+
     //STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
@@ -309,6 +309,7 @@ function init() {
 
     // load city from server
     function callbackModelsLoaded(){
+		// TODO: fallback mechanism if no server is found, play in singleplayer mode
 		requestCity();
 	}
 
@@ -328,8 +329,8 @@ function requestCity() {
         city = response;
         console.log(city);
 
+        placeCity(city.structures);
 		startGame();
-        placeCity();
 
     });
 
@@ -341,8 +342,8 @@ function requestCity() {
     });
 }
 
-function placeCity() {
-    city.structures.forEach(function(structure) {
+function placeCity(structures) {
+    structures.forEach(function(structure) {
         placeStructure(structure);
     });
 }
@@ -356,8 +357,7 @@ function placeStructure(struct) {
     registerCollidableBoundingMesh(model);
 
     // Create a structure
-    var structure = new Structure(model.name, model);
-    structure.id = struct.id;
+    var structure = new Structure(model.name, model, struct.id, struct.numCitizens);
     structureCollection.add(structure);
 }
 
@@ -379,9 +379,14 @@ function saveStructure( structure ) {
         data: JSON.stringify(struct)
     });
 
-    request.done(function (response, textStatus, jqXHR){
-        console.log("SERVER RESPONSE: new structure saved");
-    });
+    request.done(function(str) {
+		// create closure for structure
+		var structure = str;
+		return function (response, textStatus, jqXHR){
+		// todo:
+        	console.log("SERVER RESPONSE: new structure saved");
+		}
+	}(structure));
 
     request.fail(function (jqXHR, textStatus, errorThrown){
         console.error(
@@ -406,7 +411,7 @@ function startGame(){
 
 function collidablesContainEmitter(colliderOrigin) {
     for(var index = 0; index < collidableBoundingBoxes.length; index ++) {
-        if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){               
+        if(collidableBoundingBoxes[index].containsPoint(colliderOrigin)){
             return true;
         }
     }
@@ -426,29 +431,29 @@ function detectCollision (collider) {           //collider = oject that detects 
     {
         var collisionFlag = false;
         var originPoint = collider.position.clone();
-        
+
         for (var vertexIndex = 0; vertexIndex < collider.geometry.vertices.length; vertexIndex++)
-        {                
+        {
             var localVertex = collider.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4( collider.matrix );
             var directionVector = globalVertex.sub( collider.position );
-                    
+
             var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
             var collisionResults = ray.intersectObjects( collidableMeshList );
             if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
-                collisionFlag = true; 
-                break;      
+                collisionFlag = true;
+                break;
             }
-        }   
+        }
         if(collisionFlag == true) {
             changeColliderColor(collider, 255, 0, 0);
         }
         else {
             if(collidablesContainEmitter(originPoint) == true) {
-                collisionFlag = true;           
+                collisionFlag = true;
                 changeColliderColor(collider, 255, 0, 0);
             }
-            else 
+            else
                 changeColliderColor(collider, 0, 255, 0);
         }
         noCollision = !collisionFlag;
@@ -483,7 +488,7 @@ function onDocumentMouseMove( event ) {                                  // do w
 
 function buildingPlacementAllowed() {                                     // true = can place buildings
     var mousePosValid = false;
-    if(mouse2D.x > -1 && mouse2D.x < 1 && mouse2D.y > -1 && mouse2D.y < 1){                
+    if(mouse2D.x > -1 && mouse2D.x < 1 && mouse2D.y > -1 && mouse2D.y < 1){
         mousePosValid = true;
     }
 
@@ -498,7 +503,7 @@ function onDocumentMouseDown( event ) {
 	}
 
     if(rollOverMesh) {                                             //if the ghost model is visible
-        if( buildingPlacementAllowed() ) { 
+        if( buildingPlacementAllowed() ) {
             intersector = getMouseProjectionOnFloor();
             if(intersector) {
                 var model;                                                        //avoid errors when trying to place buildings and the mouse hovers outside the floor area
@@ -551,8 +556,8 @@ function onDocumentMouseDown( event ) {
                 clearSelectedModel();
                 highlightSelectedModel (intersects[0].object);
             }
-        }   
-        else {                                                                      //not selected anything 
+        }
+        else {                                                                      //not selected anything
             clearSelectedModel();
 
         }
@@ -564,29 +569,29 @@ function onDocumentMouseDown( event ) {
 
 function onKeyDown ( event ) {
     switch( event.keyCode ) {
-        case 87: // w  
+        case 87: // w
             moveCameraForward();
             break;
         case 83: // s
             moveCameraBackwards();
             break;
-        case 65: // a  
+        case 65: // a
             moveCameraLeft();
             break;
         case 68: // d
-            moveCameraRight(); 
+            moveCameraRight();
             break;
-        case 69: // e  
+        case 69: // e
             rotateCameraRight();
             break;
-        case 81: // q  
+        case 81: // q
             rotateCameraLeft();
             break;
         case 82: // r
-            increaseCameraElevation(); 
+            increaseCameraElevation();
             break;
-        case 70: // f  
-            decreaseCameraElevation(); 
+        case 70: // f
+            decreaseCameraElevation();
             break;
         case 190: // .
             cameraZoomIn();
@@ -594,14 +599,14 @@ function onKeyDown ( event ) {
         case 188: // ,
             cameraZoomOut();
             break;
-        case 80: // p  
+        case 80: // p
             togglePlacementMode();
             break;
         case 219: // [, {
             rotateRollOverCCW();
             break;
         case 221: // ], }
-            rotateRollOverCW();           
+            rotateRollOverCW();
             break;
         case 75: // k
             printEmitterOfModel(rollOverMesh);                  //collision debugging
@@ -638,12 +643,12 @@ function setCameraElevationAngle() {
         var elevationAngle = camera.position.angleTo(lookAtReference);
         cameraElevationAngle = elevationAngle;
     }
-    return elevationAngle;                                      
+    return elevationAngle;
 }
 
 function setCameraLookAngle() {
     if(cameraLookAngle === undefined) {
-        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());                                      
+        var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());
         var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
         cameraLookAngle = lookAngle;
     }
@@ -663,18 +668,18 @@ function getNormalizedProjectionDirection() {
 
 function rotateCameraRight() {
     cameraLookAngle -= 0.05;
-    
+
     var projectionDistance = getProjectionDistance();
     camera.position.x = cameraLookAt.x + Math.cos( cameraLookAngle ) * projectionDistance;
-    camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;        
+    camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;
 }
 
 function rotateCameraLeft() {
     cameraLookAngle += 0.05;
-    
+
     var projectionDistance = getProjectionDistance();
     camera.position.x = cameraLookAt.x + Math.cos( cameraLookAngle ) * projectionDistance;
-    camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;       
+    camera.position.z = cameraLookAt.z + Math.sin( cameraLookAngle ) * projectionDistance;
 }
 
 
@@ -685,8 +690,8 @@ function moveCameraLeft() {
     if( Math.abs( cameraLookAt.x + projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.x ) < floor.geometry.height/2 ) {
         camera.position.x += projectionDirection.z;
         camera.position.z -= projectionDirection.x;
-        cameraLookAt.x += projectionDirection.z; 
-        cameraLookAt.z -= projectionDirection.x; 
+        cameraLookAt.x += projectionDirection.z;
+        cameraLookAt.z -= projectionDirection.x;
     }
 }
 
@@ -696,8 +701,8 @@ function moveCameraRight() {
     if( Math.abs( cameraLookAt.x - projectionDirection.z ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.x ) < floor.geometry.height/2 ) {
         camera.position.x -= projectionDirection.z;
         camera.position.z += projectionDirection.x;
-        cameraLookAt.x -= projectionDirection.z; 
-        cameraLookAt.z += projectionDirection.x;        
+        cameraLookAt.x -= projectionDirection.z;
+        cameraLookAt.z += projectionDirection.x;
     }
 }
 
@@ -707,8 +712,8 @@ function moveCameraForward() {
     if( Math.abs( cameraLookAt.x + projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z + projectionDirection.z ) < floor.geometry.height/2 ) {
         camera.position.x += projectionDirection.x;
         camera.position.z += projectionDirection.z;
-        cameraLookAt.x += projectionDirection.x; 
-        cameraLookAt.z += projectionDirection.z; 
+        cameraLookAt.x += projectionDirection.x;
+        cameraLookAt.z += projectionDirection.z;
     }
 }
 
@@ -718,8 +723,8 @@ function moveCameraBackwards() {
     if( Math.abs( cameraLookAt.x - projectionDirection.x ) < floor.geometry.width/2 && Math.abs( cameraLookAt.z - projectionDirection.z ) < floor.geometry.height/2 ) {
         camera.position.x -= projectionDirection.x;
         camera.position.z -= projectionDirection.z;
-        cameraLookAt.x -= projectionDirection.x; 
-        cameraLookAt.z -= projectionDirection.z; 
+        cameraLookAt.x -= projectionDirection.x;
+        cameraLookAt.z -= projectionDirection.z;
     }
 }
 
@@ -745,10 +750,10 @@ function increaseCameraElevation () {
     if(cameraElevationAngle*180/Math.PI > 35.0) {
         cameraElevationAngle -= 0.05;
         var lookDistance = camera.position.distanceTo(cameraLookAt);
-        
+
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
         camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
-        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;        
+        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;
     }
 }
 
@@ -757,10 +762,10 @@ function decreaseCameraElevation () {
         cameraElevationAngle += 0.05;
         var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
-        
+
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
         camera.position.z = cameraLookAt.z + Math.sin( cameraElevationAngle ) * Math.sin( cameraLookAngle ) * lookDistance;
-        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;           
+        camera.position.y = cameraLookAt.y + Math.cos( cameraElevationAngle ) * lookDistance;
     }
 }
 
@@ -793,7 +798,7 @@ function rotateRollOverCW() {
 
 function rotateRollOverCCW() {
     if(rollOverMesh) {
-        rollOverMesh.rotation.y -= Math.PI/13;      
+        rollOverMesh.rotation.y -= Math.PI/13;
     }
 }
 
@@ -802,8 +807,8 @@ function removeSelectedModel() {
         for (var i = 0; i < scene.children.length; i++) {
             var child = scene.children[i];
             if(child.getMesh) {
-                if (child.getMesh() == selectedModel) {                
-                    scene.remove(child);                                            
+                if (child.getMesh() == selectedModel) {
+                    scene.remove(child);
                     scene.remove(selectedModel.modelBoundingMesh);
 
                     var meshIndex = collidableMeshList.indexOf(selectedModel.modelBoundingMesh);
@@ -813,8 +818,8 @@ function removeSelectedModel() {
                     var selectableIndex = selectableMeshes.indexOf(selectedModel);
                     selectableMeshes.splice(selectableIndex, 1);
                     break;
-                }    
-            }   
+                }
+            }
         }
         selectedModel = null;
     }
@@ -840,11 +845,11 @@ function togglePlacementMode () {
             initRollOver(intersector);
         else {
             var projectionDirection = getNormalizedProjectionDirection();
-            var floorSize = floor.modelBoundingBox.size(); 
-            initRollOver(new THREE.Vector3(+projectionDirection.z * floorSize.x, 0, -projectionDirection.x * floorSize.z));            //force init at edge of the map if mouse projection is outside the floor surface 
+            var floorSize = floor.modelBoundingBox.size();
+            initRollOver(new THREE.Vector3(+projectionDirection.z * floorSize.x, 0, -projectionDirection.x * floorSize.z));            //force init at edge of the map if mouse projection is outside the floor surface
         }
     }
-}                         
+}
 
 function onWindowResize() {
     camera.aspect = container.offsetWidth / container.offsetHeight;
@@ -908,7 +913,7 @@ function getMouseProjectionOnFloor() {
 function render() {
     camera.lookAt( cameraLookAt );
 
-    if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set 
+    if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set
         intersector = getMouseProjectionOnFloor();
         if ( intersector ) {
             //console.log(intersector);
@@ -916,8 +921,8 @@ function render() {
         }
     }
 
-    detectCollision(rollOverMesh);  
-    
+    detectCollision(rollOverMesh);
+
     renderer.render( scene, camera );
 }
 

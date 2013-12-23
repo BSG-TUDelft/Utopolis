@@ -69,7 +69,7 @@ var Gui = {
 		Gui.contextMenu.el.addClass("");
 		Gui.contextMenu.hide();
 
-		Gui.contextMenu.addEventListener(BuildMenu.structureSelected, function(e){
+		Gui.contextMenu.addEventListener(ContextMenu.citizensChanged, function(e){
 
 			var request = $.ajax({
 				url: host + 'structure/' + e.structure.id + '/citizens/' + e.citizens,
@@ -93,8 +93,8 @@ var Gui = {
 	update: function(){
 		var getNumIdleCitizens = function(city) {
 			var sum = city.numCitizens;
-			city.structures.forEach(function (structure) {
-				sum -= structure.numCitizens;
+			structureCollection.forEach(function (structure) {
+				sum -= structure.citizens;
 			});
 			return sum;
 		}
@@ -147,7 +147,7 @@ var Gui = {
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
 		Gui.console.printText("You have started constructing a " + structureInfo.name +
 			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
-		
+
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
