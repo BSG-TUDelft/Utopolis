@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<actor version="1">
+  <castshadow/>
+  <group>
+    <variant frequency="100" name="Base">
+      <animations>
+        <animation file="quadraped/horse_idle_a.psa" name="idle" speed="110"/>        
+		<animation file="quadraped/horse_idle_a.psa" name="idle" speed="200"/>
+        <animation file="quadraped/horse_death.psa" name="death" speed="235"/>
+      </animations>
+      <mesh>skeletal/horse.pmd</mesh>
+    </variant>
+  </group>
+  <group>
+    <variant frequency="16" name="cblack">
+      <textures><texture file="skeletal/horse_black_a.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="17" name="cbrown">
+      <textures><texture file="skeletal/horse_brown_a.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="16" name="cchestnut">
+      <textures><texture file="skeletal/horse_chestnut_a.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="17" name="cdun">
+      <textures><texture file="skeletal/horse_dun_a.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="17" name="cgray">
+      <textures><texture file="skeletal/horse_gray_a.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="17" name="ctan">
+      <textures><texture file="skeletal/horse_tan_a.dds" name="baseTex"/></textures>
+    </variant>
+  </group>
+</actor>

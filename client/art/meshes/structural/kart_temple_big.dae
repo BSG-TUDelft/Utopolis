@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="kart_struct_dds_001-material" name="kart_struct_dds.001">
       <instance_effect url="#kart_struct_dds_001-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Columns_001-mesh" name="Columns_001">
       <mesh>
@@ -116,10 +116,10 @@
         <instance_geometry url="#Columns_001-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="kart_struct_dds_001" target="#kart_struct_dds_001-material">
+              <instance_material_UNUSED symbol="kart_struct_dds_001" target="#kart_struct_dds_001-material">
                 <bind_vertex_input semantic="Columns_001-UV" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

@@ -25,7 +25,7 @@ IberModelLoader.prototype.decreaseRemainingStructures = function () {
 }
 
 IberModelLoader.prototype.modelStructuresArray = {
-	'iber_barracks': './art/meshes/structural/iber_barracks.dae',
+	/*'iber_barracks': './art/meshes/structural/iber_barracks.dae',
 	'iber_blacksmith_struct': './art/meshes/structural/iber_blacksmith_struct.dae',
 	'iber_civic_centre': './art/meshes/structural/iber_civic_centre.dae',
 	'iber_corral': './art/meshes/structural/iber_corral.dae',
@@ -45,7 +45,7 @@ IberModelLoader.prototype.modelStructuresArray = {
 	'iber_wall_long': './art/meshes/structural/iber_wall_long.dae',
 	'iber_wall_medium': './art/meshes/structural/iber_wall_medium.dae',
 	'iber_wall_short': './art/meshes/structural/iber_wall_short.dae',
-	'iber_wall_tower': './art/meshes/structural/iber_wall_tower.dae',
+	'iber_wall_tower': './art/meshes/structural/iber_wall_tower.dae',*/
 }
 
 IberModelLoader.prototype.getSize = function(obj) {

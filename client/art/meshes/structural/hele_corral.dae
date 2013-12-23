@@ -10,7 +10,7 @@
     <unit name="meter" meter="0.0254"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images/>
+  <library_images_UNUSED/>
   <library_geometries>
     <geometry id="default02Mesh_009-mesh" name="default02Mesh.009">
       <mesh>

@@ -743,7 +743,7 @@ THREE.ColladaLoader = function () {
 
 				// collect used fx for this geometry-instance
 
-				if ( instance_materials ) {
+				if ( instance_materials) {
 
 					for ( j = 0; j < instance_materials.length; j ++ ) {
 

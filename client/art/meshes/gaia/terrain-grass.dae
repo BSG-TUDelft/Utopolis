@@ -102,11 +102,8 @@
       </extra>
     </light>
   </library_lights>
-  <library_images>
-    <image id="grass1_png" name="grass1_png">
-      <init_from>grass1.png</init_from>
-    </image>
-  </library_images>
+  <library_images_UNUSED>
+  </library_images_UNUSED>
   <library_effects>
     <effect id="Material_002-effect">
       <profile_COMMON>
@@ -228,7 +225,7 @@
         <instance_geometry url="#Grid-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_002-material" target="#Material_002-material"/>
+              <instance_material_UNUSED symbol="Material_002-material" target="#Material_002-material"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

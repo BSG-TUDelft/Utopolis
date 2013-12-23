@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material-material" name="Material">
       <instance_effect url="#Material-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="mesh-mesh" name="mesh">
       <mesh>
@@ -210,9 +210,9 @@
           <skeleton>#origin</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material1" target="#Material-material">
+              <instance_material_UNUSED symbol="Material1" target="#Material-material">
                 <bind_vertex_input semantic="Plane-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_controller>

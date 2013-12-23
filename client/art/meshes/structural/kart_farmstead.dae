@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_02___Default_012-material" name="_02___Default.012">
       <instance_effect url="#_02___Default_012-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Box01Mesh-mesh" name="Box01Mesh">
       <mesh>
@@ -116,10 +116,10 @@
         <instance_geometry url="#Box01Mesh-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_02___Default_012" target="#_02___Default_012-material">
+              <instance_material_UNUSED symbol="_02___Default_012" target="#_02___Default_012-material">
                 <bind_vertex_input semantic="Box01-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

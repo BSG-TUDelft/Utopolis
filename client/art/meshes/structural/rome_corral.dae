@@ -11,11 +11,11 @@
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_lights/>
-  <library_images>
+  <library_images_UNUSED>
     <image id="untitled" name="untitled">
       <!-- <init_from>../../textures/skins/structural/ao/rome_corral.png</init_from> -->
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_effects>
     <!-- effect id="Material_002-effect">
       <profile_COMMON>
@@ -60,11 +60,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>-->
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_002-material" name="Material.002">
       <!-- <instance_effect url="#Material_002-effect"/> -->
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="rome_corralMesh-mesh" name="rome_corralMesh">
       <mesh>
@@ -132,10 +132,10 @@
         <instance_geometry url="#rome_corralMesh-mesh">
           <bind_material>
             <technique_common>
-              <!-- <instance_material symbol="Material_002" target="#Material_002-material">
+              <!-- <instance_material_UNUSED symbol="Material_002" target="#Material_002-material">
                 <bind_vertex_input semantic="rome_corral-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material> -->
+              </instance_material_UNUSED> -->
             </technique_common>
           </bind_material>
         </instance_geometry>

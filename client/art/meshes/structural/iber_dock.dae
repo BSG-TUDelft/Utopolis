@@ -15,16 +15,16 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__74_image-image" name="Map__74_image">
       <init_from>file://C:\Documents and Settings\Michael\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\structural\iber_struct.dds</init_from>
     </image>
-  </library_images>
-  <library_materials>
+  </library_images_UNUSED>
+  <library_materials_UNUSED>
     <material id="_01___Default" name="_01___Default">
       <instance_effect url="#_01___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_01___Default-fx" name="_01___Default">
       <profile_COMMON>
@@ -4896,7 +4896,7 @@
         <vertices id="dock-lib-Vertex">
           <input semantic="POSITION" source="#dock-lib-Position"/>
         </vertices>
-        <polygons material="_01___Default" count="727">
+        <polygons material_UNUSED="_01___Default" count="727">
           <input semantic="VERTEX" offset="0" source="#dock-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#dock-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#dock-lib-UV0"/>
@@ -5677,7 +5677,7 @@
         <instance_geometry url="#dock-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_01___Default" target="#_01___Default"/>
+              <instance_material_UNUSED symbol="_01___Default" target="#_01___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

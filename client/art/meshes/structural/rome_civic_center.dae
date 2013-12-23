@@ -15,16 +15,16 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__379-image" name="Map__379">
       <init_from>file://C:\0 AD\binaries\data\mods\internal\art\textures\skins\structural\rome_struct.dds</init_from>
     </image>
-  </library_images>
-  <library_materials>
+  </library_images_UNUSED>
+  <library_materials_UNUSED>
     <material id="Material__5749" name="Material__5749">
       <instance_effect url="#Material__5749-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material__5749-fx" name="Material__5749">
       <profile_COMMON>
@@ -9544,7 +9544,7 @@
         <vertices id="port_prop0-lib-Vertex">
           <input semantic="POSITION" source="#port_prop0-lib-Position"/>
         </vertices>
-        <polygons material="Material__5749" count="1853">
+        <polygons material_UNUSED="Material__5749" count="1853">
           <input semantic="VERTEX" offset="0" source="#port_prop0-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#port_prop0-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#port_prop0-lib-UV0"/>
@@ -11422,8 +11422,8 @@
         <instance_geometry url="#port_prop0-lib">
           <bind_material>
             <technique_common>
-              <!-- <instance_material symbol="Map__379-Material" target="#Map__379-Material"/> -->
-              <instance_material symbol="Material__5749" target="#Material__5749"/>
+              <!-- <instance_material_UNUSED symbol="Map__379-Material" target="#Map__379-Material"/> -->
+              <instance_material_UNUSED symbol="Material__5749" target="#Material__5749"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

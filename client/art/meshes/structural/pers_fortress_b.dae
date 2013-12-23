@@ -15,11 +15,11 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_material" name="Material_material">
       <instance_effect url="#Material_material-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material_material-fx" name="Material_material">
       <profile_COMMON>
@@ -16951,7 +16951,7 @@
         <vertices id="Fortress-lib-Vertex">
           <input semantic="POSITION" source="#Fortress-lib-Position"/>
         </vertices>
-        <polygons material="Material_material" count="2900">
+        <polygons material_UNUSED="Material_material" count="2900">
           <input semantic="VERTEX" offset="0" source="#Fortress-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Fortress-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Fortress-lib-UV0"/>
@@ -19866,7 +19866,7 @@
         <instance_geometry url="#Fortress-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_material" target="#Material_material"/>
+              <instance_material_UNUSED symbol="Material_material" target="#Material_material"/>
             </technique_common>
           </bind_material>
         </instance_geometry>
