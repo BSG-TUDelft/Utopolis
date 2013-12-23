@@ -848,7 +848,7 @@ function initGui() {
 		"<div style='padding: 20px'>" +
 			"<label>Password</label><input type='password' id='password'/>" +
 		"</div>" +
-		"<div class='button-big' id='login-submit' style='width: 100px; float: right; margin: 30px 20px'><div class='inner'>login</div></div>"
+		"<div class='button-big' id='login-submit' style='width: 100px; float: right; margin: 30px 20px' tabindex='0'><div class='inner'>login</div></div>"
 	);
 
 	// Listen to click and ENTER
