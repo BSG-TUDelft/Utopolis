@@ -65,7 +65,7 @@ function initModels(){
 		"hele_house": "structures/hellenes/house_new.xml",
 		"hele_farm": "structures/hellenes/farmstead_new.xml",
 		"hele_corral": "structures/hellenes/corral.xml",
-		'hele_barracks': 'structures/hellenes/barracks.xml',
+		'hele_barracks': 'structures/hellenes/barracks_new.xml',
 		"hele_storehouse": "structures/hellenes/storehouse.xml",
 		"hele_blacksmith": "structures/hellenes/blacksmith.xml",
 		"hele_fortress": "structures/hellenes/fortress_new.xml",
