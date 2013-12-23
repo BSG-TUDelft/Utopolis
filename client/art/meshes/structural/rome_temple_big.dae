@@ -10,11 +10,11 @@
     <unit name="inch" meter="0.0254"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="rome_struct_png" name="rome_struct_png">
       <init_from>rome_struct.png</init_from>
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_effects>
     <effect id="_02___Default-effect">
       <profile_COMMON>

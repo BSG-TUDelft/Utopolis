@@ -15,11 +15,11 @@
     <unit meter="0.025400"/>
     <up_axis>Y_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__20-image" name="Map__20">
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_sail_eye_war.dds</init_from>
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_materials_UNUSED>
     <material id="_24___Default" name="_24___Default">
       <instance_effect url="#_24___Default-fx"/>

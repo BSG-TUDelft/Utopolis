@@ -12,7 +12,7 @@
   </asset>
   <library_cameras/>
   <library_lights/>
-  <library_images/>
+  <library_images_UNUSED/>
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>

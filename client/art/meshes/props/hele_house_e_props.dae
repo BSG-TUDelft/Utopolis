@@ -15,11 +15,11 @@
     <unit meter="0.025400"/>
     <up_axis>Y_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__309-image" name="Map__309">
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_props_a.dds</init_from>
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_materials_UNUSED>
     <material id="_22___Default" name="_22___Default">
       <instance_effect url="#_22___Default-fx"/>

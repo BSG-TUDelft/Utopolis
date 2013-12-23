@@ -62,9 +62,11 @@ function initModels(){
 	}
 
 	var actors = {
+		// Load HELLENIC buildings
 		"hele_house": "structures/hellenes/house_new.xml",
 		"hele_farm": "structures/hellenes/farmstead_new.xml",
 		"hele_corral": "structures/hellenes/corral.xml",
+		"hele_market": "structures/hellenes/market.xml",
 		'hele_barracks': 'structures/hellenes/barracks_new.xml',
 		"hele_storehouse": "structures/hellenes/storehouse.xml",
 		"hele_blacksmith": "structures/hellenes/blacksmith.xml",
@@ -73,9 +75,11 @@ function initModels(){
 		"hele_civic": "structures/hellenes/civic_centre_new.xml",
 		"hele_temple": "structures/hellenes/temple_new.xml",
 
+		// Load ROMAN buildings
 		'rome_house': 'structures/romans/house.xml',
 		'rome_farm': 'structures/romans/farmstead.xml',
 		'rome_corral': 'structures/romans/corral.xml',
+		'rome_market': 'structures/romans/market.xml',
 		'rome_storehouse': 'structures/romans/storehouse.xml',
 		'rome_barracks': 'structures/romans/barracks.xml',
 		'rome_blacksmith': 'structures/romans/blacksmith.xml',
@@ -84,9 +88,11 @@ function initModels(){
 		'rome_civic': 'structures/romans/civic_centre.xml',
 		'rome_temple': 'structures/romans/temple_mars.xml',
 
+		// Load CARTHAGINIAN buildings
 		'kart_house': 'structures/carthaginians/house.xml',
 		'kart_farm': 'structures/carthaginians/farmstead.xml',
 		'kart_corral': 'structures/carthaginians/corral.xml',
+		'kart_market': 'structures/carthaginians/market.xml',
 		'kart_storehouse': 'structures/carthaginians/storehouse.xml',
 		'kart_barracks': 'structures/carthaginians/barracks.xml',
 		'kart_blacksmith': 'structures/carthaginians/blacksmith.xml',
@@ -95,9 +101,11 @@ function initModels(){
 		'kart_civic': 'structures/carthaginians/civil_centre.xml',
 		'kart_temple': 'structures/carthaginians/temple_big.xml',
 
+		// Load IBERIAN buildings
 		'iber_house': 'structures/iberians/house.xml',
 		'iber_farm': 'structures/iberians/farmstead.xml',
 		'iber_corral': 'structures/iberians/corral.xml',
+		'iber_market': 'structures/iberians/market.xml',
 		'iber_storehouse': 'structures/iberians/storehouse.xml',
 		'iber_barracks': 'structures/iberians/barracks.xml',
 		'iber_blacksmith': 'structures/iberians/blacksmith.xml',
@@ -106,9 +114,11 @@ function initModels(){
 		'iber_civic': 'structures/iberians/civil_centre.xml',
 		'iber_temple': 'structures/iberians/temple.xml',
 
+		// Load PERSIAN buildings
 		'pers_house': 'structures/persians/house.xml',
 		'pers_farm': 'structures/persians/farmstead.xml',
 		'pers_corral': 'structures/persians/corral.xml',
+		'pers_market': 'structures/persians/market.xml',
 		'pers_storehouse': 'structures/persians/storehouse.xml',
 		'pers_barracks': 'structures/persians/barracks.xml',
 		'pers_blacksmith': 'structures/persians/blacksmith.xml',
@@ -117,6 +127,7 @@ function initModels(){
 		'pers_civic': 'structures/persians/civil_centre.xml',
 		'pers_temple': 'structures/persians/temple.xml',
 
+		// Load GAIA
 		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml'
 
 	}

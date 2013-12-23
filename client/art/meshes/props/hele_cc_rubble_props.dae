@@ -10,7 +10,7 @@
     <unit name="inch" meter="0.0254"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images/>
+  <library_images_UNUSED/>
   <library_geometries>
     <geometry id="Plane_016-mesh" name="Plane.016">
       <mesh>

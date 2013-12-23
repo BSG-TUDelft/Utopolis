@@ -102,8 +102,8 @@
       </extra>
     </light>
   </library_lights>
-  <library_images>
-  </library_images>
+  <library_images_UNUSED>
+  </library_images_UNUSED>
   <library_effects>
     <effect id="Material_002-effect">
       <profile_COMMON>

@@ -15,11 +15,11 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__292-image" name="Map__292">
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\internal\art\textures\skins\structural\kart_struct.dds</init_from>
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_materials_UNUSED>
     <material id="_02___Default" name="_02___Default">
       <instance_effect url="#_02___Default-fx"/>

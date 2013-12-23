@@ -149,6 +149,11 @@ function initGui() {
 				iconCss: "hele_corral",
 				structureType: "corral"
 			},{
+				name: "Market",
+				structureId: "hele_market",
+				iconCss: "hele_market",
+				structureType: "market"
+			},{
 				name: "Storehouse",
 				structureId: "hele_storehouse",
 				iconCss: "hele_storehouse",
@@ -204,6 +209,11 @@ function initGui() {
 				iconCss: "rome_corral",
 				structureType: "corral"
 			},{
+				name: "Market",
+				structureId: "rome_market",
+				iconCss: "rome_market",
+				structureType: "market"
+			},{
 				name: "Storehouse",
 				structureId: "rome_storehouse",
 				iconCss: "rome_storehouse",
@@ -257,6 +267,11 @@ function initGui() {
 				structureId: "kart_corral",
 				iconCss: "kart_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "kart_market",
+				iconCss: "kart_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "kart_storehouse",
@@ -312,6 +327,11 @@ function initGui() {
 				iconCss: "iber_corral",
 				structureType: "corral"
 			},{
+				name: "Market",
+				structureId: "iber_market",
+				iconCss: "iber_market",
+				structureType: "market"
+			},{
 				name: "Storehouse",
 				structureId: "iber_storehouse",
 				iconCss: "iber_storehouse",
@@ -365,6 +385,11 @@ function initGui() {
 				structureId: "pers_corral",
 				iconCss: "pers_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "pers_market",
+				iconCss: "pers_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "pers_storehouse",
@@ -457,6 +482,22 @@ function initGui() {
 				citizenCap: 6
 			},
 			"corral": {
+				cost: {
+					metal: 4,
+					food: 2
+				},
+				requirements: {
+					knowledge: 4,
+					culture: 4
+				},
+				buildTime: 30000,
+				generates: {
+					food: 4,
+					health: 1
+				},
+				citizenCap: 6
+			},
+			"market": {
 				cost: {
 					metal: 4,
 					food: 2

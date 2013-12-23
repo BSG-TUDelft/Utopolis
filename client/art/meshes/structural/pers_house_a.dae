@@ -63,8 +63,8 @@
 			</profile_COMMON>
 		</effect>
 	</library_effects>
-	<library_images>
-	</library_images>
+	<library_images_UNUSED>
+	</library_images_UNUSED>
 	<library_materials_UNUSED>
 		<material id="pers_struct_dds" name="pers_struct_dds">
 			<instance_effect url="#pers_struct_dds-fx"/>

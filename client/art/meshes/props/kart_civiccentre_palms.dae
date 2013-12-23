@@ -38,8 +38,8 @@
 			</profile_COMMON>
 		</effect>
 	</library_effects>
-	<library_images>
-	</library_images>
+	<library_images_UNUSED>
+	</library_images_UNUSED>
 	<library_materials_UNUSED>
 		<material id="tree_palm_senegal_a_d" name="tree_palm_senegal_a_d">
 			<instance_effect url="#tree_palm_senegal_a_d-fx"/>

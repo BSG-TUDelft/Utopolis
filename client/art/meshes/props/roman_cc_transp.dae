@@ -15,14 +15,14 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__6-image" name="Map__6">
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\rome_struct.png</init_from>
     </image>
     <image id="Map__7-image" name="Map__7">
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\rome_struct.png</init_from>
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_materials_UNUSED>
     <material id="_03___Default" name="_03___Default">
       <instance_effect url="#_03___Default-fx"/>

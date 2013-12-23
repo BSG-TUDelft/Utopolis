@@ -10,7 +10,7 @@
     <unit name="centimeter" meter="0.01"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images/>
+  <library_images_UNUSED/>
   <library_geometries>
     <geometry id="wrld_barrel_a-Geometry_003-mesh" name="wrld_barrel_a-Geometry.003">
       <mesh>
