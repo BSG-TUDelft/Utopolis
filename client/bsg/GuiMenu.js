@@ -298,12 +298,12 @@ function initGui() {
 			tabCss: "tab_iber",
 			structures: [{
 				name: "House",
-				structureId: "iber_house_a",
+				structureId: "iber_house",
 				iconCss: "iber_house",
 				structureType: "house"
 			},{
 				name: "Farm",
-				structureId: "iber_farmstead",
+				structureId: "iber_farm",
 				iconCss: "iber_farm",
 				structureType: "farm"
 			},{
@@ -323,17 +323,17 @@ function initGui() {
 				structureType: "barracks"
 			},{
 				name: "Blacksmith",
-				structureId: "iber_blacksmith_struct",
+				structureId: "iber_blacksmith",
 				iconCss: "iber_blacksmith",
 				structureType: "blacksmith"
 			},{
 				name: "Civic center",
-				structureId: "iber_civic_centre",
+				structureId: "iber_civic",
 				iconCss: "iber_civic",
 				structureType: "civic"
 			},{
 				name: "Tower",
-				structureId: "iber_scout_tower",
+				structureId: "iber_tower",
 				iconCss: "iber_tower",
 				structureType: "tower"
 			},{

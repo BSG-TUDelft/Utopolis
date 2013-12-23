@@ -10,7 +10,6 @@ var GaiaModelLoader = function () {
 	function load(name, xml){
 		var testLoader = new ActorModelLoader();
 		testLoader.addEventListener(ActorModelLoader.doneLoading, function(res){
-			console.log(res.scene);
 			loadedModels[res.scene.name] = new ModelWrapper(res.scene);
 			testLoader = null;
 		});
@@ -55,7 +54,18 @@ var GaiaModelLoader = function () {
 		'kart_fortress': 'structures/carthaginians/fortress.xml',
 		'kart_tower': 'structures/carthaginians/wall_tower.xml',
 		'kart_civic': 'structures/carthaginians/civil_centre.xml',
-		'kart_temple': 'structures/carthaginians/temple_big.xml'
+		'kart_temple': 'structures/carthaginians/temple_big.xml',
+
+		'iber_house': 'structures/iberians/house.xml',
+		'iber_farm': 'structures/iberians/farmstead.xml',
+		'iber_corral': 'structures/iberians/corral.xml',
+		'iber_storehouse': 'structures/iberians/storehouse.xml',
+		'iber_barracks': 'structures/iberians/barracks.xml',
+		'iber_blacksmith': 'structures/iberians/blacksmith.xml',
+		'iber_fortress': 'structures/iberians/fortress.xml',
+		'iber_tower': 'structures/iberians/wall_tower.xml',
+		'iber_civic': 'structures/iberians/civil_centre.xml',
+		'iber_temple': 'structures/iberians/temple.xml'
 
 	}
 	for(var i in actors){
