@@ -61,6 +61,6 @@ public class CityResource extends Resource {
 		City c = DBConnector.get().getCity(playerId);
 		c.getStructures().add(s);
 		DBConnector.get().save(c);
-		return simpleResponse(200);
+		return buildResponse(s);
 	}
 }
