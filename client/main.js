@@ -14,7 +14,7 @@ var mouse2D, raycaster;
 var mouseOffsetX, mouseOffsetY;
 var rollOverMesh;
 var voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3(), normalMatrix = new THREE.Matrix3();
-var i, intersector;
+var i, intersector, projector;
 
 var noCollision;
 
@@ -36,7 +36,6 @@ var sounds = {};
 var city;
 
 init();
-animate();
 
 /*function initFloor() {
     // FLOOR
@@ -56,12 +55,16 @@ function initFloor() {
     loader.load();
 }
 
-function initModels(){
+function initModels(callback){
 	function load(name, xml){
 		var loader = new ActorModelLoader();
 		loader.addEventListener(ActorModelLoader.doneLoading, function(res){
 			loadedModels[res.scene.name] = new ModelWrapper(res.scene);
 			loader = null;
+
+			if(--queue === 0){
+				callback();
+			}
 		});
 		loader.loadActorXml(name, xml);
 
@@ -137,7 +140,9 @@ function initModels(){
 		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml'
 
 	}
+	var queue = 0;
 	for(var i in actors){
+		queue++;
 		load(i, actors[i]);
 	}
 }
@@ -259,24 +264,24 @@ function init() {
     scene.add( directionalLight );
 
 	var skybox = Skybox.get([
-		/*'art/skybox/cloudy_0/yellowcloud_ft.jpg',
+		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
 		'art/skybox/cloudy_0/yellowcloud_bk.jpg',
 		'art/skybox/cloudy_0/yellowcloud_up.jpg',
 		'art/skybox/cloudy_0/yellowcloud_dn.jpg',
 		'art/skybox/cloudy_0/yellowcloud_rt.jpg',
-		'art/skybox/cloudy_0/yellowcloud_lf.jpg'
+		'art/skybox/cloudy_0/yellowcloud_lf.jpg'/*
 		'art/skybox/cloudy_0/bluecloud_ft.jpg',
 		'art/skybox/cloudy_0/bluecloud_bk.jpg',
 		'art/skybox/cloudy_0/bluecloud_up.jpg',
 		'art/skybox/cloudy_0/bluecloud_dn.jpg',
 		'art/skybox/cloudy_0/bluecloud_rt.jpg',
-		'art/skybox/cloudy_0/bluecloud_lf.jpg'*/
+		'art/skybox/cloudy_0/bluecloud_lf.jpg'
 		'art/skybox/cloudy_0/graycloud_ft.jpg',
 		'art/skybox/cloudy_0/graycloud_bk.jpg',
 		'art/skybox/cloudy_0/graycloud_up.jpg',
 		'art/skybox/cloudy_0/graycloud_dn.jpg',
 		'art/skybox/cloudy_0/graycloud_rt.jpg',
-		'art/skybox/cloudy_0/graycloud_lf.jpg'
+		'art/skybox/cloudy_0/graycloud_lf.jpg'*/
 	]);
 	scene.add(skybox);
 
@@ -296,20 +301,16 @@ function init() {
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
 
-    //MODEL LOADERS
-	initModels();
-
 	// COLLECTION OF STRUCTURES
 	structureCollection = new ModelArray();
 
-    // load city from server
-    requestCity();
+    //MODEL LOADERS
+	initModels(callbackModelsLoaded);
 
-    // register event handlers
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    document.addEventListener( 'mousedown', onDocumentMouseDown, false );   
-    document.addEventListener( 'keydown', onKeyDown, false );
-    window.addEventListener( 'resize', onWindowResize, false );
+    // load city from server
+    function callbackModelsLoaded(){
+		requestCity();
+	}
 
 	$( document ).ready(function() {
 		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
@@ -326,7 +327,10 @@ function requestCity() {
         console.log("SERVER RESPONSE: city retrieved successfully");
         city = response;
         console.log(city);
+
+		startGame();
         placeCity();
+
     });
 
     request.fail(function (jqXHR, textStatus, errorThrown){
@@ -344,8 +348,6 @@ function placeCity() {
 }
 
 function placeStructure(struct) {
-    var structure = Gui.getStructureInfoByTypeId(struct.structureId);
-
     var model = loadedModels[struct.structureId].getClone();
  	model.position = new THREE.Vector3( struct.x, struct.y, struct.z );
  	model.rotation.y = struct.rotation;
@@ -361,14 +363,14 @@ function placeStructure(struct) {
 
 function saveStructure( structure ) {
     var struct = {
-        maxCitizens: 100,
-        numCitizens: structure.citizens,
-        structureId: structure.name,
-        x: structure.model.position.x,
-        y: structure.model.position.y,
-        z: structure.model.position.z,
-        rotation: structure.model.rotation.y
-    }
+		maxCitizens: 100,
+		numCitizens: structure.citizens,
+		structureId: structure.name,
+		x: structure.model.position.x,
+		y: structure.model.position.y,
+		z: structure.model.position.z,
+		rotation: structure.model.rotation.y
+	};
 
     var request = $.ajax({
         url: host + 'city/1/structure',
@@ -397,6 +399,9 @@ function startGame(){
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
+
+	// Start game loop
+	animate();
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -467,9 +472,9 @@ function setMouseOffset() {
 	 * mouseOffsetX = $(container).offset().left
 	 * mouseOffsetY = $(container).offset().top
 	 */
-};
+}
 
-function onDocumentMouseMove( event ) {                                  // do we need to compute this on every movement?           
+function onDocumentMouseMove( event ) {                                  // do we need to compute this on every movement?
     event.preventDefault();
     mouse2D.x = ( (event.clientX + mouseOffsetX) / container.offsetWidth) * 2 - 1;
     mouse2D.y = - ( (event.clientY + mouseOffsetY) / container.offsetHeight ) * 2 + 1;
@@ -860,6 +865,7 @@ function update() {
     updateBirds(delta);
     updateFlag(delta);
     stats.update();
+	Gui.update();
 }
 
 function highlightSelectedModel (model) {

@@ -4,11 +4,13 @@ var Gui = {
 
 	// PROPERTIES
 	structurePopup: null,
+	resources: {},				// Current players' resources
 	topbar: null,				// Top bar menu element
 	buildMenu: null,			// Build menu on the left
 	contextMenu: null,			// Context menu on the right
 	console: null,				// Console to display text
-
+	timeLastPoll: $.now(),		// Time of last poll
+	pollInterval: 2000,			// Interval of polling (in ms)
 
 	// METHODS
 	initGui: function (menuData, topbarData){
@@ -22,6 +24,42 @@ var Gui = {
 		Gui.buildMenu = new BuildMenu($("#left_menu"), menuData);
 		Gui.buildMenu.init();
 
+		// Add event listener to build menu
+		Gui.buildMenu.addEventListener(BuildMenu.structureSelected, function(e){
+			// Clicked on the same structure again means disable placement mode
+			if(e.structure == null) {
+				togglePlacementMode();
+			}
+			else if(e.structure.structureId == "flag" && flag_placed == false){
+				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
+
+				if(rollOverMesh) {
+					refreshRollover();
+				}
+				if(rollOverMesh == undefined)
+					togglePlacementMode();
+			}
+			else if(e.structure.structureId == "flag" && flag_placed == true){
+				return;
+			}
+			else {
+				if(Gui.enoughResources(Gui.resources, menuData.structureTypes[e.structure.structureType])) {
+					currentModel = loadedModels[e.structure.structureId];
+
+					if(rollOverMesh) {
+						refreshRollover();
+					}
+					if(rollOverMesh == undefined)
+						togglePlacementMode();
+				}
+				else {																		//if not enough resources, deselect building.
+					$("#structures").find("li").removeClass("selected");
+					Gui.buildMenu.selectedStructureId = null;
+				}
+			}
+
+		});
+
 		// Initialize topbar menu element
 		Gui.topbar = new Topbar(topbarData);
 		Gui.topbar.init();
@@ -30,8 +68,56 @@ var Gui = {
 		Gui.contextMenu = new ContextMenu($("#right_menu"), menuData);
 		Gui.contextMenu.el.addClass("");
 		Gui.contextMenu.hide();
+
+		Gui.contextMenu.addEventListener(BuildMenu.structureSelected, function(e){
+
+			var request = $.ajax({
+				url: host + 'structure/' + e.structure.id + '/citizens/' + e.citizens,
+				type: 'GET'
+			});
+
+			request.done(function (response, textStatus, jqXHR){
+				console.log("SERVER RESPONSE: updated citizens");
+			});
+
+			request.fail(function (jqXHR, textStatus, errorThrown){
+				console.error(
+					"The following error occured: " +
+						textStatus, errorThrown
+				);
+			});
+		});
 	},
 
+	/** GUIs update loop, gets called from the game loop */
+	update: function(){
+		var getNumIdleCitizens = function(city) {
+			var sum = city.numCitizens;
+			city.structures.forEach(function (structure) {
+				sum -= structure.numCitizens;
+			});
+			return sum;
+		}
+
+		// See if we have to issue a poll request
+		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
+			Gui.timeLastPoll = $.now();
+
+			// POLL THAT MOFO !
+
+			//res.wood += .75;
+			//res.stone += .5;
+			//res.metal += .25;
+			//res.food += 1;
+
+			// This should come from the poll
+			Gui.resources.citizens = getNumIdleCitizens(city);
+
+		}
+
+
+		Gui.updatePlayerResources(Gui.resources);
+	},
 
 	/** Gets called from Main whenever a structure in the 3d world is selected
 	 * @param structure {Structure} that was selected  */
@@ -68,7 +154,6 @@ var Gui = {
 	 * @param resources {Object} nameless object containing key-value pairs of resources eg: { wood: 12, metal: 10 }	 */
 	updatePlayerResources: function(resources){
 		Gui.topbar.setResourceValues(resources);
-
 		Gui.buildMenu.setResourceValues(resources);
 	},
 
@@ -697,68 +782,6 @@ function initGui() {
 
 	Gui.initGui(menuData, topbarData);
 
-	// Example use:
-	Gui.buildMenu.addEventListener(BuildMenu.structureSelected, function(e){
-		// Clicked on the same structure again means disable placement mode
-		if(e.structure == null) {
-			togglePlacementMode();
-		}
-		else if(e.structure.structureId == "flag" && flag_placed == false){
-				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
-
-				if(rollOverMesh) {
-					refreshRollover();
-				}
-				if(rollOverMesh == undefined)
-					togglePlacementMode();
-			}
-		else if(e.structure.structureId == "flag" && flag_placed == true){
-			return;
-		}
-		else {
-			if(Gui.enoughResources(res, menuData.structureTypes[e.structure.structureType])) {
-				currentModel = loadedModels[e.structure.structureId];
-
-				if(rollOverMesh) {
-					refreshRollover();
-				}
-				if(rollOverMesh == undefined)
-					togglePlacementMode();
-			}
-			else {																		//if not enough resources, deselect building.
-				$("#structures").find("li").removeClass("selected");
-				Gui.buildMenu.selectedStructureId = null;
-			}
-		}
-
-	});
-
-	// Incrementing example (client side)
-	var res = {
-		wood: 0,
-		stone: 0,
-		metal: 2,
-		food: 0,
-		citizens: 0
-	};
-	setInterval(function(){
-		res.wood += .75;
-		res.stone += .5;
-		res.metal += .25;
-		res.food += 1;
-		// res.citizens = Math.floor(Math.random() * 25);
-		res.citizens = getNumIdleCitizens(city);
-
-		Gui.updatePlayerResources(res);
-	}, 1500);
-
-	var getNumIdleCitizens = function(city) {
-		var sum = city.numCitizens;
-		city.structures.forEach(function (structure) {
-			sum -= structure.numCitizens;
-		});
-		return sum;
-	}
 
 	/** Leaderboard*/
 	var getRndInt = function(max){
@@ -841,11 +864,11 @@ function initGui() {
 			name: $("#username").val(),
 			password: $("#password").val()
 		};
-		$.post("INSERT_URL_HERE", params)
+		/*$.post("INSERT_URL_HERE", params)
 			.done(function( data ) {
 				// if login successful
 				login.hide();
-		});
+		});*/
 
 		// THIS LINE (AND THE LINE UNDER IT)
 		login.hide();
