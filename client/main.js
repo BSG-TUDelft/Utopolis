@@ -376,17 +376,16 @@ function saveStructure( structure ) {
         url: host + 'city/1/structure',
         type: 'PUT',
         contentType: 'application/json',
-        data: JSON.stringify(struct)
+        data: JSON.stringify(struct),
+		context: structure
     });
 
-    request.done(function(str) {
-		// create closure for structure
-		var structure = str;
-		return function (response, textStatus, jqXHR){
-		// todo:
-        	console.log("SERVER RESPONSE: new structure saved");
-		}
-	}(structure));
+    request.done(function(response, textStatus, jqXHR){
+		// todo: Checking mechanism for concurrent requests!
+		console.log("SERVER RESPONSE: new structure saved");
+		// Save the newly generated id to the structure on the client
+		this.id = response.id;
+	});
 
     request.fail(function (jqXHR, textStatus, errorThrown){
         console.error(
