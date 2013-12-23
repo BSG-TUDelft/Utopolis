@@ -103,9 +103,6 @@
     </light>
   </library_lights>
   <library_images>
-    <image id="grass1_png" name="grass1_png">
-      <init_from>grass1.png</init_from>
-    </image>
   </library_images>
   <library_effects>
     <effect id="Material_002-effect">

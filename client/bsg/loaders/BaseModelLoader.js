@@ -22,19 +22,6 @@ BaseModelLoader.prototype = {
 	numModelStructures: 0,
 	colladaLoader: null,
 
-	loadActorXml: function (actorXml) {
-		$.ajax({
-			type: "GET",
-			url: actorXml,
-			dataType: "xml",
-			success: function (xml) {
-
-			}
-
-
-		});
-	},
-
 	loadModels: function () {
 		for (var key in this.modelStructuresArray) {
 			if (!this.modelStructuresArray.hasOwnProperty(key)) continue;

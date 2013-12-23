@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="kart_struct_dds_001-material" name="kart_struct_dds.001">
       <instance_effect url="#kart_struct_dds_001-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Columns_001-mesh" name="Columns_001">
       <mesh>

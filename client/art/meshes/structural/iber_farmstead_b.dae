@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material__41-material" name="Material__41">
       <instance_effect url="#Material__41-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="CubeMesh-mesh" name="CubeMesh">
       <mesh>

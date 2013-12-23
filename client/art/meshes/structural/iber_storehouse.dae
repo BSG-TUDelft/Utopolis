@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Gray_001-material" name="Gray.001">
       <instance_effect url="#Gray_001-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="millMesh-mesh" name="millMesh">
       <mesh>

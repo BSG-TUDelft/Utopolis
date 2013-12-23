@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_hele_struct_b_png-material" name="Material_hele_struct_b_png">
       <instance_effect url="#Material_hele_struct_b_png-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="BuildingMesh-mesh" name="BuildingMesh">
       <mesh>

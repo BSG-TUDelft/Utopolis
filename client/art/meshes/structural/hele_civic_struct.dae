@@ -15,16 +15,16 @@
     <unit meter="0.025400"/>
     <up_axis>Y_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__314_image_image-image" name="Map__314_image_image">
       <init_from>../../textures/skins/structural/hele_struct.png</init_from>
     </image>
-  </library_images>
-  <library_materials>
+  </library_images_UNUSED>
+  <library_materials_UNUSED>
     <material id="_14___Default" name="_14___Default">
       <instance_effect url="#_14___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_14___Default-fx" name="_14___Default">
       <profile_COMMON>

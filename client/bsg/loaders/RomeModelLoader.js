@@ -25,7 +25,7 @@ RomeModelLoader.prototype.decreaseRemainingStructures = function () {
 }
 
 RomeModelLoader.prototype.modelStructuresArray = {
-	'rome_house': './art/meshes/structural/roman_house_a.dae',
+	/*'rome_house': './art/meshes/structural/roman_house_a.dae',
 	'rome_farm': './art/meshes/structural/rome_fc.dae',
 	'rome_corral': './art/meshes/structural/rome_corral.dae',
 	'rome_storehouse': './art/meshes/structural/rome_storehouse.dae',
@@ -34,7 +34,7 @@ RomeModelLoader.prototype.modelStructuresArray = {
 	'rome_fortress': './art/meshes/structural/rome_fortress.dae',
 	'rome_tower': './art/meshes/structural/rome_wall_tower.dae',
 	'rome_civic': './art/meshes/structural/rome_civic_center.dae', // MISSING TEXTURE
-	'rome_temple': './art/meshes/structural/rome_temple_2.dae'		// needs a different texture
+	'rome_temple': './art/meshes/structural/rome_temple_2.dae'		// needs a different texture*/
 
 
 	/* unused:

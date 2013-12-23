@@ -15,11 +15,11 @@
     <unit meter="0.025400"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_material" name="Material_material">
       <instance_effect url="#Material_material-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material_material-fx" name="Material_material">
       <profile_COMMON>

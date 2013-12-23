@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="wire_193169255_001-material" name="wire_193169255.001">
       <instance_effect url="#wire_193169255_001-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Box04Mesh-mesh" name="Box04Mesh">
       <mesh>

@@ -11,11 +11,11 @@
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_lights/>
-  <library_images>
+  <library_images_UNUSED>
     <image id="untitled" name="untitled">
       <!-- <init_from>../../textures/skins/structural/ao/rome_corral.png</init_from> -->
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_effects>
     <!-- effect id="Material_002-effect">
       <profile_COMMON>
@@ -60,11 +60,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>-->
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_002-material" name="Material.002">
       <!-- <instance_effect url="#Material_002-effect"/> -->
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="rome_corralMesh-mesh" name="rome_corralMesh">
       <mesh>

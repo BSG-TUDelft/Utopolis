@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_TF_1-material" name="Material.TF.1">
       <instance_effect url="#Material_TF_1-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="CartStoa-mesh-mesh" name="CartStoa-mesh">
       <mesh>

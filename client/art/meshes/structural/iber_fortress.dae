@@ -192,11 +192,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Default-material" name="Default">
       <instance_effect url="#Default-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Iber_Fortress-mesh" name="Iber_Fortress">
       <mesh>

@@ -57,16 +57,16 @@
 			</profile_COMMON>
 		</effect>
 	</library_effects>
-	<library_images>
+	<library_images_UNUSED>
 		<image id="iber_ship_png-img" name="iber_ship_png-img">
 			<init_from>/Users/Home/Public/Dropbox/EmjeR/iber_ship.png</init_from>
 		</image>
-	</library_images>
-	<library_materials>
+	</library_images_UNUSED>
+	<library_materials_UNUSED>
 		<material id="iber_ship_png" name="iber_ship_png">
 			<instance_effect url="#iber_ship_png-fx"/>
 		</material>
-	</library_materials>
+	</library_materials_UNUSED>
 	<library_geometries>
 		<geometry id="Mesh-Geometry" name="Mesh-Geometry">
 			<mesh>

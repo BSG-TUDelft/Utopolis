@@ -38,11 +38,11 @@
       </profile_COMMON>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material-material" name="Material">
       <instance_effect url="#Material-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="towerb-mesh">
       <mesh>

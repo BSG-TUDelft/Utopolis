@@ -10,11 +10,11 @@
     <unit name="inch" meter="0.0254"/>
     <up_axis>Z_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="animal-elephant-base_dds" name="animal-elephant-base_dds">
       <init_from>../../textures/skins/structural/rome_struct_2.png</init_from>
     </image>
-  </library_images>
+  </library_images_UNUSED>
   <library_effects>
     <effect id="Material_001-effect">
       <profile_COMMON>
@@ -59,11 +59,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_001-material" name="Material.001">
       <instance_effect url="#Material_001-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="RomanBarracks-mesh-mesh" name="RomanBarracks-mesh">
       <mesh>
