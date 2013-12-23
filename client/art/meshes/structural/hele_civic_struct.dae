@@ -15,16 +15,16 @@
     <unit meter="0.025400"/>
     <up_axis>Y_UP</up_axis>
   </asset>
-  <library_images>
+  <library_images_UNUSED>
     <image id="Map__314_image_image-image" name="Map__314_image_image">
       <init_from>../../textures/skins/structural/hele_struct.png</init_from>
     </image>
-  </library_images>
-  <library_materials>
+  </library_images_UNUSED>
+  <library_materials_UNUSED>
     <material id="_14___Default" name="_14___Default">
       <instance_effect url="#_14___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_14___Default-fx" name="_14___Default">
       <profile_COMMON>
@@ -2891,7 +2891,7 @@
         <vertices id="material1_Pivot-lib-Vertex">
           <input semantic="POSITION" source="#material1_Pivot-lib-Position"/>
         </vertices>
-        <polygons material="_14___Default" count="566">
+        <polygons material_UNUSED="_14___Default" count="566">
           <input semantic="VERTEX" offset="0" source="#material1_Pivot-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#material1_Pivot-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#material1_Pivot-lib-UV0"/>
@@ -3472,7 +3472,7 @@
         <instance_geometry url="#material1_Pivot-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_14___Default" target="#_14___Default"/>
+              <instance_material_UNUSED symbol="_14___Default" target="#_14___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

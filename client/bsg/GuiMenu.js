@@ -143,38 +143,36 @@ function initGui() {
 				structureId: "hele_farm",
 				iconCss: "hele_farm",
 				structureType: "farm"
-//				},{
-//					name: "Corral",
-//					structureId: "hele_corral",
-//					iconCss: "hele_corral"
+			},{
+				name: "Corral",
+				structureId: "hele_corral",
+				iconCss: "hele_corral",
+				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "hele_market",
+				iconCss: "hele_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "hele_storehouse",
 				iconCss: "hele_storehouse",
 				structureType: "storehouse"
-//				},{
-//					name: "Barracks",
-//					structureId: "hele_barracks",
-//					iconCss: "hele_barracks"
+			},{
+				name: "Barracks",
+				structureId: "hele_barracks",
+				iconCss: "hele_barracks",
+				structureType: "barracks"
 			},{
 				name: "Blacksmith",
 				structureId: "hele_blacksmith",
 				iconCss: "hele_blacksmith",
 				structureType: "blacksmith"
-//				},{
-//					name: "Civic center",
-//					structureId: "hele_civic",
-//					iconCss: "hele_civic"
-				/*			cost: {
-				 stone: 1,
-				 metal: 1,
-				 food: 2
-				 },
-				 requirements: {
-				 culture: 4,
-				 knowledge: 4
-				 },
-				 buildTime: 30000 */
+			},{
+				name: "Civic center",
+				structureId: "hele_civic",
+				iconCss: "hele_civic",
+				structureType: "civic"
 			},{
 				name: "Tower",
 				structureId: "hele_tower",
@@ -186,11 +184,11 @@ function initGui() {
 				structureId: "hele_fortress",
 				iconCss: "hele_fortress",
 				structureType: "fortress"
-
-//				},{
-//					name: "Temple",
-//					structureId: "hele_temple",
-//					iconCss: "hele_temple"
+			},{
+				name: "Temple",
+				structureId: "hele_temple",
+				iconCss: "hele_temple",
+				structureType: "temple"
 			}]
 		}, {
 			name: "Romans",
@@ -211,6 +209,11 @@ function initGui() {
 				iconCss: "rome_corral",
 				structureType: "corral"
 			},{
+				name: "Market",
+				structureId: "rome_market",
+				iconCss: "rome_market",
+				structureType: "market"
+			},{
 				name: "Storehouse",
 				structureId: "rome_storehouse",
 				iconCss: "rome_storehouse",
@@ -225,11 +228,11 @@ function initGui() {
 				structureId: "rome_blacksmith",
 				iconCss: "rome_blacksmith",
 				structureType: "blacksmith"
-//		},{
-//			name: "Civic center",
-//			structureId: "rome_civic",
-//			iconCss: "rome_civic",
-//			structureType: "civic"
+			},{
+				name: "Civic center",
+				structureId: "rome_civic",
+				iconCss: "rome_civic",
+				structureType: "civic"
 			},{
 				name: "Tower",
 				structureId: "rome_tower",
@@ -254,15 +257,21 @@ function initGui() {
 				structureId: "kart_house",
 				iconCss: "kart_house",
 				structureType: "house"
-//				},{
-//					name: "Farm",
-//					structureId: "kart_farm",
-//					iconCss: "kart_farm"
+			},{
+				name: "Farm",
+				structureId: "kart_farm",
+				iconCss: "kart_farm",
+				structureType: "house"
 			},{
 				name: "Corral",
 				structureId: "kart_corral",
 				iconCss: "kart_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "kart_market",
+				iconCss: "kart_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "kart_storehouse",
@@ -304,12 +313,12 @@ function initGui() {
 			tabCss: "tab_iber",
 			structures: [{
 				name: "House",
-				structureId: "iber_house_a",
+				structureId: "iber_house",
 				iconCss: "iber_house",
 				structureType: "house"
 			},{
 				name: "Farm",
-				structureId: "iber_farmstead",
+				structureId: "iber_farm",
 				iconCss: "iber_farm",
 				structureType: "farm"
 			},{
@@ -317,6 +326,11 @@ function initGui() {
 				structureId: "iber_corral",
 				iconCss: "iber_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "iber_market",
+				iconCss: "iber_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "iber_storehouse",
@@ -329,17 +343,17 @@ function initGui() {
 				structureType: "barracks"
 			},{
 				name: "Blacksmith",
-				structureId: "iber_blacksmith_struct",
+				structureId: "iber_blacksmith",
 				iconCss: "iber_blacksmith",
 				structureType: "blacksmith"
 			},{
 				name: "Civic center",
-				structureId: "iber_civic_centre",
+				structureId: "iber_civic",
 				iconCss: "iber_civic",
 				structureType: "civic"
 			},{
 				name: "Tower",
-				structureId: "iber_scout_tower",
+				structureId: "iber_tower",
 				iconCss: "iber_tower",
 				structureType: "tower"
 			},{
@@ -371,6 +385,11 @@ function initGui() {
 				structureId: "pers_corral",
 				iconCss: "pers_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "pers_market",
+				iconCss: "pers_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "pers_storehouse",
@@ -463,6 +482,22 @@ function initGui() {
 				citizenCap: 6
 			},
 			"corral": {
+				cost: {
+					metal: 4,
+					food: 2
+				},
+				requirements: {
+					knowledge: 4,
+					culture: 4
+				},
+				buildTime: 30000,
+				generates: {
+					food: 4,
+					health: 1
+				},
+				citizenCap: 6
+			},
+			"market": {
 				cost: {
 					metal: 4,
 					food: 2
@@ -702,7 +737,7 @@ function initGui() {
 	var res = {
 		wood: 0,
 		stone: 0,
-		metal: 0,
+		metal: 2,
 		food: 0,
 		citizens: 0
 	};

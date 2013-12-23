@@ -12,7 +12,7 @@
   </asset>
   <library_cameras/>
   <library_lights/>
-  <library_images/>
+  <library_images_UNUSED/>
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>
@@ -41,11 +41,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material" name="Material">
       <instance_effect url="#Material-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Ram-mesh">
       <mesh>
@@ -229,9 +229,9 @@
           <skeleton>#FourWheelRam_RamBone</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material" target="#Material">
+              <instance_material_UNUSED symbol="Material" target="#Material">
                 <bind_vertex_input semantic="UVTex" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_controller>

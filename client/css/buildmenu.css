@@ -195,12 +195,12 @@
 	opacity: 1 !important;
 }
 
-#structures .disabled {
-	opacity: .5;
+#structures .disabled div {
+	opacity: .2;
 }
 
 #structures li.disabled:hover {
-	opacity: .5 !important;
+	opacity: 0.8 !important;
 }
 
 div.structure_infobox {

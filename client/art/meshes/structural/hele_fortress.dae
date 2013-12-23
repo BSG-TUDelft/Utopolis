@@ -5973,7 +5973,7 @@
         <vertices id="fortress-lib-Vertex">
           <input semantic="POSITION" source="#fortress-lib-Position"/>
         </vertices>
-        <polygons material="_07___Default" count="1238">
+        <polygons material_UNUSED="_07___Default" count="1238">
           <input semantic="VERTEX" offset="0" source="#fortress-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#fortress-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#fortress-lib-UV0"/>

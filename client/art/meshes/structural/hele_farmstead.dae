@@ -78,7 +78,7 @@
       </extra>
     </light>
   </library_lights>
-  <library_images/>
+  <library_images_UNUSED/>
   <library_geometries>
     <geometry id="Cube_024-mesh" name="Cube.024">
       <mesh>

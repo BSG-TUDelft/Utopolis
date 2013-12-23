@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="wire_193169255-material" name="wire_193169255">
       <instance_effect url="#wire_193169255-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="house_2Mesh-mesh" name="house_2Mesh">
       <mesh>
@@ -114,14 +114,14 @@
         <rotate sid="rotationX">1 0 0 8.63496e-6</rotate>
         <scale sid="scale">1.000001 1.000001 1</scale>
         <instance_geometry url="#house_2Mesh-mesh">
-          <bind_material>
+          <!--<bind_material>
             <technique_common>
-              <instance_material symbol="wire_193169255" target="#wire_193169255-material">
+              <instance_material_UNUSED symbol="wire_193169255" target="#wire_193169255-material">
                 <bind_vertex_input semantic="house_2-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
-          </bind_material>
+          </bind_material>-->
         </instance_geometry>
         <node id="prop_dust" type="NODE">
           <matrix sid="parentinverse">-0.9961943 0 0.08715369 0 0.0871537 7.54979e-8 0.9961944 0 -6.57992e-9 1 -7.52106e-8 0 0 0 0 1</matrix>
