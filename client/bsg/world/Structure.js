@@ -1,5 +1,6 @@
-Structure = function(name, model, citizens){
+Structure = function(name, model, id, citizens){
 	this.name = name;
 	this.model = model;
-	this.citizens = citizens || 1;
+	this.id = id || -1;
+	this.citizens = citizens || 0;
 }
