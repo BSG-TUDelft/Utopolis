@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\rome_ram.png</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_20___Default" name="_20___Default">
       <instance_effect url="#_20___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_20___Default-fx" name="_20___Default">
       <profile_COMMON>
@@ -2049,7 +2049,7 @@
         <vertices id="Farmstead__Struct_000-lib-Vertex">
           <input semantic="POSITION" source="#Farmstead__Struct_000-lib-Position"/>
         </vertices>
-        <polygons material="_20___Default" count="308">
+        <polygons material_UNUSED="_20___Default" count="308">
           <input semantic="VERTEX" offset="0" source="#Farmstead__Struct_000-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Farmstead__Struct_000-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Farmstead__Struct_000-lib-UV0"/>
@@ -2372,7 +2372,7 @@
         <instance_geometry url="#Farmstead__Struct_000-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_20___Default" target="#_20___Default"/>
+              <instance_material_UNUSED symbol="_20___Default" target="#_20___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\rooftiles_broken.png</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material__13" name="Material__13">
       <instance_effect url="#Material__13-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material__13-fx" name="Material__13">
       <profile_COMMON>
@@ -191,7 +191,7 @@
         <vertices id="Farmstead_Broken_Roof-lib-Vertex">
           <input semantic="POSITION" source="#Farmstead_Broken_Roof-lib-Position"/>
         </vertices>
-        <polygons material="Material__13" count="16">
+        <polygons material_UNUSED="Material__13" count="16">
           <input semantic="VERTEX" offset="0" source="#Farmstead_Broken_Roof-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Farmstead_Broken_Roof-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Farmstead_Broken_Roof-lib-UV0"/>
@@ -222,7 +222,7 @@
         <instance_geometry url="#Farmstead_Broken_Roof-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material__13" target="#Material__13"/>
+              <instance_material_UNUSED symbol="Material__13" target="#Material__13"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

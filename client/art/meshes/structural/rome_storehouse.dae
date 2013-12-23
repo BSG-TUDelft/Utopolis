@@ -116,10 +116,10 @@
         <instance_geometry url="#romemill-mesh-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material" target="#Material-material">
+              <instance_material_UNUSED symbol="Material" target="#Material-material">
                 <bind_vertex_input semantic="Object08-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

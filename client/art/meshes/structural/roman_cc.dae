@@ -46,11 +46,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_02___Default-material" name="_02___Default">
       <instance_effect url="#_02___Default-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="BasilicaMesh-mesh" name="BasilicaMesh">
       <mesh>
@@ -118,10 +118,10 @@
         <instance_geometry url="#BasilicaMesh-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_02___Default" target="#_02___Default-material">
+              <instance_material_UNUSED symbol="_02___Default" target="#_02___Default-material">
                 <bind_vertex_input semantic="Basilica-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

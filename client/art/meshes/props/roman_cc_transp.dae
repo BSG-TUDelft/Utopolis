@@ -23,11 +23,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\rome_struct.png</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_03___Default" name="_03___Default">
       <instance_effect url="#_03___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_03___Default-fx" name="_03___Default">
       <profile_COMMON>
@@ -11492,7 +11492,7 @@
         <vertices id="rostrum-lib-Vertex">
           <input semantic="POSITION" source="#rostrum-lib-Position"/>
         </vertices>
-        <polygons material="_03___Default" count="1670">
+        <polygons material_UNUSED="_03___Default" count="1670">
           <input semantic="VERTEX" offset="0" source="#rostrum-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#rostrum-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#rostrum-lib-UV0"/>
@@ -13177,7 +13177,7 @@
         <instance_geometry url="#rostrum-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_03___Default" target="#_03___Default"/>
+              <instance_material_UNUSED symbol="_03___Default" target="#_03___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

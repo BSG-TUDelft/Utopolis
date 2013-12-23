@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_sail_eye_war.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_24___Default" name="_24___Default">
       <instance_effect url="#_24___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_24___Default-fx" name="_24___Default">
       <profile_COMMON>
@@ -1234,7 +1234,7 @@
         <vertices id="Plane-lib-Vertex">
           <input semantic="POSITION" source="#Plane-lib-Position"/>
         </vertices>
-        <polygons material="_24___Default" count="168">
+        <polygons material_UNUSED="_24___Default" count="168">
           <input semantic="VERTEX" offset="0" source="#Plane-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Plane-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Plane-lib-UV0"/>
@@ -1417,7 +1417,7 @@
         <instance_geometry url="#Plane-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_24___Default" target="#_24___Default"/>
+              <instance_material_UNUSED symbol="_24___Default" target="#_24___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

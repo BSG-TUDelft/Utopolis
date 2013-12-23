@@ -67,11 +67,11 @@
             </imager>
         </camera>
     </library_cameras>
-    <library_materials>
+    <library_materials_UNUSED>
         <material id="Material-iber_prop_shields_dds" name="iber_prop_shields_dds">
             <instance_effect url="#Effect-iber_prop_shields_dds" />
         </material>
-    </library_materials>
+    </library_materials_UNUSED>
     <library_effects>
         <effect id="Effect-iber_prop_shields_dds" name="iber_prop_shields_dds">
             <profile_COMMON>
@@ -502,7 +502,7 @@
                 <instance_geometry url="#Geometry-iber_fortress_props">
                     <bind_material>
                         <technique_common>
-                            <instance_material symbol="Material-iber_prop_shields_dds" target="#Material-iber_prop_shields_dds" />
+                            <instance_material_UNUSED symbol="Material-iber_prop_shields_dds" target="#Material-iber_prop_shields_dds" />
                         </technique_common>
                     </bind_material>
                 </instance_geometry>

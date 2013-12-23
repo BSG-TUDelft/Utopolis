@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\internal\art\textures\skins\structural\pers_struct.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Gray" name="Gray">
       <instance_effect url="#Gray-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Gray-fx" name="Gray">
       <profile_COMMON>
@@ -993,7 +993,7 @@
         <vertices id="Object37-lib-Vertex">
           <input semantic="POSITION" source="#Object37-lib-Position"/>
         </vertices>
-        <polygons material="Gray" count="174">
+        <polygons material_UNUSED="Gray" count="174">
           <input semantic="VERTEX" offset="0" source="#Object37-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Object37-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Object37-lib-UV0"/>
@@ -1195,8 +1195,8 @@
           <instance_geometry url="#Object37-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__265-Material" target="#Map__265-Material"/>
-                <instance_material symbol="Gray" target="#Gray"/>
+                <instance_material_UNUSED symbol="Map__265-Material" target="#Map__265-Material"/>
+                <instance_material_UNUSED symbol="Gray" target="#Gray"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

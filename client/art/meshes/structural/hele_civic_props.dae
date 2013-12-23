@@ -5081,7 +5081,7 @@
         <vertices id="Jar_tall01-lib-Vertex">
           <input semantic="POSITION" source="#Jar_tall01-lib-Position"/>
         </vertices>
-        <polygons material="_10___Default" count="1210">
+        <polygons material_UNUSED="_10___Default" count="1210">
           <input semantic="VERTEX" offset="0" source="#Jar_tall01-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Jar_tall01-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Jar_tall01-lib-UV0"/>
@@ -6311,8 +6311,8 @@
           <instance_geometry url="#Jar_tall01-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__315-Material" target="#Map__315-Material"/>
-                <instance_material symbol="_10___Default" target="#_10___Default"/>
+                <instance_material_UNUSED symbol="Map__315-Material" target="#Map__315-Material"/>
+                <instance_material_UNUSED symbol="_10___Default" target="#_10___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

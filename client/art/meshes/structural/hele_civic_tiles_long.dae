@@ -2335,7 +2335,7 @@
         <vertices id="tiles-lib-Vertex">
           <input semantic="POSITION" source="#tiles-lib-Position"/>
         </vertices>
-        <polygons material="_11___Default" count="506">
+        <polygons material_UNUSED="_11___Default" count="506">
           <input semantic="VERTEX" offset="0" source="#tiles-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#tiles-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#tiles-lib-UV0"/>
@@ -2860,8 +2860,8 @@
           <instance_geometry url="#tiles-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__316-Material" target="#Map__316-Material"/>
-                <instance_material symbol="_11___Default" target="#_11___Default"/>
+                <instance_material_UNUSED symbol="Map__316-Material" target="#Map__316-Material"/>
+                <instance_material_UNUSED symbol="_11___Default" target="#_11___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Michael\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\props\decal_struct_mud_long.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_16___Default" name="_16___Default">
       <instance_effect url="#_16___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_16___Default-fx" name="_16___Default">
       <profile_COMMON>
@@ -126,7 +126,7 @@
         <vertices id="Plane04-lib-Vertex">
           <input semantic="POSITION" source="#Plane04-lib-Position"/>
         </vertices>
-        <polygons material="_16___Default" count="2">
+        <polygons material_UNUSED="_16___Default" count="2">
           <input semantic="VERTEX" offset="0" source="#Plane04-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Plane04-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Plane04-lib-UV0"/>
@@ -143,7 +143,7 @@
         <instance_geometry url="#Plane04-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_16___Default" target="#_16___Default"/>
+              <instance_material_UNUSED symbol="_16___Default" target="#_16___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

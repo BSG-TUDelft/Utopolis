@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_props_a.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_22___Default" name="_22___Default">
       <instance_effect url="#_22___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_22___Default-fx" name="_22___Default">
       <profile_COMMON>
@@ -1764,7 +1764,7 @@
         <vertices id="Jar_tall002-lib-Vertex">
           <input semantic="POSITION" source="#Jar_tall002-lib-Position"/>
         </vertices>
-        <polygons material="_22___Default" count="360">
+        <polygons material_UNUSED="_22___Default" count="360">
           <input semantic="VERTEX" offset="0" source="#Jar_tall002-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Jar_tall002-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Jar_tall002-lib-UV0"/>
@@ -2139,7 +2139,7 @@
         <instance_geometry url="#Jar_tall002-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_22___Default" target="#_22___Default"/>
+              <instance_material_UNUSED symbol="_22___Default" target="#_22___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

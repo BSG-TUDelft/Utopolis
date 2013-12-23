@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\rome_cc_statues.png</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_033___Default" name="_033___Default">
       <instance_effect url="#_033___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_033___Default-fx" name="_033___Default">
       <profile_COMMON>
@@ -19734,7 +19734,7 @@
         <vertices id="Cube_001-lib-Vertex">
           <input semantic="POSITION" source="#Cube_001-lib-Position"/>
         </vertices>
-        <polygons material="_033___Default" count="2982">
+        <polygons material_UNUSED="_033___Default" count="2982">
           <input semantic="VERTEX" offset="0" source="#Cube_001-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Cube_001-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Cube_001-lib-UV0"/>
@@ -22731,7 +22731,7 @@
         <instance_geometry url="#Cube_001-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_033___Default" target="#_033___Default"/>
+              <instance_material_UNUSED symbol="_033___Default" target="#_033___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

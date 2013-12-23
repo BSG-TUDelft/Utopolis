@@ -44,11 +44,11 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_002-material" name="Material.002">
       <instance_effect url="#Material_002-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="props_b-mesh" name="props_b">
       <mesh>
@@ -106,9 +106,9 @@
         <instance_geometry url="#props_b-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_0021" target="#Material_002-material">
+              <instance_material_UNUSED symbol="Material_0021" target="#Material_002-material">
                 <bind_vertex_input semantic="UVTex" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

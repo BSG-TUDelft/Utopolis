@@ -225,7 +225,7 @@
         <instance_geometry url="#Grid-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_002-material" target="#Material_002-material"/>
+              <instance_material_UNUSED symbol="Material_002-material" target="#Material_002-material"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

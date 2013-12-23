@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\internal\art\textures\skins\structural\kart_struct.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_02___Default" name="_02___Default">
       <instance_effect url="#_02___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_02___Default-fx" name="_02___Default">
       <profile_COMMON>
@@ -1551,7 +1551,7 @@
         <vertices id="Object11-lib-Vertex">
           <input semantic="POSITION" source="#Object11-lib-Position"/>
         </vertices>
-        <polygons material="_02___Default" count="232">
+        <polygons material_UNUSED="_02___Default" count="232">
           <input semantic="VERTEX" offset="0" source="#Object11-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Object11-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Object11-lib-UV0"/>
@@ -1803,8 +1803,8 @@
           <instance_geometry url="#Object11-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__292-Material" target="#Map__292-Material"/>
-                <instance_material symbol="_02___Default" target="#_02___Default"/>
+                <instance_material_UNUSED symbol="Map__292-Material" target="#Map__292-Material"/>
+                <instance_material_UNUSED symbol="_02___Default" target="#_02___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

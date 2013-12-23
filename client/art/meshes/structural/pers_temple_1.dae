@@ -10927,7 +10927,7 @@
         <vertices id="Cube-lib-Vertex">
           <input semantic="POSITION" source="#Cube-lib-Position"/>
         </vertices>
-        <polygons material="_0225151___Default" count="1860">
+        <polygons material_UNUSED="_0225151___Default" count="1860">
           <input semantic="VERTEX" offset="0" source="#Cube-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Cube-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Cube-lib-UV0"/>
@@ -12802,7 +12802,7 @@
         <instance_geometry url="#Cube-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_0225151___Default" target="#_0225151___Default"/>
+              <instance_material_UNUSED symbol="_0225151___Default" target="#_0225151___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

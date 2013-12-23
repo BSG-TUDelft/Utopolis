@@ -210,9 +210,9 @@
           <skeleton>#RamBone</skeleton>
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material1" target="#Material-material">
+              <instance_material_UNUSED symbol="Material1" target="#Material-material">
                 <bind_vertex_input semantic="UVTex" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_controller>

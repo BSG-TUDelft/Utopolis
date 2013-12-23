@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Michael\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\props\wood_c.png</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_09___Default" name="_09___Default">
       <instance_effect url="#_09___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_09___Default-fx" name="_09___Default">
       <profile_COMMON>
@@ -156,7 +156,7 @@
         <vertices id="Plane49-lib-Vertex">
           <input semantic="POSITION" source="#Plane49-lib-Position"/>
         </vertices>
-        <polygons material="_09___Default" count="8">
+        <polygons material_UNUSED="_09___Default" count="8">
           <input semantic="VERTEX" offset="0" source="#Plane49-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Plane49-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Plane49-lib-UV0"/>
@@ -179,7 +179,7 @@
         <instance_geometry url="#Plane49-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_09___Default" target="#_09___Default"/>
+              <instance_material_UNUSED symbol="_09___Default" target="#_09___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

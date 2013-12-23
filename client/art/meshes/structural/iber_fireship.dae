@@ -106,9 +106,9 @@
         <instance_geometry url="#fireship-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="iber_ship_png1" target="#iber_ship_png-material">
+              <instance_material_UNUSED symbol="iber_ship_png1" target="#iber_ship_png-material">
                 <bind_vertex_input semantic="Cube_006-UV" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

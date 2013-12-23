@@ -116,10 +116,10 @@
         <instance_geometry url="#Columns_001-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="kart_struct_dds_001" target="#kart_struct_dds_001-material">
+              <instance_material_UNUSED symbol="kart_struct_dds_001" target="#kart_struct_dds_001-material">
                 <bind_vertex_input semantic="Columns_001-UV" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

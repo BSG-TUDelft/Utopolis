@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\celt_struct.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_17___Default" name="_17___Default">
       <instance_effect url="#_17___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_17___Default-fx" name="_17___Default">
       <profile_COMMON>
@@ -4256,7 +4256,7 @@
         <vertices id="Fence-lib-Vertex">
           <input semantic="POSITION" source="#Fence-lib-Position"/>
         </vertices>
-        <polygons material="_17___Default" count="592">
+        <polygons material_UNUSED="_17___Default" count="592">
           <input semantic="VERTEX" offset="0" source="#Fence-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Fence-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Fence-lib-UV0"/>
@@ -4863,7 +4863,7 @@
         <instance_geometry url="#Fence-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_17___Default" target="#_17___Default"/>
+              <instance_material_UNUSED symbol="_17___Default" target="#_17___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

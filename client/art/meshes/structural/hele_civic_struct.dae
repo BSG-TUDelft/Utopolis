@@ -2891,7 +2891,7 @@
         <vertices id="material1_Pivot-lib-Vertex">
           <input semantic="POSITION" source="#material1_Pivot-lib-Position"/>
         </vertices>
-        <polygons material="_14___Default" count="566">
+        <polygons material_UNUSED="_14___Default" count="566">
           <input semantic="VERTEX" offset="0" source="#material1_Pivot-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#material1_Pivot-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#material1_Pivot-lib-UV0"/>
@@ -3472,7 +3472,7 @@
         <instance_geometry url="#material1_Pivot-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_14___Default" target="#_14___Default"/>
+              <instance_material_UNUSED symbol="_14___Default" target="#_14___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

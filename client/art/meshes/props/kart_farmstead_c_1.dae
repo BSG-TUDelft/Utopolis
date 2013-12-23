@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\props\wrld_wood_1.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_09___Default" name="_09___Default">
       <instance_effect url="#_09___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_09___Default-fx" name="_09___Default">
       <profile_COMMON>
@@ -2381,7 +2381,7 @@
         <vertices id="objhand_cart_final01-lib-Vertex">
           <input semantic="POSITION" source="#objhand_cart_final01-lib-Position"/>
         </vertices>
-        <polygons material="_09___Default" count="354">
+        <polygons material_UNUSED="_09___Default" count="354">
           <input semantic="VERTEX" offset="0" source="#objhand_cart_final01-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#objhand_cart_final01-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#objhand_cart_final01-lib-UV0"/>
@@ -2754,8 +2754,8 @@
           <instance_geometry url="#objhand_cart_final01-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__298-Material" target="#Map__298-Material"/>
-                <instance_material symbol="_09___Default" target="#_09___Default"/>
+                <instance_material_UNUSED symbol="Map__298-Material" target="#Map__298-Material"/>
+                <instance_material_UNUSED symbol="_09___Default" target="#_09___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

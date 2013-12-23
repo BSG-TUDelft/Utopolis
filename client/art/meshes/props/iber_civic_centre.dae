@@ -15,11 +15,11 @@
     <unit meter="0.025400"/>
     <up_axis>Y_UP</up_axis>
   </asset>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material_Iberian_props" name="Material_Iberian_props">
       <instance_effect url="#Material_Iberian_props-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material_Iberian_props-fx" name="Material_Iberian_props">
       <profile_COMMON>
@@ -507,7 +507,7 @@
         <vertices id="Geometry_MeshNode-lib-Vertex">
           <input semantic="POSITION" source="#Geometry_MeshNode-lib-Position"/>
         </vertices>
-        <polygons material="Material_Iberian_props" count="84">
+        <polygons material_UNUSED="Material_Iberian_props" count="84">
           <input semantic="VERTEX" offset="0" source="#Geometry_MeshNode-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Geometry_MeshNode-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Geometry_MeshNode-lib-UV0"/>
@@ -615,7 +615,7 @@
         <instance_geometry url="#Geometry_MeshNode-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_Iberian_props" target="#Material_Iberian_props"/>
+              <instance_material_UNUSED symbol="Material_Iberian_props" target="#Material_Iberian_props"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

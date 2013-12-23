@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_tile_b.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_11___Default" name="_11___Default">
       <instance_effect url="#_11___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_11___Default-fx" name="_11___Default">
       <profile_COMMON>
@@ -4268,7 +4268,7 @@
         <vertices id="gymnasion_tile-lib-Vertex">
           <input semantic="POSITION" source="#gymnasion_tile-lib-Position"/>
         </vertices>
-        <polygons material="_11___Default" count="594">
+        <polygons material_UNUSED="_11___Default" count="594">
           <input semantic="VERTEX" offset="0" source="#gymnasion_tile-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#gymnasion_tile-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#gymnasion_tile-lib-UV0"/>
@@ -4877,7 +4877,7 @@
         <instance_geometry url="#gymnasion_tile-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_11___Default" target="#_11___Default"/>
+              <instance_material_UNUSED symbol="_11___Default" target="#_11___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

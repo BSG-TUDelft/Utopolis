@@ -25,7 +25,7 @@
       <instance_effect url="#_06___Default-fx"/>
     </material>
   </library_materials_UNUSED>
-  <library_effects>
+  <library_effects_UNUSED>
     <effect id="_06___Default-fx" name="_06___Default">
       <profile_COMMON>
         <technique sid="standard">
@@ -69,7 +69,7 @@
         </technique>
       </profile_COMMON>
     </effect>
-  </library_effects>
+  </library_effects_UNUSED>
   <library_geometries>
     <geometry id="Tiles-lib" name="TilesMesh">
       <mesh>
@@ -1335,7 +1335,7 @@
         <vertices id="Tiles-lib-Vertex">
           <input semantic="POSITION" source="#Tiles-lib-Position"/>
         </vertices>
-        <polygons material="_06___Default" count="280">
+        <polygons material_UNUSED="_06___Default" count="280">
           <input semantic="VERTEX" offset="0" source="#Tiles-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Tiles-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Tiles-lib-UV0"/>
@@ -1630,7 +1630,7 @@
         <instance_geometry url="#Tiles-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_06___Default" target="#_06___Default"/>
+              <instance_material_UNUSED_UNUSED symbol="_06___Default" target="#_06___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

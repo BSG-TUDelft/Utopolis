@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\structural\hele_struct.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_04___Default" name="_04___Default">
       <instance_effect url="#_04___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_04___Default-fx" name="_04___Default">
       <profile_COMMON>
@@ -1109,7 +1109,7 @@
         <vertices id="Object01-lib-Vertex">
           <input semantic="POSITION" source="#Object01-lib-Position"/>
         </vertices>
-        <polygons material="_04___Default" count="176">
+        <polygons material_UNUSED="_04___Default" count="176">
           <input semantic="VERTEX" offset="0" source="#Object01-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Object01-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Object01-lib-UV0"/>
@@ -1300,7 +1300,7 @@
         <instance_geometry url="#Object01-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_04___Default" target="#_04___Default"/>
+              <instance_material_UNUSED symbol="_04___Default" target="#_04___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

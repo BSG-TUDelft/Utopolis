@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_props_a.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_10___Default" name="_10___Default">
       <instance_effect url="#_10___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_10___Default-fx" name="_10___Default">
       <profile_COMMON>
@@ -1748,7 +1748,7 @@
         <vertices id="column1-lib-Vertex">
           <input semantic="POSITION" source="#column1-lib-Position"/>
         </vertices>
-        <polygons material="_10___Default" count="320">
+        <polygons material_UNUSED="_10___Default" count="320">
           <input semantic="VERTEX" offset="0" source="#column1-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#column1-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#column1-lib-UV0"/>
@@ -2083,7 +2083,7 @@
         <instance_geometry url="#column1-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_10___Default" target="#_10___Default"/>
+              <instance_material_UNUSED symbol="_10___Default" target="#_10___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

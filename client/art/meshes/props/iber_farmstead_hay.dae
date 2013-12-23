@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\props\wrld_hay_a.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material__43" name="Material__43">
       <instance_effect url="#Material__43-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material__43-fx" name="Material__43">
       <profile_COMMON>
@@ -576,7 +576,7 @@
         <vertices id="hay-lib-Vertex">
           <input semantic="POSITION" source="#hay-lib-Position"/>
         </vertices>
-        <polygons material="Material__43" count="120">
+        <polygons material_UNUSED="Material__43" count="120">
           <input semantic="VERTEX" offset="0" source="#hay-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#hay-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#hay-lib-UV0"/>
@@ -721,8 +721,8 @@
         <instance_geometry url="#hay-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Map__284-Material" target="#Map__284-Material"/>
-              <instance_material symbol="Material__43" target="#Material__43"/>
+              <instance_material_UNUSED symbol="Map__284-Material" target="#Map__284-Material"/>
+              <instance_material_UNUSED symbol="Material__43" target="#Material__43"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

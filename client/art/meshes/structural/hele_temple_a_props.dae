@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\props\hele_props_a.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_05___Default" name="_05___Default">
       <instance_effect url="#_05___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_05___Default-fx" name="_05___Default">
       <profile_COMMON>
@@ -2482,7 +2482,7 @@
         <vertices id="Object04-lib-Vertex">
           <input semantic="POSITION" source="#Object04-lib-Position"/>
         </vertices>
-        <polygons material="_05___Default" count="486">
+        <polygons material_UNUSED="_05___Default" count="486">
           <input semantic="VERTEX" offset="0" source="#Object04-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Object04-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Object04-lib-UV0"/>
@@ -2985,8 +2985,8 @@
         <instance_geometry url="#Object04-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Map__302-Material" target="#Map__302-Material"/>
-              <instance_material symbol="_05___Default" target="#_05___Default"/>
+              <instance_material_UNUSED symbol="Map__302-Material" target="#Map__302-Material"/>
+              <instance_material_UNUSED symbol="_05___Default" target="#_05___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

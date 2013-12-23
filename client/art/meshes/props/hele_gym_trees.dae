@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\gaia\prop_tree_cypess.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_12___Default" name="_12___Default">
       <instance_effect url="#_12___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_12___Default-fx" name="_12___Default">
       <profile_COMMON>
@@ -1308,7 +1308,7 @@
         <vertices id="trees002-lib-Vertex">
           <input semantic="POSITION" source="#trees002-lib-Position"/>
         </vertices>
-        <polygons material="_12___Default" count="322">
+        <polygons material_UNUSED="_12___Default" count="322">
           <input semantic="VERTEX" offset="0" source="#trees002-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#trees002-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#trees002-lib-UV0"/>
@@ -1645,7 +1645,7 @@
         <instance_geometry url="#trees002-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_12___Default" target="#_12___Default"/>
+              <instance_material_UNUSED symbol="_12___Default" target="#_12___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

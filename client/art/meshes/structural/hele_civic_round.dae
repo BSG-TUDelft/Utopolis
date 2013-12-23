@@ -480,7 +480,7 @@
         <vertices id="roundRoof-lib-Vertex">
           <input semantic="POSITION" source="#roundRoof-lib-Position"/>
         </vertices>
-        <polygons material="_15___Default" count="80">
+        <polygons material_UNUSED="_15___Default" count="80">
           <input semantic="VERTEX" offset="0" source="#roundRoof-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#roundRoof-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#roundRoof-lib-UV0"/>
@@ -579,8 +579,8 @@
           <instance_geometry url="#roundRoof-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__313-Material" target="#Map__313-Material"/>
-                <instance_material symbol="_15___Default" target="#_15___Default"/>
+                <instance_material_UNUSED symbol="Map__313-Material" target="#Map__313-Material"/>
+                <instance_material_UNUSED symbol="_15___Default" target="#_15___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

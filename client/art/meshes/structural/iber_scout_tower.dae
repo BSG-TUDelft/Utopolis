@@ -116,10 +116,10 @@
         <instance_geometry url="#defaultMesh-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material__41_002" target="#Material__41_002-material">
+              <instance_material_UNUSED symbol="Material__41_002" target="#Material__41_002-material">
                 <bind_vertex_input semantic="default-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

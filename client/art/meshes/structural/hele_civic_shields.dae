@@ -372,7 +372,7 @@
         <vertices id="shield18-lib-Vertex">
           <input semantic="POSITION" source="#shield18-lib-Position"/>
         </vertices>
-        <polygons material="_08___Default" count="60">
+        <polygons material_UNUSED="_08___Default" count="60">
           <input semantic="VERTEX" offset="0" source="#shield18-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#shield18-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#shield18-lib-UV0"/>
@@ -453,8 +453,8 @@
           <instance_geometry url="#shield18-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__297-Material" target="#Map__297-Material"/>
-                <instance_material symbol="_08___Default" target="#_08___Default"/>
+                <instance_material_UNUSED symbol="Map__297-Material" target="#Map__297-Material"/>
+                <instance_material_UNUSED symbol="_08___Default" target="#_08___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

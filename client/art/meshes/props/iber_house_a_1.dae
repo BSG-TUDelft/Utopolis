@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Brad\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\internal\art\textures\skins\structural\iber_struct.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material__41" name="Material__41">
       <instance_effect url="#Material__41-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="Material__41-fx" name="Material__41">
       <profile_COMMON>
@@ -1128,7 +1128,7 @@
         <vertices id="Object08-lib-Vertex">
           <input semantic="POSITION" source="#Object08-lib-Position"/>
         </vertices>
-        <polygons material="Material__41" count="220">
+        <polygons material_UNUSED="Material__41" count="220">
           <input semantic="VERTEX" offset="0" source="#Object08-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#Object08-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#Object08-lib-UV0"/>
@@ -1373,8 +1373,8 @@
         <instance_geometry url="#Object08-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Map__291-Material" target="#Map__291-Material"/>
-              <instance_material symbol="Material__41" target="#Material__41"/>
+              <instance_material_UNUSED symbol="Map__291-Material" target="#Map__291-Material"/>
+              <instance_material_UNUSED symbol="Material__41" target="#Material__41"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

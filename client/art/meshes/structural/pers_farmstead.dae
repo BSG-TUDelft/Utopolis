@@ -20296,7 +20296,7 @@
         <vertices id="pers_farmstead_a-lib-Vertex">
           <input semantic="POSITION" source="#pers_farmstead_a-lib-Position"/>
         </vertices>
-        <polygons material="_0225151___Default" count="3022">
+        <polygons material_UNUSED="_0225151___Default" count="3022">
           <input semantic="VERTEX" offset="0" source="#pers_farmstead_a-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#pers_farmstead_a-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#pers_farmstead_a-lib-UV0"/>
@@ -23333,7 +23333,7 @@
         <instance_geometry url="#pers_farmstead_a-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_0225151___Default" target="#_0225151___Default"/>
+              <instance_material_UNUSED symbol="_0225151___Default" target="#_0225151___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

@@ -20,11 +20,11 @@
       <init_from>file://C:\Users\Michael\Wildfire Games\0 A.D\binaries\data\mods\public\art\textures\skins\props\hele_props_b.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_08___Default" name="_08___Default">
       <instance_effect url="#_08___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_08___Default-fx" name="_08___Default">
       <profile_COMMON>
@@ -372,7 +372,7 @@
         <vertices id="gymnasion_shields-lib-Vertex">
           <input semantic="POSITION" source="#gymnasion_shields-lib-Position"/>
         </vertices>
-        <polygons material="_08___Default" count="60">
+        <polygons material_UNUSED="_08___Default" count="60">
           <input semantic="VERTEX" offset="0" source="#gymnasion_shields-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#gymnasion_shields-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#gymnasion_shields-lib-UV0"/>
@@ -447,7 +447,7 @@
         <instance_geometry url="#gymnasion_shields-lib">
           <bind_material>
             <technique_common>
-              <instance_material symbol="_08___Default" target="#_08___Default"/>
+              <instance_material_UNUSED symbol="_08___Default" target="#_08___Default"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

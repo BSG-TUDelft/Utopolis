@@ -71,11 +71,11 @@
 			<init_from>..\..\textures\skins\structural\hele_ship_trireme_a.dds</init_from>
 		</image>
 	</library_images>
-	<library_materials>
+	<library_materials_UNUSED>
 		<material id="hele_ship_trireme_a_d" name="hele_ship_trireme_a_d">
 			<instance_effect url="#hele_ship_trireme_a_d-fx"/>
 		</material>
-	</library_materials>
+	</library_materials_UNUSED>
 	<library_geometries>
 		<geometry id="Oars-Geometry" name="Oars-Geometry">
 			<mesh>
@@ -131,9 +131,9 @@
 				<instance_geometry url="#Oars-Geometry">
 					<bind_material>
 						<technique_common>
-							<instance_material symbol="hele_ship_trireme_a_d" target="#hele_ship_trireme_a_d">
+							<instance_material_UNUSED symbol="hele_ship_trireme_a_d" target="#hele_ship_trireme_a_d">
 								<bind_vertex_input input_semantic="TEXCOORD" input_set="1" semantic="CHANNEL1"/>
-							</instance_material>
+							</instance_material_UNUSED>
 						</technique_common>
 					</bind_material>
 				</instance_geometry>

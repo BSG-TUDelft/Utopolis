@@ -305,7 +305,7 @@
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="hele-material" name="hele">
       <instance_effect url="#hele-effect"/>
     </material>
@@ -339,7 +339,7 @@
     <material id="_0_800000__0_800000__0_800000_-material" name="_0_800000__0_800000__0_800000_">
       <instance_effect url="#_0_800000__0_800000__0_800000_-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Cube_007-mesh" name="Cube.007">
       <mesh>
@@ -407,50 +407,50 @@
         <instance_geometry url="#Cube_007-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="hele-material" target="#hele-material">
+              <instance_material_UNUSED symbol="hele-material" target="#hele-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="helle_struct-material" target="#helle_struct-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="helle_struct-material" target="#helle_struct-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="hele_props_a-material" target="#hele_props_a-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="hele_props_a-material" target="#hele_props_a-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="hele_shields-material" target="#hele_shields-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="hele_shields-material" target="#hele_shields-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="armor-material" target="#armor-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="armor-material" target="#armor-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="material_004_trans-material" target="#material_004_trans-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="material_004_trans-material" target="#material_004_trans-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="banner-material" target="#banner-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="banner-material" target="#banner-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="rooftiles_broken-material" target="#rooftiles_broken-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="rooftiles_broken-material" target="#rooftiles_broken-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="celt_struct_1-material" target="#celt_struct_1-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="celt_struct_1-material" target="#celt_struct_1-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="Material_005-material" target="#Material_005-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="Material_005-material" target="#Material_005-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
-              <instance_material symbol="_0_800000__0_800000__0_800000_-material" target="#_0_800000__0_800000__0_800000_-material">
+              </instance_material_UNUSED>
+              <instance_material_UNUSED symbol="_0_800000__0_800000__0_800000_-material" target="#_0_800000__0_800000__0_800000_-material">
                 <bind_vertex_input semantic="Spear03-lib-UV0" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

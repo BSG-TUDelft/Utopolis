@@ -38,11 +38,11 @@
       </profile_COMMON>
     </effect>
   </library_effects>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="Material-material" name="Material">
       <instance_effect url="#Material-effect"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_geometries>
     <geometry id="Barracks_001-mesh">
       <mesh>
@@ -99,9 +99,9 @@
         <instance_geometry url="#Barracks_001-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material1" target="#Material-material">
+              <instance_material_UNUSED symbol="Material1" target="#Material-material">
                 <bind_vertex_input semantic="UVTex" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

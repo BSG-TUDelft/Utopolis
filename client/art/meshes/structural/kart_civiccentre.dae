@@ -116,10 +116,10 @@
         <instance_geometry url="#CartStoa-mesh-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_TF_1" target="#Material_TF_1-material">
+              <instance_material_UNUSED symbol="Material_TF_1" target="#Material_TF_1-material">
                 <bind_vertex_input semantic="UVTex" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

@@ -20,11 +20,11 @@
       <init_from>file://C:\Documents and Settings\Michael\My Documents\0 A.D\0 A.D. - New Revision\binaries\data\mods\public\art\textures\skins\props\hele_tile_b.dds</init_from>
     </image>
   </library_images>
-  <library_materials>
+  <library_materials_UNUSED>
     <material id="_11___Default" name="_11___Default">
       <instance_effect url="#_11___Default-fx"/>
     </material>
-  </library_materials>
+  </library_materials_UNUSED>
   <library_effects>
     <effect id="_11___Default-fx" name="_11___Default">
       <profile_COMMON>
@@ -4123,7 +4123,7 @@
         <vertices id="tiles-lib-Vertex">
           <input semantic="POSITION" source="#tiles-lib-Position"/>
         </vertices>
-        <polygons material="_11___Default" count="888">
+        <polygons material_UNUSED="_11___Default" count="888">
           <input semantic="VERTEX" offset="0" source="#tiles-lib-Vertex"/>
           <input semantic="NORMAL" offset="1" source="#tiles-lib-Normal0"/>
           <input semantic="TEXCOORD" offset="2" set="0" source="#tiles-lib-UV0"/>
@@ -5030,8 +5030,8 @@
           <instance_geometry url="#tiles-lib">
             <bind_material>
               <technique_common>
-                <instance_material symbol="Map__316-Material" target="#Map__316-Material"/>
-                <instance_material symbol="_11___Default" target="#_11___Default"/>
+                <instance_material_UNUSED symbol="Map__316-Material" target="#Map__316-Material"/>
+                <instance_material_UNUSED symbol="_11___Default" target="#_11___Default"/>
               </technique_common>
             </bind_material>
           </instance_geometry>

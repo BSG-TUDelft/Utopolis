@@ -160,10 +160,10 @@
         <instance_geometry url="#CartBlacksmith-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material1" target="#Material-material">
+              <instance_material_UNUSED symbol="Material1" target="#Material-material">
                 <bind_vertex_input semantic="main" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="AO" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

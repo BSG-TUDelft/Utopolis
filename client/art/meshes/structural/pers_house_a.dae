@@ -65,11 +65,11 @@
 	</library_effects>
 	<library_images>
 	</library_images>
-	<library_materials>
+	<library_materials_UNUSED>
 		<material id="pers_struct_dds" name="pers_struct_dds">
 			<instance_effect url="#pers_struct_dds-fx"/>
 		</material>
-	</library_materials>
+	</library_materials_UNUSED>
 	<library_geometries>
 		<geometry id="House_001" name="House_001">
 			<mesh>
@@ -125,9 +125,9 @@
 				<instance_geometry url="#House_001">
 					<bind_material>
 						<technique_common>
-							<instance_material symbol="pers_struct_dds" target="#pers_struct_dds">
+							<instance_material_UNUSED symbol="pers_struct_dds" target="#pers_struct_dds">
 								<bind_vertex_input input_semantic="TEXCOORD" input_set="1" semantic="CHANNEL1"/>
-							</instance_material>
+							</instance_material_UNUSED>
 						</technique_common>
 					</bind_material>
 				</instance_geometry>

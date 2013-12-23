@@ -287,10 +287,10 @@
         <instance_geometry url="#Iber_Fortress-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Default" target="#Default-material">
+              <instance_material_UNUSED symbol="Default" target="#Default-material">
                 <bind_vertex_input semantic="Geometry-Iber_Fortress-Texture" input_semantic="TEXCOORD" input_set="0"/>
                 <bind_vertex_input semantic="lightmap" input_semantic="TEXCOORD" input_set="1"/>
-              </instance_material>
+              </instance_material_UNUSED>
             </technique_common>
           </bind_material>
         </instance_geometry>

@@ -126,9 +126,9 @@
 				<instance_geometry url="#Mesh-Geometry">
 					<bind_material>
 						<technique_common>
-							<instance_material symbol="iber_ship_png" target="#iber_ship_png">
+							<instance_material_UNUSED symbol="iber_ship_png" target="#iber_ship_png">
 								<bind_vertex_input input_semantic="TEXCOORD" input_set="1" semantic="CHANNEL1"/>
-							</instance_material>
+							</instance_material_UNUSED>
 						</technique_common>
 					</bind_material>
 				</instance_geometry>
