@@ -4,12 +4,12 @@
   <group>
     <variant frequency="100" name="Hellenes Farmstead">
       <mesh>structural/hele_farmstead.dae</mesh>
-      <props>
+      <!-- Unless the bug that turns everything white is fixed.. NO PROPS FOR JOO !!<props>
         <prop actor="props/structures/hellenes/farmstead_hay.xml" attachpoint="root"/>
         <prop actor="props/structures/hellenes/farmstead_props.xml" attachpoint="root"/>
         <prop actor="props/structures/decals/farmstead_mud.xml" attachpoint="root"/>
         <prop actor="props/structures/hellenes/farmstead_plants.xml" attachpoint="root"/>
-      </props>
+      </props> -->
       <textures>
 <texture file="structural/hele_struct_b.dds" name="baseTex"/>
 <texture file="structural/hele_struct_b_norm.png" name="normTex"/>
