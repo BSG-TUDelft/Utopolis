@@ -132,6 +132,10 @@ var ActorModelLoader = function () {
 							textureUrl = checkTextureUrl(reqUrl, textureUrl);
 
 							loadDecal(textureUrl, width);
+
+							// Remove prop from loading queue
+							me.props.splice( $.inArray(reqUrl, me.props), 1 );
+							checkIfDone();
 						}
 
 						if($(xml).find("actor group variant textures texture[name*='baseTex']").size() === 0){
@@ -151,7 +155,7 @@ var ActorModelLoader = function () {
 
 	/** Loads a decal (TODO) */
 	function loadDecal(textureUrl, width){
-		console.log("Loading decal: " + width + ", " + textureUrl);
+		console.log("Loading decal, width: " + width + ", texture:" + textureUrl + ", collada scene: " + me.scene.name );
 		// TODO: ATTACH TO FLOOR SOMEHOW
 	}
 
@@ -208,7 +212,7 @@ ActorModelLoader.prototype = {
 
 	modelName: null,
 	textureUrl: null,
-	props: [],
+	props: [],					// loading queue
 	scene: null,
 	suppressDDSWarning: true
 };
