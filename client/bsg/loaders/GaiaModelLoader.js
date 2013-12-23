@@ -65,7 +65,18 @@ var GaiaModelLoader = function () {
 		'iber_fortress': 'structures/iberians/fortress.xml',
 		'iber_tower': 'structures/iberians/wall_tower.xml',
 		'iber_civic': 'structures/iberians/civil_centre.xml',
-		'iber_temple': 'structures/iberians/temple.xml'
+		'iber_temple': 'structures/iberians/temple.xml',
+
+		'pers_house': 'structures/persians/house.xml',
+		'pers_farm': 'structures/persians/farmstead.xml',
+		'pers_corral': 'structures/persians/corral.xml',
+		'pers_storehouse': 'structures/persians/storehouse.xml',
+		'pers_barracks': 'structures/persians/barracks.xml',
+		'pers_blacksmith': 'structures/persians/blacksmith.xml',
+		'pers_fortress': 'structures/persians/fortress.xml',
+		'pers_tower': 'structures/persians/wall_tower.xml',
+		'pers_civic': 'structures/persians/civil_centre.xml',
+		'pers_temple': 'structures/persians/temple.xml'
 
 	}
 	for(var i in actors){
