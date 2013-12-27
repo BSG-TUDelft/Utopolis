@@ -70,23 +70,24 @@ var Gui = {
 		Gui.contextMenu.hide();
 
 		Gui.contextMenu.addEventListener(ContextMenu.citizensChanged, function(e){
+            if(!clientOnlyMode){
+                var request = $.ajax({
+                    url: host + 'structure/' + e.structure.id + '/citizens/' + e.citizens,
+                    type: 'GET'
+                });
 
-			var request = $.ajax({
-				url: host + 'structure/' + e.structure.id + '/citizens/' + e.citizens,
-				type: 'GET'
-			});
+                request.done(function (response, textStatus, jqXHR){
+                    console.log("SERVER RESPONSE: updated citizens");
+                });
 
-			request.done(function (response, textStatus, jqXHR){
-				console.log("SERVER RESPONSE: updated citizens");
-			});
-
-			request.fail(function (jqXHR, textStatus, errorThrown){
-				console.error(
-					"The following error occured: " +
-						textStatus, errorThrown
-				);
-			});
-		});
+                request.fail(function (jqXHR, textStatus, errorThrown){
+                    console.error(
+                        "The following error occured: " +
+                            textStatus, errorThrown
+                    );
+                });
+			}
+        });
 	},
 
 	/** GUIs update loop, gets called from the game loop */
