@@ -31,10 +31,16 @@ var ActorModelLoader = function () {
 				//$(xml).find("variant[name*='Texture-Branches-1']").find("texture[name*='baseTex']").attr("file")
 				//$(xml).find("variant[name*='Texture-Branches-1'] texture[name*='baseTex']").attr("file")
 
-				// Find all props that are attached to the root (the only ones we can actually use at this point)
-				//me.props = $(xml).find("variant[name!='death'] props prop[attachpoint*='root']").map(function(index, el) { return el.attributes['actor'].nodeValue;}).toArray();
-				me.props = $(xml).find("variant").first().find("props prop[attachpoint*='root']").map(function(index, el) { return el.attributes['actor'].nodeValue;}).toArray();
+				//me.propsQueue = $(xml).find("variant[name!='death'] props prop[attachpoint*='root']").map(function(index, el) { return el.attributes['actor'].nodeValue;}).toArray();
+				//me.propsQueue = $(xml).find("variant").first().find("props prop[attachpoint*='root']").map(function(index, el) { return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };}).toArray();
 
+				// Find all props that are attached to the root (the only ones we can actually use at this point)
+				me.propsQueue = $(xml).find("variant[name!='death']") //,variant[name!='Idle'],variant[name!='garrisoned']")
+					.find("props prop").map(function(index, el) {
+						// todo: filter these attachpoints through jQuery find
+						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
+							return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };
+					}).toArray();
 				me.textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
 				me.textureUrl = checkTextureUrl(url, me.textureUrl);
 
@@ -77,7 +83,7 @@ var ActorModelLoader = function () {
 	}
 
 	/** Fires when a prop is done loading */
-	function doneLoadingProp(collada, propTextureUrl){
+	function doneLoadingProp(collada, propTextureUrl, attachPoint){
 		var mesh = collada.scene;
 
 		var texture = THREE.ImageUtils.loadTexture(propTextureUrl);
@@ -99,24 +105,40 @@ var ActorModelLoader = function () {
 
 	/** Goes through the props array, loads props XML and mesh / textures afterwards */
 	function loadProps(){
-		for(var i = 0;  i < me.props.length; i++){
-			var url = actorsUrlPrefix + me.props[i];
+		for(var i = 0;  i < me.propsQueue.length; i++){
+			var url = actorsUrlPrefix + me.propsQueue[i].actor;
+			var attachPoint = me.propsQueue[i].attachPoint;
+
+
 			$.ajax({
 				type: "GET",
 				url: url,
 				dataType: "xml",
-				success: function(reqUrl) {
-					// create closure for reqUrl
+				success: function(reqUrl, attachPoint) {
+					// create closure for reqUrl, attachPoint and propIndex
 					return function (xml) {
+					if(attachPoint == 'loaded-projectile' ||
+							attachPoint == 'projectile' ||
+							attachPoint == 'garrisoned' ||
+							//me.propsQueue[propIndex].actor.substring(0, 'particle'.length) == 'particle'
+							attachPoint == 'smoke' ||
+							attachPoint == 'fire'
+						){
+
+						// These are useless to us
+						// todo: Perhaps we can have particles later
+						removeFromQueue(reqUrl);
+						return;
+					}
+
 					if($(xml).find("actor group variant mesh").size() === 0){
 						// There's no mesh, we dont know how to handle this. Keep calm and parse on.
-						me.props.splice( $.inArray(reqUrl, me.props), 1 );
-						checkIfDone();
+						removeFromQueue(reqUrl);
 						return;
 					}
 					if($(xml).find("actor group variant textures texture[name*='baseTex']").size() === 0){
-						console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. We will not load this prop");
-						checkIfDone();
+						console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. Will not load this prop");
+						removeFromQueue(reqUrl);
 						return;
 					}
 
@@ -126,24 +148,35 @@ var ActorModelLoader = function () {
 
 					var propLoader = new THREE.ColladaLoader();
 					propLoader.options.convertUpAxis = true;
-					propLoader.load(propMeshUrl, function( prTU) {
+					propLoader.load(propMeshUrl, function( prTU, attachPoint) {
 						// Create closure for propTextureUrl
 						return function(collada) {
 							// Remove prop from loading queue
-							me.props.splice( $.inArray(reqUrl, me.props), 1 );
+							removeFromQueue(reqUrl);
 
-							doneLoadingProp(collada, propTextureUrl);
-					}}(propTextureUrl));
+							doneLoadingProp(collada, propTextureUrl, attachPoint);
+					}}(propTextureUrl, attachPoint));
 
-				}}(url),
+				}}(url, attachPoint),
 				error: function(reqUrl) {
 					// create closeure for reqUrl
 					return function(xhr, status, error){
-					console.error("ActorModelLoader.loadProps: Error loading prop xml [" + reqUrl + "]. Error message: " + error);
+					console.error("ActorModelLoader.loadProps: Error loading prop for [" + me.modelName + "] xml [" + reqUrl + "]. Error message: " + error);
 				}}(url)
 			});
 		}
+		// removes a prop from the queue
+		function removeFromQueue(url){
+			for(var i = 0;  i < me.propsQueue.length; i++){
+				if(actorsUrlPrefix + me.propsQueue[i].actor == url){
+					me.propsQueue.splice(i,1);
+					break;
+				}
+			}
+			checkIfDone();
+		}
 	}
+
 	/** If the mesh contains instances of THREE.Light, remove them */
 	function removeLights(mesh) {
 		if (mesh.children) {
@@ -169,13 +202,13 @@ var ActorModelLoader = function () {
 
 	/** Will see if everything that needs to be loaded is loaded, fires doneLoading if this is the case*/
 	function checkIfDone(){
-		if(me.props.length === 0){
+		if(me.propsQueue.length === 0){
 			me.dispatchEvent({ type: ActorModelLoader.doneLoading, scene: me.scene });
 		}
 	}
 
 	/** Helper function to convert path ending with .dds to .png. */
-	function checkTextureUrl(actorXml, textureUrl){
+	function checkTextureUrl(actorXml, textureUrl){//todo: whatif file has dds in the name?
 		if(textureUrl.match(/dds/)){
 			if(!me.suppressDDSWarning){
 				console.warn("ActorModelLoader.loadActorXml: The actor xml [" + actorXml + "] asked me to load a texture [" + textureUrl + "] but this appears to be a DirectDrawSurface (.dds) file which WebGL can't handle! I've taken the liberty of interpreting it as a .png file, so that had better be there!");
@@ -198,7 +231,7 @@ ActorModelLoader.prototype = {
 
 	modelName: null,
 	textureUrl: null,
-	props: [],
+	propsQueue: [],	// Array of objects containing { actor, attachPoint}
 	scene: null,
 	suppressDDSWarning: true
 };
@@ -207,77 +240,6 @@ ActorModelLoader.prototype = {
 ActorModelLoader.doneLoading = "DONE_LOADING";
 
 THREE.EventDispatcher.prototype.apply( ActorModelLoader.prototype );
-
-/*
-	loadModels: function () {
-		for (var key in this.modelStructuresArray) {
-			if (!this.modelStructuresArray.hasOwnProperty(key)) continue;
-			this.load(key,
-				this.modelStructuresArray,
-				$.proxy(this.decreaseRemainingStructures, this)
-			);		// Pass context to all callback functions because JS gets weird
-		}
-	},
-
-	load: function (key, map, callbackDecRemainingStructures) {
-		this.colladaLoader.load(map[key], this.setTextureOnModel(key, this.textureFile, callbackDecRemainingStructures));
-	},
-
-	setTextureOnModel: function (key, textureFile, callbackDecRemainingStructures) {
-		return function (collada) {
-			function removeLights(model) {
-				if (model.children) {
-					for (var j = 0; j < model.children.length; j++) {
-						var child = model.children[j];
-						if (child instanceof THREE.Light) {
-							model.children.splice(j, 1);
-						}
-					}
-				}
-			}
-
-			function setMaterial(node, material) {
-				node.material = material;
-				if (node.children) {
-					for (var i = 0; i < node.children.length; i++) {
-						setMaterial(node.children[i], material);
-					}
-				}
-			}
-
-			var dae = collada.scene;
-			dae.name = key;
-			removeLights(dae);
-			var texture = THREE.ImageUtils.loadTexture(textureFile);
-			var material = new THREE.MeshLambertMaterial({map: texture});
-
-			material.transparent = true;
-			material.blending = THREE.AdditiveAlphaBlending;
-
-			setMaterial(dae, material);
-			dae.scale.x = dae.scale.y = dae.scale.z = 0.4;
-			dae.updateMatrix();
-			this.loadedModels[key] = new ModelWrapper(dae);
-			callbackDecRemainingStructures();
-		};
-	},
-
-	decreaseRemainingStructures: function () {
-		this.numModelStructures--;
-		if (this.numModelStructures == 0) {
-			// Will dispatch event when done loading all the models
-			this.dispatchEvent({ type: ModelLoader.doneLoading })
-		}
-	},
-
-	getSize: function (obj) {
-		var size = 0, key;
-		for (key in obj) {
-			if (obj.hasOwnProperty(key))
-				size++;
-		}
-		return size;
-	}*/
 
 
 

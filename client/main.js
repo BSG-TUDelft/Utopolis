@@ -137,8 +137,11 @@ function initModels(callback){
 		'pers_temple': 'structures/persians/temple.xml',
 
 		// Load GAIA
-		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml'
-
+		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
+		'gaia_european_beech' : 'flora/trees/european_beech.xml',
+		'gaia_mediterranean_cypress' : 'flora/trees/mediterranean_cypress.xml',
+		'gaia_pine' : 'flora/trees/pine.xml',
+		'gaia_poplar' : 'flora/trees/poplar.xml'
 	};
 	var queue = 0;
 	for(var i in actors){
@@ -380,6 +383,10 @@ function saveStructure( structure ) {
 		rotation: structure.model.rotation.y
 	};
 
+	if(clientOnlyMode){
+		structure.id = parseInt(Math.random() * 65535, 2);
+		return;
+	}
     var request = $.ajax({
         url: host + 'city/1/structure',
         type: 'PUT',

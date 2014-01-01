@@ -528,6 +528,26 @@ function initGui() {
 				structureId: "gaia_aleppo_pine",
 				iconCss: "gaia_aleppo_pine",
 				structureType: "tree"
+			},{
+				name: "European Beech",
+				structureId: "gaia_european_beech",
+				iconCss: "gaia_european_beech",
+				structureType: "tree"
+			},{
+				name: "Mediterranean Cypress",
+				structureId: "gaia_mediterranean_cypress",
+				iconCss: "gaia_mediterranean_cypress",
+				structureType: "tree"
+			},{
+				name: "Pine",
+				structureId: "gaia_pine",
+				iconCss: "gaia_pine",
+				structureType: "tree"
+			},{
+				name: "Poplar",
+				structureId: "gaia_poplar",
+				iconCss: "gaia_poplar",
+				structureType: "tree"
 			}]
 		}],
 
