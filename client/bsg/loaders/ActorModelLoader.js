@@ -38,7 +38,7 @@ var ActorModelLoader = function () {
 				me.propsQueue = $(xml).find("variant[name!='death']") //,variant[name!='Idle'],variant[name!='garrisoned']")
 					.find("props prop").map(function(index, el) {
 						// todo: filter these attachpoints through jQuery find
-						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
+						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
 							return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };
 					}).toArray();
 				me.textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
@@ -58,10 +58,11 @@ var ActorModelLoader = function () {
 
 	// PRIVATE METHODS
 
-	/** Gets called when */
+	/** Gets called when main collada model is downloaded from the server*/
 	function doneLoadingScene (collada){
 		me.scene = collada.scene;
 		me.scene.name = me.modelName;
+		me.scene.castShadow = true;
 		removeLights(me.scene);
 
 		var texture = THREE.ImageUtils.loadTexture(me.textureUrl);
@@ -82,7 +83,7 @@ var ActorModelLoader = function () {
 		checkIfDone();
 	}
 
-	/** Fires when a prop is done loading */
+	/** Fires when a prop is done loading from the server */
 	function doneLoadingProp(collada, propTextureUrl, attachPoint){
 		var mesh = collada.scene;
 
@@ -106,6 +107,11 @@ var ActorModelLoader = function () {
 			attachTo = me.scene;
 		}
 
+		/*if(attachPoint == 'garrisoned'){
+			scene.addEventListener("UPDATE", function(res){
+				mesh.updateAnimation( 1000 * res.delta);
+			});
+		}*/
 		attachTo.add(mesh);
 		me.scene.updateMatrix();
 
@@ -127,19 +133,6 @@ var ActorModelLoader = function () {
 				success: function(reqUrl, attachPoint) {
 					// create closure for reqUrl, attachPoint and propIndex
 					return function (xml) {
-					if(attachPoint == 'loaded-projectile' ||
-							attachPoint == 'projectile' ||
-							attachPoint == 'garrisoned' ||
-							//me.propsQueue[propIndex].actor.substring(0, 'particle'.length) == 'particle'
-							attachPoint == 'smoke' ||
-							attachPoint == 'fire'
-						){
-
-						// These are useless to us
-						// todo: Perhaps we can have particles later
-						removeFromQueue(reqUrl);
-						return;
-					}
 
 					if($(xml).find("actor group variant mesh").size() === 0){
 						// There's no mesh, we dont know how to handle this. Keep calm and parse on.
@@ -229,8 +222,10 @@ var ActorModelLoader = function () {
 	}
 
 	// PUBLIC INTERFACE
-	// Public methods
+	// Public members
+	this.modelName = null;
 
+	// Public methods
 	/** Loads a model and its textures by providing the actor XML file */
 	this.loadActorXml = loadActorXml;
 };
