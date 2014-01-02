@@ -96,7 +96,6 @@ var ActorModelLoader = function () {
 		setMaterial(mesh, material);
 		mesh.scale.x = mesh.scale.y = mesh.scale.z = 1;	// Set scale to 1 because children are recursively scaled for some arcane reason
 
-<<<<<<< HEAD
 		var attachTo = null;
 		// Find the scene to add this prop to
 		if(attachPoint != "root"){
@@ -108,9 +107,6 @@ var ActorModelLoader = function () {
 		}
 
 		attachTo.add(mesh);
-=======
-		me.scene.add(mesh);
->>>>>>> parent of f42d161... Props that are not added to root are added to the appropriate sub node. Example of this are the garrisoned flags of fortresses, towers, temples etc
 		me.scene.updateMatrix();
 
 
