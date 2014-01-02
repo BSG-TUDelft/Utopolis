@@ -319,7 +319,6 @@ function init() {
 	}
 
 	$( document ).ready(function() {
-		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
 	});
 }
 
@@ -418,9 +417,13 @@ function startGame(){
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
+	scene.addEventListener("UPDATE", Gui.update);
 
 	// Start game loop
 	animate();
+
+	// Display welcome message
+	Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -878,10 +881,13 @@ function animate() {
 function update() {
     var delta = clock.getDelta();
     if ( t > 1 ) t = 0;
-    updateBirds(delta);
-    updateFlag(delta);
     stats.update();
-	Gui.update();
+
+	// Dispatch 'UPDATE' event on scene
+	scene.dispatchEvent({
+		type: "UPDATE",
+		delta: delta
+	});
 }
 
 function highlightSelectedModel (model) {

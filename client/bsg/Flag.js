@@ -2,8 +2,18 @@ var base_height = 1;
 var _size;
 var scale_v;
 var group;
+var flag_placed;
 
-function initFlag(size, texture_uri) {
+function initFlag(scene, size, texture_uri) {
+	// Listen to scenes UPDATE event to update animation
+	scene.addEventListener("UPDATE", function(res){
+		if(group){
+			if(group.children[2]){
+				group.children[2].updateAnimation( 50 * res.delta );
+			}
+		}
+	});
+
 	_size = size;
 	scale_v = (size*(3/2)) / 13;
 
@@ -53,13 +63,6 @@ function initFlag(size, texture_uri) {
 	flag_placed = true;
 	handling_flag = true;
 	return group;
-}
-
-function updateFlag(delta){
-	if(group)
-		if(group.children[2]){
-			group.children[2].updateAnimation( 50 * delta );
-		}
 }
 
 function getFlag(){
