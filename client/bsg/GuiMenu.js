@@ -847,7 +847,7 @@ function initGui() {
 			data[i][3] += Math.floor(Math.random() * 10);
 			data[i][4] += Math.floor(Math.random() * 10);
 		}
-		leaderboard.update(data);
+		leaderboard.update();
 	}, 1500);
 
 

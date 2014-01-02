@@ -38,7 +38,7 @@ var ActorModelLoader = function () {
 				me.propsQueue = $(xml).find("variant[name!='death']") //,variant[name!='Idle'],variant[name!='garrisoned']")
 					.find("props prop").map(function(index, el) {
 						// todo: filter these attachpoints through jQuery find
-						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
+						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisonedX' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
 							return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };
 					}).toArray();
 				me.textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
@@ -58,7 +58,7 @@ var ActorModelLoader = function () {
 
 	// PRIVATE METHODS
 
-	/** Gets called when */
+	/** Gets called when main collada model is downloaded from the server */
 	function doneLoadingScene (collada){
 		me.scene = collada.scene;
 		me.scene.name = me.modelName;
@@ -82,10 +82,9 @@ var ActorModelLoader = function () {
 		checkIfDone();
 	}
 
-	/** Fires when a prop is done loading */
+	/** Fires when a prop is done loading from the server*/
 	function doneLoadingProp(collada, propTextureUrl, attachPoint){
 		var mesh = collada.scene;
-
 		var texture = THREE.ImageUtils.loadTexture(propTextureUrl);
 		var material = new THREE.MeshBasicMaterial({map: texture});
 
@@ -96,7 +95,17 @@ var ActorModelLoader = function () {
 		setMaterial(mesh, material);
 		mesh.scale.x = mesh.scale.y = mesh.scale.z = 1;	// Set scale to 1 because children are recursively scaled for some arcane reason
 
-		me.scene.add(mesh);
+		var attachTo = null;
+		// Find the scene to add this prop to
+		if(attachPoint != "root"){
+			// Prop is not added to root, find the child (prefixed with 'prop_' in collada file)
+			attachTo = me.scene.getChildByName("prop_" + attachPoint, true);
+		}
+		if(attachTo == null){
+			attachTo = me.scene;
+		}
+
+		attachTo.add(mesh);
 		me.scene.updateMatrix();
 
 
@@ -117,19 +126,6 @@ var ActorModelLoader = function () {
 				success: function(reqUrl, attachPoint) {
 					// create closure for reqUrl, attachPoint and propIndex
 					return function (xml) {
-					if(attachPoint == 'loaded-projectile' ||
-							attachPoint == 'projectile' ||
-							attachPoint == 'garrisoned' ||
-							//me.propsQueue[propIndex].actor.substring(0, 'particle'.length) == 'particle'
-							attachPoint == 'smoke' ||
-							attachPoint == 'fire'
-						){
-
-						// These are useless to us
-						// todo: Perhaps we can have particles later
-						removeFromQueue(reqUrl);
-						return;
-					}
 
 					if($(xml).find("actor group variant mesh").size() === 0){
 						// There's no mesh, we dont know how to handle this. Keep calm and parse on.

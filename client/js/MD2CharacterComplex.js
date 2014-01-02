@@ -311,7 +311,7 @@ THREE.MD2CharacterComplex = function () {
 
 		if ( this.meshBody ) {
 
-			this.meshBody.update( delta );
+			this.meshBody.update();
 
 			this.meshBody.setAnimationWeight( this.activeAnimation, mix );
 			this.meshBody.setAnimationWeight( this.oldAnimation,  1 - mix );
@@ -320,7 +320,7 @@ THREE.MD2CharacterComplex = function () {
 
 		if ( this.meshWeapon ) {
 
-			this.meshWeapon.update( delta );
+			this.meshWeapon.update();
 
 			this.meshWeapon.setAnimationWeight( this.activeAnimation, mix );
 			this.meshWeapon.setAnimationWeight( this.oldAnimation,  1 - mix );

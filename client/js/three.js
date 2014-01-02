@@ -30086,7 +30086,7 @@ THREE.AnimationHandler = (function() {
 	that.update = function( deltaTimeMS ) {
 
 		for( var i = 0; i < playing.length; i ++ )
-			playing[ i ].update( deltaTimeMS );
+			playing[ i ].update();
 
 	};
 
@@ -30396,7 +30396,7 @@ THREE.Animation.prototype.play = function ( loop, startTimeMS ) {
 
 		}
 
-		this.update( 0 );
+		this.update();
 
 	}
 
@@ -30811,7 +30811,7 @@ THREE.KeyFrameAnimation.prototype.play = function( loop, startTimeMS ) {
 
 		}
 
-		this.update( 0 );
+		this.update();
 
 	}
 
@@ -34071,7 +34071,7 @@ THREE.BoxHelper = function ( object ) {
 
 	if ( object !== undefined ) {
 
-		this.update( object );
+		this.update();
 
 	}
 
