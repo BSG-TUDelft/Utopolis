@@ -99,7 +99,7 @@ var ActorModelLoader = function () {
 		// Find the scene to add this prop to
 		if(attachPoint != "root"){
 			// Prop is not added to root, find the child (prefixed with 'prop_' in collada file)
-			attachTo = me.scene.getChildByName("prop_" + attachPoint, true);
+			attachTo = me.scene.getObjectByName("prop_" + attachPoint, true);
 		}
 		if(attachTo == null){
 			attachTo = me.scene;
@@ -196,7 +196,7 @@ var ActorModelLoader = function () {
 		}
 	}
 
-	/** Will see if everything that needs to be loaded is loaded, fires doneLoading if this is the case*/
+	/** Will see if everything that needs to be loaded is loaded, fires doneLoading event if this is the case*/
 	function checkIfDone(){
 		if(me.propsQueue.length === 0){
 			me.dispatchEvent({ type: ActorModelLoader.doneLoading, scene: me.scene });
