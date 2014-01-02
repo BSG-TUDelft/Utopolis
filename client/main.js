@@ -319,6 +319,7 @@ function init() {
 	}
 
 	$( document ).ready(function() {
+		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
 	});
 }
 
@@ -347,7 +348,7 @@ function requestCity() {
 		Gui.console.printText("Could not connect to server (" + host + "). Playing in client-only mode.", null);
 		city = {
             numCitizens: 100
-        };
+        }
         startGame();
     });
 }
@@ -412,8 +413,6 @@ function saveStructure( structure ) {
 
 /** Starts the game, registers event handlers */
 function startGame(){
-	Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
-
 	// register event handlers
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );

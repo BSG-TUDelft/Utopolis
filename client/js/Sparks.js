@@ -78,13 +78,13 @@ SPARKS.Emitter.prototype = {
 			}
 
 			while(elapsed >= emitter._TIMESTEP) {
-				emitter.update();
+				emitter.update(emitter._TIMESTEP / 1000);
 				elapsed -= emitter._TIMESTEP;
 			}
 			emitter._lastTime = time - elapsed;
 
 		} else {
-			emitter.update();
+			emitter.update(elapsed/1000);
 			emitter._lastTime = time;
 		}
 
