@@ -436,7 +436,7 @@ function collidablesContainEmitter(colliderOrigin) {
 }
 
 function changeColliderColor(collider, r, g, b) {
-    if(collider.children[0].material != null ){
+    if(collider.children[0].material != null && collider.children[0].material.ambient){
         collider.children[0].material.ambient.r = r;
         collider.children[0].material.ambient.g = g;
         collider.children[0].material.ambient.b = b;
@@ -898,7 +898,7 @@ function highlightSelectedModel (model) {
     selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
-    highlightMaterial.emissive.setHex(0x888888);
+    if(highlightMaterial.emissive) highlightMaterial.emissive.setHex(0x888888);
     selectedModel.material = highlightMaterial;
 }
 

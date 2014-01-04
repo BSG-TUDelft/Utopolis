@@ -21,7 +21,7 @@ var ActorModelLoader = function () {
 	// PUBLIC METHODS
 	/** Loads a model and its textures by providing the actor XML file */
 	function loadActorXml (name, actorXml) {
-		this.modelName = name;
+		me.modelName = name;
 		var url =  actorsUrlPrefix + actorXml;
 		$.ajax({
 			type: "GET",
@@ -41,14 +41,27 @@ var ActorModelLoader = function () {
 						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
 							return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };
 					}).toArray();
-				me.textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
-				me.textureUrl = checkTextureUrl(url, me.textureUrl);
+				var textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
+				textureUrl = checkTextureUrl(url, textureUrl);
 
 				// Taking the first mesh
 				var meshUrl = meshUrlPrefix + $(xml).find("mesh").first().text();
+				var material;
+
+				// This crude way of defining material looks if the <material> node contains the word player
+				// and if so, loads the player color shader (where transparency == player color)
+				if($(xml).find("material").first().text().indexOf("player") > -1)
+					material = getPlayerColorMaterial(textureUrl);
+				else
+					material = getAdditiveAlphaBlendingMaterial(textureUrl);
 
 				// Load the mesh
-				colladaLoader.load(meshUrl, doneLoadingScene);
+				colladaLoader.load(meshUrl, function(material) {
+					// Create closure for material
+					return function(collada){
+						doneLoadingScene(collada, material);
+					}
+				}(material));
 			},
 			error: function(xhr, status, error){
 				console.error("ActorModelLoader.loadActorXml: Error loading xml [" + url + "]. Name: [" + name + "]. Error message: " + error);
@@ -59,20 +72,14 @@ var ActorModelLoader = function () {
 	// PRIVATE METHODS
 
 	/** Gets called when main collada model is downloaded from the server*/
-	function doneLoadingScene (collada){
+	function doneLoadingScene (collada, material){
 		me.scene = collada.scene;
 		me.scene.name = me.modelName;
 		me.scene.castShadow = true;
+
 		removeLights(me.scene);
-
-		var texture = THREE.ImageUtils.loadTexture(me.textureUrl);
-		var material = new THREE.MeshLambertMaterial({map: texture});
-
-		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
-		material.transparent = true;
-		material.blending = THREE["AdditiveAlphaBlending"];
-
 		setMaterial(me.scene, material);
+
 		me.scene.scale.x = me.scene.scale.y = me.scene.scale.z = me.scale;
 		me.scene.updateMatrix();
 
@@ -84,15 +91,8 @@ var ActorModelLoader = function () {
 	}
 
 	/** Fires when a prop is done loading from the server */
-	function doneLoadingProp(collada, propTextureUrl, attachPoint){
+	function doneLoadingProp(collada, material, attachPoint){
 		var mesh = collada.scene;
-
-		var texture = THREE.ImageUtils.loadTexture(propTextureUrl);
-		var material = new THREE.MeshBasicMaterial({map: texture});
-
-		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
-		material.transparent = true;
-		material.blending = THREE["AdditiveAlphaBlending"];
 
 		setMaterial(mesh, material);
 		mesh.scale.x = mesh.scale.y = mesh.scale.z = 1;	// Set scale to 1 because children are recursively scaled for some arcane reason
@@ -125,7 +125,6 @@ var ActorModelLoader = function () {
 			var url = actorsUrlPrefix + me.propsQueue[i].actor;
 			var attachPoint = me.propsQueue[i].attachPoint;
 
-
 			$.ajax({
 				type: "GET",
 				url: url,
@@ -149,16 +148,24 @@ var ActorModelLoader = function () {
 					var propTextureUrl = textureUrlPrefix + $(xml).find("actor group variant textures texture[name*='baseTex']").first().attr("file");
 					propTextureUrl = checkTextureUrl(reqUrl, propTextureUrl);
 
+					// This crude way of defining material looks if the <material> node contains the word player
+					// and if so, loads the player color shader (where transparency == player color)
+					var material;
+					if($(xml).find("material").first().text().indexOf("player") > -1)
+						material = getPlayerColorMaterial(propTextureUrl);
+					else
+						material = getAdditiveAlphaBlendingMaterial(propTextureUrl);
+
 					var propLoader = new THREE.ColladaLoader();
 					propLoader.options.convertUpAxis = true;
-					propLoader.load(propMeshUrl, function( prTU, attachPoint) {
-						// Create closure for propTextureUrl
+					propLoader.load(propMeshUrl, function( material, attachPoint) {
+						// Create closure for material and attachPoint
 						return function(collada) {
 							// Remove prop from loading queue
 							removeFromQueue(reqUrl);
 
-							doneLoadingProp(collada, propTextureUrl, attachPoint);
-					}}(propTextureUrl, attachPoint));
+							doneLoadingProp(collada, material, attachPoint);
+					}}(material, attachPoint));
 
 				}}(url, attachPoint),
 				error: function(reqUrl) {
@@ -203,6 +210,44 @@ var ActorModelLoader = function () {
 		}
 	}
 
+	/** Returns the material used in meshes that need to be textures with player color
+	 * @param textureUrl {String} url to texture
+	 * @returns {THREE.MeshLambertMaterial} to be applied to meshes */
+	function getAdditiveAlphaBlendingMaterial(textureUrl){
+		var texture = THREE.ImageUtils.loadTexture(textureUrl);
+		var material = new THREE.MeshLambertMaterial({map: texture});
+
+		material.transparent = true;
+		material.blending = THREE["AdditiveAlphaBlending"];
+		return material;
+	}
+
+	/** Returns the material used in meshes that need to be textures with player color
+	 * @param textureUrl {String} url to texture
+	 * @returns {THREE.ShaderMaterial} to be applied to meshes */
+	function getPlayerColorMaterial(textureUrl){
+		// texture
+		var texture = THREE.ImageUtils.loadTexture(textureUrl);
+		texture.needsUpdate = true; // important
+
+		// uniforms
+		var uniforms = {
+			color: { type: "c", value: me.playerColor },
+			texture: { type: "t", value: texture }
+		};
+
+		// attributes
+		var attributes = {	};
+
+		// material
+		return new THREE.ShaderMaterial({
+			attributes: attributes,
+			uniforms: uniforms,
+			vertexShader: document.getElementById('player_color_vertex_shader').textContent,
+			fragmentShader: document.getElementById('player_color_fragment_shader').textContent
+		});
+	}
+
 	/** Will see if everything that needs to be loaded is loaded, fires doneLoading event if this is the case*/
 	function checkIfDone(){
 		if(me.propsQueue.length === 0){
@@ -224,6 +269,7 @@ var ActorModelLoader = function () {
 	// PUBLIC INTERFACE
 	// Public members
 	this.modelName = null;
+	this.playerColor = new THREE.Color( 0xFF0066 );
 
 	// Public methods
 	/** Loads a model and its textures by providing the actor XML file */
