@@ -1,7 +1,7 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var host = "http://localhost:8080/api/"
-
+var host = "http://localhost:8080/api/";
+var clientOnlyMode = false;
 var container, stats;
 
 var camera, scene, renderer;
@@ -139,19 +139,21 @@ function initModels(callback){
 		// Load GAIA
 		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml'
 
-	}
+	};
 	var queue = 0;
 	for(var i in actors){
-		queue++;
+		if(!actors.hasOwnProperty(i)) continue;
+        queue++;
 		load(i, actors[i]);
 	}
 }
 
 function initRollOver(position) {
+    var ghostModel;
     if(currentModel){
         if(currentModel.material == null && getFlag() == null){
             rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
-            var ghostModel = currentModel.getClone();
+            ghostModel = currentModel.getClone();
             ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
             rollOverMesh.add(ghostModel);
             rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
@@ -160,7 +162,7 @@ function initRollOver(position) {
         }
         else if(currentModel.material != null){
             rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
-            var ghostModel = currentModel.getClone();
+            ghostModel = currentModel.getClone();
             var ghostMaterial = ghostModel.material.clone();
 
             setMaterial(ghostModel, ghostMaterial);
@@ -184,7 +186,7 @@ function setRollOverPosition (intersector) {
 }
 
 function registerCollidableBoundingMesh(model) {            //using this method might cause trouble if we decide to allow players to move buildings instead of destroying and building new ones
-    modelBoundingBox = model.getBoundingBox();
+    var modelBoundingBox = model.getBoundingBox();
     collidableBoundingBoxes.push(modelBoundingBox);
     //showBoundingBox(modelBoundingBox);                //collision debugging
 
@@ -339,6 +341,12 @@ function requestCity() {
             "The following error occured: " +
             textStatus, errorThrown
         );
+        clientOnlyMode = true;
+		Gui.console.printText("Could not connect to server (" + host + "). Playing in client-only mode.", null);
+		city = {
+            numCitizens: 100
+        }
+        startGame();
     });
 }
 
@@ -530,7 +538,7 @@ function onDocumentMouseDown( event ) {
 
     				// Now select what we just made (this is sort of ugly I suppose, but it works)
     				togglePlacementMode();
-    				var intersects = getMouseProjectionOnObjects( selectableMeshes );
+    				intersects = getMouseProjectionOnObjects( selectableMeshes );
     				if(intersects.length > 0) {
     					if (selectedModel != intersects[0].object) {                    //we have a new selection
     						var topLevelMesh = getTopLevelMesh(model);
@@ -608,8 +616,8 @@ function onKeyDown ( event ) {
             rotateRollOverCW();
             break;
         case 75: // k
-            printEmitterOfModel(rollOverMesh);                  //collision debugging
-            showEmitterOfModel(rollOverMesh);
+            //printEmitterOfModel(rollOverMesh);                  //collision debugging
+            //showEmitterOfModel(rollOverMesh);
             break;
         case 88: // x
             removeSelectedModel();
@@ -639,25 +647,22 @@ function getProjectionDirection() {
 function setCameraElevationAngle() {
     if(cameraElevationAngle === undefined){
         var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z);
-        var elevationAngle = camera.position.angleTo(lookAtReference);
-        cameraElevationAngle = elevationAngle;
+        cameraElevationAngle = camera.position.angleTo(lookAtReference);
     }
-    return elevationAngle;
+    return cameraElevationAngle;
 }
 
 function setCameraLookAngle() {
     if(cameraLookAngle === undefined) {
         var lookAtReference = new THREE.Vector3 (cameraLookAt.x, camera.position.y, cameraLookAt.z + getProjectionDistance());
-        var lookAngle = camera.position.angleTo(lookAtReference) + Math.PI/2;
-        cameraLookAngle = lookAngle;
+        cameraLookAngle = camera.position.angleTo(lookAtReference) + Math.PI / 2;
     }
-    return lookAngle;
+    return cameraLookAngle;
 }
 
 function getProjectionDistance() {                                                        //gets the distance to the projection of the cameraLookAtPoint on the y = camera.position.y plane.
     var projectionPoint = getLookAtProjection();
-    var projectionDistance = camera.position.distanceTo(projectionPoint);
-    return projectionDistance;
+    return camera.position.distanceTo(projectionPoint);
 }
 
 function getNormalizedProjectionDirection() {
@@ -759,7 +764,7 @@ function increaseCameraElevation () {
 function decreaseCameraElevation () {
     if(cameraElevationAngle*180/Math.PI < 65) {
         cameraElevationAngle += 0.05;
-        var lookDirection = getLookAtDirection().normalize();
+        //var lookDirection = getLookAtDirection().normalize();
         var lookDistance = camera.position.distanceTo(cameraLookAt);
 
         camera.position.x = cameraLookAt.x + Math.sin( cameraElevationAngle ) * Math.cos( cameraLookAngle ) * lookDistance;
@@ -895,8 +900,7 @@ function clearSelectedModel () {
 
 function getMouseProjectionOnObjects(objectArray) {
     raycaster = projector.pickingRay( mouse2D.clone(), camera );
-    var intersects = raycaster.intersectObjects( objectArray );
-    return intersects;
+    return raycaster.intersectObjects(objectArray);
 }
 
 function getMouseProjectionOnFloor() {
