@@ -18,6 +18,10 @@
 	line-height: 30px;
 }
 
+
+#topbar .menu-buttons .disabled {
+	color: #393A39;
+}
 #topbar .menu-buttons li {
 	cursor: pointer;
 	float: left;

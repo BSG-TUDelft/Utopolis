@@ -10,12 +10,12 @@ var Topbar = function (parent, topbarData) {
 			"<ul class='resources'></ul>" +
 		"</div>");
 
-	this.el.find(".menu-buttons").append("<li button-id='settings'>[Settings]</li>");
+	this.el.find(".menu-buttons").append("<li button-id='settings' class='disabled'>[Settings]</li>");
 	this.el.find(".menu-buttons").append("<li button-id='quests'>[Quests]</li>");
-	this.el.find(".menu-buttons").append("<li button-id='crafting'>[Crafting]</li>");
-	this.el.find(".menu-buttons").append("<li button-id='auctionhouse'>[Auction House]</li>");
+	this.el.find(".menu-buttons").append("<li button-id='crafting' class='disabled'>[Crafting]</li>");
+	this.el.find(".menu-buttons").append("<li button-id='auctionhouse' class='disabled'>[Auction House]</li>");
 	this.el.find(".menu-buttons").append("<li button-id='leaderboard'>[Leaderboard]</li>");
-	this.el.find(".menu-buttons").append("<li button-id='messages'>[Messages]</li>");
+	this.el.find(".menu-buttons").append("<li button-id='messages' class='disabled'>[Messages]</li>");
 	this.el.find(".menu-buttons").append("<li button-id='help'>[Help]</li>");
 
 	this.el.find("li").click($.proxy(onButtonClick, this));
