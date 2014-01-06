@@ -1,75 +1,80 @@
-var Quests = function(parent, data, config){
-	// Call parent constructor
-	Popup.prototype.constructor.call(this, parent, config);
+"use strict";
+var QuestOverview = function(parent, data, config){
+	this.config = config || {};
+	this.activeQuestContainer = $('<div></div>');
+	this.inActiveQuestContainer = $('<div></div>');
 
-	this.el.append( '' +
-		'<div class="leaderboard"> ' +
-		'<h1>Leaderboard</h1>' +
-		'<table cellpadding="0" cellspacing="0" border="0" id="leaderboard"></table>' +
+	this.config.tabs = [{
+		text: "Active quests",
+		content: this.activeQuestContainer
+	},{
+		text: "Completed quests",
+		content: this.inActiveQuestContainer
+	}];
+
+	// Call parent constructor
+	Popup.prototype.constructor.call(this, parent, this.config);
+
+	// Listen to tabChanged event of superclass Popup
+	this.addEventListener(Popup.tabChanged, $.proxy(onTabChanged, this));
+
+	this.el.addClass('questoverview');
+	this.el.append('' +
+		'<h1>Quest overview</h1>' +
+		'<div class="questlog"> ' +
 		'</div>' );
-	// Used in column renderer
-	var parseIcons = function (icons) {
-		var res = "<div class='medals'>";
-		var css = {
-			bronze1: "medal_bronze1",
-			bronze2: "medal_bronze2",
-			bronze3: "medal_bronze3",
-			silver1: "medal_silver1",
-			silver2: "medal_silver2",
-			silver3: "medal_silver3",
-			gold1: "medal_gold1",
-			gold2: "medal_gold2",
-			gold3: "medal_gold3"
-		};
-		for (var i in icons) {
-			if (!icons.hasOwnProperty(i)) continue;
-			if (icons[i]) {
-				res += "<div title='" + i + "' class='" + css[i] + "'></div>";
-			}
+	this.el.find(".questlog").append(this.activeQuestContainer,	this.inActiveQuestContainer);
+
+
+	this.update = function(data){
+		if (!this.isVisible()) return false;
+
+		//var questlog = this.el.find(".questlog");
+		for(var i = 0; i < data.length; i++){
+			//var css = data[i].completed ? "completed" : "incomplete";
+			//var status = data[i].completed ? "Completed!" : "Active";
+
+			var container = data[i].completed ? this.inActiveQuestContainer : this.activeQuestContainer;
+			container.append('' +
+				'<div quest-id="' + data[i].id + '" quest-completed="' + data[i].completed + '">' +
+					'<h2>Quest: ' + data[i].title + '</h2>' +
+					'<span class="status">' + status + '</span>' +
+					data[i].text +
+				'</div>'
+			);
 		}
-		return res + "</div>";
 	};
 
-	$('#leaderboard').dataTable( {
-		"aaData": data,
-		"aoColumns": [{
-			sTitle: "Name", mRender: function ( data, type, full ) {
-				return data + '' + parseIcons(full[5]);
-			}
-		},
-			{ "sTitle": "Citizens", sClass: "right_align", sWidth: "100px" },
-			{ "sTitle": "Culture", sClass: "right_align", sWidth: "100px" },
-			{ "sTitle": "Economy", sClass: "right_align", sWidth: "100px" },
-			{ "sTitle": "Knowledge", sClass: "right_align", sWidth: "110px" }
-		],
-		bLengthChange: false,
-		bInfo: false,
-		bPaginate: false,
-		bFilter: false
-	});
-	$('#leaderboard').find('th').append('<div></div>');
-	$(window).bind('resize', function () {
-		$('#leaderboard').css('width', '100%');
-	} );
+	// Private
+	function onTabChanged(e){
+		/*this.el.find(".questlog div").each(function(index, el){
+			if(e.tabIndex == el.attributes[data[i].completed])
+				$(el).show();
+			else
+				$(el).hide();
+		});*/
 
+		console.log(e.tabIndex);
+	}
+
+	this.update(data);
 	this.el.hide();
+
 };
-Leaderboard.prototype = new Popup();
+QuestOverview.prototype = new Popup();
 
 /** Updates data, provide data in nested array */
-Leaderboard.prototype.update = function (data) {
+QuestOverview.prototype.update2 = function (data) {
 	// Prevent updating if not needed to improve performance. Also Chrome doesnt like it
 	if (!this.isVisible()) return false;
 
-	for (var i = 0; i < data.length; i++) {
-		$('#leaderboard').dataTable().fnUpdate(data[i], i);
-	}
+	this.questData = data;
 };
 
-Leaderboard.prototype.show = function(){
+QuestOverview.prototype.show = function(){
 	Popup.prototype.show.call(this);
 	this.center();
 };
 
-
-Leaderboard.prototype.constructor = Leaderboard;
+// Reset constructor
+QuestOverview.prototype.constructor = QuestOverview;
