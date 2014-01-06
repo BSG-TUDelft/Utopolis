@@ -24,6 +24,7 @@ public class City implements Serializable {
 	private List<Structure> structures;
 	private String name;
 	private int numCitizens;
+	private String color;
 	
 	public int getId() {
 		return id;
@@ -63,6 +64,14 @@ public class City implements Serializable {
 
 	public void setNumCitizens(int numCitizens) {
 		this.numCitizens = numCitizens;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 	
 }

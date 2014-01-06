@@ -50,6 +50,7 @@ public class DBBootstrap {
 			c1.setPlayer(p1);
 			c1.setStructures(Arrays.asList(structs1));
 			c1.setNumCitizens(1337);
+			c1.setColor("0xFF0000");
 			DBConnector.get().save(c1);
 
 			City[] cities1 = { c1 };

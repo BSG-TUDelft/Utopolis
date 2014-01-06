@@ -768,9 +768,9 @@ function initGui() {
 	var topbarData = {
 		resources: [{
 			resourceId: 'citizens',
-			name: 'Idle citizens',
+			name: 'Homeless citizens',
 			iconCss: 'citizens',
-			formatter: function(val) { return $.format('{0} idle citizens', val); }
+			formatter: function(val) { return $.format('{0} homeless citizens', val); }
 		}, {
 			resourceId: 'wood',
 			name: 'Wood',
