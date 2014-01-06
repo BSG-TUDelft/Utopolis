@@ -5,6 +5,7 @@ import java.util.Arrays;
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
+import nl.tudelft.bsg.utopolis.server.model.Race;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 public class DBBootstrap {
@@ -51,6 +52,7 @@ public class DBBootstrap {
 			c1.setStructures(Arrays.asList(structs1));
 			c1.setNumCitizens(1337);
 			c1.setColor("0xFF0000");
+			c1.setRace(Race.kart);
 			DBConnector.get().save(c1);
 
 			City[] cities1 = { c1 };

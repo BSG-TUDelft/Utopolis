@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -25,7 +26,9 @@ public class City implements Serializable {
 	private String name;
 	private int numCitizens;
 	private String color;
-	
+	@Enumerated
+	private Race race;
+
 	public int getId() {
 		return id;
 	}
@@ -72,6 +75,14 @@ public class City implements Serializable {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public Race getRace() {
+		return race;
+	}
+
+	public void setRace(Race race) {
+		this.race = race;
 	}
 	
 }
