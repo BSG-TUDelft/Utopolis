@@ -8,6 +8,7 @@ var Gui = {
 	topbar: null,				// Top bar menu element
 	buildMenu: null,			// Build menu on the left
 	contextMenu: null,			// Context menu on the right
+	craftingScreen: null,		// Crafting screen popup
 	console: null,				// Console to display text
 	timeLastPoll: $.now(),		// Time of last poll
 	pollInterval: 2000,			// Interval of polling (in ms)
@@ -88,6 +89,17 @@ var Gui = {
                 });
 			}
         });
+
+		$( "body" ).keypress(function( event ) {
+			switch(event.which){
+
+				case "c".charCodeAt(0):
+					var data = {};
+					Gui.craftingScreen = new CraftingScreen($("body"), data, { animation: "slow"});
+					break;
+			}
+		});
+
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -531,7 +543,8 @@ function initGui() {
 			}]
 		}],
 
-		/** Contains definitions for structure types. Note that keys under 'cost' and 'requirements' refer to keys in the resources collection */
+		/** Contains definitions for structure types. Note that keys under
+		 * 'cost' and 'requirements' refer to keys in the resources collection */
 		structureTypes: {
 			"house": {
 				cost: {
@@ -873,7 +886,6 @@ function initGui() {
 
 		// THIS LINE (AND THE LINE UNDER IT)
 		login.hide();
-
 	}
 
 	login.center();
