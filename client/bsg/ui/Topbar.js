@@ -11,6 +11,7 @@ var Topbar = function (parent, topbarData) {
 		"</div>");
 
 	this.el.find(".menu-buttons").append("<li button-id='settings'>[Settings]</li>");
+	this.el.find(".menu-buttons").append("<li button-id='quests'>[Quests]</li>");
 	this.el.find(".menu-buttons").append("<li button-id='crafting'>[Crafting]</li>");
 	this.el.find(".menu-buttons").append("<li button-id='auctionhouse'>[Auction House]</li>");
 	this.el.find(".menu-buttons").append("<li button-id='leaderboard'>[Leaderboard]</li>");
