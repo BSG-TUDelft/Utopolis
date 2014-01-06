@@ -61,8 +61,31 @@ var Gui = {
 		});
 
 		// Initialize topbar menu element
-		Gui.topbar = new Topbar(topbarData);
-		Gui.topbar.init();
+		Gui.topbar = new Topbar($("#topbar"), topbarData);
+		Gui.topbar.addEventListener(Topbar.buttonClicked, function(e){
+			// Event handler for top buttons
+			switch(e.buttonId){
+				case 'leaderboard':
+					leaderboard.toggle();
+					break;
+				case 'help':
+					alert("Utopolis [BETA] v0.1\n\n\n" +
+						"* Georgi Khomeriki (Computer Science TU Delft)\n" +
+						"* Tiago Mota (Computer Science TU Delft)\n" +
+						"* Rashmi Narayan (Technology, Policy and Management TU Delft)\n" +
+						"* Anika Rose (Technology, Policy and Management TU Delft)\n" +
+						"* Wouter van den Heuvel (Media Technology Leiden University)\n" +
+						"* Mircea Voda (Computer Science TU Delft)\n" +
+						"\n\n\n" +
+						"[licence information]"
+					);
+					break;
+				default:
+					alert("Not implemented - Sorry");
+					break;
+			}
+		});
+
 
 		// Initialize right context menu
 		Gui.contextMenu = new ContextMenu($("#right_menu"), menuData);
@@ -88,6 +111,40 @@ var Gui = {
                 });
 			}
         });
+
+		/** Leaderboard*/
+		var getRndInt = function(max){
+			return Math.floor(Math.random() * max);
+		};
+
+		var getRndIcons = function() {
+			return {
+				bronze1: Math.random() < .5,
+				bronze2: Math.random() < .5,
+				bronze3: Math.random() < .5,
+				silver1: Math.random() < .5,
+				silver2: Math.random() < .5,
+				silver3: Math.random() < .5,
+				gold1: Math.random() < .5,
+				gold2: Math.random() < .5,
+				gold3: Math.random() < .5
+			};
+		};
+		var data = [
+			[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
+		];
+
+		/** Initiates a leaderboard with parent and given inital data */
+		var leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -784,61 +841,29 @@ function initGui() {
 	Gui.initGui(menuData, topbarData);
 
 
-	/** Leaderboard*/
-	var getRndInt = function(max){
-		return Math.floor(Math.random() * max);
-	};
 
-	var getRndIcons = function() {
-		return {
-			bronze1: Math.random() < .5,
-			bronze2: Math.random() < .5,
-			bronze3: Math.random() < .5,
-			silver1: Math.random() < .5,
-			silver2: Math.random() < .5,
-			silver3: Math.random() < .5,
-			gold1: Math.random() < .5,
-			gold2: Math.random() < .5,
-			gold3: Math.random() < .5
-		};
-	};
 
-	var data = [
-		[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
-	];
-
-	/** Initiates a leaderboard with parent and given inital data */
-	var leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 
 	/** Test / demo function */
-	setInterval(function(){
-		for(var i = 0; i < data.length; i++){
-			data[i][1] += Math.floor(Math.random() * 10);
-			data[i][2] += Math.floor(Math.random() * 10);
-			data[i][3] += Math.floor(Math.random() * 10);
-			data[i][4] += Math.floor(Math.random() * 10);
-		}
-		leaderboard.update(data);
-	}, 1500);
-
-
-	$( "body" ).keypress(function( event ) {
-		switch(event.which){
-
-			case "l".charCodeAt(0):
-				leaderboard.toggle();
-				break;
-		}
-	});
+//	setInterval(function(){
+//		for(var i = 0; i < data.length; i++){
+//			data[i][1] += Math.floor(Math.random() * 10);
+//			data[i][2] += Math.floor(Math.random() * 10);
+//			data[i][3] += Math.floor(Math.random() * 10);
+//			data[i][4] += Math.floor(Math.random() * 10);
+//		}
+//		leaderboard.update(data);
+//	}, 1500);
+//
+//
+//	$( "body" ).keypress(function( event ) {
+//		switch(event.which){
+//
+//			case "l".charCodeAt(0):
+//				leaderboard.toggle();
+//				break;
+//		}
+//	});
 
 	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
 	login.el.addClass("login");
