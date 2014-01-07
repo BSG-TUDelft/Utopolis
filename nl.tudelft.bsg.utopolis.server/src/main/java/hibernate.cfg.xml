@@ -30,6 +30,8 @@
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Structure"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.City"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Province"/>
+		<mapping class="nl.tudelft.bsg.utopolis.server.model.Quest"/>
+		<mapping class="nl.tudelft.bsg.utopolis.server.model.QuestReq"/>
 		
 	</session-factory>
 </hibernate-configuration>

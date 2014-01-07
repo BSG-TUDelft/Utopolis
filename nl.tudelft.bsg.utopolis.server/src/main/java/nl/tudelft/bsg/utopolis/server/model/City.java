@@ -24,6 +24,8 @@ public class City implements Serializable {
 	private List<Structure> structures;
 	private String name;
 	private int numCitizens;
+	@OneToMany
+	private List<Quest> completedQuests;
 	
 	public int getId() {
 		return id;
@@ -63,6 +65,14 @@ public class City implements Serializable {
 
 	public void setNumCitizens(int numCitizens) {
 		this.numCitizens = numCitizens;
+	}
+
+	public List<Quest> getCompletedQuests() {
+		return completedQuests;
+	}
+
+	public void setCompletedQuests(List<Quest> completedQuests) {
+		this.completedQuests = completedQuests;
 	}
 	
 }
