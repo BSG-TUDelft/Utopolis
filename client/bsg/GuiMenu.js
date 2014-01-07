@@ -9,6 +9,8 @@ var Gui = {
 	buildMenu: null,			// Build menu on the left
 	contextMenu: null,			// Context menu on the right
 	craftingScreen: null,		// Crafting screen popup
+	leaderboard: null,			// Leaderboard popup
+	questOverview: null,		// Quest overview popup
 	console: null,				// Console to display text
 	timeLastPoll: $.now(),		// Time of last poll
 	pollInterval: 2000,			// Interval of polling (in ms)
@@ -62,8 +64,37 @@ var Gui = {
 		});
 
 		// Initialize topbar menu element
-		Gui.topbar = new Topbar(topbarData);
-		Gui.topbar.init();
+		Gui.topbar = new Topbar($("#topbar"), topbarData);
+		Gui.topbar.addEventListener(Topbar.buttonClicked, function(e){
+			// Event handler for top buttons
+			switch(e.buttonId){
+				case 'leaderboard':
+					Gui.leaderboard.toggle();
+					break;
+				case 'help':
+					alert("Utopolis [BETA] v0.1\n\n\n" +
+						"* Georgi Khomeriki (Computer Science TU Delft)\n" +
+						"* Tiago Mota (Computer Science TU Delft)\n" +
+						"* Rashmi Narayan (Technology, Policy and Management TU Delft)\n" +
+						"* Anika Rose (Technology, Policy and Management TU Delft)\n" +
+						"* Wouter van den Heuvel (Media Technology Leiden University)\n" +
+						"* Mircea Voda (Computer Science TU Delft)\n" +
+						"\n\n\n" +
+						"[licence information]"
+					);
+					break;
+				case 'quests':
+					Gui.questOverview.toggle();
+					break;
+				case 'crafting':
+					Gui.craftingScreen.toggle();
+					break;
+				default:
+					alert("Not implemented - Sorry");
+					break;
+			}
+		});
+
 
 		// Initialize right context menu
 		Gui.contextMenu = new ContextMenu($("#right_menu"), menuData);
@@ -90,16 +121,74 @@ var Gui = {
 			}
         });
 
-		$( "body" ).keypress(function( event ) {
-			switch(event.which){
+		var craftingData = {};
+		Gui.craftingScreen = new CraftingScreen($("body"), craftingData, { animation: "slow"});
 
-				case "c".charCodeAt(0):
-					var data = {};
-					Gui.craftingScreen = new CraftingScreen($("body"), data, { animation: "slow"});
-					break;
-			}
-		});
 
+		/** Leaderboard*/
+		var getRndInt = function(max){
+			return Math.floor(Math.random() * max);
+		};
+
+		var getRndIcons = function() {
+			return {
+				bronze1: Math.random() < .5,
+				bronze2: Math.random() < .5,
+				bronze3: Math.random() < .5,
+				silver1: Math.random() < .5,
+				silver2: Math.random() < .5,
+				silver3: Math.random() < .5,
+				gold1: Math.random() < .5,
+				gold2: Math.random() < .5,
+				gold3: Math.random() < .5
+			};
+		};
+		var data = [
+			[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
+		];
+
+		/** Initiates a leaderboard with parent and given inital data */
+		Gui.leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
+
+		var questData = [{
+			id: 0,
+			title: "Foundation",
+			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
+				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm.",
+			completed: true
+		}, {
+			id: 1,
+			title: "Boundaries",
+			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
+				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. ",
+			completed: false
+		}, {
+			id: 2,
+			title: "Nourishment",
+			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals.",
+			completed: false
+		}, {
+			id: 3,
+			title: "Rainy Day",
+			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses).",
+			completed: false
+		}, {
+			id: 4,
+			title: "Trading",
+			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. ",
+			completed: false
+		}
+		];
+		Gui.questOverview = new QuestOverview($("body"), questData);
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -110,7 +199,7 @@ var Gui = {
 				sum -= structure.citizens;
 			});
 			return sum;
-		}
+		};
 
 		// See if we have to issue a poll request
 		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
@@ -130,6 +219,8 @@ var Gui = {
 
 
 		Gui.updatePlayerResources(Gui.resources);
+
+		//Gui.questOverview.update();
 	},
 
 	/** Gets called from Main whenever a structure in the 3d world is selected
@@ -214,6 +305,7 @@ var Gui = {
 		for(var e in this.menuData.empires){
 			if(!this.menuData.empires.hasOwnProperty(e)) continue;
 			for(var s in this.menuData.empires[e].structures){
+				if(!this.menuData.empires[e].structures.hasOwnProperty(s)) continue;
 				if(this.menuData.empires[e].structures[s].structureId == id)
 					return this.menuData.empires[e].structures[s];
 			}
@@ -797,61 +889,29 @@ function initGui() {
 	Gui.initGui(menuData, topbarData);
 
 
-	/** Leaderboard*/
-	var getRndInt = function(max){
-		return Math.floor(Math.random() * max);
-	};
 
-	var getRndIcons = function() {
-		return {
-			bronze1: Math.random() < .5,
-			bronze2: Math.random() < .5,
-			bronze3: Math.random() < .5,
-			silver1: Math.random() < .5,
-			silver2: Math.random() < .5,
-			silver3: Math.random() < .5,
-			gold1: Math.random() < .5,
-			gold2: Math.random() < .5,
-			gold3: Math.random() < .5
-		};
-	};
 
-	var data = [
-		[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
-	];
-
-	/** Initiates a leaderboard with parent and given inital data */
-	var leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 
 	/** Test / demo function */
-	setInterval(function(){
-		for(var i = 0; i < data.length; i++){
-			data[i][1] += Math.floor(Math.random() * 10);
-			data[i][2] += Math.floor(Math.random() * 10);
-			data[i][3] += Math.floor(Math.random() * 10);
-			data[i][4] += Math.floor(Math.random() * 10);
-		}
-		leaderboard.update(data);
-	}, 1500);
-
-
-	$( "body" ).keypress(function( event ) {
-		switch(event.which){
-
-			case "l".charCodeAt(0):
-				leaderboard.toggle();
-				break;
-		}
-	});
+//	setInterval(function(){
+//		for(var i = 0; i < data.length; i++){
+//			data[i][1] += Math.floor(Math.random() * 10);
+//			data[i][2] += Math.floor(Math.random() * 10);
+//			data[i][3] += Math.floor(Math.random() * 10);
+//			data[i][4] += Math.floor(Math.random() * 10);
+//		}
+//		leaderboard.update(data);
+//	}, 1500);
+//
+//
+//	$( "body" ).keypress(function( event ) {
+//		switch(event.which){
+//
+//			case "l".charCodeAt(0):
+//				leaderboard.toggle();
+//				break;
+//		}
+//	});
 
 	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
 	login.el.addClass("login");

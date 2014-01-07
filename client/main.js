@@ -299,7 +299,7 @@ function init() {
     //STATS
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '60px';
+    stats.domElement.style.top = '80px';
     stats.domElement.style.right = '10px';
     container.appendChild( stats.domElement );
 
