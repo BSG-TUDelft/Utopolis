@@ -46,7 +46,6 @@
 	/* now keep red background for 200ms */
 	transition: color 200ms step-end;
 	transition: background-position 200ms step-end;
-	transition: margin 200ms step end;
 }
 
 .button-big:active {

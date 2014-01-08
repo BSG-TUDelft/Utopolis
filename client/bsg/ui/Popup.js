@@ -10,6 +10,7 @@
  */
 var Popup = function (parent, config) {
 	this.el = $("<div class='popup'></div>");
+	this.parent = parent;
 	$(parent).append(this.el);
 
 	this.config = config || {};
@@ -46,7 +47,11 @@ var Popup = function (parent, config) {
 
 			if(i == this.activeTabIndex){
 				li.addClass("active");
+				this.config.tabs[i].content.show();
 			}
+			else
+				this.config.tabs[i].content.hide();
+
 
 			li.click($.proxy(tabClick, this, i));
 			this.tabstrip.append(li);
@@ -97,12 +102,18 @@ Popup.prototype = {
 
 	/** Toggles visibility */
 	toggle: function () {
+		this.bringToFront();
 		this.el.toggle(this.animation);
 	},
 
 	/** Returns true if this popup is visible */
 	isVisible: function () {
 		return this.el.is(':visible');
+	},
+
+	/** Makes this popup the last element in it's container (i.e bring visually to front) */
+	bringToFront: function(){
+		$(this.parent).append(this.el);
 	},
 
 	/** Sets the active tab to be that of tabIndex

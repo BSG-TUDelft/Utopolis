@@ -21,11 +21,18 @@
 	background-repeat: no-repeat;
 	background-position: right center;
 }
+.craftingscreen table .create_product div {
+	cursor: pointer;
+}
+
+.craftingscreen table .create_product div:hover {
+	color: #262395;
+}
 
 .craftingscreen table .time {
 	width: 80px;
 	font-size: 20pt;
-	text-align: center;
+	text-align: right;
 }
 
 .craftingscreen table .workplace {

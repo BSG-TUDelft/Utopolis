@@ -54,7 +54,7 @@ var QuestOverview = function(parent, data, config){
 				$(el).hide();
 		});*/
 
-		console.log(e.tabIndex);
+		//console.log(e.tabIndex);
 	}
 
 	this.update(data);

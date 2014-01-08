@@ -16,7 +16,7 @@
 	overflow-y: auto;
 }
 
-.questoverview .questlog div {
+.questoverview .questlog div div {
 	margin: 2px;
 	padding: 6px;
 	background-color: rgba(0,0,0,.5);
