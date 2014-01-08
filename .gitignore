@@ -12,3 +12,4 @@ target/
 .idea
 *.bak
 projectFilesBackup/
+nl.tudelft.bsg.utopolis.server/bin/

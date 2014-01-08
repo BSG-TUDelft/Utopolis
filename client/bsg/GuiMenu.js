@@ -8,6 +8,7 @@ var Gui = {
 	topbar: null,				// Top bar menu element
 	buildMenu: null,			// Build menu on the left
 	contextMenu: null,			// Context menu on the right
+	craftingScreen: null,		// Crafting screen popup
 	leaderboard: null,			// Leaderboard popup
 	questOverview: null,		// Quest overview popup
 	console: null,				// Console to display text
@@ -79,11 +80,17 @@ var Gui = {
 						"* Wouter van den Heuvel (Media Technology Leiden University)\n" +
 						"* Mircea Voda (Computer Science TU Delft)\n" +
 						"\n\n\n" +
-						"[licence information]"
+						"Additional credits \n\n" +
+						"* 3d models, textures, music: 0AD wildfire games (CC-BY 3.0)\n" +
+						"* skybox image: Spiney CC-BY 3.0"
+
 					);
 					break;
 				case 'quests':
 					Gui.questOverview.toggle();
+					break;
+				case 'crafting':
+					Gui.craftingScreen.toggle();
 					break;
 				default:
 					alert("Not implemented - Sorry");
@@ -116,6 +123,123 @@ var Gui = {
                 });
 			}
         });
+
+
+		var productData = {
+			barley : {
+				name: "barley",
+				description: "A hardy cereal with coarse bristles, cultivated especially for use in bread and brewing",
+				iconCss: "product_barley",
+				productionTime: 60000 // 1 minute
+			},
+			bread: {
+				name: "bread",
+				description: "A staple food prepared by baking a dough of flour and water. One of the world's oldest foods.",
+				iconCss: "product_bread",
+				productionTime: 120000, // 2 minutes
+				ingredients: [ "flour" ],
+				workshop: "farm"
+			},
+			bronze: {
+				name: "bronze",
+				description: "Bronze is an alloy consisting primarily of copper, usually with tin as the main additive. It is hard and tough, and it was so significant in antiquity that the Bronze Age was named after the metal.",
+				iconCss: "product_bronze",
+				productionTime: 300000, // 5 minutes
+				ingredients: [ "copper", "copper", "copper", "tin" ],
+				workshop: "blacksmith"
+			},
+			bronze_statue: {
+				name: "bronze statue",
+				description: "A statue cast in bronze, a mould is made using clay and wax",
+				iconCss: "product_bronze_statue",
+				productionTime: 900000, // 15 minutes
+				ingredients: [ "bronze", "clay", "wax" ],
+				workshop: "civic"
+			},
+			candles: {
+				name: "candles",
+				description: "A solid block of wax with an embedded wick, which is ignited to provide light and was used as a method of keeping time.",
+				iconCss: "product_candles",
+				productionTime: 300000, // 5 minutes
+				ingredients: [  "wax" ],
+				workshop: "civic"
+			},
+			clay: {
+				name: "clay",
+				description: "Stiff, sticky fine-grained earth that can be moulded when wet, and is dried and baked to make bricks, pottery, and ceramics.",
+				iconCss: "product_clay"
+			},
+			copper: {
+				name: "copper",
+				description: "This metal and its alloys have been used for thousands of years. Copper was principally mined on Cyprus, hence the origin of the name of the metal as ?yprium (metal of Cyprus), later shortened to ?uprum",
+				iconCss: "product_copper"
+			},
+			flour: {
+				name: "flour",
+				description: "Powder obtained by grinding grain, typically wheat, and used to make bread, cakes, and pastry.",
+				iconCss: "product_flour",
+				productionTime: 10000, // 10 seconds
+				ingredients: [ "barley" ],
+				workshop: "farm"
+			},
+			tin: {
+				name: "tin",
+				description: "This silvery, malleable poor metal is not easily oxidized in air and is used to coat other metals to prevent corrosion.",
+				iconCss: "product_tin"
+			},
+			vase: {
+				name: "vase",
+				description: "Decorated vase",
+				iconCss: "product_vase",
+				productionTime: 120000, // 2 minutes
+				ingredients: [  "clay", "clay", "wood" ],
+				workshop: "civic"
+			},
+			wax: {
+				name: "wax",
+				description: "A natural wax produced in the bee hive of honey bees. ",
+				iconCss: "product_wax"
+			},
+			wax_tablet: {
+				name: "Wax tablet",
+				description: "A tablet made of wood and covered with a layer of wax, used as a reusable writing surface. The phrase 'tabula rasa' (clean slate) originates from erasing wax tablets by heating them",
+				iconCss: "product_wax_tablet",
+				productionTime: 120000, // 2 minutes
+				ingredients: [  "wax", "wood" ],
+				workshop: "civic"
+			},
+			wood: {
+				name: "wood",
+				description: "Has been used for thousands of years for both fuel and as a construction material.",
+				iconCss: "product_wood"
+			}
+		};
+		var craftingData = {
+			availableProducts: [
+				"flour",
+				"bread",
+				"bronze",
+				"bronze_statue",
+				"candles",
+				"vase",
+				"wax_tablet"
+			],
+			productData: productData
+		};
+		Gui.craftingScreen = new CraftingScreen($("body"), craftingData, { animation: "slow"});
+		Gui.craftingScreen.addEventListener(CraftingScreen.productCrafted, function(e){
+			Gui.console.printText("You just crafted " + e.productInfo.name, null);
+
+
+			var iconPopup = $('<div class="toaster-icon ' + e.productInfo.iconCss + '"></div>');
+			$("body").append(iconPopup);
+			iconPopup.css({ bottom: 50, left: 300});
+			iconPopup.animate({
+				bottom: "-150px"
+			}, 500, null, function(){
+				$(this).remove();
+			} );
+		});
 
 		/** Leaderboard*/
 		var getRndInt = function(max){
@@ -151,36 +275,60 @@ var Gui = {
 		/** Initiates a leaderboard with parent and given inital data */
 		Gui.leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 
-		var questData = [{
+		var questDescriptions = [{
 			id: 0,
 			title: "Foundation",
 			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
 				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm.",
-			completed: true
 		}, {
 			id: 1,
 			title: "Boundaries",
 			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
 				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. ",
-			completed: false
 		}, {
 			id: 2,
 			title: "Nourishment",
 			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals.",
-			completed: false
 		}, {
 			id: 3,
 			title: "Rainy Day",
 			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses).",
-			completed: false
 		}, {
 			id: 4,
 			title: "Trading",
 			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. ",
+		}];
+		Gui.questOverview = new QuestOverview($("body"), {
+			description: questDescriptions
+		});
+		Gui.questOverview.addEventListener(QuestOverview.newQuestCompleted, function(e){
+			Gui.console.printText("You have completed the quest " + e.questDescription.title + "!!", null);
+		});
+
+		var questStatus = [{
+			id: 0,
+			completed: true
+		}, {
+			id: 1,
+			completed: true
+		}, {
+			id: 2,
 			completed: false
-		}
-		];
-		Gui.questOverview = new QuestOverview($("body"), questData);
+		}, {
+			id: 3,
+			completed: false
+		}, {
+			id: 4,
+			completed: false
+		}/*, {
+			id: 5,
+			completed: false
+		}, {
+			id: 6,
+			completed: false
+		}*/];
+		Gui.questOverview.update(questStatus);
+
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -239,11 +387,30 @@ var Gui = {
 		if(structureInfo.structureType === "tree")
 			return;
 
+		// test
+		var questStatus = [{
+			id: 0,
+			completed: true
+		}, {
+			id: 1,
+			completed: true
+		}, {
+			id: 2,
+			completed: true
+		}, {
+			id: 3,
+			completed: false
+		}, {
+			id: 4,
+			completed: false
+		}];
+		Gui.questOverview.update(questStatus);
+
+
 		var structureTypeInfo = this.menuData.structureTypes[structureInfo.structureType];
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
 		Gui.console.printText("You have started constructing a " + structureInfo.name +
 			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
-
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
@@ -627,7 +794,8 @@ function initGui() {
 			}]
 		}],
 
-		/** Contains definitions for structure types. Note that keys under 'cost' and 'requirements' refer to keys in the resources collection */
+		/** Contains definitions for structure types. Note that keys under
+		 * 'cost' and 'requirements' refer to keys in the resources collection */
 		structureTypes: {
 			"house": {
 				cost: {
@@ -851,9 +1019,9 @@ function initGui() {
 	var topbarData = {
 		resources: [{
 			resourceId: 'citizens',
-			name: 'Idle citizens',
+			name: 'Homeless citizens',
 			iconCss: 'citizens',
-			formatter: function(val) { return $.format('{0} idle citizens', val); }
+			formatter: function(val) { return $.format('{0} homeless citizens', val); }
 		}, {
 			resourceId: 'wood',
 			name: 'Wood',
@@ -937,7 +1105,6 @@ function initGui() {
 
 		// THIS LINE (AND THE LINE UNDER IT)
 		login.hide();
-
 	}
 
 	login.center();

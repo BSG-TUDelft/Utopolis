@@ -1,0 +1,61 @@
+.craftingscreen h1 {
+	text-align: center;
+	margin: 10px 0 10px;
+}
+
+.craftingscreen table {
+	width: 100%;
+}
+
+.craftingscreen table td {
+	background-color: rgba(0,0,0, .5);
+	padding: 4px;
+	cursor: default;
+}
+
+.craftingscreen table .create_product {
+	width: 100px;
+	text-align: right;
+	padding-right: 50px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+.craftingscreen table .create_product div {
+	cursor: pointer;
+}
+
+.craftingscreen table .create_product div:hover {
+	color: #262395;
+}
+
+.craftingscreen table .time {
+	width: 80px;
+	font-size: 20pt;
+	text-align: right;
+}
+
+.craftingscreen table .workplace {
+	width: 50px;
+	text-align: right;
+	vertical-align: bottom;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+}
+
+.craftingscreen table .ingredients {
+	line-height: 62px;	/** This is to vertically align the 'amount txt' to the bottom >_<*/
+}
+
+.craftingscreen table .ingredients div {
+	text-align: right;
+
+	float: left;
+	width: 40px;
+	height: 40px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+
