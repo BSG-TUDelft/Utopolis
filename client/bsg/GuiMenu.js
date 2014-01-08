@@ -187,6 +187,14 @@ var Gui = {
 				description: "This silvery, malleable poor metal is not easily oxidized in air and is used to coat other metals to prevent corrosion.",
 				iconCss: "product_tin"
 			},
+			vase: {
+				name: "vase",
+				description: "Decorated vase",
+				iconCss: "product_vase",
+				productionTime: 120000, // 2 minutes
+				ingredients: [  "clay", "clay", "wood" ],
+				workshop: "civic"
+			},
 			wax: {
 				name: "wax",
 				description: "A natural wax produced in the bee hive of honey bees. ",
@@ -213,12 +221,25 @@ var Gui = {
 				"bronze",
 				"bronze_statue",
 				"candles",
+				"vase",
 				"wax_tablet"
 			],
 			productData: productData
 		};
 		Gui.craftingScreen = new CraftingScreen($("body"), craftingData, { animation: "slow"});
+		Gui.craftingScreen.addEventListener(CraftingScreen.productCrafted, function(e){
+			Gui.console.printText("You just crafted " + e.productInfo.name, null);
 
+
+			var iconPopup = $('<div class="toaster-icon ' + e.productInfo.iconCss + '"></div>');
+			$("body").append(iconPopup);
+			iconPopup.css({ bottom: 50, left: 300});
+			iconPopup.animate({
+				bottom: "-150px"
+			}, 500, null, function(){
+				$(this).remove();
+			} );
+		});
 
 		/** Leaderboard*/
 		var getRndInt = function(max){
@@ -254,36 +275,55 @@ var Gui = {
 		/** Initiates a leaderboard with parent and given inital data */
 		Gui.leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 
-		var questData = [{
+		var questDescriptions = [{
 			id: 0,
 			title: "Foundation",
 			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
 				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm.",
-			completed: true
 		}, {
 			id: 1,
 			title: "Boundaries",
 			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
 				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. ",
-			completed: false
 		}, {
 			id: 2,
 			title: "Nourishment",
 			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals.",
-			completed: false
 		}, {
 			id: 3,
 			title: "Rainy Day",
 			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses).",
-			completed: false
 		}, {
 			id: 4,
 			title: "Trading",
 			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. ",
+		}];
+		Gui.questOverview = new QuestOverview($("body"), {
+			description: questDescriptions
+		});
+		var questStatus = [{
+			id: 0,
+			completed: true
+		}, {
+			id: 1,
+			completed: true
+		}, {
+			id: 2,
 			completed: false
-		}
-		];
-		Gui.questOverview = new QuestOverview($("body"), questData);
+		}, {
+			id: 3,
+			completed: false
+		}, {
+			id: 4,
+			completed: false
+		}/*, {
+			id: 5,
+			completed: false
+		}, {
+			id: 6,
+			completed: false
+		}*/];
+		Gui.questOverview.update(questStatus)
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -346,7 +386,6 @@ var Gui = {
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
 		Gui.console.printText("You have started constructing a " + structureInfo.name +
 			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
-
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements

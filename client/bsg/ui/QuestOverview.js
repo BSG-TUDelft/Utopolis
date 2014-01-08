@@ -1,8 +1,10 @@
 "use strict";
 var QuestOverview = function(parent, data, config){
+	var me = this;
 	this.config = config || {};
 	this.activeQuestContainer = $('<div></div>');
 	this.inActiveQuestContainer = $('<div></div>');
+	this.questDescriptions = data.description;
 
 	this.config.tabs = [{
 		text: "Active quests",
@@ -26,20 +28,20 @@ var QuestOverview = function(parent, data, config){
 	this.el.find(".questlog").append(this.activeQuestContainer,	this.inActiveQuestContainer);
 
 
-	this.update = function(data){
+	function update(data){
+		this.data = data;
 		if (!this.isVisible()) return false;
 
-		//var questlog = this.el.find(".questlog");
 		for(var i = 0; i < data.length; i++){
 			//var css = data[i].completed ? "completed" : "incomplete";
 			//var status = data[i].completed ? "Completed!" : "Active";
-
+			var questDescription = getQuestDescriptionById(data[i].id);
 			var container = data[i].completed ? this.inActiveQuestContainer : this.activeQuestContainer;
 			container.append('' +
 				'<div quest-id="' + data[i].id + '" quest-completed="' + data[i].completed + '">' +
-					'<h2>Quest: ' + data[i].title + '</h2>' +
-					'<span class="status">' + status + '</span>' +
-					data[i].text +
+					'<h2>Quest: ' + questDescription.title + '</h2>' +
+					//'<span class="status">' + status + '</span>' +
+					questDescription.text +
 				'</div>'
 			);
 		}
@@ -57,9 +59,16 @@ var QuestOverview = function(parent, data, config){
 		//console.log(e.tabIndex);
 	}
 
-	this.update(data);
-	this.el.hide();
+	/** */
+	function getQuestDescriptionById(id){
+		for(var i = 0; i < me.questDescriptions.length; i++){
+			if(me.questDescriptions[i].id == id)
+				return me.questDescriptions[i];
+		}
+	}
 
+	this.el.hide();
+	this.update = update;
 };
 QuestOverview.prototype = new Popup();
 
@@ -74,6 +83,12 @@ QuestOverview.prototype.update2 = function (data) {
 QuestOverview.prototype.show = function(){
 	Popup.prototype.show.call(this);
 	this.center();
+	this.update(this.data);
+};
+
+QuestOverview.prototype.toggle = function(){
+	Popup.prototype.toggle.call(this);
+	this.update(this.data);
 };
 
 // Reset constructor

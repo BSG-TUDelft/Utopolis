@@ -58,3 +58,12 @@ button-big:not(:active) {
 	transition: padding-right 200ms step-end;
 
 }
+
+
+/** Toaster! */
+.toaster-icon {
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	background-size: contain;
+}

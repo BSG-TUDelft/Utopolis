@@ -15,38 +15,7 @@ var CraftingScreen = function(parent, data, config){
 		'<div class="craftingscreen"> ' +
 			'<h1>Crafting</h1>' +
 			'<table cellpadding="0" border="0" class="craftingscreen_table">' +
-		/*'<tr>' +
-			'<td class="create_product product_bread">bread <div>[create]</div></td>' +
-			'<td class="time" title="construction time: 10 minutes">0:10</td>' +
-			'<td class="workplace structureicon hele_farm" title="workplace: farm (2 workers available)">x2</td>' +
-			'<td class="ingredients"><div class="product_flour">x1</div></td>' +
-		'</tr>' +
-		'<tr>' +
-			'<td class="create_product product_flour">flour <div>[create]</div></td>' +
-			'<td class="time" title="construction time: 1 minute">0:01</td>' +
-			'<td class="workplace structureicon hele_farm" title="workplace: farm (2 workers available)">x2</td>' +
-			'<td class="ingredients"><div class="product_barley">x1</div></td>' +
-		'</tr>' +
-		'<tr>' +
-			'<td class="create_product product_beer">beer <div>[create]</div></td>' +
-			'<td class="time" title="construction time: 5 minutes">0:05</td>' +
-			'<td class="workplace structureicon hele_farm" title="workplace: farm (2 workers available)">x2</td>' +
-			'<td class="ingredients"><div class="product_barley">x1</div><div class="product_hop">x1</div></td>' +
-		'</tr>' +
-		'<tr>' +
-			'<td class="create_product product_wine">wine <div>[create]</div></td>' +
-			'<td class="time" title="construction time: 12 minutes">0:12</td>' +
-			'<td class="workplace structureicon hele_civic" title="workplace: civic center (6 workers available)">x6</td>' +
-			'<td class="ingredients"><div class="product_grapes">x1</div><div class=""></td>' +
-		'</tr>' +
-		'<tr>' +
-			'<td class="create_product product_vase">vase <div>[create]</div></td>' +
-			'<td class="time" title="construction time: 3 hours, 20 minutes">3:20</td>' +
-			'<td class="workplace structureicon hele_civic" title="workplace: civic center (6 workers available)">x6</td>' +
-			'<td class="ingredients"><div class="product_clay">x2</div><div class="product_wood">x1</div></td>' +
-		'</tr>' +*/
-
-		'</table>' +
+			'</table>' +
 		'</div>' );
 
 	var table = this.el.find(".craftingscreen_table");
@@ -87,7 +56,7 @@ var CraftingScreen = function(parent, data, config){
 		var productId = e.target.attributes["data-product_id"].nodeValue;
 		var productInfo = this.data.productData[productId];
 
-		Gui.console.printText("You just crafted " + productInfo.name, null);
+		this.dispatchEvent( { type: CraftingScreen.productCrafted, productInfo: productInfo } );
 	}
 
 	// Formats time
@@ -141,5 +110,6 @@ CraftingScreen.prototype.show = function(){
 	this.center();
 };
 
-
 CraftingScreen.prototype.constructor = CraftingScreen;
+CraftingScreen.productCrafted = "PRODUCT_CRAFTED";
+THREE.EventDispatcher.prototype.apply( CraftingScreen.prototype );
