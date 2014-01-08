@@ -301,6 +301,10 @@ var Gui = {
 		Gui.questOverview = new QuestOverview($("body"), {
 			description: questDescriptions
 		});
+		Gui.questOverview.addEventListener(QuestOverview.newQuestCompleted, function(e){
+			Gui.console.printText("You have completed the quest " + e.questDescription.title + "!!", null);
+		});
+
 		var questStatus = [{
 			id: 0,
 			completed: true
@@ -323,7 +327,8 @@ var Gui = {
 			id: 6,
 			completed: false
 		}*/];
-		Gui.questOverview.update(questStatus)
+		Gui.questOverview.update(questStatus);
+
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -381,6 +386,26 @@ var Gui = {
 		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
 		if(structureInfo.structureType === "tree")
 			return;
+
+		// test
+		var questStatus = [{
+			id: 0,
+			completed: true
+		}, {
+			id: 1,
+			completed: true
+		}, {
+			id: 2,
+			completed: true
+		}, {
+			id: 3,
+			completed: false
+		}, {
+			id: 4,
+			completed: false
+		}];
+		Gui.questOverview.update(questStatus);
+
 
 		var structureTypeInfo = this.menuData.structureTypes[structureInfo.structureType];
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
