@@ -219,6 +219,7 @@ function initCamera() {
 
 function initSound(){
 	sounds.error = new Sound(['audio/game/error.mp3'], { loop: false});
+	sounds.questCompleted = new Sound(['audio/game/quest_complete.mp3'], { loop: false});
 	sounds.selected = {
 		barracks: new Sound(['audio/selected/sel_barracks.ogg']),
 		blacksmith: new Sound(['audio/selected/sel_blacksmith.ogg']),

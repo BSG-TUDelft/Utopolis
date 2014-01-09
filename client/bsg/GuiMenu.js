@@ -302,7 +302,10 @@ var Gui = {
 			description: questDescriptions
 		});
 		Gui.questOverview.addEventListener(QuestOverview.newQuestCompleted, function(e){
-			Gui.console.printText("You have completed the quest " + e.questDescription.title + "!!", null);
+			setTimeout(function(){
+				sounds.questCompleted.play();
+				Gui.console.printText("You have completed the quest " + e.questDescription.title + "!!", null);
+			}, 1500);
 		});
 
 		var questStatus = [{
