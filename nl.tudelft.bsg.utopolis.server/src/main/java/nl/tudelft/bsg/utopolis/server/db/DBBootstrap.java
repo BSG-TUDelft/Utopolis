@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.KeyPerformanceIndicators;
+import nl.tudelft.bsg.utopolis.server.model.Medals;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Race;
@@ -57,6 +58,11 @@ public class DBBootstrap {
 
 			KeyPerformanceIndicators kpi = new KeyPerformanceIndicators(40f, 23f, 45f, 12f, 49f);
 			c1.setKpi(kpi);			
+			
+			Medals medals = new Medals();
+			medals.setQuest0Completed(true);
+			medals.setQuest1Completed(true);
+			c1.setMedals(medals);
 			
 			DBConnector.get().save(c1);
 

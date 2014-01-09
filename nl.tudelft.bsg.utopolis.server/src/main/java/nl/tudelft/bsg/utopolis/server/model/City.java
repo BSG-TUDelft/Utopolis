@@ -28,9 +28,13 @@ public class City implements Serializable {
 	private String color;
 	@Enumerated
 	private Race race;
+
 	// Leaderboard
 	@OneToOne(cascade={CascadeType.ALL})
 	private KeyPerformanceIndicators kpi;
+	@OneToOne(cascade={CascadeType.ALL})
+	private Medals medals;
+	
 
 	
 	public int getId() {
@@ -95,6 +99,14 @@ public class City implements Serializable {
 
 	public void setKpi(KeyPerformanceIndicators kpi) {
 		this.kpi = kpi;
+	}
+
+	public Medals getMedals() {
+		return medals;
+	}
+
+	public void setMedals(Medals medals) {
+		this.medals = medals;
 	}
 	
 }
