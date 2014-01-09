@@ -18,7 +18,7 @@
 	width: 44px;
 	height: 100%;
 	background-image: url(../images/ui/topbar/top_60x38.png), url(../images/ui/tabstrip/vertical_tab_bg.png);
-	background-position: 9px 0, 0 0;
+	background-position: 9px 30px, 0 0;
   	background-repeat: no-repeat, repeat;
 	position: absolute;
 	right: 6px;
@@ -122,7 +122,6 @@
 	height: 32px;
 	position: absolute;
 	right: 49px;
-	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -161,7 +160,6 @@
 }
 
 #structures {
-	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -197,12 +195,12 @@
 	opacity: 1 !important;
 }
 
-#structures .disabled {
-	opacity: .5;
+#structures .disabled div {
+	opacity: .2;
 }
 
 #structures li.disabled:hover {
-	opacity: .5 !important;
+	opacity: 0.8 !important;
 }
 
 div.structure_infobox {

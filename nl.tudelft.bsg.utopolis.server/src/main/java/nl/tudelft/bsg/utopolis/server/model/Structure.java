@@ -3,7 +3,6 @@ package nl.tudelft.bsg.utopolis.server.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -14,15 +13,15 @@ public class Structure implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
-	@Enumerated
-	private StructureType structType;
-	@Enumerated
-	private Race race;
+//	@Enumerated
+//	private StructureType structType;
+//	@Enumerated
+//	private Race race;
+	private String structureId;
 	private double x;
 	private double y;
 	private double z;
 	private double rotation;
-	private double scale;
 	private int numCitizens;
 	private int maxCitizens;
 
@@ -33,23 +32,15 @@ public class Structure implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public StructureType getStructType() {
-		return structType;
-	}
-
-	public void setStructType(StructureType structType) {
-		this.structType = structType;
-	}
-
-	public Race getRace() {
-		return race;
-	}
-
-	public void setRace(Race race) {
-		this.race = race;
-	}
 	
+	public String getStructureId() {
+		return structureId;
+	}
+
+	public void setStructureId(String structureId) {
+		this.structureId = structureId;
+	}
+
 	public double getX() {
 		return x;
 	}
@@ -80,14 +71,6 @@ public class Structure implements Serializable {
 
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
-	}
-	
-	public double getScale() {
-		return scale;
-	}
-
-	public void setScale(double scale) {
-		this.scale = scale;
 	}
 
 	public int getNumCitizens() {

@@ -9,7 +9,7 @@
 	position: absolute;
 	left: 100px;
 	top: 100px;
-	background: url(../images/ui/common/wood.png);
+	background: url(../images/ui/common/wood.png) 0 bottom, fixed;
 	min-width: 500px;
 	min-height: 300px;
 
@@ -49,7 +49,63 @@
 	left: -36px;
 }
 
+/* Modal window blocker */
+.modalBlock {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0, .75);
+}
 
+/* Tab strip */
+.popup .horizontal_tabstrip {
+	margin-left: 10px;
+	position: absolute;
+	bottom: 0;
+	margin-bottom: -47px;
 
+	background-image: url(../images/ui/popup/horizontal_tabs_bg_92x44.png);
+	background-repeat: repeat;
+	height: 44px;
+	width: 90%;
+}
 
+.popup .horizontal_tabstrip .strip {
+	float: left;
+	height: 44px;
+	background-image: url(../images/ui/common/wood.png);
+	background-position: -10px 0px;
 
+}
+
+.popup .horizontal_tabstrip .strip li {
+	float: left;
+	background-image: url(../images/ui/popup/horizontal_tabs_unselected_17x150.png), url(../images/ui/popup/horizontal_tabs_unselected_17x150.png);
+	background-position: 0 0, right -100px;
+	background-repeat: no-repeat, no-repeat;
+	height: 50px;
+	padding-left: 17px;
+	padding-right: 17px;
+	line-height: 50px;
+	cursor: pointer;
+}
+
+.popup .horizontal_tabstrip .strip li.active {
+	background-image: url(../images/ui/popup/horizontal_tabs_selected_17x150.png), url(../images/ui/popup/horizontal_tabs_selected_17x150.png);
+}
+
+.popup .horizontal_tabstrip .strip li .text {
+	height: 50px;
+	background-image: url(../images/ui/popup/horizontal_tabs_unselected_17x150.png);
+	background-position: 0 -50px;
+	margin-bottom: -6px; /** this div protrudes a bit downwards */
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.popup .horizontal_tabstrip .strip li.active .text {
+	background-image: url(../images/ui/popup/horizontal_tabs_selected_17x150.png);
+
+}

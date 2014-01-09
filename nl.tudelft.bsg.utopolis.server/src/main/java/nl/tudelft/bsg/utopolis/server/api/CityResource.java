@@ -1,9 +1,8 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -14,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.CityList;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 @Path("city")
@@ -22,16 +22,16 @@ public class CityResource extends Resource {
 	@GET
 	@Path("/{playerId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public City getCity(@PathParam("playerId") int playerId) {
-		return DBConnector.get().getCity(playerId);
+	public Response getCity(@PathParam("playerId") int playerId) {
+		return buildResponse(DBConnector.get().getCity(playerId));
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public City createCity(City c) {
+	public Response createCity(City c) {
 		DBConnector.get().save(c);
-		return c;
+		return buildResponse(c);
 	}
 
 	@POST
@@ -44,18 +44,29 @@ public class CityResource extends Resource {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<City> listCities() {
-		return DBConnector.get().getCities();
+	public Response listCities() {
+		return buildResponse(new CityList(DBConnector.get().getCities()));
+	}
+
+	@OPTIONS
+	@Path("/{playerId}/structure")
+	public Response createStructureOptions() {
+		return optionsResponse();
 	}
 
 	@PUT
 	@Path("/{playerId}/structure")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createStructure(@PathParam("playerId") int playerId,
 			Structure s) {
 		City c = DBConnector.get().getCity(playerId);
 		c.getStructures().add(s);
 		DBConnector.get().save(c);
-		return simpleResponse(200);
+		return buildResponse(s);
 	}
+
+
 }
+
+

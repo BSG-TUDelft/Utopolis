@@ -4,7 +4,7 @@
  * @param data
  * @constructor
  */
-var ContextMenu = function(parent, data) {
+var ContextMenu = function (parent, data) {
 	this.el = $("<div class='contextmenu'></div>");
 	$(parent).append(this.el);
 	this.data = data;
@@ -19,16 +19,20 @@ ContextMenu.prototype = {
 	animation: 0,
 
 	/** Shows this ContextMenu with structure info
-	 * @param structure    (Structure) */
+	 * @param structure    {Structure} */
 	show: function (structure) {
 		function citizenFormatter() {
-			return $.format('Citizens allocated: {0}', structure.citizens);
+			return $.format('Citizens allocated: {0}/{1}', structure.citizens, structureTypeInfo.citizenCap);
 		}
 
 		var structureInfo = this.getStructureInfo(structure.name);
 		if (structureInfo === null)
 			console.log("No structure info found with structureId " + structure.name);
-		var structureType = this.data.structureTypes[structureInfo.structureType];
+		var structureTypeInfo = this.data.structureTypes[structureInfo.structureType];
+
+		// Play selected sound
+		var sound = sounds.selected[structureInfo.structureType];
+		if(sound) sound.play();
 
 		var html = ["<h2>" + structureInfo.name + "</h2>",
 			"<div class='structureicon " + structureInfo.iconCss + "'></div>",
@@ -40,20 +44,22 @@ ContextMenu.prototype = {
 			"</ul>"];
 
 		this.el.html(html);
-		this.updateRevenue(structureType, structure);
+		this.updateRevenue(structureTypeInfo, structure);
 
 		$("#structureslider").slider({
 			value: structure.citizens,
 			min: 0,
-			max: structureType.citizenCap,
+			max: structureTypeInfo.citizenCap,
 			step: 1,
 			slide: $.proxy(function (event, ui) {
 				structure.citizens = ui.value;
-				this.updateRevenue(structureType, structure);
+				this.updateRevenue(structureTypeInfo, structure);
 				$("#citizencounter").html(citizenFormatter());
+			}, this),
+			change: $.proxy(function (event, ui) {
+				this.dispatchEvent( { type: ContextMenu.citizensChanged, structure: structure, citizens:  ui.value } );
 			}, this)
 		});
-
 		this.el.show();
 	},
 
@@ -84,7 +90,8 @@ ContextMenu.prototype = {
 		return null;
 	},
 
-	updateRevenue: function(structureType, structure) {
+	/** Updates the list of expected revenue by the selected building */
+	updateRevenue: function (structureType, structure) {
 		// Add revenue
 		var html = [];
 		for (var i in structureType.generates) {
@@ -98,4 +105,7 @@ ContextMenu.prototype = {
 		this.el.find(".generates").html(html.join(''));
 	}
 };
+// Event fires when the slider has changed
+ContextMenu.citizensChanged = "CITIZENS_CHANGED";
+THREE.EventDispatcher.prototype.apply( ContextMenu.prototype );
 

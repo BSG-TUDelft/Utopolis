@@ -4,32 +4,375 @@ var Gui = {
 
 	// PROPERTIES
 	structurePopup: null,
+	resources: {},				// Current players' resources
 	topbar: null,				// Top bar menu element
 	buildMenu: null,			// Build menu on the left
 	contextMenu: null,			// Context menu on the right
-
+	craftingScreen: null,		// Crafting screen popup
+	leaderboard: null,			// Leaderboard popup
+	questOverview: null,		// Quest overview popup
+	console: null,				// Console to display text
+	timeLastPoll: $.now(),		// Time of last poll
+	pollInterval: 2000,			// Interval of polling (in ms)
 
 	// METHODS
 	initGui: function (menuData, topbarData){
+		this.menuData = menuData;
+
+		// Initialize console, has to be done first so other stuff can overlay
+		Gui.console = new Console($("body"));
+		Gui.console.printText("Initializing ...", null);
+
 		// Initialize build menu on the left
 		Gui.buildMenu = new BuildMenu($("#left_menu"), menuData);
 		Gui.buildMenu.init();
 
+		// Add event listener to build menu
+		Gui.buildMenu.addEventListener(BuildMenu.structureSelected, function(e){
+			// Clicked on the same structure again means disable placement mode
+			if(e.structure == null) {
+				togglePlacementMode();
+			}
+			else if(e.structure.structureId == "flag" && flag_placed == false){
+				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
+
+				if(rollOverMesh) {
+					refreshRollover();
+				}
+				if(rollOverMesh == undefined)
+					togglePlacementMode();
+			}
+			else if(e.structure.structureId == "flag" && flag_placed == true){
+				return;
+			}
+			else {
+				if(Gui.enoughResources(Gui.resources, menuData.structureTypes[e.structure.structureType])) {
+					currentModel = loadedModels[e.structure.structureId];
+
+					if(rollOverMesh) {
+						refreshRollover();
+					}
+					if(rollOverMesh == undefined)
+						togglePlacementMode();
+				}
+				else {																		//if not enough resources, deselect building.
+					$("#structures").find("li").removeClass("selected");
+					Gui.buildMenu.selectedStructureId = null;
+				}
+			}
+
+		});
+
 		// Initialize topbar menu element
-		Gui.topbar = new Topbar(topbarData);
-		Gui.topbar.init();
+		Gui.topbar = new Topbar($("#topbar"), topbarData);
+		Gui.topbar.addEventListener(Topbar.buttonClicked, function(e){
+			// Event handler for top buttons
+			switch(e.buttonId){
+				case 'leaderboard':
+					Gui.leaderboard.toggle();
+					break;
+				case 'help':
+					alert("Utopolis [BETA] v0.1\n\n\n" +
+						"* Georgi Khomeriki (Computer Science TU Delft)\n" +
+						"* Tiago Mota (Computer Science TU Delft)\n" +
+						"* Rashmi Narayan (Technology, Policy and Management TU Delft)\n" +
+						"* Anika Rose (Technology, Policy and Management TU Delft)\n" +
+						"* Wouter van den Heuvel (Media Technology Leiden University)\n" +
+						"* Mircea Voda (Computer Science TU Delft)\n" +
+						"\n\n\n" +
+						"Additional credits \n\n" +
+						"* 3d models, textures, music: 0AD wildfire games (CC-BY 3.0)\n" +
+						"* skybox image: Spiney CC-BY 3.0"
+
+					);
+					break;
+				case 'quests':
+					Gui.questOverview.toggle();
+					break;
+				case 'crafting':
+					Gui.craftingScreen.toggle();
+					break;
+				default:
+					alert("Not implemented - Sorry");
+					break;
+			}
+		});
+
 
 		// Initialize right context menu
 		Gui.contextMenu = new ContextMenu($("#right_menu"), menuData);
 		Gui.contextMenu.el.addClass("");
 		Gui.contextMenu.hide();
 
+		Gui.contextMenu.addEventListener(ContextMenu.citizensChanged, function(e){
+            if(!clientOnlyMode){
+                var request = $.ajax({
+                    url: host + 'structure/' + e.structure.id + '/citizens/' + e.citizens,
+                    type: 'GET'
+                });
+
+                request.done(function (response, textStatus, jqXHR){
+                    console.log("SERVER RESPONSE: updated citizens");
+                });
+
+                request.fail(function (jqXHR, textStatus, errorThrown){
+                    console.error(
+                        "The following error occured: " +
+                            textStatus, errorThrown
+                    );
+                });
+			}
+        });
+
+
+		var productData = {
+			barley : {
+				name: "barley",
+				description: "A hardy cereal with coarse bristles, cultivated especially for use in bread and brewing",
+				iconCss: "product_barley",
+				productionTime: 60000 // 1 minute
+			},
+			bread: {
+				name: "bread",
+				description: "A staple food prepared by baking a dough of flour and water. One of the world's oldest foods.",
+				iconCss: "product_bread",
+				productionTime: 120000, // 2 minutes
+				ingredients: [ "flour" ],
+				workshop: "farm"
+			},
+			bronze: {
+				name: "bronze",
+				description: "Bronze is an alloy consisting primarily of copper, usually with tin as the main additive. It is hard and tough, and it was so significant in antiquity that the Bronze Age was named after the metal.",
+				iconCss: "product_bronze",
+				productionTime: 300000, // 5 minutes
+				ingredients: [ "copper", "copper", "copper", "tin" ],
+				workshop: "blacksmith"
+			},
+			bronze_statue: {
+				name: "bronze statue",
+				description: "A statue cast in bronze, a mould is made using clay and wax",
+				iconCss: "product_bronze_statue",
+				productionTime: 900000, // 15 minutes
+				ingredients: [ "bronze", "clay", "wax" ],
+				workshop: "civic"
+			},
+			candles: {
+				name: "candles",
+				description: "A solid block of wax with an embedded wick, which is ignited to provide light and was used as a method of keeping time.",
+				iconCss: "product_candles",
+				productionTime: 300000, // 5 minutes
+				ingredients: [  "wax" ],
+				workshop: "civic"
+			},
+			clay: {
+				name: "clay",
+				description: "Stiff, sticky fine-grained earth that can be moulded when wet, and is dried and baked to make bricks, pottery, and ceramics.",
+				iconCss: "product_clay"
+			},
+			copper: {
+				name: "copper",
+				description: "This metal and its alloys have been used for thousands of years. Copper was principally mined on Cyprus, hence the origin of the name of the metal as ?yprium (metal of Cyprus), later shortened to ?uprum",
+				iconCss: "product_copper"
+			},
+			flour: {
+				name: "flour",
+				description: "Powder obtained by grinding grain, typically wheat, and used to make bread, cakes, and pastry.",
+				iconCss: "product_flour",
+				productionTime: 10000, // 10 seconds
+				ingredients: [ "barley" ],
+				workshop: "farm"
+			},
+			tin: {
+				name: "tin",
+				description: "This silvery, malleable poor metal is not easily oxidized in air and is used to coat other metals to prevent corrosion.",
+				iconCss: "product_tin"
+			},
+			vase: {
+				name: "vase",
+				description: "Decorated vase",
+				iconCss: "product_vase",
+				productionTime: 120000, // 2 minutes
+				ingredients: [  "clay", "clay", "wood" ],
+				workshop: "civic"
+			},
+			wax: {
+				name: "wax",
+				description: "A natural wax produced in the bee hive of honey bees. ",
+				iconCss: "product_wax"
+			},
+			wax_tablet: {
+				name: "Wax tablet",
+				description: "A tablet made of wood and covered with a layer of wax, used as a reusable writing surface. The phrase 'tabula rasa' (clean slate) originates from erasing wax tablets by heating them",
+				iconCss: "product_wax_tablet",
+				productionTime: 120000, // 2 minutes
+				ingredients: [  "wax", "wood" ],
+				workshop: "civic"
+			},
+			wood: {
+				name: "wood",
+				description: "Has been used for thousands of years for both fuel and as a construction material.",
+				iconCss: "product_wood"
+			}
+		};
+		var craftingData = {
+			availableProducts: [
+				"flour",
+				"bread",
+				"bronze",
+				"bronze_statue",
+				"candles",
+				"vase",
+				"wax_tablet"
+			],
+			productData: productData
+		};
+		Gui.craftingScreen = new CraftingScreen($("body"), craftingData, { animation: "slow"});
+		Gui.craftingScreen.addEventListener(CraftingScreen.productCrafted, function(e){
+			Gui.console.printText("You just crafted " + e.productInfo.name, null);
+
+
+			var iconPopup = $('<div class="toaster-icon ' + e.productInfo.iconCss + '"></div>');
+			$("body").append(iconPopup);
+			iconPopup.css({ bottom: 50, left: 300});
+			iconPopup.animate({
+				bottom: "-150px"
+			}, 500, null, function(){
+				$(this).remove();
+			} );
+		});
+
+		/** Leaderboard*/
+		var getRndInt = function(max){
+			return Math.floor(Math.random() * max);
+		};
+
+		var getRndIcons = function() {
+			return {
+				bronze1: Math.random() < .5,
+				bronze2: Math.random() < .5,
+				bronze3: Math.random() < .5,
+				silver1: Math.random() < .5,
+				silver2: Math.random() < .5,
+				silver3: Math.random() < .5,
+				gold1: Math.random() < .5,
+				gold2: Math.random() < .5,
+				gold3: Math.random() < .5
+			};
+		};
+		var data = [
+			[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
+			[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
+		];
+
+		/** Initiates a leaderboard with parent and given inital data */
+		Gui.leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
+
+		var questDescriptions = [{
+			id: 0,
+			title: "Foundation",
+			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
+				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm.",
+		}, {
+			id: 1,
+			title: "Boundaries",
+			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
+				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. ",
+		}, {
+			id: 2,
+			title: "Nourishment",
+			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals.",
+		}, {
+			id: 3,
+			title: "Rainy Day",
+			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses).",
+		}, {
+			id: 4,
+			title: "Trading",
+			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. ",
+		}];
+		Gui.questOverview = new QuestOverview($("body"), {
+			description: questDescriptions
+		});
+		Gui.questOverview.addEventListener(QuestOverview.newQuestCompleted, function(e){
+			setTimeout(function(){
+				sounds.questCompleted.play();
+				Gui.console.printText("You have completed the quest " + e.questDescription.title + "!!", null);
+			}, 1500);
+		});
+
+		var questStatus = [{
+			id: 0,
+			completed: true
+		}, {
+			id: 1,
+			completed: true
+		}, {
+			id: 2,
+			completed: false
+		}, {
+			id: 3,
+			completed: false
+		}, {
+			id: 4,
+			completed: false
+		}/*, {
+			id: 5,
+			completed: false
+		}, {
+			id: 6,
+			completed: false
+		}*/];
+		Gui.questOverview.update(questStatus);
+
 	},
 
+	/** GUIs update loop, gets called from the game loop */
+	update: function(){
+		var getNumIdleCitizens = function(city) {
+			var sum = city.numCitizens;
+			structureCollection.forEach(function (structure) {
+				sum -= structure.citizens;
+			});
+			return sum;
+		};
+
+		// See if we have to issue a poll request
+		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
+			Gui.timeLastPoll = $.now();
+
+			// POLL THAT MOFO !
+
+			//res.wood += .75;
+			//res.stone += .5;
+			//res.metal += .25;
+			//res.food += 1;
+
+			// This should come from the poll
+			Gui.resources.citizens = getNumIdleCitizens(city);
+
+		}
+
+
+		Gui.updatePlayerResources(Gui.resources);
+
+		//Gui.questOverview.update();
+	},
 
 	/** Gets called from Main whenever a structure in the 3d world is selected
-	 * @param structure (Structure) that was selected  */
+	 * @param structure {Structure} that was selected  */
 	structureSelected: function (structure) {
+		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
+		if(structureInfo.structureType === "tree")
+			return;
+
 		Gui.contextMenu.show(structure);
 	},
 
@@ -38,11 +381,45 @@ var Gui = {
 		Gui.contextMenu.hide();
 	},
 
+	/** Gets called from Main whenever a structure is just constructed */
+	structureConstructed: function(structure){
+		// Undo 'selected state' of icon in menu
+		Gui.buildMenu.unselectStructure();
+
+		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
+		if(structureInfo.structureType === "tree")
+			return;
+
+		// test
+		var questStatus = [{
+			id: 0,
+			completed: true
+		}, {
+			id: 1,
+			completed: true
+		}, {
+			id: 2,
+			completed: true
+		}, {
+			id: 3,
+			completed: false
+		}, {
+			id: 4,
+			completed: false
+		}];
+		Gui.questOverview.update(questStatus);
+
+
+		var structureTypeInfo = this.menuData.structureTypes[structureInfo.structureType];
+		var eta = new Date($.now() + structureTypeInfo.buildTime );
+		Gui.console.printText("You have started constructing a " + structureInfo.name +
+			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
+	},
+
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
 	 * @param resources {Object} nameless object containing key-value pairs of resources eg: { wood: 12, metal: 10 }	 */
 	updatePlayerResources: function(resources){
 		Gui.topbar.setResourceValues(resources);
-
 		Gui.buildMenu.setResourceValues(resources);
 	},
 
@@ -53,6 +430,9 @@ var Gui = {
 	enoughResources: function (playerResources, structureType) {
 		//var cost = ["wood", "stone", "food", "metal"],
 		//	reqs = ["knowledge", ""]
+		if(!structureType.cost)
+			return true;
+
 		if(structureType.cost.wood) {
 			if(playerResources.wood < structureType.cost.wood)
 				return false;
@@ -78,6 +458,21 @@ var Gui = {
 				return false;
 		}
 		return true;
+	},
+
+	/** Returns structure info based on structure type id *
+	 * @param id {String} Structure type id, eg: "hele_house"
+	 * @returns {Object}	 */
+	getStructureInfoByTypeId: function(id){
+		for(var e in this.menuData.empires){
+			if(!this.menuData.empires.hasOwnProperty(e)) continue;
+			for(var s in this.menuData.empires[e].structures){
+				if(!this.menuData.empires[e].structures.hasOwnProperty(s)) continue;
+				if(this.menuData.empires[e].structures[s].structureId == id)
+					return this.menuData.empires[e].structures[s];
+			}
+		}
+		return null;
 	}
 };
 
@@ -100,38 +495,36 @@ function initGui() {
 				structureId: "hele_farm",
 				iconCss: "hele_farm",
 				structureType: "farm"
-//				},{
-//					name: "Corral",
-//					structureId: "hele_corral",
-//					iconCss: "hele_corral"
+			},{
+				name: "Corral",
+				structureId: "hele_corral",
+				iconCss: "hele_corral",
+				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "hele_market",
+				iconCss: "hele_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "hele_storehouse",
 				iconCss: "hele_storehouse",
 				structureType: "storehouse"
-//				},{
-//					name: "Barracks",
-//					structureId: "hele_barracks",
-//					iconCss: "hele_barracks"
+			},{
+				name: "Barracks",
+				structureId: "hele_barracks",
+				iconCss: "hele_barracks",
+				structureType: "barracks"
 			},{
 				name: "Blacksmith",
 				structureId: "hele_blacksmith",
 				iconCss: "hele_blacksmith",
 				structureType: "blacksmith"
-//				},{
-//					name: "Civic center",
-//					structureId: "hele_civic",
-//					iconCss: "hele_civic"
-				/*			cost: {
-				 stone: 1,
-				 metal: 1,
-				 food: 2
-				 },
-				 requirements: {
-				 culture: 4,
-				 knowledge: 4
-				 },
-				 buildTime: 30000 */
+			},{
+				name: "Civic center",
+				structureId: "hele_civic",
+				iconCss: "hele_civic",
+				structureType: "civic"
 			},{
 				name: "Tower",
 				structureId: "hele_tower",
@@ -143,11 +536,11 @@ function initGui() {
 				structureId: "hele_fortress",
 				iconCss: "hele_fortress",
 				structureType: "fortress"
-
-//				},{
-//					name: "Temple",
-//					structureId: "hele_temple",
-//					iconCss: "hele_temple"
+			},{
+				name: "Temple",
+				structureId: "hele_temple",
+				iconCss: "hele_temple",
+				structureType: "temple"
 			}]
 		}, {
 			name: "Romans",
@@ -168,6 +561,11 @@ function initGui() {
 				iconCss: "rome_corral",
 				structureType: "corral"
 			},{
+				name: "Market",
+				structureId: "rome_market",
+				iconCss: "rome_market",
+				structureType: "market"
+			},{
 				name: "Storehouse",
 				structureId: "rome_storehouse",
 				iconCss: "rome_storehouse",
@@ -182,11 +580,11 @@ function initGui() {
 				structureId: "rome_blacksmith",
 				iconCss: "rome_blacksmith",
 				structureType: "blacksmith"
-//		},{
-//			name: "Civic center",
-//			structureId: "rome_civic",
-//			iconCss: "rome_civic",
-//			structureType: "civic"
+			},{
+				name: "Civic center",
+				structureId: "rome_civic",
+				iconCss: "rome_civic",
+				structureType: "civic"
 			},{
 				name: "Tower",
 				structureId: "rome_tower",
@@ -211,15 +609,21 @@ function initGui() {
 				structureId: "kart_house",
 				iconCss: "kart_house",
 				structureType: "house"
-//				},{
-//					name: "Farm",
-//					structureId: "kart_farm",
-//					iconCss: "kart_farm"
+			},{
+				name: "Farm",
+				structureId: "kart_farm",
+				iconCss: "kart_farm",
+				structureType: "house"
 			},{
 				name: "Corral",
 				structureId: "kart_corral",
 				iconCss: "kart_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "kart_market",
+				iconCss: "kart_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "kart_storehouse",
@@ -261,12 +665,12 @@ function initGui() {
 			tabCss: "tab_iber",
 			structures: [{
 				name: "House",
-				structureId: "iber_house_a",
+				structureId: "iber_house",
 				iconCss: "iber_house",
 				structureType: "house"
 			},{
 				name: "Farm",
-				structureId: "iber_farmstead",
+				structureId: "iber_farm",
 				iconCss: "iber_farm",
 				structureType: "farm"
 			},{
@@ -274,6 +678,11 @@ function initGui() {
 				structureId: "iber_corral",
 				iconCss: "iber_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "iber_market",
+				iconCss: "iber_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "iber_storehouse",
@@ -286,17 +695,17 @@ function initGui() {
 				structureType: "barracks"
 			},{
 				name: "Blacksmith",
-				structureId: "iber_blacksmith_struct",
+				structureId: "iber_blacksmith",
 				iconCss: "iber_blacksmith",
 				structureType: "blacksmith"
 			},{
 				name: "Civic center",
-				structureId: "iber_civic_centre",
+				structureId: "iber_civic",
 				iconCss: "iber_civic",
 				structureType: "civic"
 			},{
 				name: "Tower",
-				structureId: "iber_scout_tower",
+				structureId: "iber_tower",
 				iconCss: "iber_tower",
 				structureType: "tower"
 			},{
@@ -328,6 +737,11 @@ function initGui() {
 				structureId: "pers_corral",
 				iconCss: "pers_corral",
 				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "pers_market",
+				iconCss: "pers_market",
+				structureType: "market"
 			},{
 				name: "Storehouse",
 				structureId: "pers_storehouse",
@@ -369,10 +783,22 @@ function initGui() {
 			//	tabCss: "tab_maur"
 		}, {
 			name: "Gaia",
-			tabCss: "tab_gaia"
+			tabCss: "tab_gaia",
+			structures: [{
+				name: "Flag",
+				structureId: "flag",
+				iconCss: "flag",
+				structureType: "flag"
+			},{
+				name: "Aleppo Pine",
+				structureId: "gaia_aleppo_pine",
+				iconCss: "gaia_aleppo_pine",
+				structureType: "tree"
+			}]
 		}],
 
-		/** Contains definitions for structure types. Note that keys under 'cost' and 'requirements' refer to keys in the resources collection */
+		/** Contains definitions for structure types. Note that keys under
+		 * 'cost' and 'requirements' refer to keys in the resources collection */
 		structureTypes: {
 			"house": {
 				cost: {
@@ -404,7 +830,9 @@ function initGui() {
 				buildTime: 30000,
 				generates: {
 					food: 2,
-					health: 1
+					health: 1,
+					economy: 1,
+					trade: 1
 				},
 				citizenCap: 6
 			},
@@ -420,14 +848,42 @@ function initGui() {
 				buildTime: 30000,
 				generates: {
 					food: 4,
-					health: 1
+					health: 1,
+					diplomacy: 1
+				},
+				citizenCap: 6
+			},
+			"market": {
+				cost: {
+					metal: 100,
+					stone: 100,
+					wood: 1000,
+					food: 5000
+				},
+				requirements: {
+					knowledge: 100,
+					culture: 250
+				},
+				buildTime: 30000,
+				generates: {
+					stone: 8,
+					metal: 8,
+					wood: 8,
+					food: 16,
+					knowledge: 10,
+					culture: 10,
+					diplomacy: 5,
+					trade: 5,
+					peace: 5
 				},
 				citizenCap: 6
 			},
 			"storehouse": {
 				cost: {
-					wood: 3,
-					stone: 6
+					wood: 50,
+					stone: 50,
+					metal: 50,
+					food: 100
 				},
 				requirements: {
 					knowledge: 4,
@@ -446,24 +902,13 @@ function initGui() {
 			"barracks": {
 				cost: {
 					wood: 100,
-					food: 250
+					food: 200
 				},
 				requirements: {
 					knowledge: 40,
 					culture: 40
 				},
 				buildTime: 120000,
-				citizenCap: 10
-			},
-			"blacksmith": {
-				cost: {
-					wood: 100,
-					food: 100
-				},
-				requirements: {
-
-				},
-				buildTime: 240000,
 				generates: {
 					wood: 10,
 					metal: 10,
@@ -471,13 +916,32 @@ function initGui() {
 					safety: 5,
 					peace: 5
 				},
+				citizenCap: 10
+			},
+			"blacksmith": {
+				cost: {
+					wood: 50,
+					food: 100,
+					metal: 25,
+					stone: 25
+				},
+				requirements: {
+
+				},
+				buildTime: 240000,
+				generates: {
+					knowledge: 5,
+					stone: 5,
+					safety: 1,
+					diplomacy: 1
+				},
 				citizenCap: 8
 			},
 			"tower": {
 				cost: {
 					stone: 25,
 					metal: 25,
-					food: 40
+					food: 50
 				},
 				requirements: {
 					knowledge: 25,
@@ -544,7 +1008,19 @@ function initGui() {
 					spirituality: 15
 				},
 				citizenCap: 30
-			}
+			},
+			"flag": {
+				cost: {
+					stone: 0,
+					food: 0
+				},
+				requirements: {
+					knowledge: 0,
+					culture: 0
+				},
+				buildTime: 100000
+			},
+			"tree": {}
 		},
 
 		/** Strings */
@@ -568,9 +1044,9 @@ function initGui() {
 	var topbarData = {
 		resources: [{
 			resourceId: 'citizens',
-			name: 'Idle citizens',
+			name: 'Homeless citizens',
 			iconCss: 'citizens',
-			formatter: function(val) { return $.format('{0} idle citizens', val); }
+			formatter: function(val) { return $.format('{0} homeless citizens', val); }
 		}, {
 			resourceId: 'wood',
 			name: 'Wood',
@@ -596,102 +1072,68 @@ function initGui() {
 
 	Gui.initGui(menuData, topbarData);
 
-	// Example use:
-	Gui.buildMenu.addEventListener(BuildMenu.structureSelected, function(e){
-		// Clicked on the same structure again means disable placement mode
-		if(e.structure == null) {
-			togglePlacementMode();
-		}
-		else {
-			if(Gui.enoughResources(res, menuData.structureTypes[e.structure.structureType])) {
-				currentModel = loadedModels[e.structure.structureId];
 
-				if(rollOverMesh) {
-					refreshRollover();
-				}
-				if(rollOverMesh == undefined)
-					togglePlacementMode();
-			}
-			else {																		//if not enough resources, deselect building.
-				$("#structures").find("li").removeClass("selected");
-				Gui.buildMenu.selectedStructureId = null;
-			}
-		}
 
-	});
 
-	// Incrementing example (client side)
-	var res = {
-		wood: 0,
-		stone: 0,
-		metal: 0,
-		food: 0,
-		citizens: 0
-	};
-	setInterval(function(){
-		res.wood += .75;
-		res.stone += .5;
-		res.metal += .25;
-		res.food += 1;
-		res.citizens = Math.floor(Math.random() * 25);
-
-		Gui.updatePlayerResources(res);
-	}, 1500);
-
-	/** Leaderboard*/
-	var getRndInt = function(max){
-		return Math.floor(Math.random() * max);
-	};
-
-	var getRndIcons = function() {
-		return {
-			bronze1: Math.random() < .5,
-			bronze2: Math.random() < .5,
-			bronze3: Math.random() < .5,
-			silver1: Math.random() < .5,
-			silver2: Math.random() < .5,
-			silver3: Math.random() < .5,
-			gold1: Math.random() < .5,
-			gold2: Math.random() < .5,
-			gold3: Math.random() < .5
-		};
-	};
-
-	var data = [
-		[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-		[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
-	];
-
-	/** Initiates a leaderboard with parent and given inital data */
-	var leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 
 	/** Test / demo function */
-	setInterval(function(){
-		for(var i = 0; i < data.length; i++){
-			data[i][1] += Math.floor(Math.random() * 10);
-			data[i][2] += Math.floor(Math.random() * 10);
-			data[i][3] += Math.floor(Math.random() * 10);
-			data[i][4] += Math.floor(Math.random() * 10);
-		}
-		leaderboard.update(data);
-	}, 1500);
+//	setInterval(function(){
+//		for(var i = 0; i < data.length; i++){
+//			data[i][1] += Math.floor(Math.random() * 10);
+//			data[i][2] += Math.floor(Math.random() * 10);
+//			data[i][3] += Math.floor(Math.random() * 10);
+//			data[i][4] += Math.floor(Math.random() * 10);
+//		}
+//		leaderboard.update(data);
+//	}, 1500);
+//
+//
+//	$( "body" ).keypress(function( event ) {
+//		switch(event.which){
+//
+//			case "l".charCodeAt(0):
+//				leaderboard.toggle();
+//				break;
+//		}
+//	});
 
+	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
+	login.el.addClass("login");
+	login.el.append("<h1>Login</h1>" +
+		"<div style='padding: 20px'>" +
+			"<label>Username</label><input type='text' id='username'/>" +
+		"</div>" +
+		"<div style='padding: 20px'>" +
+			"<label>Password</label><input type='password' id='password'/>" +
+		"</div>" +
+		"<div class='button-big' id='login-submit' style='width: 100px; float: right; margin: 30px 20px' tabindex='0'><div class='inner'>login</div></div>"
+	);
 
-	$( "body" ).keypress(function( event ) {
-		switch(event.which){
-
-			case "l".charCodeAt(0):
-				leaderboard.toggle();
-				break;
-		}
+	// Listen to click and ENTER
+	$("#login-submit").click(function(){
+		submitLogin();
 	});
+	login.el.keypress(function( event ) {
+		if ( event.which == 13 ) { submitLogin(); }
+	});
+
+	function submitLogin(){
+		var params = {
+			name: $("#username").val(),
+			password: $("#password").val()
+		};
+		/*$.post("INSERT_URL_HERE", params)
+			.done(function( data ) {
+				// if login successful
+				login.hide();
+		});*/
+
+		// THIS LINE (AND THE LINE UNDER IT)
+		login.hide();
+	}
+
+	login.center();
+	login.show();
+	$("#username").focus();
 }
 

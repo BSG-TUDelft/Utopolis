@@ -25,7 +25,7 @@ PersModelLoader.prototype.decreaseRemainingStructures = function () {
 }
 
 PersModelLoader.prototype.modelStructuresArray = {
-	"pers_house":"./art/meshes/structural/pers_house_c.dae",
+	/*"pers_house":"./art/meshes/structural/pers_house_c.dae",
 	"pers_farms":"./art/meshes/structural/pers_farmstead.dae",
 	"pers_corral":"./art/meshes/structural/pers_corral.dae",
 	"pers_storehouse":"./art/meshes/structural/pers_storehouse.dae",

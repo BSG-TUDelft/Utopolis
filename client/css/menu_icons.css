@@ -8,6 +8,9 @@
 .structureicon.hele_corral {
 	background-image: url(../images/ui/icons/hele/corral.png);
 }
+.structureicon.hele_market {
+	background-image: url(../images/ui/icons/hele/market.png);
+}
 .structureicon.hele_storehouse {
 	background-image: url(../images/ui/icons/hele/storehouse.png);
 }
@@ -39,6 +42,9 @@
 }
 .structureicon.iber_corral {
 	background-image: url(../images/ui/icons/iber/corral.png);
+}
+.structureicon.iber_market {
+	background-image: url(../images/ui/icons/iber/market.png);
 }
 .structureicon.iber_storehouse {
 	background-image: url(../images/ui/icons/iber/storehouse.png);
@@ -72,6 +78,9 @@
 .structureicon.rome_corral {
 	background-image: url(../images/ui/icons/rome/corral.png);
 }
+.structureicon.rome_market {
+	background-image: url(../images/ui/icons/rome/market.png);
+}
 .structureicon.rome_storehouse {
 	background-image: url(../images/ui/icons/rome/storehouse.png);
 }
@@ -103,6 +112,9 @@
 }
 .structureicon.kart_corral {
 	background-image: url(../images/ui/icons/kart/corral.png);
+}
+.structureicon.kart_market {
+	background-image: url(../images/ui/icons/kart/market.png);
 }
 .structureicon.kart_storehouse {
 	background-image: url(../images/ui/icons/kart/storehouse.png);
@@ -136,6 +148,9 @@
 .structureicon.pers_corral {
 	background-image: url(../images/ui/icons/pers/corral.png);
 }
+.structureicon.pers_market {
+	background-image: url(../images/ui/icons/pers/market.png);
+}
 .structureicon.pers_storehouse {
 	background-image: url(../images/ui/icons/pers/storehouse.png);
 }
@@ -156,4 +171,12 @@
 }
 .structureicon.pers_temple {
 	background-image: url(../images/ui/icons/pers/temple.png);
+}
+
+/*<-- Gaia icons -->*/
+.structureicon.gaia_aleppo_pine {
+	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);
+}
+.structureicon.flag {
+	background-image: url(../images/flag/flag-icon.png);
 }

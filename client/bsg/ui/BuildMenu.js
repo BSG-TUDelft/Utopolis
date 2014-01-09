@@ -178,6 +178,12 @@ BuildMenu.prototype = {
 		}
 	},
 
+	/** Forces unselect of structure icon */
+	unselectStructure: function(){
+		this.selectedStructureId = null;
+		$("#structures").find("li").removeClass("selected");
+	},
+
 	/** Calculates scrolling for structures  */
 	calculateStructuresScroll: function(){
 		var topMargin = 10;	// soo ugly :(
@@ -266,7 +272,13 @@ BuildMenu.prototype = {
 		var resources = this.resources;
 		$("#structures").find("li").each(function(index, element){
 			// Are we able to afford this building
-			element.className = Gui.enoughResources(resources, structureTypes[element.type]) ? "" : "disabled";
+			//element.className =  ? "" : "disabled";
+			if(Gui.enoughResources(resources, structureTypes[element.type])){
+				$(element).removeClass("disabled");
+			}
+			else {
+				$(element).addClass("disabled");
+			}
 		});
 	},
 

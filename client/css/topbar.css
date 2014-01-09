@@ -1,26 +1,47 @@
 #topbar {
-	height: 38px;
+	height: 68px;
 	position: absolute;
 	top: 0;
 	left: 244px;
+	width: 100%;
+}
+
+#topbar .inner {
+	margin: 0 0 0 244px;
+}
+
+#topbar .menu-buttons {
+	background: url(../images/ui/common/wood.png);
+	width: 100%;
+	margin-left: -244px;
+	height: 30px;
+	line-height: 30px;
+}
+
+
+#topbar .menu-buttons .disabled {
+	color: #393A39;
+}
+#topbar .menu-buttons li {
+	cursor: pointer;
+	float: left;
+	margin-left: 16px;
+}
+
+#topbar .menu-buttons li:hover {
+	color: #262395;
+}
+
+#topbar .resources {
 	background: url(../images/ui/topbar/top_60x38.png);
+	height: 27px;
+	padding-top: 11px;
+	margin-left: -244px;
 	width: 100%;
 }
 
-#topbar .inner {
 
-}
-
-#topbar #resources {
-	margin-left: -250px;
-	width: 100%;
-}
-
-#topbar .inner {
-	margin: 11px 0 0 250px;
-}
-
-#topbar #resources li {
+#topbar .resources li {
 	border: 1px solid #726c5a;
 	border-bottom-color: #595548;
 	border-left-color: #595548;
@@ -34,24 +55,24 @@
 	text-align: right;
 }
 
-#topbar #resources li.citizens {
+#topbar .resources li.citizens {
 	float: left;
 	background-image: url(../images/ui/topbar/resources/citizens_small.png);
 }
 
 
-#topbar #resources li.wood {
+#topbar .resources li.wood {
 	background-image: url(../images/ui/topbar/resources/wood_small.png);
 }
 
-#topbar #resources li.food {
+#topbar .resources li.food {
 	background-image: url(../images/ui/topbar/resources/food_small.png);
 }
 
-#topbar #resources li.metal {
+#topbar .resources li.metal {
 	background-image: url(../images/ui/topbar/resources/metal_small.png);
 }
 
-#topbar #resources li.stone {
+#topbar .resources li.stone {
 	background-image: url(../images/ui/topbar/resources/stone_small.png);
 }

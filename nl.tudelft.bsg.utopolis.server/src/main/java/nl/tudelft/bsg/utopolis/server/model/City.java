@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -23,6 +24,18 @@ public class City implements Serializable {
 	@OneToMany(cascade={CascadeType.ALL})
 	private List<Structure> structures;
 	private String name;
+	private int numCitizens;
+	private String color;
+	@Enumerated
+	private Race race;
+
+	// Leaderboard
+	@OneToOne(cascade={CascadeType.ALL})
+	private KeyPerformanceIndicators kpi;
+	@OneToOne(cascade={CascadeType.ALL})
+	private Medals medals;
+	
+
 	
 	public int getId() {
 		return id;
@@ -54,6 +67,46 @@ public class City implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getNumCitizens() {
+		return numCitizens;
+	}
+
+	public void setNumCitizens(int numCitizens) {
+		this.numCitizens = numCitizens;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public Race getRace() {
+		return race;
+	}
+
+	public void setRace(Race race) {
+		this.race = race;
+	}
+
+	public KeyPerformanceIndicators getKpi() {
+		return kpi;
+	}
+
+	public void setKpi(KeyPerformanceIndicators kpi) {
+		this.kpi = kpi;
+	}
+
+	public Medals getMedals() {
+		return medals;
+	}
+
+	public void setMedals(Medals medals) {
+		this.medals = medals;
 	}
 	
 }

@@ -46,26 +46,18 @@ public class Resource {
 	@Context
 	private UriInfo uriInfo;
 
-	/**
-	 * Translates a content byte array to a proper response.
-	 * 
-	 * @param content
-	 *            The content byte array.
-	 * @return The proper Response containing the content.
-	 */
-	protected Response responseJson(byte[] content) {
-		return responseJson(new String(content));
+	protected Response buildResponse(Object o) {
+		Response response = Response.ok(o).build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
-
-	/**
-	 * Translates a JSON String to a proper response.
-	 * 
-	 * @param content
-	 *            The content String.
-	 * @return The proper Response containing the content.
-	 */
-	protected Response responseJson(String content) {
-		return Response.ok(content, MediaType.APPLICATION_JSON).build();
+	
+	protected Response optionsResponse() {
+		Response response = simpleResponse(200);
+		response.getHeaders().add("Access-Control-Allow-Methods", "PUT, POST");
+		response.getHeaders().add("Access-Control-Allow-Headers",
+				"Content-Type, Accept, x-requested-with");
+		return response;
 	}
 
 	/**
@@ -76,7 +68,10 @@ public class Resource {
 	 * @return Simple response with no body.
 	 */
 	protected Response simpleResponse(int status) {
-		return Response.status(status).type(MediaType.WILDCARD).build();
+		Response response = Response.status(status).type(MediaType.WILDCARD)
+				.build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**
@@ -88,7 +83,9 @@ public class Resource {
 	 * @return Simple response with the given message in the body.
 	 */
 	protected Response simpleResponse(String msg) {
-		return Response.ok(msg, MediaType.TEXT_PLAIN).build();
+		Response response = Response.ok(msg, MediaType.TEXT_PLAIN).build(); 
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**
@@ -101,8 +98,10 @@ public class Resource {
 	 * @return Simple response with the given message in the body.
 	 */
 	protected Response simpleResponse(int status, String msg) {
-		return Response.status(status).type(MediaType.TEXT_PLAIN).entity(msg)
+		Response response = Response.status(status).type(MediaType.TEXT_PLAIN).entity(msg)
 				.build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+		return response;
 	}
 
 	/**

@@ -1,0 +1,23 @@
+.questoverview {
+	width: 60%;
+}
+
+.questoverview h1 {
+	text-align: center;
+	margin: 10px 0 10px;
+}
+
+.questoverview h2 {
+	margin-bottom: 20px;
+}
+
+.questoverview .questlog {
+	height: 300px;
+	overflow-y: auto;
+}
+
+.questoverview .questlog div div {
+	margin: 2px;
+	padding: 6px;
+	background-color: rgba(0,0,0,.5);
+}
