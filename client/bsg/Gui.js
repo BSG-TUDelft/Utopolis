@@ -69,7 +69,7 @@ var Gui = {
 			// Event handler for top buttons
 			switch(e.buttonId){
 				case 'leaderboard':
-					Gui.leaderboard.toggle();
+					openLeaderboard();
 					break;
 				case 'help':
 					alert("Utopolis [BETA] v0.1\n\n\n" +
@@ -241,62 +241,29 @@ var Gui = {
 			} );
 		});
 
-		/** Leaderboard*/
-		var getRndInt = function(max){
-			return Math.floor(Math.random() * max);
-		};
-
-		var getRndIcons = function() {
-			return {
-				bronze1: Math.random() < .5,
-				bronze2: Math.random() < .5,
-				bronze3: Math.random() < .5,
-				silver1: Math.random() < .5,
-				silver2: Math.random() < .5,
-				silver3: Math.random() < .5,
-				gold1: Math.random() < .5,
-				gold2: Math.random() < .5,
-				gold3: Math.random() < .5
-			};
-		};
-		var data = [
-			[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
-		];
-
-		/** Initiates a leaderboard with parent and given inital data */
-		Gui.leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
 
 		var questDescriptions = [{
 			id: 0,
 			title: "Foundation",
 			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
-				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm.",
+				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm."
 		}, {
 			id: 1,
 			title: "Boundaries",
 			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
-				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. ",
+				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. "
 		}, {
 			id: 2,
 			title: "Nourishment",
-			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals.",
+			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals."
 		}, {
 			id: 3,
 			title: "Rainy Day",
-			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses).",
+			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses)."
 		}, {
 			id: 4,
 			title: "Trading",
-			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. ",
+			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. "
 		}];
 		Gui.questOverview = new QuestOverview($("body"), {
 			description: questDescriptions
@@ -332,6 +299,71 @@ var Gui = {
 		}*/];
 		Gui.questOverview.update(questStatus);
 
+		/** Initiates a leaderboard with parent and given inital data */
+		var medalDescriptions = {
+			bronze1: "This medal is awarded for completing quest " + questDescriptions[0].title + ".",
+			bronze2: "This medal is awarded for completing quest " + questDescriptions[1].title + ".",
+			bronze3: "This medal is awarded for completing quest " + questDescriptions[2].title + ".",
+			silver1: "This medal is awarded for completing quest " + questDescriptions[3].title + ".",
+			silver2: "This medal is awarded for completing quest " + questDescriptions[4].title + ".",
+		};
+		Gui.leaderboard = new Leaderboard($("body"), medalDescriptions, { animation: "slow"});
+
+
+		// Private functions
+		function openLeaderboard(){
+			if(!clientOnlyMode){
+				// Fire a request to retreive the latest scores
+				Gui.leaderboard.ajaxSpinner.show();
+
+				var request = $.ajax({
+					url: host + 'city/list',
+					type: 'GET'
+				});
+
+				request.done(function (response, textStatus, jqXHR){
+					var data = [];
+					for(var i = 0; i < response.cities.length; i++){
+						var city = response.cities[i];
+						data.push([
+							city.name + " (" + city.player.name + ")",
+							city.kpi.foreignRelations,
+							city.kpi.happiness,
+							city.kpi.population,
+							city.kpi.technology,
+							city.kpi.wealth,
+							getMedals(city.medals)
+						]);
+					}
+
+					function getMedals(medals) {
+						return {
+							bronze1: medals.quest0Completed,
+							bronze2: medals.quest1Completed,
+							bronze3: medals.quest2Completed,
+							silver1: medals.quest3Completed,
+							silver2: medals.quest4Completed,
+							silver3: medals.quest5Completed/*,
+							gold1: medals.quest6Completed,
+							gold2: medals.quest7Completed,
+							gold3: medals.quest8Completed*/
+						};
+					};
+					Gui.leaderboard.ajaxSpinner.hide();
+					Gui.leaderboard.update(data);
+				});
+
+				request.fail(function (jqXHR, textStatus, errorThrown){
+					console.error(
+						"The following error occured: " +
+							textStatus, errorThrown
+					);
+				});
+			}
+
+			// Already show it, update with new data when it comes back from the server
+			Gui.leaderboard.show();
+		}
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -830,7 +862,9 @@ function initGui() {
 				buildTime: 30000,
 				generates: {
 					food: 2,
-					health: 1
+					health: 1,
+					economy: 1,
+					trade: 1
 				},
 				citizenCap: 6
 			},
@@ -846,30 +880,42 @@ function initGui() {
 				buildTime: 30000,
 				generates: {
 					food: 4,
-					health: 1
+					health: 1,
+					diplomacy: 1
 				},
 				citizenCap: 6
 			},
 			"market": {
 				cost: {
-					metal: 4,
-					food: 2
+					metal: 100,
+					stone: 100,
+					wood: 1000,
+					food: 5000
 				},
 				requirements: {
-					knowledge: 4,
-					culture: 4
+					knowledge: 100,
+					culture: 250
 				},
 				buildTime: 30000,
 				generates: {
-					food: 4,
-					health: 1
+					stone: 8,
+					metal: 8,
+					wood: 8,
+					food: 16,
+					knowledge: 10,
+					culture: 10,
+					diplomacy: 5,
+					trade: 5,
+					peace: 5
 				},
 				citizenCap: 6
 			},
 			"storehouse": {
 				cost: {
-					wood: 3,
-					stone: 6
+					wood: 50,
+					stone: 50,
+					metal: 50,
+					food: 100
 				},
 				requirements: {
 					knowledge: 4,
@@ -888,24 +934,13 @@ function initGui() {
 			"barracks": {
 				cost: {
 					wood: 100,
-					food: 250
+					food: 200
 				},
 				requirements: {
 					knowledge: 40,
 					culture: 40
 				},
 				buildTime: 120000,
-				citizenCap: 10
-			},
-			"blacksmith": {
-				cost: {
-					wood: 100,
-					food: 100
-				},
-				requirements: {
-
-				},
-				buildTime: 240000,
 				generates: {
 					wood: 10,
 					metal: 10,
@@ -913,13 +948,32 @@ function initGui() {
 					safety: 5,
 					peace: 5
 				},
+				citizenCap: 10
+			},
+			"blacksmith": {
+				cost: {
+					wood: 50,
+					food: 100,
+					metal: 25,
+					stone: 25
+				},
+				requirements: {
+
+				},
+				buildTime: 240000,
+				generates: {
+					knowledge: 5,
+					stone: 5,
+					safety: 1,
+					diplomacy: 1
+				},
 				citizenCap: 8
 			},
 			"tower": {
 				cost: {
 					stone: 25,
 					metal: 25,
-					food: 40
+					food: 50
 				},
 				requirements: {
 					knowledge: 25,
@@ -1011,6 +1065,7 @@ function initGui() {
 			safety: { name: "Safety", iconCss: "safety"},
 			health: { name: "Health", iconCss: "health"},
 			knowledge: { name: "Knowledge", iconCss: "knowledge"},
+			trade: { name: "Trade", iconCss: "trade"},
 			culture: { name: "Culture", iconCss: "culture"},
 			economy: { name: "Economy", iconCss: "economy"},
 			peace: { name: "Peace", iconCss: "peace"},

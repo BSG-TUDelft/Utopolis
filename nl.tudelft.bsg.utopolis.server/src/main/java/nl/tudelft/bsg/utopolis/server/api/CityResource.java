@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.CityList;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 @Path("city")
@@ -44,7 +45,7 @@ public class CityResource extends Resource {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listCities() {
-		return buildResponse(DBConnector.get().getCities());
+		return buildResponse(new CityList(DBConnector.get().getCities()));
 	}
 
 	@OPTIONS
@@ -64,4 +65,8 @@ public class CityResource extends Resource {
 		DBConnector.get().save(c);
 		return buildResponse(s);
 	}
+
+
 }
+
+
