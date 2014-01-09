@@ -15,6 +15,12 @@
 	margin: 10px 0 10px;
 }
 
+.leaderboard .loader {
+	position: absolute;
+	right: 45px;
+	top: 45px;
+}
+
 .leaderboard table {
 	border-right: 1px solid #696245;
 	width: 100%;
