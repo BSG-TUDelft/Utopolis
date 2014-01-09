@@ -12,10 +12,11 @@
 	<meta name="author" content="Utopolis Team" />
 	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 	</head>
-	<body ontouchstart="">
+	<body onload="requestPlayers()">
 		<script type="text/javascript"
 			src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 		<script src="js/menu.js" type="text/javascript"></script>
+		<script src="js/assign_citizens.js" type="text/javascript"></script>
 		<div id='root'>
 			<div id="menu">
 				<div class="menu-tab">
@@ -68,21 +69,10 @@
 					</div>
 					<br/>
 					<div class="status-content">
-						<div id="province">
-							<form action="" method="get">
-								<p>Province: </p>
-								<select name="provinces">
-									<option value="g1">Group 1</option>
-									<option value="g2">Group 2</option>
-								</select>
-							</form>
-						</div>
 						<div id="student">
 							<form action="" method="get">
 								<p>Student: </p>
-								<select name="students">
-									<option value="s1">Student 1</option>
-									<option value="s2">Student 2</option>
+								<select id="students">
 								</select>
 							</form>
 						</div>
