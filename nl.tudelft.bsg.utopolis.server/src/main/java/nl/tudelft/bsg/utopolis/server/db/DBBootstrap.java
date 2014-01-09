@@ -13,65 +13,76 @@ import nl.tudelft.bsg.utopolis.server.model.Structure;
 public class DBBootstrap {
 	public static void init() {
 		if (DBConnector.get().getPlayers().size() == 0) {
-//			Structure s1 = new Structure();
-//			s1.setX(1);
-//			s1.setY(2);
-//			s1.setZ(3);
-//			s1.setRotation(90);
-//			s1.setScale(0.2);
-//			s1.setStructType(StructureType.barracks);
-//			s1.setRace(Race.iber);
-//			s1.setStructureId("iber_barracks");
-//			s1.setMaxCitizens(100);
-//			s1.setNumCitizens(13);
-//			DBConnector.get().save(s1);
-//
-//			Structure s2 = new Structure();
-//			s2.setX(10);
-//			s2.setY(20);
-//			s2.setZ(30);
-//			s2.setRotation(180);
-//			s2.setScale(0.4);
-//			s2.setStructType(StructureType.blacksmith);
-//			s2.setRace(Race.iber);
-//			s2.setStructureId("iber_blacksmith_struct");
-//			s2.setMaxCitizens(200);
-//			s2.setNumCitizens(133);
-//			DBConnector.get().save(s2);
-//
-//			Structure[] structs1 = { s1, s2 };
-			Structure[] structs1 = { };
 
-			Player p1 = new Player();
-			p1.setName("John Doe");
-			p1.setNick("JD");
-			p1.setPassword("pw");
-			DBConnector.get().save(p1);
 
-			City c1 = new City();
-			c1.setName("Sparta");
-			c1.setPlayer(p1);
-			c1.setStructures(Arrays.asList(structs1));
-			c1.setNumCitizens(1337);
-			c1.setColor("0xFF0000");
-			c1.setRace(Race.kart);
-
-			KeyPerformanceIndicators kpi = new KeyPerformanceIndicators(40f, 23f, 45f, 12f, 49f);
-			c1.setKpi(kpi);			
-			
-			Medals medals = new Medals();
-			medals.setQuest0Completed(true);
-			medals.setQuest1Completed(true);
-			c1.setMedals(medals);
-			
-			DBConnector.get().save(c1);
-
-			City[] cities1 = { c1 };
+			City[] cities1 = { 
+					generateCity("Athens", "Georgi", Race.hele),
+					generateCity("Cartage", "Wouter", Race.kart),
+					generateCity("Acropolis", "Tiago", Race.pers),
+					generateCity("New Rome", "Annika", Race.rome)
+			};
 
 			Province pr1 = new Province();
-			pr1.setName("Rome");
+			pr1.setName("First grade");
 			pr1.setCities(Arrays.asList(cities1));
 			DBConnector.get().save(pr1);
+			
+			
 		}
+	}
+
+	private static City generateCity(String cityName, String playerName, Race race) {
+		Structure[] structs = { };
+
+		Player player = new Player();
+		player.setName(playerName);
+		player.setNick(playerName);
+		player.setPassword("pw");
+		DBConnector.get().save(player);
+
+		City city = new City();
+		city.setName(cityName);
+		city.setPlayer(player);
+		city.setStructures(Arrays.asList(structs));
+		city.setNumCitizens((int)Math.random() * 100);
+		city.setColor("0xFF0000");
+		city.setRace(race);
+
+		KeyPerformanceIndicators kpi = new KeyPerformanceIndicators((float) (Math.random() * 30f), 
+				(float) (Math.random() * 30f), 
+				(float) (Math.random() * 30f), 
+				(float) (Math.random() * 30f), 
+				(float) (Math.random() * 30f));
+		city.setKpi(kpi);			
+		
+		Medals medals = new Medals();
+		for(int i = 0; i < Math.random() * 6; i++){
+			switch(i){
+			case 0:
+				medals.setQuest0Completed(true);
+				break;
+			case 1:
+				medals.setQuest1Completed(true);
+				break;
+			case 2:
+				medals.setQuest2Completed(true);
+				break;
+			case 3:
+				medals.setQuest3Completed(true);
+				break;
+			case 4:
+				medals.setQuest4Completed(true);
+				break;
+			case 5:
+				medals.setQuest5Completed(true);
+				break;
+			
+			}
+		}
+		city.setMedals(medals);
+		
+		DBConnector.get().save(city);
+		
+		return city;
 	}
 }
