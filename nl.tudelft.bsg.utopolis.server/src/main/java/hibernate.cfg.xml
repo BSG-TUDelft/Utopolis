@@ -29,6 +29,7 @@
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Player"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Structure"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.City"/>
+		<mapping class="nl.tudelft.bsg.utopolis.server.model.KeyPerformanceIndicators"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Province"/>
 		
 	</session-factory>

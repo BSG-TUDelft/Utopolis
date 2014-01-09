@@ -3,6 +3,7 @@ package nl.tudelft.bsg.utopolis.server.db;
 import java.util.Arrays;
 
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.KeyPerformanceIndicators;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Race;
@@ -53,6 +54,10 @@ public class DBBootstrap {
 			c1.setNumCitizens(1337);
 			c1.setColor("0xFF0000");
 			c1.setRace(Race.kart);
+
+			KeyPerformanceIndicators kpi = new KeyPerformanceIndicators(40f, 23f, 45f, 12f, 49f);
+			c1.setKpi(kpi);			
+			
 			DBConnector.get().save(c1);
 
 			City[] cities1 = { c1 };

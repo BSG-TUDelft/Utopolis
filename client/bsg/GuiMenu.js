@@ -830,7 +830,9 @@ function initGui() {
 				buildTime: 30000,
 				generates: {
 					food: 2,
-					health: 1
+					health: 1,
+					economy: 1,
+					trade: 1
 				},
 				citizenCap: 6
 			},
@@ -846,30 +848,42 @@ function initGui() {
 				buildTime: 30000,
 				generates: {
 					food: 4,
-					health: 1
+					health: 1,
+					diplomacy: 1
 				},
 				citizenCap: 6
 			},
 			"market": {
 				cost: {
-					metal: 4,
-					food: 2
+					metal: 100,
+					stone: 100,
+					wood: 1000,
+					food: 5000
 				},
 				requirements: {
-					knowledge: 4,
-					culture: 4
+					knowledge: 100,
+					culture: 250
 				},
 				buildTime: 30000,
 				generates: {
-					food: 4,
-					health: 1
+					stone: 8,
+					metal: 8,
+					wood: 8,
+					food: 16,
+					knowledge: 10,
+					culture: 10,
+					diplomacy: 5,
+					trade: 5,
+					peace: 5
 				},
 				citizenCap: 6
 			},
 			"storehouse": {
 				cost: {
-					wood: 3,
-					stone: 6
+					wood: 50,
+					stone: 50,
+					metal: 50,
+					food: 100
 				},
 				requirements: {
 					knowledge: 4,
@@ -888,24 +902,13 @@ function initGui() {
 			"barracks": {
 				cost: {
 					wood: 100,
-					food: 250
+					food: 200
 				},
 				requirements: {
 					knowledge: 40,
 					culture: 40
 				},
 				buildTime: 120000,
-				citizenCap: 10
-			},
-			"blacksmith": {
-				cost: {
-					wood: 100,
-					food: 100
-				},
-				requirements: {
-
-				},
-				buildTime: 240000,
 				generates: {
 					wood: 10,
 					metal: 10,
@@ -913,13 +916,32 @@ function initGui() {
 					safety: 5,
 					peace: 5
 				},
+				citizenCap: 10
+			},
+			"blacksmith": {
+				cost: {
+					wood: 50,
+					food: 100,
+					metal: 25,
+					stone: 25
+				},
+				requirements: {
+
+				},
+				buildTime: 240000,
+				generates: {
+					knowledge: 5,
+					stone: 5,
+					safety: 1,
+					diplomacy: 1
+				},
 				citizenCap: 8
 			},
 			"tower": {
 				cost: {
 					stone: 25,
 					metal: 25,
-					food: 40
+					food: 50
 				},
 				requirements: {
 					knowledge: 25,
