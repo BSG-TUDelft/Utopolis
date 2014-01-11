@@ -13,7 +13,6 @@ var MessageOverview = function(parent, data, config){
 
     this.config = config || {};
 
-
     // Call parent constructor
     Popup.prototype.constructor.call(this, parent, this.config);
 
@@ -37,6 +36,12 @@ var MessageOverview = function(parent, data, config){
     '');
 
     this.data = data;
+    this.el.on('click', ".compose", function(e){
+        me.input.show();
+        me.input.el.find(".to").val("");
+        me.input.el.find(".subject").val("");
+        me.input.el.find(".message-text").val("");
+    });
     this.el.on('click', '.table .button', function(e){
         var index = e.target.attributes["data-index"].nodeValue;
         var row = me.data[index];
@@ -50,9 +55,11 @@ var MessageOverview = function(parent, data, config){
                 break;
             case "reply":
                 me.input.show();
+                me.input.el.find(".to").focus();
                 me.input.el.find(".to").val(row[FROM]);
                 me.input.el.find(".subject").val("Re: " + row[SUBJECT]);
                 me.input.el.find(".message-text").val("\n\n> " + row[MESSAGE_TEXT].split("\n").join("\n> "));
+                me.input.el.find(".message-text").focus();
                 //me.input.el.find(".subject").val("Re: " + row[SUBJECT]);
                 break;
         }
@@ -112,7 +119,7 @@ var MessageOverview = function(parent, data, config){
         } );
 
 
-    }
+    };
     this.initData();
 };
 MessageOverview.prototype = new Popup();
