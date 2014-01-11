@@ -61,10 +61,10 @@ Leaderboard.prototype.update = function (data) {
 		table.dataTable( {
 			"aaData": data,
 			"aoColumns": [{
-				sTitle: "Name", mRender: $.proxy(function ( data, type, full ) {
-					return data + '' + parseIcons(full[full.length -1], this.medalDescriptions);
-				}, this)
-			},
+                    sTitle: "Name", mRender: $.proxy(function ( data, type, full ) {
+                        return data + '' + parseIcons(full[full.length -1], this.medalDescriptions);
+                    }, this)
+                },
 				{ "sTitle": "F. relations", sClass: "right_align", sWidth: "110px" },
 				{ "sTitle": "Happiness", sClass: "right_align", sWidth: "110px" },
 				{ "sTitle": "Population", sClass: "right_align", sWidth: "110px" },

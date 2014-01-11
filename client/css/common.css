@@ -13,8 +13,16 @@
 	background-repeat: no-repeat, no-repeat, repeat-x;
 	min-width: 64px;
 	text-align: center;
-	font-size: 20px;
-	line-height: 28px;
+	font-size: 18px;
+	line-height: 32px;
+    height: 100%;
+}
+
+.button-medium:active .inner{
+    color: #1e1d15;
+    background-position:  left -96px, right -160px, 0 -128px;
+    margin-left: 1px;
+    margin-right: 1px;
 }
 
 .button-big {
@@ -53,7 +61,7 @@
 	padding-right: 1px;
 }
 
-button-big:not(:active) {
+.button-big:not(:active) {
 	transition: padding-left 200ms step-end;
 	transition: padding-right 200ms step-end;
 

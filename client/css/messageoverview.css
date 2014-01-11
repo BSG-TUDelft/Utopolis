@@ -1,0 +1,102 @@
+/*
+.messageoverview {
+    background-image: url(../images/ui/common/steel.png);
+    border: 1px solid #151515;
+    height: 100%;
+    padding: 20px 4px 4px 4px;
+}*/
+
+.messageoverview .button {
+    float: right;
+    cursor: pointer;
+}
+
+.messageoverview .button:hover {
+    color: #262395;
+}
+
+.messageoverview .compose {
+}
+
+.messageoverview .delete {
+}
+
+.messageoverview table {
+    border-right: 1px solid #696245;
+    width: 100%;
+}
+
+.messageoverview td, .messageoverview th {
+    text-align: left;
+    height: 27px;
+    padding: 0 6px 0 6px;
+    border-left: 1px solid #696245;
+}
+
+.messageoverview td {
+    border-bottom: 1px solid #696245;
+    background: rgba(0, 0, 0, .75);
+}
+
+.messageoverview .unread {
+    font-weight: bold;
+}
+
+.messageoverview .info_row {
+    cursor: default;
+}
+
+.messageoverview th {
+    line-height: 26px;
+    background: #313127;
+    background-image: url(../images/ui/table/header_bg.png), url(../images/ui/table/header_bg.png), url(../images/ui/table/header_bg.png);
+    background-position:  left 0, right -54px, 0 -27px;
+    background-repeat: no-repeat, no-repeat, repeat-x;
+    cursor: pointer;
+}
+
+.messageoverview tr {
+    cursor: pointer;
+}
+
+.messageoverview tr:hover {
+    background-color:  #595548;
+}
+
+.messageoverview tr.info_row:hover {
+    background-color:  inherit;
+}
+
+/** Input */
+
+div.message_input {
+    width: inherit;
+    padding: 10px;
+}
+
+.message_input label {
+    float: left;
+    width: 18%;
+    height: 28px;
+    text-align: right;
+}
+
+.message_input input {
+    float: right;
+    padding-left: 4px;
+    width: 80%;
+    background-color: rgba(0,0,0,.5);
+    border: 1px solid #393A39;
+    color: white;
+    height: 20px;
+    margin-bottom: 4px;
+}
+.message_input textarea {
+    padding-left: 4px;
+    width: 98.7%;
+    height: 210px;
+    background-color: rgba(0,0,0,.5);
+    border: 1px solid #393A39;
+    color: white;
+    resize: none;
+}

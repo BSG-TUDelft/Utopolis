@@ -16,6 +16,10 @@
 	width: 80%;
 }
 
+.popup h1 {
+    text-align: center;
+}
+
 .popup.thin {
 	border-image-source: url(../images/ui/popup/border_thin_77x77.png);
 	border-image-slice: 7 7 7 7;
