@@ -92,6 +92,9 @@ var Gui = {
 				case 'crafting':
 					Gui.craftingScreen.toggle();
 					break;
+                case 'messages':
+                    openMessages();
+                    break;
 				default:
 					alert("Not implemented - Sorry");
 					break;
@@ -241,7 +244,9 @@ var Gui = {
 			} );
 		});
 
+        Gui.messageOverview = new MessageOverview($("body"), []);
 
+        // Quests
 		var questDescriptions = [{
 			id: 0,
 			title: "Foundation",
@@ -305,7 +310,7 @@ var Gui = {
 			bronze2: "This medal is awarded for completing quest " + questDescriptions[1].title + ".",
 			bronze3: "This medal is awarded for completing quest " + questDescriptions[2].title + ".",
 			silver1: "This medal is awarded for completing quest " + questDescriptions[3].title + ".",
-			silver2: "This medal is awarded for completing quest " + questDescriptions[4].title + ".",
+			silver2: "This medal is awarded for completing quest " + questDescriptions[4].title + "."
 		};
 		Gui.leaderboard = new Leaderboard($("body"), medalDescriptions, { animation: "slow"});
 
@@ -364,6 +369,20 @@ var Gui = {
 			// Already show it, update with new data when it comes back from the server
 			Gui.leaderboard.show();
 		}
+
+        function openMessages(){
+
+            // Todo: fetch from server
+            var data = [
+                /* from, subject, date send, date read  */
+                ["DJ Vader", "Yo whats up", new Date(), null, "Just sayin' hi", 0],
+                ["J-Lea", "Stuff", new Date(), new Date(), "Lorem ipsum \n\n Lizzle dizzle \n mizzle fizzle", 1],
+                ["Luke Skizzlewalker", "Shizzle", new Date(), new Date(), "Blabla \n\n meep meep", 2]
+            ];
+            Gui.messageOverview.update(data);
+
+            Gui.messageOverview.show();
+        }
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -1121,14 +1140,7 @@ function initGui() {
 //	}, 1500);
 //
 //
-//	$( "body" ).keypress(function( event ) {
-//		switch(event.which){
-//
-//			case "l".charCodeAt(0):
-//				leaderboard.toggle();
-//				break;
-//		}
-//	});
+
 
 	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
 	login.el.addClass("login");
@@ -1167,6 +1179,7 @@ function initGui() {
 
 	login.center();
 	login.show();
+	login.hide();
 	$("#username").focus();
 }
 
