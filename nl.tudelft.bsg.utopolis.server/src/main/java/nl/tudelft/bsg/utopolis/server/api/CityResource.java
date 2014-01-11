@@ -66,6 +66,16 @@ public class CityResource extends Resource {
 		return buildResponse(s);
 	}
 
+	@POST
+	@Path("/{playerId}/citizens/{assignedCitizens}")
+	public Response assignCitizens(@PathParam("playerId") int playerId, @PathParam("assignedCitizens") int assignedCitizens) {
+		City c = DBConnector.get().getCity(playerId);
+		System.out.println(c.getNumCitizens());
+		c.setNumCitizens(c.getNumCitizens() + assignedCitizens);
+		DBConnector.get().save(c);
+		System.out.println(c.getNumCitizens());
+		return simpleResponse(200);
+	}
 
 }
 

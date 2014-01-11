@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.Player;
+import nl.tudelft.bsg.utopolis.server.model.PlayerList;
 
 @Path("player")
 public class PlayerResource extends Resource {
@@ -42,6 +43,6 @@ public class PlayerResource extends Resource {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listPlayers() {
-		return buildResponse(DBConnector.get().getPlayers());
+		return buildResponse(new PlayerList(DBConnector.get().getPlayers()));
 	}
 }

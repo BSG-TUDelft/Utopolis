@@ -25,9 +25,16 @@ a {
 	left: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	background-color: #CCCCCC;
+	background-color: #E9E2B4;
 	float: left;
 	display: flex;
+}
+
+.lineH {
+	background: #556270;
+	height: 5px;
+	margin-bottom: 3%;
+	margin-top: 0.5%;
 }
 
 /*menu*/
@@ -48,10 +55,6 @@ a {
 }
 
 #menu .menu-tab a {
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
 	display: flex;
 }
 
@@ -69,16 +72,22 @@ a {
 #menu .tab-icon .icon-img {
 	font-family: 'Entypo';
 	font-size: 70px;
-	color: #556270;
+	color: #2A363B;
 }
 
 
 #menu .tab-content {
 	margin: 0 auto;
 	margin-top: 5%;
-	color: #556270;
+	color: #2A363B;
 	width: 60%;
 	text-align: center;
+}
+
+#menu .tab-main {
+	position: relative;
+	margin-top: 8%;
+	opacity: 0.8;
 }
 
 #menu .menu-tab:hover .tab-icon{
@@ -113,28 +122,157 @@ a {
 }
 
 .description h1{
-	font-style: uppercase;
 	font-size: 25px;
 }
 
 .status-content {
 	width: 100%;
-	display: inline-block;
+	display: flex;
 }
 
 .status-content p {
 	font-size: 16px;
 }
-.status-content #province {
-	width: 33.3333333%;
-}
+
+/******List of Players******/
 .status-content #student {
-	width: 33.3333333%;
-}
-.status-content #assignment {
-	width: 33.3333333%;
+	width: 20%;
 }
 
+.status-content #student #students {
+	
+}
+
+/*****Number of citizens to assign******/
+.status-content #assignment {
+	width: 20%;
+}
+
+.status-content #assignment #numCitizens-input {
+	
+}
+
+/********Private message from teacher to student*****/
+.status-content #priv-message {
+	width: 50%;
+}
+
+.status-content #priv-message #priv-message-input {
+	
+}
+
+/***add another form****/
+.status-content #addAssignment {
+	width: 5%;
+}
+
+.status-content #addAssignment:hover {
+	font-size: 120%;
+	cursor: pointer;
+}
+
+/***submit form****/
+.status-content #submitAssignment {
+	width: 5%;
+}
+
+.status-content #submitAssignment:hover {
+	font-size: 120%;
+	cursor: pointer;
+}
+
+
+/************************Game Status*************************/
+/***Global overview****/
+
+#global-view > h3 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+/***History****/
+
+#history {
+	width: 100%;
+}
+
+#history > h3 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#history #itens-area {
+	height: auto;
+	z-index: 2000;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+#history #itens-area .row {
+	display: flex;
+	margin-bottom: 2%;
+}
+
+#history #itens-area #item {
+	color: #FFFFFF;
+	background: #FF6B6B;
+	position: relative;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	width: 50%;
+	margin: 8%;
+}
+
+#history #itens-area #item > h5 {
+	margin: 0;
+	padding: 0.4em;
+	text-align: center;
+	font-weight: 300;
+	opacity: 0.8;
+	background: rgba(0,0,0,0.1);
+	border-radius: 3px 3px 0 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	font-size: 70%;
+}
+
+#history #itens-area #item > div {
+	display: block;
+	font-weight: 300;
+}
+
+#history #itens-area #item > div > h4{
+	margin: 0;
+	padding: 0.4em;
+	text-align: center;
+	font-weight: 300;
+	opacity: 0.8;
+	background: rgba(0,0,0,0.1);
+	border-radius: 3px 3px 0 0;
+}
+
+#history #itens-area #item .item-content {
+	margin-top: 2%;
+	margin-bottom: 10%;
+}
+
+#history #itens-area #item .item-content .a{
+	text-align: center;
+	font-weight: 400;
+	opacity: 0.9;
+	border-radius: 3px 3px 0 0;
+	font-size: 90%;
+	text-align: justify;
+	margin-left: 5%;
+	margin-right: 5%;
+}
 
 
 @media only screen and (max-width: 1000px)  {
