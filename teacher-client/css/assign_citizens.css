@@ -1,0 +1,138 @@
+/**********************Assign Citizens*****************/
+
+.description {
+	width: 100%;
+}
+
+.description > h3{
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+.description > h5 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+.status-content {
+	width: 100%;
+	display: block;
+}
+
+.status-content .row {
+	display: flex;
+	margin-bottom: 2%;
+	border-radius: 3px;
+}
+
+.status-content p {
+	font-size: 18px;
+}
+
+/******List of Players******/
+.status-content #student {
+	width: 10%;
+	text-align: center;
+	color: #FFFFFF;
+	background: #64CCE4;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+.status-content #student a {
+	font-weight: 500;
+	opacity: 0.9;
+	left: 0px;
+	position: fixed;
+	right: 0px;
+	margin-top: 6%;
+}
+
+/*****Number of citizens to assign******/
+.status-content #assignment {
+	width: 5%;
+	text-align: center;
+	margin-left: 2%;
+}
+
+.status-content #assignment .numCitizens-input {
+	text-align: center;
+	height: 85%;
+	width: 100%;
+}
+
+/********Private message from teacher to student*****/
+.status-content #priv-message {
+	width: 80%;
+	margin-left: 2%;
+}
+
+.status-content #priv-message .priv-message-input {
+	width: 95%;
+	height: 85%;
+}
+
+
+/***submit form****/
+.status-content #submitAssignment {
+	width: 5%;
+}
+
+.status-content #submitAssignment:hover {
+	cursor: pointer;
+}
+
+.status-content #submitAssignment .tab-icon #button {
+	color: #556270;
+}
+
+.status-content #submitAssignment:hover .tab-icon #button {
+	color: #64CCE4;
+}
+
+@media only screen and (max-width: 1200px)  {
+
+	/***********Assign Citizens********/
+	.status-content .row {
+		display: block;
+	}
+
+	.status-content #student a {
+		font-weight: 500;
+		opacity: 0.9;
+		position: relative;
+		font-size: 120%;
+	}
+
+	.status-content #student {
+		width: 100%;
+		margin: 0%;
+	}
+
+	.status-content #assignment {
+		width: 100%;
+		text-align: left;
+		margin: 2%;
+	}
+
+	.status-content #assignment .numCitizens-input {
+		text-align: left;
+		width: initial;
+	}
+
+	.status-content #priv-message {
+		width: 100%;
+	}
+
+	.status-content #submitAssignment {
+		width: 100%;
+		text-align: center;
+		margin:	2%;
+	}
+
+}

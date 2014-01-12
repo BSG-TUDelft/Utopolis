@@ -9,17 +9,20 @@ function requestHistory(){
     request.done(function ( response, textStatus, jqXHR ){
         console.log("SERVER RESPONSE: history retrieved successfully");
         results = response; 
-        var i = 0;
-        while( i != results.messages.length-2 )      
-        {
-        	$("#itens-area").append("<div class='row'>"
-        		+ makeItem( results.messages[i] )
-        		+ makeItem( results.messages[i+1] )
-        		+ makeItem( results.messages[i+2] )
-        		+ "</div>");
+        $("#itens-area").empty();
+        if(results.messages.length > 1) {
+	        var i = 0;
+	        while( i != results.messages.length-2 )      
+	        {
+	        	$("#itens-area").append("<div class='row'>"
+	        		+ makeItem( results.messages[i] )
+	        		+ makeItem( results.messages[i+1] )
+	        		+ makeItem( results.messages[i+2] )
+	        		+ "</div>");
 
-          	i+=3;
-        }
+	          	i+=3;
+	        }
+	    }
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -31,6 +34,7 @@ function requestHistory(){
 }
 
 function makeItem( message ){
+	
 	var date = message.entryDate.split("T");
 
 	return "<div id='item'><div><h4>To: "

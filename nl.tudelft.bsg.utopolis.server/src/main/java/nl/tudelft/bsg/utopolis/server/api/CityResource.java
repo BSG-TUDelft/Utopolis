@@ -33,6 +33,11 @@ public class CityResource extends Resource {
 		DBConnector.get().save(c);
 		return buildResponse(c);
 	}
+	
+	@OPTIONS
+	public Response createCityOptions() {
+		return optionsResponse();
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

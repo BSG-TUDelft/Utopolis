@@ -1,6 +1,6 @@
 body {
-	font-family: 'Lato', sans-serif;
-	font-size: 22px;
+	font-family: 'Terminal Dosis', Arial, sans-serif;
+	font-size: 21px;
 }
 
 a {
@@ -11,7 +11,9 @@ a {
 	clear: both;
 }
 
-
+.flex {
+	display: flex;
+}
 
 /**********************INDEX*****************/
 #root {
@@ -25,7 +27,7 @@ a {
 	left: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	background-color: #E9E2B4;
+	background-color: #D8D8D8;
 	float: left;
 	display: flex;
 }
@@ -43,7 +45,7 @@ a {
 	display: block;
 	width: 15%;
 	margin-top: 2%;
-	margin-left: 5%;
+	margin-left: 1%;
 	margin-bottom: auto;
 	height: 100%;
 }
@@ -56,7 +58,7 @@ a {
 
 #menu .menu-tab {
 	width: 100%;
-	border-right: solid 8px #C7F464;
+	border-right: solid 8px #556270;
 	margin-top: 3%;
 	margin-bottom: 5%;
 }
@@ -67,44 +69,44 @@ a {
 }
 
 #menu .tab-icon {
-	background-color: #C7F464;
+	background-color: #556270;
 	width: 30%;
 	border-radius: 3px;
-	padding: 18% 3% 5%;
 	text-align: center;
 }
 
-#menu .tab-icon .icon-img {
-	font-family: 'Entypo';
-	font-size: 70px;
-	color: #2A363B;
+#menu .tab-icon i {
+	color: #D8D8D8;
 }
 
 
 #menu .tab-content {
 	margin: 0 auto;
-	margin-top: 5%;
 	color: #2A363B;
 	text-align: center;
 }
 
 #menu .tab-main {
 	position: relative;
-	margin-top: 20%;
+	margin-top: 10%;
 	opacity: 0.8;
-	font-size: 70%;
+	font-weight: bold;
 }
 
 #menu .menu-tab:hover .tab-icon{
-	background-color: #FF6B6B;
+	background-color: #64CCE4;
 }
 
 #menu .menu-tab:hover {
-	border-right: solid 8px #FF6B6B;
+	border-right: solid 8px #64CCE4;
 }
 
 #menu .menu-tab:hover a .tab-content{
-	color: #FF6B6B;
+	color: #64CCE4;
+}
+
+#menu .menu-tab:hover .tab-icon i {
+	color: #2A363B;
 }
 
 /*content*/
@@ -117,229 +119,13 @@ a {
 	margin-bottom: auto;
 }
 
-
-
-
-/**********************Assign Citizens*****************/
-
-.description {
-	width: 100%;
+@media only screen and (min-width: 1201px) and (max-width: 1800px) {
+	#history #itens-area #item .item-content .a {
+		margin-bottom: 15%;
+	}
 }
 
-.description > h3{
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-}
-
-.description > h5 {
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-	font-size: 80%;
-}
-
-.status-content {
-	width: 100%;
-	display: block;
-}
-
-.status-content .row {
-	display: flex;
-	margin-bottom: 2%;
-	background: #FF6B6B;
-	border-radius: 3px;
-}
-
-.status-content p {
-	font-size: 16px;
-}
-
-/******List of Players******/
-.status-content #student {
-	width: 10%;
-	text-align: center;
-	color: #FFFFFF;
-	background: #FF6B6B;
-	border-radius: 3px;
-	-webkit-transform-style: preserve-3d;
-	-moz-transform-style: preserve-3d;
-	transform-style: preserve-3d;
-	margin:	2%;
-}
-
-.status-content #student a {
-	font-weight: 500;
-	opacity: 0.9;
-	left: 0px;
-	position: fixed;
-	right: 0px;
-	margin-top: 6%;
-}
-
-/*****Number of citizens to assign******/
-.status-content #assignment {
-	width: 5%;
-	text-align: center;
-}
-
-.status-content #assignment .numCitizens-input {
-	text-align: center;
-	height: 85%;
-	width: 100%;
-}
-
-/********Private message from teacher to student*****/
-.status-content #priv-message {
-	width: 80%;
-	margin-left: 2%;
-}
-
-.status-content #priv-message .priv-message-input {
-	width: 95%;
-	height: 85%;
-}
-
-
-/***submit form****/
-.status-content #submitAssignment {
-	width: 5%;
-}
-
-.status-content #submitAssignment:hover {
-	cursor: pointer;
-}
-
-.status-content #submitAssignment .tab-icon #button {
-	color: #556270;
-}
-
-.status-content #submitAssignment:hover .tab-icon #button {
-	color: #FFFFFF;
-}
-
-/************************Game Status*************************/
-/***Global overview****/
-
-#global-view > h3 {
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-}
-
-/***History****/
-
-#history {
-	width: 100%;
-}
-
-#history > h3 {
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-}
-
-#history #itens-area {
-	height: auto;
-	z-index: 2000;
-	-webkit-backface-visibility: hidden;
-	-moz-backface-visibility: hidden;
-	backface-visibility: hidden;
-}
-
-#history #itens-area .row {
-	display: flex;
-	margin-bottom: 2%;
-}
-
-#history #itens-area #item {
-	color: #FFFFFF;
-	background: #FF6B6B;
-	position: relative;
-	border-radius: 3px;
-	-webkit-transform-style: preserve-3d;
-	-moz-transform-style: preserve-3d;
-	transform-style: preserve-3d;
-	width: 33.3333333%;
-	margin: 4%;
-}
-
-#history #itens-area #item > h5 {
-	margin: 0;
-	padding: 0.4em;
-	text-align: center;
-	font-weight: 300;
-	opacity: 0.8;
-	background: rgba(0,0,0,0.1);
-	border-radius: 3px 3px 0 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	position: fixed;
-	font-size: 70%;
-}
-
-#history #itens-area #item > div {
-	display: block;
-	font-weight: 300;
-}
-
-#history #itens-area #item > div > h4{
-	margin: 0;
-	padding: 0.4em;
-	text-align: center;
-	font-weight: 300;
-	opacity: 0.8;
-	background: rgba(0,0,0,0.1);
-	border-radius: 3px 3px 0 0;
-}
-
-#history #itens-area #item .item-content {
-	height: 100%;
-	padding-bottom: 13%;
-	padding-top: 1%;
-}
-
-#history #itens-area #item .item-content .a{
-	text-align: center;
-	font-weight: 400;
-	opacity: 0.9;
-	border-radius: 3px 3px 0 0;
-	font-size: 90%;
-	text-align: justify;
-	margin-left: 5%;
-	margin-right: 5%;
-}
-
-/*********Game set-up********/
-
-#add-players > h3 {
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-}
-
-#add-players #add-players-wrapper {
-
-}
-
-
-/*********God mode*********/
-
-#god-container > h3 {
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-}
-
-#god-container > h5 {
-	font-weight: 300;
-	opacity: 0.8;
-	color: #2A363B;
-	font-size: 80%;
-}
-
-@media only screen and (max-width: 1000px)  {
+@media only screen and (max-width: 1200px)  {
 	body {
 		font-size: 100%;
 	}
@@ -358,53 +144,12 @@ a {
 		margin-top: 8%;
 	}
 
-	/***********Assign Citizens********/
-	.status-content .row {
-		display: block;
-	}
-
-	.status-content #student a {
-		font-weight: 500;
-		opacity: 0.9;
-		position: relative;
-		font-size: 120%;
-	}
-
-	.status-content #student {
-		width: 100%;
-		margin: 0%;
-	}
-
-	.status-content #assignment {
-		width: 100%;
-		text-align: left;
-		margin: 2%;
-	}
-
-	.status-content #assignment .numCitizens-input {
-		text-align: left;
-		width: initial;
-	}
-
-	.status-content #priv-message {
-		width: 100%;
-	}
-
-	.status-content #submitAssignment {
-		width: 100%;
-		text-align: center;
-		margin:	2%;
-	}
-
-	/**********Game Status*******/
-
-	#history #itens-area .row {
-		display: block;
-	}
-
-	#history #itens-area #item {
-		width: 90%;
+	#menu .tab-icon {
+		padding: 12% 3% 5%;
 	}
 }
 
+
+
+}
 

@@ -7,13 +7,14 @@ function requestPlayers() {
 
     request.done(function ( response, textStatus, jqXHR ){
         console.log("SERVER RESPONSE: players retrieved successfully");
-        results = response;       
+        results = response;
+        $(".status-content").empty();       
         for (var i=0;i<results.players.length;i++)
         {
            $(".status-content").append('<div class="row"><div id="student"><a id="'+i+'" value="'
                 + results.players[i].nick + '">'
                 + results.players[i].name +'</a></div><div id="assignment">'
-                + '<input id="numCitizens-input'+i+'" class="numCitizens-input" type="number" required="required" name="n_citizens" placeholder="Number"></div>'
+                + '<input id="numCitizens-input'+i+'" class="numCitizens-input" type="textarea" required="required" name="n_citizens" placeholder="Number"/></div>'
                 + '<div id="priv-message">' 
                 + '<input id="priv-message-input'+i+'" class="priv-message-input" type="textarea" required="required" name="private_message" placeholder="Type a personal message to '
                 + results.players[i].name +'..."/></div>' 
@@ -31,30 +32,38 @@ function requestPlayers() {
     });
 }
 
+
 function updateCityCitizens( pos ){
 
     var nick = $('#'+pos).attr("value");
     var numCitizens = $("#numCitizens-input"+pos).val();
-    var msgText = $("#priv-message-input"+pos).val();
+    if( isNaN(numCitizens) ){
+        numCitizens = 0;
+        alert("You need to provide a number of citizens to assign!");
+    }else {
+        if(numCitizens > 0){
+            var msgText = $("#priv-message-input"+pos).val();
 
-    var request = $.ajax({
-        url: host + "player/" + nick,
-        type: 'GET'
-    });
+            var request = $.ajax({
+                url: host + "player/" + nick,
+                type: 'GET'
+            });
 
-    request.done(function (response, textStatus, jqXHR){
-        player = response;
-        assignCitizens( player, numCitizens );
-        saveMessage( player, numCitizens, msgText );
-    });
+            request.done(function (response, textStatus, jqXHR){
+                player = response;
+                assignCitizens( player, numCitizens );
+                saveMessage( player, numCitizens, msgText );
+            });
 
-    request.fail(function (jqXHR, textStatus, errorThrown){
-        console.error(
-            "The following error occured: " +
-            textStatus, errorThrown
-        );
-        console.log("Couldn't find the player.");
-    });
+            request.fail(function (jqXHR, textStatus, errorThrown){
+                console.error(
+                    "The following error occured: " +
+                    textStatus, errorThrown
+                );
+                console.log("Couldn't find the player.");
+            });
+        }
+    }
 }
 
 function assignCitizens( player, number ){
@@ -81,7 +90,7 @@ function saveMessage( player, numCitizens, msgText ) {
     
    
     var message = new Message(new Date(), msgText, player, numCitizens);
-    console.log(message.msg);
+    
     var struct = {
         entryDate: message.date,
         message: message.msg,
