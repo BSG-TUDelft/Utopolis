@@ -34,7 +34,7 @@ var Gui = {
 				togglePlacementMode();
 			}
 			else if(e.structure.structureId == "flag" && flag_placed == false){
-				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
+				currentModel = new ModelWrapper(initFlag(scene, 15, 'images/flag/flag.jpg'));
 
 				if(rollOverMesh) {
 					refreshRollover();
@@ -825,6 +825,26 @@ function initGui() {
 				name: "Aleppo Pine",
 				structureId: "gaia_aleppo_pine",
 				iconCss: "gaia_aleppo_pine",
+				structureType: "tree"
+			},{
+				name: "European Beech",
+				structureId: "gaia_european_beech",
+				iconCss: "gaia_european_beech",
+				structureType: "tree"
+			},{
+				name: "Mediterranean Cypress",
+				structureId: "gaia_mediterranean_cypress",
+				iconCss: "gaia_mediterranean_cypress",
+				structureType: "tree"
+			},{
+				name: "Pine",
+				structureId: "gaia_pine",
+				iconCss: "gaia_pine",
+				structureType: "tree"
+			},{
+				name: "Poplar",
+				structureId: "gaia_poplar",
+				iconCss: "gaia_poplar",
 				structureType: "tree"
 			}]
 		}],

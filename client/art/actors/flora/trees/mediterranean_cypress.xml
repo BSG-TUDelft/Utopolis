@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<actor version="1">
+  <castshadow/>
+  <group>
+      <variant frequency="2" name="Cypress Tree (Large)">
+          <mesh>gaia/tree_cypress_large.dae</mesh>
+          <textures><texture file="gaia/prop_tree_cypess_c.dds" name="baseTex"/></textures>
+      </variant>
+      <variant frequency="1" name="Cypress Tree (Small)">
+      <mesh>gaia/tree_cypress_sm.dae</mesh>
+      <textures><texture file="gaia/prop_tree_cypess.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="2" name="Cypress Tree (Medium)">
+      <mesh>gaia/tree_cypress_med.dae</mesh>
+      <textures><texture file="gaia/prop_tree_cypess_b.dds" name="baseTex"/></textures>
+    </variant>
+
+    <variant frequency="1" name="Cypress Tree (XLarge)">
+      <mesh>gaia/tree_cypress_xlarge.dae</mesh>
+      <textures><texture file="gaia/prop_tree_cypess_b.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="2" name="Cypress Tree (Skinny)">
+      <mesh>gaia/tree_cypress_skinny.dae</mesh>
+      <textures><texture file="gaia/tree_cypress_a.dds" name="baseTex"/></textures>
+    </variant>
+    <variant frequency="1" name="Cypress Tree (Tall)">
+      <mesh>gaia/tree_cypress_tall.dae</mesh>
+      <textures><texture file="gaia/tree_cypress_a.dds" name="baseTex"/></textures>
+    </variant>
+  </group>
+  
+  <material>basic_trans_wind.xml</material>
+</actor>
