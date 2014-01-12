@@ -1,7 +1,4 @@
 /* todo: rename to generic table*/
-.popup {
-}
-
 .leaderboard {
 	background-image: url(../images/ui/common/steel.png);
 	padding: 6px;
@@ -13,6 +10,12 @@
 .leaderboard h1 {
 	text-align: center;
 	margin: 10px 0 10px;
+}
+
+.leaderboard .loader {
+	position: absolute;
+	right: 45px;
+	top: 45px;
 }
 
 .leaderboard table {

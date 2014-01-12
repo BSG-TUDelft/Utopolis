@@ -137,8 +137,11 @@ function initModels(callback){
 		'pers_temple': 'structures/persians/temple.xml',
 
 		// Load GAIA
-		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml'
-
+		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
+		'gaia_european_beech' : 'flora/trees/european_beech.xml',
+		'gaia_mediterranean_cypress' : 'flora/trees/mediterranean_cypress.xml',
+		'gaia_pine' : 'flora/trees/pine.xml',
+		'gaia_poplar' : 'flora/trees/poplar.xml'
 	};
 	var queue = 0;
 	for(var i in actors){
@@ -317,7 +320,6 @@ function init() {
 	}
 
 	$( document ).ready(function() {
-		Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
 	});
 }
 
@@ -381,6 +383,10 @@ function saveStructure( structure ) {
 		rotation: structure.model.rotation.y
 	};
 
+	if(clientOnlyMode){
+		structure.id = parseInt(Math.random() * 65535, 2);
+		return;
+	}
     var request = $.ajax({
         url: host + 'city/1/structure',
         type: 'PUT',
@@ -412,9 +418,13 @@ function startGame(){
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
+	scene.addEventListener("UPDATE", Gui.update);
 
 	// Start game loop
 	animate();
+
+	// Display welcome message
+	Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
 }
 
 function collidablesContainEmitter(colliderOrigin) {
@@ -427,7 +437,7 @@ function collidablesContainEmitter(colliderOrigin) {
 }
 
 function changeColliderColor(collider, r, g, b) {
-    if(collider.children[0].material != null ){
+    if(collider.children[0].material != null && collider.children[0].material.ambient){
         collider.children[0].material.ambient.r = r;
         collider.children[0].material.ambient.g = g;
         collider.children[0].material.ambient.b = b;
@@ -504,7 +514,7 @@ function buildingPlacementAllowed() {                                     // tru
 }
 
 function onDocumentMouseDown( event ) {
-    event.preventDefault();
+    //event.preventDefault();
 	if((event.target || event.srcElement).nodeName != "CANVAS"){
 		// We did not click on a canvas (so on the GUI instead)
 		return;
@@ -872,10 +882,13 @@ function animate() {
 function update() {
     var delta = clock.getDelta();
     if ( t > 1 ) t = 0;
-    updateBirds(delta);
-    updateFlag(delta);
     stats.update();
-	Gui.update();
+
+	// Dispatch 'UPDATE' event on scene
+	scene.dispatchEvent({
+		type: "UPDATE",
+		delta: delta
+	});
 }
 
 function highlightSelectedModel (model) {
@@ -886,7 +899,7 @@ function highlightSelectedModel (model) {
     selectedModel = model;                                              //get the first object intersected;
     selectedModel.oldMaterial = selectedModel.material;
     var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
-    highlightMaterial.emissive.setHex(0x888888);
+    if(highlightMaterial.emissive) highlightMaterial.emissive.setHex(0x888888);
     selectedModel.material = highlightMaterial;
 }
 

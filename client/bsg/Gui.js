@@ -34,7 +34,7 @@ var Gui = {
 				togglePlacementMode();
 			}
 			else if(e.structure.structureId == "flag" && flag_placed == false){
-				currentModel = new ModelWrapper(initFlag(15, 'images/flag/flag.jpg'));
+				currentModel = new ModelWrapper(initFlag(scene, 15, 'images/flag/flag.jpg'));
 
 				if(rollOverMesh) {
 					refreshRollover();
@@ -69,7 +69,7 @@ var Gui = {
 			// Event handler for top buttons
 			switch(e.buttonId){
 				case 'leaderboard':
-					Gui.leaderboard.toggle();
+					openLeaderboard();
 					break;
 				case 'help':
 					alert("Utopolis [BETA] v0.1\n\n\n" +
@@ -92,6 +92,9 @@ var Gui = {
 				case 'crafting':
 					Gui.craftingScreen.toggle();
 					break;
+                case 'messages':
+                    openMessages();
+                    break;
 				default:
 					alert("Not implemented - Sorry");
 					break;
@@ -241,62 +244,31 @@ var Gui = {
 			} );
 		});
 
-		/** Leaderboard*/
-		var getRndInt = function(max){
-			return Math.floor(Math.random() * max);
-		};
+        Gui.messageOverview = new MessageOverview($("body"), []);
 
-		var getRndIcons = function() {
-			return {
-				bronze1: Math.random() < .5,
-				bronze2: Math.random() < .5,
-				bronze3: Math.random() < .5,
-				silver1: Math.random() < .5,
-				silver2: Math.random() < .5,
-				silver3: Math.random() < .5,
-				gold1: Math.random() < .5,
-				gold2: Math.random() < .5,
-				gold3: Math.random() < .5
-			};
-		};
-		var data = [
-			[ "Han Solo", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Luke Skywalker", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Leia Organa", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Boba Fett", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Darth Vader", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Yoda", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Chewbacca", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Obi Wan Kenobi", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Jabba the Hut", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ],
-			[ "Lando Calrissian", getRndInt(40), getRndInt(2000), getRndInt(2000), getRndInt(2000), getRndIcons() ]
-		];
-
-		/** Initiates a leaderboard with parent and given inital data */
-		Gui.leaderboard = new Leaderboard($("body"), data, { animation: "slow"});
-
+        // Quests
 		var questDescriptions = [{
 			id: 0,
 			title: "Foundation",
 			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
-				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm.",
+				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm."
 		}, {
 			id: 1,
 			title: "Boundaries",
 			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
-				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. ",
+				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. "
 		}, {
 			id: 2,
 			title: "Nourishment",
-			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals.",
+			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals."
 		}, {
 			id: 3,
 			title: "Rainy Day",
-			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses).",
+			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses)."
 		}, {
 			id: 4,
 			title: "Trading",
-			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. ",
+			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. "
 		}];
 		Gui.questOverview = new QuestOverview($("body"), {
 			description: questDescriptions
@@ -332,6 +304,85 @@ var Gui = {
 		}*/];
 		Gui.questOverview.update(questStatus);
 
+		/** Initiates a leaderboard with parent and given inital data */
+		var medalDescriptions = {
+			bronze1: "This medal is awarded for completing quest " + questDescriptions[0].title + ".",
+			bronze2: "This medal is awarded for completing quest " + questDescriptions[1].title + ".",
+			bronze3: "This medal is awarded for completing quest " + questDescriptions[2].title + ".",
+			silver1: "This medal is awarded for completing quest " + questDescriptions[3].title + ".",
+			silver2: "This medal is awarded for completing quest " + questDescriptions[4].title + "."
+		};
+		Gui.leaderboard = new Leaderboard($("body"), medalDescriptions, { animation: "slow"});
+
+
+		// Private functions
+		function openLeaderboard(){
+			if(!clientOnlyMode){
+				// Fire a request to retreive the latest scores
+				Gui.leaderboard.ajaxSpinner.show();
+
+				var request = $.ajax({
+					url: host + 'city/list',
+					type: 'GET'
+				});
+
+				request.done(function (response, textStatus, jqXHR){
+					var data = [];
+					for(var i = 0; i < response.cities.length; i++){
+						var city = response.cities[i];
+						data.push([
+							city.name + " (" + city.player.name + ")",
+							city.kpi.foreignRelations,
+							city.kpi.happiness,
+							city.kpi.population,
+							city.kpi.technology,
+							city.kpi.wealth,
+							getMedals(city.medals)
+						]);
+					}
+
+					function getMedals(medals) {
+						return {
+							bronze1: medals.quest0Completed,
+							bronze2: medals.quest1Completed,
+							bronze3: medals.quest2Completed,
+							silver1: medals.quest3Completed,
+							silver2: medals.quest4Completed,
+							silver3: medals.quest5Completed/*,
+							gold1: medals.quest6Completed,
+							gold2: medals.quest7Completed,
+							gold3: medals.quest8Completed*/
+						};
+					};
+					Gui.leaderboard.ajaxSpinner.hide();
+					Gui.leaderboard.update(data);
+				});
+
+				request.fail(function (jqXHR, textStatus, errorThrown){
+					console.error(
+						"The following error occured: " +
+							textStatus, errorThrown
+					);
+				});
+			}
+
+			// Already show it, update with new data when it comes back from the server
+			Gui.leaderboard.show();
+		}
+
+        function openMessages(){
+
+            // Todo: fetch from server
+            var data = [
+                /* from, subject, date send, date read  */
+                ["DJ Vader", "Yo whats up", new Date(), null, "Just sayin' hi", 0],
+                ["J-Lea", "Stuff", new Date(), new Date(), "Lorem ipsum \n\n Lizzle dizzle \n mizzle fizzle", 1],
+                ["Luke Skizzlewalker", "Shizzle", new Date(), new Date(), "Blabla \n\n meep meep", 2]
+            ];
+            Gui.messageOverview.update(data);
+
+            Gui.messageOverview.show();
+        }
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -794,6 +845,26 @@ function initGui() {
 				structureId: "gaia_aleppo_pine",
 				iconCss: "gaia_aleppo_pine",
 				structureType: "tree"
+			},{
+				name: "European Beech",
+				structureId: "gaia_european_beech",
+				iconCss: "gaia_european_beech",
+				structureType: "tree"
+			},{
+				name: "Mediterranean Cypress",
+				structureId: "gaia_mediterranean_cypress",
+				iconCss: "gaia_mediterranean_cypress",
+				structureType: "tree"
+			},{
+				name: "Pine",
+				structureId: "gaia_pine",
+				iconCss: "gaia_pine",
+				structureType: "tree"
+			},{
+				name: "Poplar",
+				structureId: "gaia_poplar",
+				iconCss: "gaia_poplar",
+				structureType: "tree"
 			}]
 		}],
 
@@ -1033,6 +1104,7 @@ function initGui() {
 			safety: { name: "Safety", iconCss: "safety"},
 			health: { name: "Health", iconCss: "health"},
 			knowledge: { name: "Knowledge", iconCss: "knowledge"},
+			trade: { name: "Trade", iconCss: "trade"},
 			culture: { name: "Culture", iconCss: "culture"},
 			economy: { name: "Economy", iconCss: "economy"},
 			peace: { name: "Peace", iconCss: "peace"},
@@ -1088,14 +1160,7 @@ function initGui() {
 //	}, 1500);
 //
 //
-//	$( "body" ).keypress(function( event ) {
-//		switch(event.which){
-//
-//			case "l".charCodeAt(0):
-//				leaderboard.toggle();
-//				break;
-//		}
-//	});
+
 
 	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
 	login.el.addClass("login");
@@ -1134,6 +1199,7 @@ function initGui() {
 
 	login.center();
 	login.show();
+	login.hide();
 	$("#username").focus();
 }
 

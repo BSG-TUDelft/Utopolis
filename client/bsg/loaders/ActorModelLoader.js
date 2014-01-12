@@ -21,7 +21,7 @@ var ActorModelLoader = function () {
 	// PUBLIC METHODS
 	/** Loads a model and its textures by providing the actor XML file */
 	function loadActorXml (name, actorXml) {
-		this.modelName = name;
+		me.modelName = name;
 		var url =  actorsUrlPrefix + actorXml;
 		$.ajax({
 			type: "GET",
@@ -31,18 +31,37 @@ var ActorModelLoader = function () {
 				//$(xml).find("variant[name*='Texture-Branches-1']").find("texture[name*='baseTex']").attr("file")
 				//$(xml).find("variant[name*='Texture-Branches-1'] texture[name*='baseTex']").attr("file")
 
-				// Find all props that are attached to the root (the only ones we can actually use at this point)
-				//me.props = $(xml).find("variant[name!='death'] props prop[attachpoint*='root']").map(function(index, el) { return el.attributes['actor'].nodeValue;}).toArray();
-				me.props = $(xml).find("variant").first().find("props prop[attachpoint*='root']").map(function(index, el) { return el.attributes['actor'].nodeValue;}).toArray();
+				//me.propsQueue = $(xml).find("variant[name!='death'] props prop[attachpoint*='root']").map(function(index, el) { return el.attributes['actor'].nodeValue;}).toArray();
+				//me.propsQueue = $(xml).find("variant").first().find("props prop[attachpoint*='root']").map(function(index, el) { return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };}).toArray();
 
-				me.textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
-				me.textureUrl = checkTextureUrl(url, me.textureUrl);
+				// Find all props that are attached to the root (the only ones we can actually use at this point)
+				me.propsQueue = $(xml).find("variant[name!='death']") //,variant[name!='Idle'],variant[name!='garrisoned']")
+					.find("props prop").map(function(index, el) {
+						// todo: filter these attachpoints through jQuery find
+						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
+							return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };
+					}).toArray();
+				var textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
+				textureUrl = checkTextureUrl(url, textureUrl);
 
 				// Taking the first mesh
 				var meshUrl = meshUrlPrefix + $(xml).find("mesh").first().text();
+				var material;
+
+				// This crude way of defining material looks if the <material> node contains the word player
+				// and if so, loads the player color shader (where transparency == player color)
+				if($(xml).find("material").first().text().indexOf("player") > -1)
+					material = getPlayerColorMaterial(textureUrl);
+				else
+					material = getAdditiveAlphaBlendingMaterial(textureUrl);
 
 				// Load the mesh
-				colladaLoader.load(meshUrl, doneLoadingScene);
+				colladaLoader.load(meshUrl, function(material) {
+					// Create closure for material
+					return function(collada){
+						doneLoadingScene(collada, material);
+					}
+				}(material));
 			},
 			error: function(xhr, status, error){
 				console.error("ActorModelLoader.loadActorXml: Error loading xml [" + url + "]. Name: [" + name + "]. Error message: " + error);
@@ -52,20 +71,15 @@ var ActorModelLoader = function () {
 
 	// PRIVATE METHODS
 
-	/** Gets called when */
-	function doneLoadingScene (collada){
+	/** Gets called when main collada model is downloaded from the server*/
+	function doneLoadingScene (collada, material){
 		me.scene = collada.scene;
 		me.scene.name = me.modelName;
+		me.scene.castShadow = true;
+
 		removeLights(me.scene);
-
-		var texture = THREE.ImageUtils.loadTexture(me.textureUrl);
-		var material = new THREE.MeshLambertMaterial({map: texture});
-
-		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
-		material.transparent = true;
-		material.blending = THREE["AdditiveAlphaBlending"];
-
 		setMaterial(me.scene, material);
+
 		me.scene.scale.x = me.scene.scale.y = me.scene.scale.z = me.scale;
 		me.scene.updateMatrix();
 
@@ -76,21 +90,29 @@ var ActorModelLoader = function () {
 		checkIfDone();
 	}
 
-	/** Fires when a prop is done loading */
-	function doneLoadingProp(collada, propTextureUrl){
+	/** Fires when a prop is done loading from the server */
+	function doneLoadingProp(collada, material, attachPoint){
 		var mesh = collada.scene;
-
-		var texture = THREE.ImageUtils.loadTexture(propTextureUrl);
-		var material = new THREE.MeshBasicMaterial({map: texture});
-
-		// Todo: figure out if we need different blend modes for different materials. Maybe additive alpha blending is overkill?
-		material.transparent = true;
-		material.blending = THREE["AdditiveAlphaBlending"];
 
 		setMaterial(mesh, material);
 		mesh.scale.x = mesh.scale.y = mesh.scale.z = 1;	// Set scale to 1 because children are recursively scaled for some arcane reason
 
-		me.scene.add(mesh);
+		var attachTo = null;
+		// Find the scene to add this prop to
+		if(attachPoint != "root"){
+			// Prop is not added to root, find the child (prefixed with 'prop_' in collada file)
+			attachTo = me.scene.getObjectByName("prop_" + attachPoint, true);
+		}
+		if(attachTo == null){
+			attachTo = me.scene;
+		}
+
+		/*if(attachPoint == 'garrisoned'){
+			scene.addEventListener("UPDATE", function(res){
+				mesh.updateAnimation( 1000 * res.delta);
+			});
+		}*/
+		attachTo.add(mesh);
 		me.scene.updateMatrix();
 
 
@@ -99,24 +121,26 @@ var ActorModelLoader = function () {
 
 	/** Goes through the props array, loads props XML and mesh / textures afterwards */
 	function loadProps(){
-		for(var i = 0;  i < me.props.length; i++){
-			var url = actorsUrlPrefix + me.props[i];
+		for(var i = 0;  i < me.propsQueue.length; i++){
+			var url = actorsUrlPrefix + me.propsQueue[i].actor;
+			var attachPoint = me.propsQueue[i].attachPoint;
+
 			$.ajax({
 				type: "GET",
 				url: url,
 				dataType: "xml",
-				success: function(reqUrl) {
-					// create closure for reqUrl
+				success: function(reqUrl, attachPoint) {
+					// create closure for reqUrl, attachPoint and propIndex
 					return function (xml) {
+
 					if($(xml).find("actor group variant mesh").size() === 0){
 						// There's no mesh, we dont know how to handle this. Keep calm and parse on.
-						me.props.splice( $.inArray(reqUrl, me.props), 1 );
-						checkIfDone();
+						removeFromQueue(reqUrl);
 						return;
 					}
 					if($(xml).find("actor group variant textures texture[name*='baseTex']").size() === 0){
-						console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. We will not load this prop");
-						checkIfDone();
+						console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. Will not load this prop");
+						removeFromQueue(reqUrl);
 						return;
 					}
 
@@ -124,26 +148,45 @@ var ActorModelLoader = function () {
 					var propTextureUrl = textureUrlPrefix + $(xml).find("actor group variant textures texture[name*='baseTex']").first().attr("file");
 					propTextureUrl = checkTextureUrl(reqUrl, propTextureUrl);
 
+					// This crude way of defining material looks if the <material> node contains the word player
+					// and if so, loads the player color shader (where transparency == player color)
+					var material;
+					if($(xml).find("material").first().text().indexOf("player") > -1)
+						material = getPlayerColorMaterial(propTextureUrl);
+					else
+						material = getAdditiveAlphaBlendingMaterial(propTextureUrl);
+
 					var propLoader = new THREE.ColladaLoader();
 					propLoader.options.convertUpAxis = true;
-					propLoader.load(propMeshUrl, function( prTU) {
-						// Create closure for propTextureUrl
+					propLoader.load(propMeshUrl, function( material, attachPoint) {
+						// Create closure for material and attachPoint
 						return function(collada) {
 							// Remove prop from loading queue
-							me.props.splice( $.inArray(reqUrl, me.props), 1 );
+							removeFromQueue(reqUrl);
 
-							doneLoadingProp(collada, propTextureUrl);
-					}}(propTextureUrl));
+							doneLoadingProp(collada, material, attachPoint);
+					}}(material, attachPoint));
 
-				}}(url),
+				}}(url, attachPoint),
 				error: function(reqUrl) {
 					// create closeure for reqUrl
 					return function(xhr, status, error){
-					console.error("ActorModelLoader.loadProps: Error loading prop xml [" + reqUrl + "]. Error message: " + error);
+					console.error("ActorModelLoader.loadProps: Error loading prop for [" + me.modelName + "] xml [" + reqUrl + "]. Error message: " + error);
 				}}(url)
 			});
 		}
+		// removes a prop from the queue
+		function removeFromQueue(url){
+			for(var i = 0;  i < me.propsQueue.length; i++){
+				if(actorsUrlPrefix + me.propsQueue[i].actor == url){
+					me.propsQueue.splice(i,1);
+					break;
+				}
+			}
+			checkIfDone();
+		}
 	}
+
 	/** If the mesh contains instances of THREE.Light, remove them */
 	function removeLights(mesh) {
 		if (mesh.children) {
@@ -167,15 +210,53 @@ var ActorModelLoader = function () {
 		}
 	}
 
-	/** Will see if everything that needs to be loaded is loaded, fires doneLoading if this is the case*/
+	/** Returns the material used in meshes that need to be textures with player color
+	 * @param textureUrl {String} url to texture
+	 * @returns {THREE.MeshLambertMaterial} to be applied to meshes */
+	function getAdditiveAlphaBlendingMaterial(textureUrl){
+		var texture = THREE.ImageUtils.loadTexture(textureUrl);
+		var material = new THREE.MeshLambertMaterial({map: texture});
+
+		material.transparent = true;
+		material.blending = THREE["AdditiveAlphaBlending"];
+		return material;
+	}
+
+	/** Returns the material used in meshes that need to be textures with player color
+	 * @param textureUrl {String} url to texture
+	 * @returns {THREE.ShaderMaterial} to be applied to meshes */
+	function getPlayerColorMaterial(textureUrl){
+		// texture
+		var texture = THREE.ImageUtils.loadTexture(textureUrl);
+		texture.needsUpdate = true; // important
+
+		// uniforms
+		var uniforms = {
+			color: { type: "c", value: me.playerColor },
+			texture: { type: "t", value: texture }
+		};
+
+		// attributes
+		var attributes = {	};
+
+		// material
+		return new THREE.ShaderMaterial({
+			attributes: attributes,
+			uniforms: uniforms,
+			vertexShader: document.getElementById('player_color_vertex_shader').textContent,
+			fragmentShader: document.getElementById('player_color_fragment_shader').textContent
+		});
+	}
+
+	/** Will see if everything that needs to be loaded is loaded, fires doneLoading event if this is the case*/
 	function checkIfDone(){
-		if(me.props.length === 0){
+		if(me.propsQueue.length === 0){
 			me.dispatchEvent({ type: ActorModelLoader.doneLoading, scene: me.scene });
 		}
 	}
 
 	/** Helper function to convert path ending with .dds to .png. */
-	function checkTextureUrl(actorXml, textureUrl){
+	function checkTextureUrl(actorXml, textureUrl){//todo: whatif file has dds in the name?
 		if(textureUrl.match(/dds/)){
 			if(!me.suppressDDSWarning){
 				console.warn("ActorModelLoader.loadActorXml: The actor xml [" + actorXml + "] asked me to load a texture [" + textureUrl + "] but this appears to be a DirectDrawSurface (.dds) file which WebGL can't handle! I've taken the liberty of interpreting it as a .png file, so that had better be there!");
@@ -186,8 +267,11 @@ var ActorModelLoader = function () {
 	}
 
 	// PUBLIC INTERFACE
-	// Public methods
+	// Public members
+	this.modelName = null;
+	this.playerColor = new THREE.Color( 0xFF0066 );
 
+	// Public methods
 	/** Loads a model and its textures by providing the actor XML file */
 	this.loadActorXml = loadActorXml;
 };
@@ -198,7 +282,7 @@ ActorModelLoader.prototype = {
 
 	modelName: null,
 	textureUrl: null,
-	props: [],
+	propsQueue: [],	// Array of objects containing { actor, attachPoint}
 	scene: null,
 	suppressDDSWarning: true
 };
@@ -207,77 +291,6 @@ ActorModelLoader.prototype = {
 ActorModelLoader.doneLoading = "DONE_LOADING";
 
 THREE.EventDispatcher.prototype.apply( ActorModelLoader.prototype );
-
-/*
-	loadModels: function () {
-		for (var key in this.modelStructuresArray) {
-			if (!this.modelStructuresArray.hasOwnProperty(key)) continue;
-			this.load(key,
-				this.modelStructuresArray,
-				$.proxy(this.decreaseRemainingStructures, this)
-			);		// Pass context to all callback functions because JS gets weird
-		}
-	},
-
-	load: function (key, map, callbackDecRemainingStructures) {
-		this.colladaLoader.load(map[key], this.setTextureOnModel(key, this.textureFile, callbackDecRemainingStructures));
-	},
-
-	setTextureOnModel: function (key, textureFile, callbackDecRemainingStructures) {
-		return function (collada) {
-			function removeLights(model) {
-				if (model.children) {
-					for (var j = 0; j < model.children.length; j++) {
-						var child = model.children[j];
-						if (child instanceof THREE.Light) {
-							model.children.splice(j, 1);
-						}
-					}
-				}
-			}
-
-			function setMaterial(node, material) {
-				node.material = material;
-				if (node.children) {
-					for (var i = 0; i < node.children.length; i++) {
-						setMaterial(node.children[i], material);
-					}
-				}
-			}
-
-			var dae = collada.scene;
-			dae.name = key;
-			removeLights(dae);
-			var texture = THREE.ImageUtils.loadTexture(textureFile);
-			var material = new THREE.MeshLambertMaterial({map: texture});
-
-			material.transparent = true;
-			material.blending = THREE.AdditiveAlphaBlending;
-
-			setMaterial(dae, material);
-			dae.scale.x = dae.scale.y = dae.scale.z = 0.4;
-			dae.updateMatrix();
-			this.loadedModels[key] = new ModelWrapper(dae);
-			callbackDecRemainingStructures();
-		};
-	},
-
-	decreaseRemainingStructures: function () {
-		this.numModelStructures--;
-		if (this.numModelStructures == 0) {
-			// Will dispatch event when done loading all the models
-			this.dispatchEvent({ type: ModelLoader.doneLoading })
-		}
-	},
-
-	getSize: function (obj) {
-		var size = 0, key;
-		for (key in obj) {
-			if (obj.hasOwnProperty(key))
-				size++;
-		}
-		return size;
-	}*/
 
 
 

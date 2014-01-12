@@ -1,0 +1,91 @@
+Meeting with Martijn - 10/1/2014 Utrecht
+
+Present: Georgi, Mircea, Tiago and Martijn
+
+Minutes:
+
+G: Demo the lastest version. Explaining the informal test that happen during christmas break.
+	Explaining the difficulties on the deploymnet of the game on the TU Delft server.
+
+	The game server and client interface can run on same server or different machines.
+
+	Building resource cost and production explained.
+
+	Teacher will be able to tweak the balancing of the resources on the game.
+
+
+M: Would be nice to have some kind of forum where teachers can share their balancing experience.
+
+G: We are limited we the time since the beggining and now we only have one week. We need to define what excatly we are going to for this week.
+
+G: The informal testing result in feedback that the game isn't fun. Lack's objectives.
+	So we came up with some ideias that are mostly future work.
+
+M: Having the responsability of allocating citizens to buildings allows the student to care for optimization of the resource generation and homeless citizens. 
+	Can I get rid of a building? Yes.
+
+G: For the major lack of objectives in the game we plan to have quests.
+
+M: Could this quests be created?
+
+G: THat would be the final goal.
+	The top-priority developement-wise is on the quests module.
+
+M: Is there somoe global score?
+
+G: We have the leader board ready for it.
+
+M: Are the quests on the leader board?
+
+G: We were thinking if that was or not the best way. We originally thought of showing things like the most rich, the most happy citizens, etc.
+
+M: That would be nice.
+
+G: Unfortunatly we can't implement all of this ideas, and most of it will have to stay for future work. The game is well documented and free open source and therefor is completly available for us or any other person/group wants to work with it.
+	->Explains and shows the github page and the repository
+
+M: That is actually really nice because I plan on using it with a class that I will begin to lecturer in 2 weeks.
+
+
+Mircea: Explains the future works idea of population dynamics (happiness and such), trading and crafting.
+G: Objective would be to have a AI in the end to manage all these indicators and balanced them out, to provide a fun game (future work).
+
+G: So it's aggreed the crafting module will not be implemented in the final prototype. 
+Unfortunatly we need to be pragmatic in what we will have for the final delivery, because we have only one week left.
+
+M: I agree.
+
+T: Message system between teacher and student explained.
+
+M: Excel? for assignement? It would be nice to show the overview of you got citizens. 
+
+G: We didn't really thought of using Excel, and we have some ideias for how to do this already.
+
+G: Our teacher, likes the idea of the teacher being the dictator on the game. Being able to create disasters and control every aspect of the game. We decided to leave it for future work.
+
+M: ok! How can I see the game state of the students cities.
+
+G: We well working on a fly mode to do exactly that.
+Right now the only thing we will be able to do is the player switch to other player city, to be able to city.
+
+M: Streets? Is it possible?
+
+G e M: At the moment it will be very hard to do that, because of our terrain and for the time we have left its not worth it.
+
+M: make a day cycle on the waiting time for resource generation, so that we don't get to the end of the week with major cities. To give some rithm and flow to the game .
+	Could you implement the random removal of citizens for students?
+
+G: We didnt thought about it but if you really want it on the game we need to re-prioratize our to-do list.
+
+Agreement:
+ + Focus on quests
+ + Focus on teacher interface
+ + Random citizen removal
+ + fly mode
+
+-/+ time cycle on resource generation 
+
+- Crafting not so much
+
+
+M: I really liked the work you guys did for this game. Nice job!

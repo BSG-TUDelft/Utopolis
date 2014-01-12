@@ -1,14 +1,32 @@
-var Leaderboard = function(parent, data, config){
+var Leaderboard = function(parent, medalDescriptions, config){
 	// Call parent constructor
 	Popup.prototype.constructor.call(this, parent, config);
 
+	this.medalDescriptions = medalDescriptions;
 	this.el.append( '' +
 		'<div class="leaderboard"> ' +
-		'<h1>Leaderboard</h1>' +
-		'<table cellpadding="0" cellspacing="0" border="0" id="leaderboard"></table>' +
+			'<h1>Leaderboard</h1>' +
+			'<div class="loader"></div>' +
+			'<table cellpadding="0" cellspacing="0" border="0" class="table"></table>' +
 		'</div>' );
-	// Used in column renderer
-	var parseIcons = function (icons) {
+	this.ajaxSpinner = this.el.find('.leaderboard .loader').spin('large', '#000');
+
+	$(window).bind('resize', function () {
+		$('#leaderboard').css('width', '100%');
+	} );
+
+	this.el.hide();
+};
+Leaderboard.prototype = new Popup();
+
+/** Updates data, provide data in nested array */
+Leaderboard.prototype.update = function (data) {
+	// Prevent updating if not needed to improve performance. Also Chrome doesnt like it
+	if (!this.isVisible()) return false;
+
+
+// Used in column renderer
+	var parseIcons = function (icons, medalDescriptions) {
 		var res = "<div class='medals'>";
 		var css = {
 			bronze1: "medal_bronze1",
@@ -24,51 +42,52 @@ var Leaderboard = function(parent, data, config){
 		for (var i in icons) {
 			if (!icons.hasOwnProperty(i)) continue;
 			if (icons[i]) {
-				res += "<div title='" + i + "' class='" + css[i] + "'></div>";
+				var title = medalDescriptions[i];
+				res += "<div title='" + title + "' class='" + css[i] + "'></div>";
 			}
 		}
 		return res + "</div>";
 	};
 
-	$('#leaderboard').dataTable( {
-		"aaData": data,
-		"aoColumns": [{
-			sTitle: "Name", mRender: function ( data, type, full ) {
-				return data + '' + parseIcons(full[5]);
-			}
-		},
-			{ "sTitle": "Citizens", sClass: "right_align", sWidth: "100px" },
-			{ "sTitle": "Culture", sClass: "right_align", sWidth: "100px" },
-			{ "sTitle": "Economy", sClass: "right_align", sWidth: "100px" },
-			{ "sTitle": "Knowledge", sClass: "right_align", sWidth: "110px" }
-		],
-		bLengthChange: false,
-		bInfo: false,
-		bPaginate: false,
-		bFilter: false
-	});
-	$('#leaderboard').find('th').append('<div></div>');
-	$(window).bind('resize', function () {
-		$('#leaderboard').css('width', '100%');
-	} );
-
-	this.el.hide();
-};
-Leaderboard.prototype = new Popup();
-
-/** Updates data, provide data in nested array */
-Leaderboard.prototype.update = function (data) {
-	// Prevent updating if not needed to improve performance. Also Chrome doesnt like it
-	if (!this.isVisible()) return false;
-
-	for (var i = 0; i < data.length; i++) {
-		$('#leaderboard').dataTable().fnUpdate(data[i], i);
+	var table = this.el.find('.table').first();
+	if(table.hasClass("dataTable")){
+		// Its already a datatable, so update data
+		for (var i = 0; i < data.length; i++) {
+			table.dataTable().fnUpdate(data[i], i);
+		}
+	}
+	else {
+		// Create datatable
+		table.dataTable( {
+			"aaData": data,
+			"aoColumns": [{
+                    sTitle: "Name", mRender: $.proxy(function ( data, type, full ) {
+                        return data + '' + parseIcons(full[full.length -1], this.medalDescriptions);
+                    }, this)
+                },
+				{ "sTitle": "F. relations", sClass: "right_align", sWidth: "110px" },
+				{ "sTitle": "Happiness", sClass: "right_align", sWidth: "110px" },
+				{ "sTitle": "Population", sClass: "right_align", sWidth: "110px" },
+				{ "sTitle": "Technology", sClass: "right_align", sWidth: "110px" },
+				{ "sTitle": "Wealth", sClass: "right_align", sWidth: "80px" }
+			],
+			fnServerData: function() { },
+			bLengthChange: false,
+			bInfo: false,
+			bPaginate: false,
+			bFilter: false
+		});
+		table.find('th').append('<div></div>');
 	}
 };
 
 Leaderboard.prototype.show = function(){
 	Popup.prototype.show.call(this);
 	this.center();
+};
+
+Leaderboard.prototype.toggle = function(){
+	Popup.prototype.show.call(this);
 };
 
 
