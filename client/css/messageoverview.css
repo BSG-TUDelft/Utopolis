@@ -24,6 +24,7 @@
 .messageoverview table {
     border-right: 1px solid #696245;
     width: 100%;
+    clear: both;
 }
 
 .messageoverview td, .messageoverview th {

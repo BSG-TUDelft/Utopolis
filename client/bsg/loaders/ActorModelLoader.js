@@ -35,7 +35,7 @@ var ActorModelLoader = function () {
 				//me.propsQueue = $(xml).find("variant").first().find("props prop[attachpoint*='root']").map(function(index, el) { return { actor: el.attributes['actor'].nodeValue, attachPoint: el.attributes['attachpoint'].nodeValue };}).toArray();
 
 				// Find all props that are attached to the root (the only ones we can actually use at this point)
-				me.propsQueue = $(xml).find("variant[name!='death']") //,variant[name!='Idle'],variant[name!='garrisoned']")
+				me.propsQueue = $(xml).find("variant").first()// todo: also include garrisoned variant so we can have the flag
 					.find("props prop").map(function(index, el) {
 						// todo: filter these attachpoints through jQuery find
 						if(el.attributes['attachpoint'].nodeValue != 'smoke' && el.attributes['attachpoint'].nodeValue != 'fire' && el.attributes['attachpoint'].nodeValue != 'loaded-projectile' && el.attributes['attachpoint'].nodeValue != 'projectile' && el.attributes['attachpoint'].nodeValue != 'garrisoned2' && el.attributes['attachpoint'].nodeValue != 'garrisoned_1')
@@ -226,6 +226,7 @@ var ActorModelLoader = function () {
 	 * @param textureUrl {String} url to texture
 	 * @returns {THREE.ShaderMaterial} to be applied to meshes */
 	function getPlayerColorMaterial(textureUrl){
+        return getAdditiveAlphaBlendingMaterial(textureUrl);    // todo: delete this line to enable player colors!
 		// texture
 		var texture = THREE.ImageUtils.loadTexture(textureUrl);
 		texture.needsUpdate = true; // important
