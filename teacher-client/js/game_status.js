@@ -10,14 +10,15 @@ function requestHistory(){
         console.log("SERVER RESPONSE: history retrieved successfully");
         results = response; 
         var i = 0;
-        while( i != results.messages.length-1 )      
+        while( i != results.messages.length-2 )      
         {
         	$("#itens-area").append("<div class='row'>"
         		+ makeItem( results.messages[i] )
         		+ makeItem( results.messages[i+1] )
+        		+ makeItem( results.messages[i+2] )
         		+ "</div>");
 
-          	i+=2;
+          	i+=3;
         }
     });
 

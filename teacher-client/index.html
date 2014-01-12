@@ -15,85 +15,68 @@
 	<body onload="start()">
 		<div id='root'>
 			<div id="menu">
-				<div class="menu-tab">
-					<a id="set-up" href="#"> 
-						<span class="tab-icon">
-							<i class="fa fa-gears fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">Game set-up</h2>
-						</div>
-					</a>
-				</div>
-				<div class="menu-tab">
-					<a id="status" href="#">
-						<span class="tab-icon">
-							<i class="fa fa-gamepad fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">Game Status</h2>
-						</div>
-					</a>
-				</div>
-				<div class="menu-tab">
-					<a id="assign" href="#">
-						<span class="tab-icon">
-							<i class="fa fa-group fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">Assign Citizens</h2>
-						</div>
-					</a>
-				</div>
-				<div class="menu-tab">
-					<a id="god" href="#">
-						<span class="tab-icon">
-							<i class="fa fa-eye fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">God Mode</h2>
-						</div>
-					</a>
+				<div class="menu-wrapper">
+					<div class="menu-tab">
+						<a id="status" href="#">
+							<span class="tab-icon">
+								<i class="fa fa-gamepad fa-2x" style="color: #556270; margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">Game Status</h2>
+							</div>
+						</a>
+					</div>
+					<div class="menu-tab">
+						<a id="assign" href="#">
+							<span class="tab-icon">
+								<i class="fa fa-group fa-2x" style="color: #556270; margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">Citizens</h2>
+							</div>
+						</a>
+					</div>
+					<div class="menu-tab">
+						<a id="god" href="#">
+							<span class="tab-icon">
+								<i class="fa fa-eye fa-2x" style="color: #556270; margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">God Mode</h2>
+							</div>
+						</a>
+					</div>
+					<div class="menu-tab">
+						<a id="set-up" href="#"> 
+							<span class="tab-icon">
+								<i class="fa fa-gears fa-2x" style="color: #556270; margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">New Game</h2>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 			<div id="content">
 				<div id="assign-page">
 					<div class="description">
-						<h1> Assign Citizens </h1>
-						<br/>
-						<p>Here you can assign any number of citizens to a any student. Just follow the next form!</p>
+						<h3>Citizens Assignment</h3>
+						<div class="lineH"></div>
+						<h5>Use the following interfaces to assign Citizens to your students.</h5>
 					</div>
 					<br/>
 					<div class="status-content">
-						<div id="student">
-							<p>Student: </p>
-								<select id="students">
-								</select>
-						</div>
-						<div id="assignment">
-							<p>Assign citizens: </p><input id="numCitizens-input" type="number" name="n_citizens">
-						</div>
-						<div id="priv-message"> 
-							<p>Message: </p><input id="priv-message-input" type="textarea" name="private_message"/>
-						</div>
-						<!-- <div id="addAssignment">
-							<span class="tab-icon">
-								<i class="fa fa-plus-circle fa-2x" style="color: #556270;" onclick="">
-								</i>
-							</span>
-						</div>-->
-						<div id="submitAssignment">
-							<span class="tab-icon">
-								<i class="fa fa-check-circle fa-2x" style="color: #556270;" onclick="updateCityCitizens()"></i>
-							</span>
-						</div>
-
 					</div>
-					
 				</div>
 				<div id="set-up-page">
-					<p> Set-up Game </p>
-					Not available in this beta. Coming soon!
+					<div id="add-players">
+						<h3>Create new players</h3>
+						<div class="lineH"></div>
+						<div id="add-players-wrapper">
+							
+						</div>
+					</div>
 				</div>
 				<div id="status-page">
 					<div id="global-view">
@@ -108,8 +91,11 @@
 					</div>
 				</div>
 				<div id="god-page">
-					<p> God mode </p>
-					Not available in this beta. Coming soon!
+					<div id="god-container">
+						<h3>God Mode</h3>
+						<div class="lineH"></div>
+						<h5>Not available yet!</h5>
+					</div>
 				</div>
 			</div>
 		</div>

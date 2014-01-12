@@ -10,7 +10,15 @@ function requestPlayers() {
         results = response;       
         for (var i=0;i<results.players.length;i++)
         {
-           $("#students").append("<option value='"+results.players[i].nick+"'>"+results.players[i].name+"</option>");
+           $(".status-content").append('<div class="row"><div id="student"><a id="'+i+'" value="'
+                + results.players[i].nick + '">'
+                + results.players[i].name +'</a></div><div id="assignment">'
+                + '<input id="numCitizens-input'+i+'" class="numCitizens-input" type="number" required="required" name="n_citizens" placeholder="Number"></div>'
+                + '<div id="priv-message">' 
+                + '<input id="priv-message-input'+i+'" class="priv-message-input" type="textarea" required="required" name="private_message" placeholder="Type a personal message to '
+                + results.players[i].name +'..."/></div>' 
+                + '<div id="submitAssignment"><span class="tab-icon">'
+                + '<i id="button" class="fa fa-check-circle fa-2x" onclick="updateCityCitizens('+i+')"></i></span></div></div>');
         }
 
     });
@@ -23,10 +31,11 @@ function requestPlayers() {
     });
 }
 
-function updateCityCitizens(){
-    var nick = $('#students').find("option:selected").text();
+function updateCityCitizens( pos ){
 
-    var numCitizens = $("#numCitizens-input").val();
+    var nick = $('#'+pos).attr("value");
+    var numCitizens = $("#numCitizens-input"+pos).val();
+    var msgText = $("#priv-message-input"+pos).val();
 
     var request = $.ajax({
         url: host + "player/" + nick,
@@ -36,7 +45,7 @@ function updateCityCitizens(){
     request.done(function (response, textStatus, jqXHR){
         player = response;
         assignCitizens( player, numCitizens );
-        saveMessage( player, numCitizens );
+        saveMessage( player, numCitizens, msgText );
     });
 
     request.fail(function (jqXHR, textStatus, errorThrown){
@@ -68,9 +77,9 @@ function assignCitizens( player, number ){
     });
 }
 
-function saveMessage( player, numCitizens ) {
+function saveMessage( player, numCitizens, msgText ) {
     
-    var msgText = $("#priv-message-input").val();
+   
     var message = new Message(new Date(), msgText, player, numCitizens);
     console.log(message.msg);
     var struct = {
