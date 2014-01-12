@@ -87,6 +87,13 @@ var birds = [];
 function initBirds(scene) {
 	var loader = new THREE.JSONLoader();
 
+	// Listen to scenes UPDATE event to update animation
+	scene.addEventListener("UPDATE", function(res){
+		for(var i = 0; i < birds.length; i++){
+			birds[i].obj.updateAnimation( 1000 * res.delta );
+		}
+	});
+
 	loader.load( "bsg/flamingo.js", function( geometry ) {
 
 		function morphColorsToFaceColors( geometry ) {
