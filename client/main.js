@@ -514,7 +514,7 @@ function buildingPlacementAllowed() {                                     // tru
 }
 
 function onDocumentMouseDown( event ) {
-    event.preventDefault();
+    //event.preventDefault();
 	if((event.target || event.srcElement).nodeName != "CANVAS"){
 		// We did not click on a canvas (so on the GUI instead)
 		return;
