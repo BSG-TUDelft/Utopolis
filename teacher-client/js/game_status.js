@@ -10,7 +10,7 @@ function requestHistory(){
         console.log("SERVER RESPONSE: history retrieved successfully");
         results = response; 
         $("#itens-area").empty();
-        if(results.messages.length > 1) {
+        if(results.messages.length > 2) {
 	        var i = 0;
 	        while( i != results.messages.length-2 )      
 	        {

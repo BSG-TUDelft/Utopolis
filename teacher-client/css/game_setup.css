@@ -16,6 +16,7 @@
 	margin-top: 8%;
 	margin-left: 5%;
 	margin-right: 5%;
+	margin-bottom: 8%;
 }
 
 .form-description > h5{
@@ -184,6 +185,82 @@
 	color: #2A363B;
 }
 
+
+/********Build areas*****/
+
+#build-player-city-area {
+	margin-top: 2%;
+}
+
+#build-player-city-area > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+#build-city-province-area {
+	margin-top: 2%;
+}
+
+#build-city-province-area > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+
+.drag-content-wrapper {
+	display: flex;
+	width: 100%;
+	text-align: center;
+	margin: 1%;
+}
+
+.drag-left{
+	width: 50%;
+}
+
+.drag-right{
+	width: 50%;
+}
+
+#cities-without-province {
+	width: 95%;
+	height: auto;
+	min-height: 500px;
+	background: #64CCE4;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	display: inline-flex;
+}
+
+.city-drag-item {
+	width: 100px;
+	height:	100px;
+	cursor: pointer;
+	background: #556270;
+	border-radius: 8px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+
+}
+
+#province-cities-list {
+	width: 95%;
+	height: auto;
+	min-height: 500px;
+	background: #64CCE4;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	display: inline-flex;
+}
 
 
 @media only screen and (max-width: 1200px)  {

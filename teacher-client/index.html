@@ -76,7 +76,7 @@
 				</div>
 				<div id="set-up-page">
 					<div id="set-up-wrapper">
-						<h3>Create new game</h3>
+						<h3>Fill the asked Data</h3>
 						<div class="lineH"></div>
 						<div id="add-forms">
 							<div id="add-provinces-wrapper">
@@ -138,8 +138,57 @@
 							</div>
 						</div>
 					</div>
-					<div id="build-game-area">
-						
+					<div id="build-city-province-area">
+						<h3>Set cities to a province</h3>
+						<div class="lineH"></div>
+						<div id="form-content form-description">
+							<h5>1. Select a province from the list</h5>
+							<div class="flex">
+								<div id="select-province-list">
+									<select id="provinces-list">
+									</select>
+								</div>
+								<div id="select-province-submit">
+									<span class="tab-icon">
+										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<h5>2. Drag the cities you want to be in the selected province, from the left list into the right one</h5>
+						<div class="drag-content-wrapper">
+							<div class="drag-left">
+								<div id="cities-without-province" ondrop="drop(event)" ondragover="allowDrop(event)">
+								</div>
+							</div>
+							<div class="drag-right">
+								<div id="province-cities-list" ondrop="drop(event)" ondragover="allowDrop(event)">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="build-player-city-area">
+						<h3>Set players to a city</h3>
+						<div class="lineH"></div>
+						<div id="form-content form-description">
+							<h5>1. Select a city from the list</h5>
+							<div class="flex">
+								<div id="select-city-list">
+									<select id="cities-list">
+									</select>
+								</div>
+								<div id="select-city-submit">
+									<span class="tab-icon">
+										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="drag-content-wrapper">
+							<div class="drag-left"></div>
+							<div class="drag-right"></div>
+						</div>
 					</div>
 				</div>
 				<div id="status-page">
@@ -174,5 +223,6 @@
 		<script src="js/game_status.js" type="text/javascript"></script>
 		<script src="js/scriptWrapper.js" type="text/javascript"></script>
 		<script src="js/game_setup.js" type="text/javascript"></script>
+		<script src="js/drag_drop.js" type="text/javascript"></script>
 	</body>
 </html>

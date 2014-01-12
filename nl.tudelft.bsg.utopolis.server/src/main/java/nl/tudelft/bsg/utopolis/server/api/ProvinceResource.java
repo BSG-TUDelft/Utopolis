@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.Province;
+import nl.tudelft.bsg.utopolis.server.model.ProvinceList;
 
 @Path("province")
 public class ProvinceResource extends Resource {
@@ -48,7 +49,7 @@ public class ProvinceResource extends Resource {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listProvinces() {
-		return buildResponse(DBConnector.get().getProvinces());
+		return buildResponse(new ProvinceList(DBConnector.get().getProvinces()));
 	}
 
 }

@@ -1,5 +1,8 @@
 var host = "http://localhost:8080/api/";
 
+var provinces_data = [];
+var cities = [];
+
 function createProvince(){
 	var n = $("#prvn").val();
 	var cityList = [];
@@ -101,6 +104,8 @@ function createCity(){
 
     request.done(function(response, textStatus, jqXHR){
         console.log("SERVER RESPONSE: city created!");
+        populateWithProvinces();
+        populateWithCities();
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -109,5 +114,117 @@ function createCity(){
             textStatus, errorThrown
         );
         alert("Something went wrong creating City! Try again.");
+    });	
+}
+
+function populateWithProvinces(){
+	var request = $.ajax({
+        url: host + 'province/list',
+        type: 'GET'
     });
+
+    request.done(function ( response, textStatus, jqXHR ){
+        console.log("SERVER RESPONSE: Provinces retrieved successfully");
+        results = response;
+        $("#provinces-list").empty();       
+        for (var i=0;i<results.provinces.length;i++)
+        {
+           $("#provinces-list").append("<option value='" + results.provinces[i].name + "'>" + results.provinces[i].name + "</option>");
+        }
+        provinces_data = results.provinces;
+        populateWithCitiesFromProvince();
+        populateWithCitiesNoProvince(); 
+    });
+
+    request.fail(function ( jqXHR, textStatus, errorThrown ){
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+    });  
+}
+
+function populateWithCitiesFromProvince(){
+	if(provinces_data.length > 0){
+
+		var province = $('#provinces-list').find(":selected").text();
+		var cities = [];
+
+		for(var j=0; j<provinces_data.length; j++){
+			if(provinces_data[j].name == province){
+				cities = provinces_data[j].cities;
+			}
+		}
+		$("#province-cities-list").empty();
+		for(var i=0; i<cities.length; i++){
+			$("#province-cities-list").append("<div id='city-province" + i + "' class='city-drag-item' draggable='true' ondragstart='drag(event)'>"
+				+ "<span class='tab-icon'><h4>" + cities[i].name + "</h4></span></div>");
+		}
+	}
+}
+
+function testProvinceCities( all_cities, province_cities ){
+	var temp = [];
+
+	for(var j=0; j<all_cities.length; j++) {
+		var add = true;
+		for(var z=0; z<province_cities.length; z++){
+			if(all_cities[j].name == province_cities[z].name){
+				add = false;
+				break;
+			}
+		}
+		if(add){
+			cities.push(all_cities[j]);
+		}
+	}
+}
+
+function populateWithCitiesNoProvince(){
+	if(provinces_data.length > 0){
+
+		var all_cities = [];
+
+		var request = $.ajax({
+	        url: host + 'city/list',
+	        type: 'GET'
+	    });
+
+	    request.done(function ( response, textStatus, jqXHR ){
+	        console.log("SERVER RESPONSE: cities retrieved successfully");
+	        results = response;
+	     	all_cities = results.cities;
+	     	for(var j=0; j<provinces_data.length; j++){
+		    	testProvinceCities(all_cities, provinces_data[j].cities);
+		    }
+		    $("#cities-without-province").empty();
+		    
+		    if(cities.length > 0){
+			    for(var i=0; i<cities.length; i++){
+					$("#cities-without-province").append("<div id='city-no-province" + i + "' class='city-drag-item' draggable='true' ondragstart='drag(event)'>"
+						+ "<span class='tab-icon'><h4>" + cities[i].name + "</h4></span></div>");
+				}
+				populateWithCities();
+			}
+	    });
+
+	    request.fail(function ( jqXHR, textStatus, errorThrown ){
+	        console.error(
+	            "The following error occured: " +
+	            textStatus, errorThrown
+	        );
+	    });  
+	}
+}
+
+function populateWithCities(){
+	
+    $("#cities-list").empty();
+    console.log(cities.length);
+    if(cities.length > 0) {       
+	    for (var i=0;i<cities.length;i++)
+	    {
+	       $("#cities-list").append("<option value='" + cities[i].name + "'>" + cities[i].name + "</option>");
+	    }
+    }   
 }
