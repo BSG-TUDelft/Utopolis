@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.Message;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
@@ -125,6 +126,22 @@ public class DBConnector {
 	public List<City> getCities() {
 		return getSession()
 				.createQuery("from City")
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Message> getMessages() {
+		return getSession()
+				.createQuery("from Message")
+				.list();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Message> getPlayerMessages(int playerId) {
+		return getSession()
+				.createQuery("from Message where player_id = :player_id")
+				.setParameter("player_id", playerId)
 				.list();
 	}
 
