@@ -3,4 +3,6 @@ Message = function(date, msg, player, assignNum){
 	this.msg = msg;
 	this.player = player;
 	this.assignNum = assignNum;
+    this.subject = "You have received " + assignNum + " citizens!";
+    this.from = "Teacher";
 }

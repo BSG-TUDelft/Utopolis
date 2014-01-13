@@ -95,7 +95,9 @@ function saveMessage( player, numCitizens, msgText ) {
         entryDate: message.date,
         message: message.msg,
         player: message.player,
-        assignNum: message.assignNum
+        assignNum: message.assignNum,
+        subject: message.subject,
+        from: message.from
     };
 
     var request = $.ajax({
