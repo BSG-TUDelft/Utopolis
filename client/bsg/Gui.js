@@ -371,16 +371,28 @@ var Gui = {
 		}
 
         function openMessages(){
+            if(!clientOnlyMode){
+                var request = $.ajax({
+                    url: host + "message/" + city.player.id+ "/list",
+                    type: 'GET'
+                });
+				var data = [];
+				request.done(function (response, textStatus, jqXHR){
+					for(var i = 0; i < response.messages.length; i++){
+						var msg = response.messages[i];
+						data.push([
+							(msg.sender || "Unknown sender"),
+							(msg.subject || "Empty subject"),
+							(msg.entryDate ),
+							(null),
+							(msg.message || "Empty message"),
+							(msg.id )
+						]);
+					}
+					Gui.messageOverview.update(data);
 
-            // Todo: fetch from server
-            var data = [
-                /* from, subject, date send, date read  */
-                ["DJ Vader", "Yo whats up", new Date(), null, "Just sayin' hi", 0],
-                ["J-Lea", "Stuff", new Date(), new Date(), "Lorem ipsum \n\n Lizzle dizzle \n mizzle fizzle", 1],
-                ["Luke Skizzlewalker", "Shizzle", new Date(), new Date(), "Blabla \n\n meep meep", 2]
-            ];
-            Gui.messageOverview.update(data);
-
+				});
+            }
             Gui.messageOverview.show();
         }
 	},
