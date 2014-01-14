@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class MessageList implements Serializable{
+	
 	private static final long serialVersionUID = 2563515326416092472L;
 	
 	private List<Message> messages;
@@ -11,6 +12,7 @@ public class MessageList implements Serializable{
 	public MessageList(){
 		
 	}
+	
 	public MessageList(List<Message> messages){
 		this.messages = messages;
 	}

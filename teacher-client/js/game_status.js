@@ -34,13 +34,15 @@ function requestHistory(){
 }
 
 function makeItem( message ){
-	
-	var date = message.entryDate.split("T");
+	if(message != null) {
+		var date = message.entryDate.split("T");
 
-	return "<div id='item'><div><h4>To: "
-	   	+ message.player.name 
-	   	+ "</h4></div><div class='item-content'><section class='a'>"
-	   	+ message.message + "</section></div><h5>"
-		+ date[1] + " " + date[0] + " || Citizens assigned: " 
-	   	+ message.assignNum + "</h5></div>";
+		return "<div id='item'><div><h4>To: "
+		   	+ message.player.name 
+		   	+ "</h4></div><div class='item-content'><section class='a'>"
+		   	+ message.message + "</section></div><h5>"
+			+ date[1] + " " + date[0] + " || Citizens assigned: " 
+		   	+ message.assignNum + "</h5></div>";
+   }
+   return "";
 }

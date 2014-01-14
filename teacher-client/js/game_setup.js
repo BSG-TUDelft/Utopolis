@@ -184,7 +184,7 @@ function populateWithCitiesNoProvince(){
 	if(provinces_data.length > 0){
 
 		var all_cities = [];
-
+		cities = [];
 		var request = $.ajax({
 	        url: host + 'city/list',
 	        type: 'GET'

@@ -51,7 +51,7 @@
 }
 
 #add-forms #add-players-wrapper #add-player-form {
-	width: 30%;
+	width: 100%;
 }
 
 #add-forms #player-name #pn{
@@ -110,7 +110,7 @@
 }
 
 #add-forms #add-provinces-wrapper #add-province-form {
-	width: 30%;
+	width: 100%;
 }
 
 #add-forms #province-name #prvn{
@@ -162,7 +162,7 @@
 }
 
 #add-forms #add-cities-wrapper #add-city-form {
-	width: 30%;
+	width: 100%;
 }
 
 #add-forms #city-name #cn{
@@ -214,7 +214,6 @@
 .drag-content-wrapper {
 	display: flex;
 	width: 100%;
-	text-align: center;
 	margin: 1%;
 }
 
@@ -230,36 +229,56 @@
 	width: 95%;
 	height: auto;
 	min-height: 500px;
-	background: #64CCE4;
+	background: #556270;
 	border-radius: 3px;
 	-webkit-transform-style: preserve-3d;
 	-moz-transform-style: preserve-3d;
 	transform-style: preserve-3d;
-	display: inline-flex;
+	text-align: center;
 }
 
 .city-drag-item {
-	width: 100px;
-	height:	100px;
+	width: 120px;
+	height:	120px;
 	cursor: pointer;
-	background: #556270;
-	border-radius: 8px;
+	background: #D8D8D8;
 	-webkit-transform-style: preserve-3d;
 	-moz-transform-style: preserve-3d;
 	transform-style: preserve-3d;
+	display: inline-block;
+	margin: 2%;
+}
 
+.city-drag-item .tab-icon {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 85%;
+	height: 85%;
+	background: #64CCE4;
+	text-align: center;
+	margin: 9px;
+}
+
+#set-up-page .tab-icon > h4 {
+	padding-top: 33%;
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
 }
 
 #province-cities-list {
 	width: 95%;
 	height: auto;
 	min-height: 500px;
-	background: #64CCE4;
+	background: #556270;
 	border-radius: 3px;
 	-webkit-transform-style: preserve-3d;
 	-moz-transform-style: preserve-3d;
 	transform-style: preserve-3d;
-	display: inline-flex;
+	text-align: center;
 }
 
 
