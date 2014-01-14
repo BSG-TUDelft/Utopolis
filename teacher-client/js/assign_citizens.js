@@ -97,7 +97,7 @@ function saveMessage( player, numCitizens, msgText ) {
         player: message.player,
         assignNum: message.assignNum,
         subject: message.subject,
-        from: message.from
+        sender: message.sender
     };
 
     var request = $.ajax({

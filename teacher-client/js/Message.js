@@ -4,5 +4,5 @@ Message = function(date, msg, player, assignNum){
 	this.player = player;
 	this.assignNum = assignNum;
     this.subject = "You have received " + assignNum + " citizens!";
-    this.from = "Teacher";
+    this.sender = "Teacher";
 }
