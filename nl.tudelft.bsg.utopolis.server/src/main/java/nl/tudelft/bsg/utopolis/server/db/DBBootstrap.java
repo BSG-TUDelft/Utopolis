@@ -44,9 +44,13 @@ public class DBBootstrap {
 
 		Message m1 = new Message(), m2 = new Message();
 		m1.setEntryDate(new Date());
+		m1.setSender("Teacher");
+		m1.setSubject("Update from your teacher");
 		m1.setMessage("Random message to " + playerName + " !");
 		m1.setAssignNum(1);
 		m2.setEntryDate(new Date());
+		m2.setSender("Teacher");
+		m2.setSubject("Another update from your teacher");
 		m2.setMessage("Random hyper mega gigantic piece of text for this example. Teacher will be albe to see all of the message sent to the student!");
 		m2.setAssignNum(10);
 		DBConnector.get().save(m1);
