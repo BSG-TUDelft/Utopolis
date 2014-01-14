@@ -2,12 +2,9 @@ package nl.tudelft.bsg.utopolis.server.model;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Message implements Serializable{
@@ -16,9 +13,7 @@ public class Message implements Serializable{
 	@Id
 	@GeneratedValue
 	private int id;
-	@OneToOne(cascade={CascadeType.ALL})
-	private Player player;
-	private String from;
+	private String sender;
 	private String subject;
 	private String message;
 	private Date entryDate;
@@ -39,22 +34,6 @@ public class Message implements Serializable{
 	
 	public void setMessage(String message) {
 		this.message = message;
-	}
-	
-	public Player getPlayer() {
-		return player;
-	}
-	
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-	
-	public String getFrom() {
-		return from;
-	}
-	
-	public void setFrom(String from) {
-		this.from = from;
 	}
 	
 	public Date getEntryDate() {
@@ -87,6 +66,14 @@ public class Message implements Serializable{
 
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
 	}
 	
 }

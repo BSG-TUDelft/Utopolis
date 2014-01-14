@@ -41,20 +41,22 @@ public class DBBootstrap {
 		player.setNick(playerName);
 		player.setPassword("pw");
 		DBConnector.get().save(player);
-		
-		
+
 		Message m1 = new Message(), m2 = new Message();
-		m1.setPlayer(player);
 		m1.setEntryDate(new Date());
-		m1.setMessage("Random message to you!");
+		m1.setMessage("Random message to " + playerName + " !");
 		m1.setAssignNum(1);
-		DBConnector.get().save(m1);
-		
-		m2.setPlayer(player);
 		m2.setEntryDate(new Date());
 		m2.setMessage("Random hyper mega gigantic piece of text for this example. Teacher will be albe to see all of the message sent to the student!");
 		m2.setAssignNum(10);
+		DBConnector.get().save(m1);
 		DBConnector.get().save(m2);
+
+		Message[] messages = {
+			m1,
+			m2
+		};
+		player.setMessages(Arrays.asList(messages));
 		
 		City city = new City();
 		city.setName(cityName);

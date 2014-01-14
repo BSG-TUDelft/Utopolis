@@ -100,6 +100,13 @@ public class DBConnector {
 			session.close();
 		}
 	}
+	
+	public Player getPlayer(int id) {
+		return (Player) getSession()
+				.createQuery("from Player where id = :id")
+				.setParameter("id", id)
+				.uniqueResult();
+	}
 
 	public Player getPlayer(String nick, String password) {
 		return (Player) getSession()
