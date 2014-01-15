@@ -1,0 +1,115 @@
+/************************Game Status*************************/
+/***Global overview****/
+
+#global-view > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+/***History****/
+
+#history {
+	width: 100%;
+}
+
+#history > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+#history #itens-area {
+	height: auto;
+	z-index: 2000;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+#history #itens-area .row {
+	display: flex;
+	margin-bottom: 2%;
+}
+
+#history #itens-area #item {
+	color: #2A363B;
+	background: #64CCE4;
+	position: relative;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	width: 33.3333333%;
+	margin: 2%;
+}
+
+#history #itens-area #item > h5 {
+	margin: 0;
+	padding: 0.4em;
+	text-align: center;
+	font-weight: 300;
+	opacity: 0.8;
+	background: rgba(0,0,0,0.1);
+	border-radius: 3px 3px 0 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	font-size: 90%;
+	color: #FFFFFF;
+}
+
+#history #itens-area #item > div {
+	display: block;
+	font-weight: 300;
+}
+
+#history #itens-area #item > div > h4{
+	margin: 0;
+	padding: 0.4em;
+	text-align: center;
+	font-weight: 300;
+	opacity: 0.8;
+	background: rgba(0,0,0,0.1);
+	border-radius: 3px 3px 0 0;
+	color: #FFFFFF;
+}
+
+#history #itens-area #item .item-content {
+	height: 100%;
+	padding-bottom: 13%;
+	padding-top: 1%;
+}
+
+#history #itens-area #item .item-content .a{
+	text-align: center;
+	font-weight: 400;
+	opacity: 0.9;
+	border-radius: 3px 3px 0 0;
+	font-size: 90%;
+	text-align: justify;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1800px) {
+	#history #itens-area #item .item-content .a {
+		margin-bottom: 15%;
+	}
+}
+
+@media only screen and (max-width: 1200px)  {
+
+	/**********Game Status*******/
+
+	#history #itens-area .row {
+		display: block;
+	}
+
+	#history #itens-area #item {
+		width: 90%;
+	}
+}

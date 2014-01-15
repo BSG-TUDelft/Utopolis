@@ -15,9 +15,6 @@ fieldset,img {
 	border:0;
 }
 input{
-	border:1px solid #b0b0b0;
-	padding:3px 5px 4px;
-	color:#979797;
 	width:190px;
 }
 address,caption,cite,code,dfn,th,var {

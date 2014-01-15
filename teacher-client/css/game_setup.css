@@ -1,0 +1,303 @@
+/*********Game set-up********/
+#set-up-wrapper > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+#add-forms{
+	width: 100%;
+	display: flex;
+	min-height: 200px;
+}
+
+.form-content {
+	margin-top: 8%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 8%;
+}
+
+.form-description > h5{
+	font-weight: 600;
+}
+
+/*******Players******/
+
+#add-forms #add-players-wrapper > h5 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#add-forms #add-players-wrapper > h3 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#add-forms #add-players-wrapper {
+	display: block;
+	width: 33.333333%;
+	color: #2A363B;
+	background: #64CCE4;
+	position: relative;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	margin: 2%;
+}
+
+#add-forms #add-players-wrapper #add-player-form {
+	width: 100%;
+}
+
+#add-forms #player-name #pn{
+	width: 100%;
+}
+
+#add-forms #player-login #pl{
+	width: 100%;	
+}
+
+#add-forms #player-password #ppw{
+	width: 100%;
+}
+
+#add-forms #add-players-wrapper #add-player-save {
+	width: 10%;
+	margin-left: 5%;
+	margin-top: 1.5%;
+}
+
+#add-forms #add-players-wrapper #add-player-save .tab-icon #button_p {
+	cursor:pointer;
+	color: #D8D8D8;
+}
+
+#add-forms #add-players-wrapper #add-player-save .tab-icon #button_p:hover{
+	cursor:pointer;
+	color: #2A363B;
+}
+
+/******Provinces******/
+
+#add-forms #add-provinces-wrapper {
+	display: block;
+	width: 33.333333%;
+	color: #2A363B;
+	background: #64CCE4;
+	position: relative;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	margin: 2%;
+}
+
+#add-forms #add-provinces-wrapper > h5 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#add-forms #add-provinces-wrapper > h3 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#add-forms #add-provinces-wrapper #add-province-form {
+	width: 100%;
+}
+
+#add-forms #province-name #prvn{
+	width: 100%;
+}
+
+#add-forms #add-provinces-wrapper #add-province-save {
+	width: 10%;
+	margin-left: 5%;
+	margin-top: 1.5%;
+}
+
+#add-forms #add-provinces-wrapper #add-province-save .tab-icon #button_prv{
+	cursor:pointer;
+	color: #D8D8D8;
+}
+
+#add-forms #add-provinces-wrapper #add-province-save .tab-icon #button_prv:hover {
+	cursor:pointer;
+	color: #2A363B;
+}
+
+
+/*********Cities**********/
+
+#add-forms #add-cities-wrapper {
+	display: block;
+	width: 33.333333%;
+	color: #2A363B;
+	background: #64CCE4;
+	position: relative;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	margin: 2%;
+}
+
+#add-forms #add-cities-wrapper > h5 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#add-forms #add-cities-wrapper > h3 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#add-forms #add-cities-wrapper #add-city-form {
+	width: 100%;
+}
+
+#add-forms #city-name #cn{
+	width: 100%;
+}
+
+#add-forms #add-cities-wrapper #add-city-save {
+	width: 10%;
+	margin-left: 5%;
+	margin-top: 1.5%;
+}
+
+#add-forms #add-cities-wrapper #add-city-save .tab-icon #button_c{
+	cursor:pointer;
+	color: #D8D8D8;
+}
+
+#add-forms #add-cities-wrapper #add-city-save .tab-icon #button_c:hover{
+	cursor:pointer;
+	color: #2A363B;
+}
+
+
+/********Build areas*****/
+
+#build-player-city-area {
+	margin-top: 2%;
+}
+
+#build-player-city-area > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+#build-city-province-area {
+	margin-top: 2%;
+}
+
+#build-city-province-area > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+
+.drag-content-wrapper {
+	display: flex;
+	width: 100%;
+	margin: 1%;
+}
+
+.drag-left{
+	width: 50%;
+}
+
+.drag-right{
+	width: 50%;
+}
+
+#cities-without-province {
+	width: 95%;
+	height: auto;
+	min-height: 500px;
+	background: #556270;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	text-align: center;
+}
+
+.city-drag-item {
+	width: 120px;
+	height:	120px;
+	cursor: pointer;
+	background: #D8D8D8;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	display: inline-block;
+	margin: 2%;
+}
+
+.city-drag-item .tab-icon {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 85%;
+	height: 85%;
+	background: #64CCE4;
+	text-align: center;
+	margin: 9px;
+}
+
+#set-up-page .tab-icon > h4 {
+	padding-top: 33%;
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}
+
+#province-cities-list {
+	width: 95%;
+	height: auto;
+	min-height: 500px;
+	background: #556270;
+	border-radius: 3px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	text-align: center;
+}
+
+
+@media only screen and (max-width: 1200px)  {
+/*****Game setup*****/
+
+	#add-forms{
+		display: block;
+	}
+
+	#add-forms #add-players-wrapper {
+		width: 100%;
+	}
+
+	#add-forms #add-provinces-wrapper {
+		width: 100%;
+	}
+
+	#add-forms #add-cities-wrapper {
+		width: 100%;
+	}
+}
