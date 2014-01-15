@@ -11,6 +11,7 @@
 
 	Depends on jquery-cookie
  */
+"use strict";
 var Music = {
 	initMusic: function() {
 		this.music = new Sound([

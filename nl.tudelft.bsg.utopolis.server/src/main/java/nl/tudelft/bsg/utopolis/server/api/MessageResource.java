@@ -1,6 +1,9 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.PUT;
@@ -13,6 +16,7 @@ import javax.ws.rs.core.Response;
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.Message;
 import nl.tudelft.bsg.utopolis.server.model.MessageList;
+import nl.tudelft.bsg.utopolis.server.model.Player;
 
 @Path("message")
 public class MessageResource extends Resource {
@@ -28,19 +32,35 @@ public class MessageResource extends Resource {
 	@Path("/{playerId}/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listPlayerMessages(@PathParam("playerId") int playerId){
-		return buildResponse(new MessageList(DBConnector.get().getPlayerMessages(playerId)));
+		Player player = DBConnector.get().getPlayer(playerId);
+		List<Message> list = player.getMessages();
+		MessageList result = new MessageList(list);
+		return buildResponse(result);
 	}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createMessage(Message m){
-		DBConnector.get().save(m);
+		int playerId = m.getPlayer().getId();
+		Player player = DBConnector.get().getPlayer(playerId);
+		player.addMessage(m);
+		DBConnector.get().save(player);
 		return buildResponse(m);		
 	}
+
+	@DELETE
+	@Path("/{messageId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteMessage(@PathParam("messageId") int messageId){
+		DBConnector.get().deleteMessage(messageId);
+		return buildResponse(true);
+	}
+
 	
 	@OPTIONS
 	public Response createMessageOptions() {
-		return optionsResponse();
+		return optionsResponse("PUT, POST, DELETE");
 	}
+	
 }

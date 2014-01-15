@@ -76,13 +76,14 @@ div.message_input {
 }
 
 .message_input label {
+	clear: both;
     float: left;
     width: 18%;
     height: 28px;
     text-align: right;
 }
 
-.message_input input {
+.message_input input, .message_input select {
     float: right;
     padding-left: 4px;
     width: 80%;
