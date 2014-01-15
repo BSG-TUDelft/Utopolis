@@ -1,14 +1,18 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Variant;
+
+import nl.tudelft.bsg.utopolis.server.model.City;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +55,8 @@ public class Resource {
 		response.getHeaders().add("Access-Control-Allow-Origin", "*");
 		return response;
 	}
+
+
 	
 	protected Response optionsResponse() {
 		Response response = simpleResponse(200);
@@ -68,6 +74,15 @@ public class Resource {
 		return response;
 	}
 
+	protected Response authorizationResponse(City city, String sessionHash) {
+		//String msg = "LOGIN_OK";
+		Response response = Response.ok(city)
+			.cookie(new NewCookie("SESSION", sessionHash))
+			.build();
+		response.getHeaders().add("Access-Control-Allow-Origin", "*");
+
+		return response;
+	}
 	/**
 	 * Generates a simple response with no body.
 	 * 

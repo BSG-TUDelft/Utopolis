@@ -122,11 +122,27 @@ public class DBConnector {
 				.list();
 	}
 	
-	public City getCity(int playerId) {
+	/** Attemps to find a player in the database that has nick and password of given player. Only password is case sensitive
+	 * @param nick
+	 * @param password
+	 * @return player if a player is found with  given credentials*/
+	public Player validate(String nick, String password){
+		Player player = (Player)getSession()
+			.createQuery("from Player where nick = :nick")
+			.setParameter("nick", nick)
+			.uniqueResult();
+		// Check pwd seperately because SQL is case insensitive
+		if(player.getPassword().equals(password)){
+			return player;
+		}
+		return null;
+	}
+	
+	public City getCityByPlayerId(int playerId) {
 		return (City) getSession()
-				.createQuery("from City where player_id = :player_id")
-				.setParameter("player_id", playerId)
-				.uniqueResult();
+			.createQuery("from City where player_id = :player_id")
+			.setParameter("player_id", playerId)
+			.uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -327,7 +327,7 @@ var Gui = {
 		// Private functions
 		function openLeaderboard(){
 			if(!clientOnlyMode){
-				if(!city) // global city
+				if(!Main.city) // global city
 					return alert("Something went horribly wrong! :( Please reload the game.");
 
 				// Fire a request to retreive the latest scores
@@ -343,13 +343,13 @@ var Gui = {
 					for(var i = 0; i < response.cities.length; i++){
 						var city = response.cities[i];
 						data.push([
-							city.name + " (" + city.player.name + ")",
-							city.kpi.foreignRelations,
-							city.kpi.happiness,
-							city.kpi.population,
-							city.kpi.technology,
-							city.kpi.wealth,
-							getMedals(city.medals)
+							Main.city.name + " (" + Main.city.player.name + ")",
+							Main.city.kpi.foreignRelations,
+							Main.city.kpi.happiness,
+							Main.city.kpi.population,
+							Main.city.kpi.technology,
+							Main.city.kpi.wealth,
+							getMedals(Main.city.medals)
 						]);
 					}
 
@@ -384,12 +384,12 @@ var Gui = {
 
         function openMessages(){
             if(!clientOnlyMode){
-				if(!city) // global city
+				if(!Main.city) // global city
 					return alert("Something went horribly wrong! :( Please reload the game.");
 
 				var getInboxData = function(){
 					return $.ajax({
-						url: host + "message/" + city.player.id + "/list",
+						url: host + "message/" + Main.city.player.id + "/list",
 						type: 'GET'
 					});
 				}
@@ -422,7 +422,7 @@ var Gui = {
 					for(var j = 0; j < playerResult[0].players.length; j++){
 						var plyr = playerResult[0].players[j];
 						// Do not add yourself (duh)
-						if(plyr.id == city.player.id) continue;
+						if(plyr.id == Main.city.player.id) continue;
 						playerData.push({
 							label: plyr.nick,
 							value: plyr.id
@@ -447,7 +447,7 @@ var Gui = {
 				player: msgInfo.to,
 				assignNum: 0,
 				subject: msgInfo.subject,
-				sender: city.player.nick
+				sender: Main.city.player.nick
 			};
 
 			var request = $.ajax({
@@ -491,8 +491,8 @@ var Gui = {
 
 	/** GUIs update loop, gets called from the game loop */
 	update: function(){
-		var getNumIdleCitizens = function(city) {
-			var sum = city.numCitizens;
+		var getNumIdleCitizens = function() {
+			var sum = Main.city.numCitizens;
 			structureCollection.forEach(function (structure) {
 				sum -= structure.citizens;
 			});
@@ -511,7 +511,7 @@ var Gui = {
 			//res.food += 1;
 
 			// This should come from the poll
-			Gui.resources.citizens = getNumIdleCitizens(city);
+			Gui.resources.citizens = getNumIdleCitizens();
 
 		}
 
@@ -628,6 +628,11 @@ var Gui = {
 			}
 		}
 		return null;
+	},
+
+	/** Gets called when all models and graphical assets have been loaded into memory */
+	modelsLoaded: function(){
+		$("#login-submit").show();
 	}
 };
 
@@ -1278,6 +1283,8 @@ function initGui() {
 		"<div class='button-big' id='login-submit' style='width: 100px; float: right; margin: 30px 20px' tabindex='0'><div class='inner'>login</div></div>"
 	);
 
+	// Show login button when assets have been loaded
+	$("#login-submit").hide();
 	// Listen to click and ENTER
 	$("#login-submit").click(function(){
 		submitLogin();
@@ -1288,17 +1295,43 @@ function initGui() {
 
 	function submitLogin(){
 		var params = {
-			name: $("#username").val(),
+			nick: $("#username").val(),
 			password: $("#password").val()
 		};
-		/*$.post("INSERT_URL_HERE", params)
-			.done(function( data ) {
-				// if login successful
-				login.hide();
-		});*/
 
-		// THIS LINE (AND THE LINE UNDER IT)
-		login.hide();
+		var request = $.ajax({
+			url: host + 'player/login',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(params)
+		});
+
+		request.done(function(response, textStatus, jqXHR){
+			if(response == "WRONG_PASSWORD"){
+				Gui.console.printText("Wrong username or password!", null);
+				sounds.error.play();
+			}
+			else {
+				Gui.console.printText("Login successful! Now entering " + response.name + "...", null);
+				Main.city = response;
+				Main.startGame();
+				login.hide();
+			}
+		});
+		request.fail(function (jqXHR, textStatus, errorThrown){
+			console.error(
+				"Could not connect to " + host + ". The following error occured: " +
+					textStatus, errorThrown
+			);
+			Main.clientOnlyMode = true;
+			Gui.console.printText("Could not connect to server. Playing in client-only mode.", null);
+			Main.city = {
+				numCitizens: 100
+			}
+			main.startGame();
+			login.hide();
+		});
+
 	}
 
 	login.center();
