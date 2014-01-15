@@ -2,6 +2,7 @@ package nl.tudelft.bsg.utopolis.server.db;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.KeyPerformanceIndicators;
@@ -21,7 +22,7 @@ public class DBBootstrap {
 					generateCity("Athens", "Georgi", Race.hele),
 					generateCity("Cartage", "Wouter", Race.kart),
 					generateCity("Acropolis", "Tiago", Race.pers),
-					generateCity("New Rome", "Annika", Race.rome)
+					generateCity("New Rome", "Anika", Race.rome)
 			};
 			
 			Province pr1 = new Province();
@@ -41,20 +42,35 @@ public class DBBootstrap {
 		player.setNick(playerName);
 		player.setPassword("pw");
 		DBConnector.get().save(player);
-		
-		
+
 		Message m1 = new Message(), m2 = new Message();
-		m1.setPlayer(player);
 		m1.setEntryDate(new Date());
-		m1.setMessage("Random message to you!");
+		m1.setSender("Teacher");
+		m1.setSubject("Update from your teacher");
+		m1.setMessage("Random message to " + playerName + " !");
 		m1.setAssignNum(1);
-		DBConnector.get().save(m1);
-		
-		m2.setPlayer(player);
 		m2.setEntryDate(new Date());
+		m2.setSender("Teacher");
+		m2.setSubject("Another update from your teacher");
 		m2.setMessage("Random hyper mega gigantic piece of text for this example. Teacher will be albe to see all of the message sent to the student!");
 		m2.setAssignNum(10);
+		DBConnector.get().save(m1);
 		DBConnector.get().save(m2);
+
+		Message m3 = new Message();
+		m3.setSender("Tiago");
+		m3.setSubject("Message from Tiago to " + playerName + "!");
+		m3.setMessage("Yo sup bro?!");
+		m3.setEntryDate(new Date());
+
+		
+		List<Message> messages = Arrays.asList(new Message []{
+			m1,
+			m2,
+			m3
+		});
+		player.setMessages(messages);
+
 		
 		City city = new City();
 		city.setName(cityName);
