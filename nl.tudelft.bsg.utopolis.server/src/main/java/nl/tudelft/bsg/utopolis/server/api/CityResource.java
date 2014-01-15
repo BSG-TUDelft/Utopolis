@@ -33,6 +33,11 @@ public class CityResource extends Resource {
 		DBConnector.get().save(c);
 		return buildResponse(c);
 	}
+	
+	@OPTIONS
+	public Response createCityOptions() {
+		return optionsResponse();
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -47,7 +52,7 @@ public class CityResource extends Resource {
 	public Response listCities() {
 		return buildResponse(new CityList(DBConnector.get().getCities()));
 	}
-
+	
 	@OPTIONS
 	@Path("/{playerId}/structure")
 	public Response createStructureOptions() {
@@ -66,6 +71,16 @@ public class CityResource extends Resource {
 		return buildResponse(s);
 	}
 
+	@POST
+	@Path("/{playerId}/citizens/{assignedCitizens}")
+	public Response assignCitizens(@PathParam("playerId") int playerId, @PathParam("assignedCitizens") int assignedCitizens) {
+		City c = DBConnector.get().getCity(playerId);
+		System.out.println(c.getNumCitizens());
+		c.setNumCitizens(c.getNumCitizens() + assignedCitizens);
+		DBConnector.get().save(c);
+		System.out.println(c.getNumCitizens());
+		return simpleResponse(200);
+	}
 
 }
 

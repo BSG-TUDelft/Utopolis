@@ -1,8 +1,8 @@
 $(document).ready( function() {
 	$("#assign-page").hide();
-	$("#status-page").hide();
 	$("#set-up-page").hide();
 	$("#god-page").hide();
+    start();
 
     $("#assign").click(function() {
         $("#assign-page").show();

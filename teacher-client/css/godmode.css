@@ -1,0 +1,14 @@
+/*********God mode*********/
+
+#god-container > h3 {
+	font-weight: 600;
+	opacity: 0.8;
+	color: #2A363B;
+	font-size: 120%;
+}
+
+#god-container > h5 {
+	font-weight: 300;
+	opacity: 0.8;
+	color: #2A363B;
+}

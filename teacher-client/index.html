@@ -7,107 +7,222 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="mobile-web-app-capable" content="yes">
 	<link rel="Stylesheet" href="css/main.css" />
+	<link rel="Stylesheet" href="css/assign_citizens.css" />
+	<link rel="Stylesheet" href="css/game_status.css" />
+	<link rel="Stylesheet" href="css/game_setup.css" />
+	<link rel="Stylesheet" href="css/godmode.css" />
 	<link rel="Stylesheet" href="css/reset.css" />
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<meta name="author" content="Utopolis Team" />
-	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Terminal+Dosis'
+        rel='stylesheet' type='text/css' />
 	</head>
-	<body ontouchstart="">
-		<script type="text/javascript"
-			src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-		<script src="js/menu.js" type="text/javascript"></script>
+	<body>
 		<div id='root'>
 			<div id="menu">
-				<div class="menu-tab">
-					<a id="set-up" href="#"> 
-						<span class="tab-icon">
-							<i class="fa fa-gears fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">Game set-up</h2>
-						</div>
-					</a>
-				</div>
-				<div class="menu-tab">
-					<a id="status" href="#">
-						<span class="tab-icon">
-							<i class="fa fa-gamepad fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">Game Status</h2>
-						</div>
-					</a>
-				</div>
-				<div class="menu-tab">
-					<a id="assign" href="#">
-						<span class="tab-icon">
-							<i class="fa fa-group fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">Assign Citizens</h2>
-						</div>
-					</a>
-				</div>
-				<div class="menu-tab">
-					<a id="god" href="#">
-						<span class="tab-icon">
-							<i class="fa fa-eye fa-2x" style="color: #556270; margin: 5%;"></i>
-						</span>
-						<div class="tab-content">
-							<h2 class="tab-main">God Mode</h2>
-						</div>
-					</a>
+				<div class="menu-wrapper">
+					<div class="menu-tab">
+						<a id="status" href="#" onclick="start()">
+							<span class="tab-icon">
+								<i class="fa fa-gamepad fa-2x" style="margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">Game Status</h2>
+							</div>
+						</a>
+					</div>
+					<div class="menu-tab">
+						<a id="assign" href="#">
+							<span class="tab-icon">
+								<i class="fa fa-group fa-2x" style="margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">Citizens</h2>
+							</div>
+						</a>
+					</div>
+					<div class="menu-tab">
+						<a id="god" href="#">
+							<span class="tab-icon">
+								<i class="fa fa-eye fa-2x" style="margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">God Mode</h2>
+							</div>
+						</a>
+					</div>
+					<div class="menu-tab">
+						<a id="set-up" href="#"> 
+							<span class="tab-icon">
+								<i class="fa fa-gears fa-2x" style="margin: 5%;"></i>
+							</span>
+							<div class="tab-content">
+								<h2 class="tab-main">New Game</h2>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 			<div id="content">
 				<div id="assign-page">
 					<div class="description">
-						<h1> Assign Citizens </h1>
-						<br/>
-						<p>Here you can assign any number of citizens to a any student. Just follow the next form!</p>
+						<h3>Citizens Assignment</h3>
+						<div class="lineH"></div>
+						<h5>Use the following interfaces to assign Citizens to your students.</h5>
 					</div>
 					<br/>
 					<div class="status-content">
-						<div id="province">
-							<form action="" method="get">
-								<p>Province: </p>
-								<select name="provinces">
-									<option value="g1">Group 1</option>
-									<option value="g2">Group 2</option>
-								</select>
-							</form>
-						</div>
-						<div id="student">
-							<form action="" method="get">
-								<p>Student: </p>
-								<select name="students">
-									<option value="s1">Student 1</option>
-									<option value="s2">Student 2</option>
-								</select>
-							</form>
-						</div>
-						<div id="assignment">
-							<form action="" method="post">
-								<p>Assign citizens: </p><input type="text" name="n_citizens">
-					    		<p>Message: </p><input type="textarea" name="private_message"/>
-								<input type="submit" value="Submit" class="input" />
-							</form>
-						</div>
 					</div>
 				</div>
 				<div id="set-up-page">
-					<p> Set-up Game </p>
-					Not available in this beta. Coming soon!
+					<div id="set-up-wrapper">
+						<h3>Fill the asked Data</h3>
+						<div class="lineH"></div>
+						<div id="add-forms">
+							<div id="add-provinces-wrapper">
+								<div class="form-content form-description">
+									<h5>1. Fill in the missing data to create a new Province.</h5>
+									<div class="flex">
+										<div id="add-province-form">
+											<div id="province-name">
+												<input id="prvn" type="textarea" name="name" placeholder="Province name..."/>
+											</div>
+										</div>
+										<div id="add-province-save">
+											<span class="tab-icon">
+												<i id="button_prv" class="fa fa-check-circle fa-2x" onclick="createProvince()"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="add-cities-wrapper">
+								<div class="form-content form-description">
+									<h5>2. Fill in the missing data to create a new City.</h5>
+									<div class="flex">
+										<div id="add-city-form">
+											<div id="city-name">
+												<input id="cn" type="textarea" name="name" placeholder="City name..."/>
+											</div>
+										</div>
+										<div id="add-city-save">
+											<span class="tab-icon">
+												<i id="button_c" class="fa fa-check-circle fa-2x" onclick="createCity()"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="add-players-wrapper">
+								<div class="form-content form-description">
+									<h5>3. Fill in the missing data to create a new Player.</h5>
+									<div class="flex">
+										<div id="add-player-form">
+											<div id="player-name">
+												<input id="pn"  type="textarea" name="name" placeholder="Player name..."/>
+											</div>
+											<div id="player-login">
+												<input id="pl" type="textarea" name="name" placeholder="Player login..."/>
+											</div>
+											<div id="player-password">
+												<input id="ppw" type="textarea" name="name" placeholder="Player password..."/>
+											</div>
+										</div>
+										<div id="add-player-save">
+											<span class="tab-icon">
+												<i id="button_p" class="fa fa-check-circle fa-2x" onclick="createPlayer()"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="build-city-province-area">
+						<h3>Set cities to a province</h3>
+						<div class="lineH"></div>
+						<div id="form-content form-description">
+							<h5>1. Select a province from the list</h5>
+							<div class="flex">
+								<div id="select-province-list">
+									<select id="provinces-list">
+									</select>
+								</div>
+								<div id="select-province-submit">
+									<span class="tab-icon">
+										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<h5>2. Drag the cities you want to be in the selected province, from the left list into the right one</h5>
+						<div class="drag-content-wrapper">
+							<div class="drag-left">
+								<div id="cities-without-province" ondrop="drop(event)" ondragover="allowDrop(event)">
+								</div>
+							</div>
+							<div class="drag-right">
+								<div id="province-cities-list" ondrop="drop(event)" ondragover="allowDrop(event)">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="build-player-city-area">
+						<h3>Set players to a city</h3>
+						<div class="lineH"></div>
+						<div id="form-content form-description">
+							<h5>1. Select a city from the list</h5>
+							<div class="flex">
+								<div id="select-city-list">
+									<select id="cities-list">
+									</select>
+								</div>
+								<div id="select-city-submit">
+									<span class="tab-icon">
+										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="drag-content-wrapper">
+							<div class="drag-left"></div>
+							<div class="drag-right"></div>
+						</div>
+					</div>
 				</div>
 				<div id="status-page">
-					<p> Game Status </p>
-					Not available in this beta. Coming soon!
+					<div id="global-view">
+						<h3>Global overview</h3>
+						<div class="lineH"></div>
+					</div>
+					<div id="history">
+						<h3>Assignments history</h3>
+						<div class="lineH"></div>
+						<div id="itens-area">
+						</div>
+					</div>
 				</div>
 				<div id="god-page">
-					<p> God mode </p>
-					Not available in this beta. Coming soon!
+					<div id="god-container">
+						<h3>God Mode</h3>
+						<div class="lineH"></div>
+						<h5>Not available yet!</h5>
+					</div>
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript"
+			src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<script src="js/menu.js" type="text/javascript"></script>
+		<script src="js/Message.js" type="text/javascript"></script>
+		<script src="js/Player.js" type="text/javascript"></script>
+		<script src="js/Province.js" type="text/javascript"></script>
+		<script src="js/City.js" type="text/javascript"></script>
+		<script src="js/assign_citizens.js" type="text/javascript"></script>
+		<script src="js/game_status.js" type="text/javascript"></script>
+		<script src="js/scriptWrapper.js" type="text/javascript"></script>
+		<script src="js/game_setup.js" type="text/javascript"></script>
+		<script src="js/drag_drop.js" type="text/javascript"></script>
 	</body>
 </html>

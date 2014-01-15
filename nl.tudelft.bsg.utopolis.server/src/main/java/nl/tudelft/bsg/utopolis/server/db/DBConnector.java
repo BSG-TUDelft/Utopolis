@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.Message;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
@@ -99,6 +100,13 @@ public class DBConnector {
 			session.close();
 		}
 	}
+	
+	public Player getPlayer(int id) {
+		return (Player) getSession()
+				.createQuery("from Player where id = :id")
+				.setParameter("id", id)
+				.uniqueResult();
+	}
 
 	public Player getPlayer(String nick, String password) {
 		return (Player) getSession()
@@ -127,6 +135,37 @@ public class DBConnector {
 				.createQuery("from City")
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Message> getMessages() {
+		return getSession()
+				.createQuery("from Message")
+				.list();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Message> getPlayerMessages(int playerId) {
+		return getSession()
+				.createQuery("from Message where player_id = :player_id")
+				.setParameter("player_id", playerId)
+				.list();
+	}
+	
+	public Message getMessage(int messageId) {
+		return (Message) getSession()
+				.createQuery("from Message where message_id = :message_id")
+				.setParameter("message_id", messageId)
+				.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void deleteMessage(int messageId) {
+		Message message = getMessage(messageId);
+		getSession().delete(message);
+	}
+	
+	
 
 	public Structure getStructure(int id) {
 		return (Structure) getSession()

@@ -35,8 +35,6 @@ public class City implements Serializable {
 	@OneToOne(cascade={CascadeType.ALL})
 	private Medals medals;
 	
-
-	
 	public int getId() {
 		return id;
 	}

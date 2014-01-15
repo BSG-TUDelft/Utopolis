@@ -223,6 +223,7 @@ function initCamera() {
 function initSound(){
 	sounds.error = new Sound(['audio/game/error.mp3'], { loop: false});
 	sounds.questCompleted = new Sound(['audio/game/quest_complete.mp3'], { loop: false});
+	sounds.mailSent = new Sound(['audio/game/mail_sent.wav'], { loop: false});
 	sounds.selected = {
 		barracks: new Sound(['audio/selected/sel_barracks.ogg']),
 		blacksmith: new Sound(['audio/selected/sel_blacksmith.ogg']),
@@ -331,6 +332,7 @@ function requestCity() {
 
     request.done(function (response, textStatus, jqXHR){
         console.log("SERVER RESPONSE: city retrieved successfully");
+		Gui.console.printText("Connection to server succesful!", null);
         city = response;
         console.log(city);
 
@@ -341,11 +343,11 @@ function requestCity() {
 
     request.fail(function (jqXHR, textStatus, errorThrown){
         console.error(
-            "The following error occured: " +
+            "Could not connect to " + host + ". The following error occured: " +
             textStatus, errorThrown
         );
         clientOnlyMode = true;
-		Gui.console.printText("Could not connect to server (" + host + "). Playing in client-only mode.", null);
+		Gui.console.printText("Could not connect to server. Playing in client-only mode.", null);
 		city = {
             numCitizens: 100
         }
@@ -586,6 +588,12 @@ function onDocumentMouseDown( event ) {
 }
 
 function onKeyDown ( event ) {
+	var tagName = $("*:focus").prop('tagName');
+	if(tagName == "SELECT" || tagName == "INPUT" || tagName == "TEXTAREA"){
+		// We're in a form, escape!
+		return;
+	}
+
     switch( event.keyCode ) {
         case 87: // w
             moveCameraForward();

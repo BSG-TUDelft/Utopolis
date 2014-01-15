@@ -20,11 +20,19 @@ var MessageOverview = function(parent, data, config){
     this.input = new Popup($("body"), null);
     this.input.el.addClass("message_input");
     this.input.el.append('' +
-        '<label>To:</label><input type="text" class="to"/>' +
+        '<label>To:</label><select type="text" class="to"/>' +
         '<label>Subject:</label><input type="text" class="subject"/>' +
         '<textarea class="message-text"/>' +
-        '<div class="button-medium" style="width: 100px; float: right; margin-right: -2px;" tabindex="0"><div class="inner">send</div></div>'
+        '<div class="button-medium send" style="width: 100px; float: right; margin-right: -2px;" tabindex="0"><div class="inner">send</div></div>'
     );
+	this.input.el.find(".send").click($.proxy(function(e){
+		// Fires MessageOverview.sendClicked when send button is clicked
+		var to = { id: this.input.el.find(".to").val(), nick: this.input.el.find(".to option:selected").text()};
+		var subject = this.input.el.find(".subject").val();
+		var message = this.input.el.find(".message-text").val();
+		this.dispatchEvent( { type: MessageOverview.sendClicked, to: to, subject: subject, message: message } );
+	}, this));
+
     this.input.el.hide();
     this.hide();
 
@@ -35,45 +43,44 @@ var MessageOverview = function(parent, data, config){
         '<table cellpadding="0" cellspacing="0" border="0" class="table"></table>' +
     '');
 
-    this.data = data;
+    this.inboxData = data;
     this.el.on('click', ".compose", function(e){
         me.input.show();
         me.input.el.find(".to").val("");
         me.input.el.find(".subject").val("");
         me.input.el.find(".message-text").val("");
     });
-    this.el.on('click', '.table .button', function(e){
+    this.el.on('click', '.table .button', $.proxy(function(e){
         var index = e.target.attributes["data-index"].nodeValue;
-        var row = me.data[index];
+        var row = me.inboxData[index];
 
         switch(e.target.attributes["data-button_type"].nodeValue){
             case "delete":
-                me.data.splice(index, 1);
-                me.update(me.data);
+            	var record = this.inboxData.splice(index, 1)[0];
+                this.update(this.inboxData, null);
 
-                // Todo: tell server we deleted this message
+				this.dispatchEvent( { type: MessageOverview.deleteClicked, messageId: record[ID] } );
                 break;
             case "reply":
-                me.input.show();
-                me.input.el.find(".to").focus();
-                me.input.el.find(".to").val(row[FROM]);
-                me.input.el.find(".subject").val("Re: " + row[SUBJECT]);
-                me.input.el.find(".message-text").val("\n\n> " + row[MESSAGE_TEXT].split("\n").join("\n> "));
-                me.input.el.find(".message-text").focus();
-                //me.input.el.find(".subject").val("Re: " + row[SUBJECT]);
+                this.input.show();
+                this.input.el.find(".to").focus();
+				this.input.el.find(".to option:contains('" + row[FROM]+ "')").attr('selected', true);
+                this.input.el.find(".subject").val("Re: " + row[SUBJECT]);
+                this.input.el.find(".message-text").val("\n\n> " + row[MESSAGE_TEXT].split("\n").join("\n> "));
+                this.input.el.find(".message-text").focus();
                 break;
         }
-    });
+    }, this));
 
     this.initData = function(){
         var table = this.el.find(".table").first();
         table.dataTable( {
-            "aaData": this.data,
+            "aaData": this.inboxData,
             "aoColumns": [
                 { sTitle: "From", sWidth: "30%"},
                 { sTitle: "Subject", sWidth: "60%" },
                 { sTitle: "Date", sWidth: "10%", mRender: $.proxy(function ( data, type, full ) {
-                    return data instanceof Date ? $.formatDateTime('mm/dd/y g:ii', data) : data;
+                    return ((data instanceof Date) ? $.formatDateTime('mm/dd/y g:ii', data) : data);
                 }, this) }
             ],
             fnServerData: function() { },
@@ -96,12 +103,12 @@ var MessageOverview = function(parent, data, config){
             bAutoWidth:false
         });
 
-        table.find("tbody tr").click( function () {
+        table.find("tbody tr").click(function () {
             if ( table.fnIsOpen(this) ) {
                 table.fnClose( this );
             } else {
                 var index = $(this).attr("data-message_index");
-                var row = me.data[index];
+                var row = me.inboxData[index];
                 if(!row) return;
                 var text = row[MESSAGE_TEXT].replace(/\n/g, '<br />');
                 if(row[DATE_READ] == null){
@@ -118,7 +125,32 @@ var MessageOverview = function(parent, data, config){
             }
         } );
 
+		// Autocomplete
+		var to = me.input.el.find(".to");
+		to.empty();
+		if(this.playerData){
+			$.each(this.playerData, function() {
+				to.append($("<option />").val(this.value).text(this.label));
+			});
+		}
+		/*me.input.el.find(".to").autocomplete({
+			minLength: 0,
+			source: this.playerData,
+			focus: function( event, ui ) {
+				me.input.el.find(".to").val( ui.item.label );
+				return false;
+			},
+			select: function( event, ui ) {
+				me.input.el.find(".to").val( ui.item.label );
 
+				return false;
+			}
+		})
+		.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li>" )
+				.append( "<a>" + item.label + "<br></a>" )
+				.appendTo( ul );
+		};*/
     };
     this.initData();
 };
@@ -136,11 +168,15 @@ MessageOverview.prototype.toggle = function(){
     //this.update(this.data);
 };
 
-MessageOverview.prototype.update = function(data){
+MessageOverview.prototype.update = function(inboxData, playerData){
     var dataTable = this.el.find(".table").first().dataTable();
     dataTable.fnDestroy();
     dataTable.html("");
-    this.data = data;
+	if(inboxData != null)
+	    this.inboxData = inboxData;
+	if(playerData != null)
+		this.playerData = playerData;
+
     this.initData();
 
 
@@ -151,4 +187,6 @@ MessageOverview.prototype.update = function(data){
 };
 // Reset constructor
 MessageOverview.prototype.constructor = MessageOverview;
+MessageOverview.sendClicked = "SEND_CLICKED";
+MessageOverview.deleteClicked = "DELETE_CLICKED";
 THREE.EventDispatcher.prototype.apply( MessageOverview.prototype );

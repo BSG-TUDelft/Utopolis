@@ -244,7 +244,16 @@ var Gui = {
 			} );
 		});
 
-        Gui.messageOverview = new MessageOverview($("body"), []);
+        // Message overview
+		Gui.messageOverview = new MessageOverview($("body"), []);
+		Gui.messageOverview.addEventListener(MessageOverview.sendClicked, function(e){
+			sendMessage({ to: e.to, subject: e.subject, message: e.message});
+		});
+		Gui.messageOverview.addEventListener(MessageOverview.deleteClicked, function(e){
+			deleteMessage(e.messageId);
+		});
+
+
 
         // Quests
 		var questDescriptions = [{
@@ -318,6 +327,9 @@ var Gui = {
 		// Private functions
 		function openLeaderboard(){
 			if(!clientOnlyMode){
+				if(!city) // global city
+					return alert("Something went horribly wrong! :( Please reload the game.");
+
 				// Fire a request to retreive the latest scores
 				Gui.leaderboard.ajaxSpinner.show();
 
@@ -371,18 +383,110 @@ var Gui = {
 		}
 
         function openMessages(){
+            if(!clientOnlyMode){
+				if(!city) // global city
+					return alert("Something went horribly wrong! :( Please reload the game.");
 
-            // Todo: fetch from server
-            var data = [
-                /* from, subject, date send, date read  */
-                ["DJ Vader", "Yo whats up", new Date(), null, "Just sayin' hi", 0],
-                ["J-Lea", "Stuff", new Date(), new Date(), "Lorem ipsum \n\n Lizzle dizzle \n mizzle fizzle", 1],
-                ["Luke Skizzlewalker", "Shizzle", new Date(), new Date(), "Blabla \n\n meep meep", 2]
-            ];
-            Gui.messageOverview.update(data);
+				var getInboxData = function(){
+					return $.ajax({
+						url: host + "message/" + city.player.id + "/list",
+						type: 'GET'
+					});
+				}
+				var getPlayerData = function (){
+					return $.ajax({
+						url: host + "player/list",
+						type: 'GET'
+					});
+				}
 
+				// Send off two requests, one to get the inbox data, the other to get player data
+				$.when(getInboxData(), getPlayerData()).done(function(inboxResult, playerResult){
+					// Parse inbox data into array that the datatable can read
+					var inboxData = [];
+					for(var i = 0; i < inboxResult[0].messages.length; i++){
+						var msg = inboxResult[0].messages[i];
+						inboxData.push([
+							(msg.sender || "Unknown sender"),
+							(msg.subject || "Empty subject"),
+							new Date(msg.entryDate ),
+							(null),
+							(msg.message || "Empty message"),
+							msg.id
+							//msg.player.id
+						]);
+					}
+
+					// Pass player data, used in the send message dialog
+					var playerData = [];
+					for(var j = 0; j < playerResult[0].players.length; j++){
+						var plyr = playerResult[0].players[j];
+						// Do not add yourself (duh)
+						if(plyr.id == city.player.id) continue;
+						playerData.push({
+							label: plyr.nick,
+							value: plyr.id
+						});
+					}
+
+					Gui.messageOverview.update(inboxData, playerData);
+
+				});
+            }
             Gui.messageOverview.show();
         }
+
+		function sendMessage(msgInfo){
+			// Does not validate
+			if(msgInfo.to == "")
+				return;
+
+			var message = {
+				entryDate: new Date(),
+				message: msgInfo.message,
+				player: msgInfo.to,
+				assignNum: 0,
+				subject: msgInfo.subject,
+				sender: city.player.nick
+			};
+
+			var request = $.ajax({
+				url: host + 'message',
+				type: 'PUT',
+				contentType: 'application/json',
+				data: JSON.stringify(message),
+				context: message
+			});
+
+			request.done(function(response, textStatus, jqXHR){
+				Gui.console.printText("Your message is sent to " + msgInfo.to.nick, null);
+				Gui.messageOverview.input.el.hide();
+				sounds.mailSent.play();
+
+				console.log("SERVER RESPONSE: message sent!");
+			});
+
+			request.fail(function ( jqXHR, textStatus, errorThrown ){
+				console.error(
+					"The following error occured: " +
+						textStatus, errorThrown
+				);
+			});
+		}
+
+		/** Deletes message on the server */
+		function deleteMessage(messageId){
+			var request = $.ajax({
+				url: host + 'message/' + messageId,
+				type: 'DELETE',
+				contentType: 'application/json'
+			});
+
+			request.done(function(response, textStatus, jqXHR){
+				Gui.console.printText("Message deleted", null);
+				sounds.mailSent.play();
+			});
+		}
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -1199,7 +1303,6 @@ function initGui() {
 
 	login.center();
 	login.show();
-	login.hide();
 	$("#username").focus();
 }
 
