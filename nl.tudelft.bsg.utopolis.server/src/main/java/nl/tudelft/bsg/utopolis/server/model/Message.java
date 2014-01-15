@@ -25,8 +25,8 @@ public class Message implements Serializable{
 	private int assignNum;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="player_id", insertable=false, updatable=false)
-    private Player player;
+	@JoinColumn(name="player_id", insertable=false, updatable=false)
+	private Player player;
 	
 	public int getId() {
 		return id;

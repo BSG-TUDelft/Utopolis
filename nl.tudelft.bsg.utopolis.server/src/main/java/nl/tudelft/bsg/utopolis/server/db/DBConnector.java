@@ -151,6 +151,21 @@ public class DBConnector {
 				.setParameter("player_id", playerId)
 				.list();
 	}
+	
+	public Message getMessage(int messageId) {
+		return (Message) getSession()
+				.createQuery("from Message where message_id = :message_id")
+				.setParameter("message_id", messageId)
+				.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void deleteMessage(int messageId) {
+		Message message = getMessage(messageId);
+		getSession().delete(message);
+	}
+	
+	
 
 	public Structure getStructure(int id) {
 		return (Structure) getSession()

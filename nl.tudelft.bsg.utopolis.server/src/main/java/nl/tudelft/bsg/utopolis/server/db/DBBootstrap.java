@@ -2,6 +2,7 @@ package nl.tudelft.bsg.utopolis.server.db;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.KeyPerformanceIndicators;
@@ -21,7 +22,7 @@ public class DBBootstrap {
 					generateCity("Athens", "Georgi", Race.hele),
 					generateCity("Cartage", "Wouter", Race.kart),
 					generateCity("Acropolis", "Tiago", Race.pers),
-					generateCity("New Rome", "Annika", Race.rome)
+					generateCity("New Rome", "Anika", Race.rome)
 			};
 			
 			Province pr1 = new Province();
@@ -56,11 +57,20 @@ public class DBBootstrap {
 		DBConnector.get().save(m1);
 		DBConnector.get().save(m2);
 
-		Message[] messages = {
+		Message m3 = new Message();
+		m3.setSender("Tiago");
+		m3.setSubject("Message from Tiago to " + playerName + "!");
+		m3.setMessage("Yo sup bro?!");
+		m3.setEntryDate(new Date());
+
+		
+		List<Message> messages = Arrays.asList(new Message []{
 			m1,
-			m2
-		};
-		player.setMessages(Arrays.asList(messages));
+			m2,
+			m3
+		});
+		player.setMessages(messages);
+
 		
 		City city = new City();
 		city.setName(cityName);
