@@ -1326,9 +1326,10 @@ function initGui() {
 			Main.clientOnlyMode = true;
 			Gui.console.printText("Could not connect to server. Playing in client-only mode.", null);
 			Main.city = {
-				numCitizens: 100
+				numCitizens: 100,
+				structures: []
 			}
-			main.startGame();
+			Main.startGame();
 			login.hide();
 		});
 
