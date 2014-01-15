@@ -154,14 +154,21 @@ public class DBConnector {
 	
 	public Message getMessage(int messageId) {
 		return (Message) getSession()
-				.createQuery("from Message where message_id = :message_id")
+				.createQuery("from Message where id = :message_id")
 				.setParameter("message_id", messageId)
 				.uniqueResult();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void deleteMessage(int messageId) {
 		Message message = getMessage(messageId);
+		/*Player player = message.getPlayer();
+		List<Message> all = getPlayerMessages(player.getId());
+		for(Message msg : all){
+			if(msg.getId() == messageId)
+				all.remove(msg);
+		}
+		
+		player.setMessages(all);*/
 		getSession().delete(message);
 	}
 	
