@@ -6,10 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlIDREF;
+
+import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 
 @Entity
@@ -29,6 +34,10 @@ public class City implements Serializable {
 	@Enumerated
 	private Race race;
 	private int provinceId;
+	 
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@XmlInverseReference(mappedBy="cities")
+ 	private Province province;
 	
 	// Leaderboard
 	@OneToOne(cascade={CascadeType.ALL})
@@ -114,6 +123,14 @@ public class City implements Serializable {
 
 	public void setProvinceId(int provinceId) {
 		this.provinceId = provinceId;
+	}
+
+	public Province getProvince() {
+		return province;
+	}
+
+	public void setProvince(Province province) {
+		this.province = province;
 	}
 
 

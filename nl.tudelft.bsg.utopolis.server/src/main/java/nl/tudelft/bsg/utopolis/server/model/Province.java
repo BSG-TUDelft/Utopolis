@@ -5,18 +5,21 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlID;
 
 @Entity
 public class Province implements Serializable {
 	private static final long serialVersionUID = 3634843961492433604L;
 	
 	@Id
+	@XmlID
 	@GeneratedValue
 	private int id;
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	private List<City> cities;
 	private String name;
 

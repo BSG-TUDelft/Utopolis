@@ -127,10 +127,14 @@ public class DBConnector {
 			.createQuery("from City where player_id = :player_id")
 			.setParameter("player_id", playerId)
 			.uniqueResult();
+		
+		// This is extremely lame but if you can tell me how to do bidirectional relationship I'd be happy to know!
+		// this describes the situation but I can't make it work http://stackoverflow.com/questions/14844691/how-can-i-get-moxy-to-assign-a-parent-when-unmarshalling-a-child-with-an-xmlinve
+		
 		List<Province> provinces = getProvinces();
 		for(Province province : provinces){
 			if(province.getCities().contains(city))
-				city.setProvince(province);
+				city.setProvinceId(province.getId());
 		}
 		return city;
 	}
