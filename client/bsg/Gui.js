@@ -334,32 +334,48 @@ var Gui = {
 				Gui.leaderboard.ajaxSpinner.show();
 
 				var request = $.ajax({
-					url: host + 'city/list',
+					url: host + 'province/list',
 					type: 'GET'
 				});
 
 				var Main = { city: city}; // remove after merge!
 				request.done(function (response, textStatus, jqXHR){
-					var citiesData = [];
-					var provinces;
+					var citiesData = [],
+						provinceData = [];
 
-					for(var i = 0; i < response.cities.length; i++){
-						var city = response.cities[i];
+					for(var i = 0; i < response.provinces.length; i++){
+						var province = response.provinces[i];
 
-						if(city.provinceId == Main.city.provinceId){
+						if(province.id == Main.city.provinceId){
 							// This city belongs to the same province as the current player
-							citiesData.push([
-								city.name + " (" + city.player.name + ")",
-								city.kpi.foreignRelations,
-								city.kpi.happiness,
-								city.kpi.population,
-								city.kpi.technology,
-								city.kpi.wealth,
-								getMedals(city.medals)
-							]);
+							$.each(province.cities, function(index, city){
+								citiesData.push([
+									city.name + " (" + city.player.name + ")",
+									city.kpi.foreignRelations,
+									city.kpi.happiness,
+									city.kpi.population,
+									city.kpi.technology,
+									city.kpi.wealth,
+									getMedals(city.medals)
+								]);
+							});
 						}
+						provinceData.push([
+							province.name + ((province.id == Main.city.provinceId) ? " (your province)" : ""),
+							calculateAverage(province.cities, "foreignRelations"),
+							calculateAverage(province.cities, "happiness"),
+							calculateAverage(province.cities, "population"),
+							calculateAverage(province.cities, "technology"),
+							calculateAverage(province.cities, "wealth")
+						]);
+					}
 
-
+					function calculateAverage(cities, kpi){
+						var sum = 0;
+						$.each(cities, function(index, city){
+							sum += city.kpi[kpi];
+						});
+						return Math.round(sum / cities.length * 10000) / 10000;
 					}
 
 					function getMedals(medals) {
@@ -376,8 +392,6 @@ var Gui = {
 						};
 					};
 
-
-					var provinceData = []
 					Gui.leaderboard.ajaxSpinner.hide();
 					Gui.leaderboard.update(citiesData, provinceData);
 				});

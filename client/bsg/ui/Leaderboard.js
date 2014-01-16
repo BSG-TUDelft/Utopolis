@@ -4,14 +4,14 @@ var Leaderboard = function(parent, medalDescriptions, config){
 	this.config = config || {};
 	this.citiesData = [];
 	this.provinceData = [];
-	this.provinceContainer = $('<div></div>');
-	this.allProvincesContainer = $('<div></div>');
+	var provinceContainer = $('<h1>Leaderboard - cities in your province</h1>');
+	var allProvincesContainer = $('<h1>Leaderboard - global province ranking</h1>');
 	this.config.tabs = [{
 		text: "Cities in my province",
-		content: this.provinceContainer
+		content: provinceContainer
 	},{
 		text: "All provinces",
-		content: this.allProvincesContainer
+		content: allProvincesContainer
 	}];
 
 	// Call parent constructor
@@ -20,10 +20,10 @@ var Leaderboard = function(parent, medalDescriptions, config){
 	this.medalDescriptions = medalDescriptions;
 	this.el.append( '' +
 		'<div class="leaderboard"> ' +
-			'<h1>Leaderboard</h1>' +
 			'<div class="loader"></div>' +
 			'<table cellpadding="0" cellspacing="0" border="0" class="table"></table>' +
 		'</div>' );
+	this.el.find(".leaderboard").before(provinceContainer, allProvincesContainer);
 	this.ajaxSpinner = this.el.find('.leaderboard .loader').spin('large', '#000');
 
 	$(window).bind('resize', function () {
@@ -33,7 +33,7 @@ var Leaderboard = function(parent, medalDescriptions, config){
 	this.addEventListener(Popup.tabChanged, $.proxy(tabChanged, this));
 
 	function tabChanged(e){
-		renderTable();
+		$.proxy(renderTable, this)();
 	}
 
 	this.el.hide();
