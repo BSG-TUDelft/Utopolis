@@ -338,7 +338,6 @@ var Gui = {
 					type: 'GET'
 				});
 
-				var Main = { city: city}; // remove after merge!
 				request.done(function (response, textStatus, jqXHR){
 					var citiesData = [],
 						provinceData = [];
