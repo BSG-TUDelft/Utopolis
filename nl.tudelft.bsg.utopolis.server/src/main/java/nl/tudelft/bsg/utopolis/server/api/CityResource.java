@@ -25,6 +25,7 @@ public class CityResource extends Resource {
 	public Response getCity(@PathParam("playerId") int playerId) {
 		City city = DBConnector.get().getCity(playerId);
 		return buildResponse(city);
+
 	}
 
 	@PUT
@@ -66,7 +67,7 @@ public class CityResource extends Resource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createStructure(@PathParam("playerId") int playerId,
 			Structure s) {
-		City c = DBConnector.get().getCity(playerId);
+		City c = DBConnector.get().getCityByPlayerId(playerId);
 		c.getStructures().add(s);
 		DBConnector.get().save(c);
 		return buildResponse(s);
@@ -75,7 +76,7 @@ public class CityResource extends Resource {
 	@POST
 	@Path("/{playerId}/citizens/{assignedCitizens}")
 	public Response assignCitizens(@PathParam("playerId") int playerId, @PathParam("assignedCitizens") int assignedCitizens) {
-		City c = DBConnector.get().getCity(playerId);
+		City c = DBConnector.get().getCityByPlayerId(playerId);
 		System.out.println(c.getNumCitizens());
 		c.setNumCitizens(c.getNumCitizens() + assignedCitizens);
 		DBConnector.get().save(c);
