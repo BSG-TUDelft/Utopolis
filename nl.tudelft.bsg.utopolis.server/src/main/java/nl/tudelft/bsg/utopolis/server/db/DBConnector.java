@@ -123,10 +123,16 @@ public class DBConnector {
 	}
 	
 	public City getCity(int playerId) {
-		return (City) getSession()
-				.createQuery("from City where player_id = :player_id")
-				.setParameter("player_id", playerId)
-				.uniqueResult();
+		City city = (City) getSession()
+			.createQuery("from City where player_id = :player_id")
+			.setParameter("player_id", playerId)
+			.uniqueResult();
+		List<Province> provinces = getProvinces();
+		for(Province province : provinces){
+			if(province.getCities().contains(city))
+				city.setProvince(province);
+		}
+		return city;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -180,7 +186,7 @@ public class DBConnector {
 				.setParameter("id", id)
 				.uniqueResult();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Province> getProvinces() {
 		return getSession()

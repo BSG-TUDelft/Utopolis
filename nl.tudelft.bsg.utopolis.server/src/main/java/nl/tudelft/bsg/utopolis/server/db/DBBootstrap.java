@@ -17,7 +17,6 @@ public class DBBootstrap {
 	public static void init() {
 		if (DBConnector.get().getPlayers().size() == 0) {
 			
-
 			City[] cities1 = { 
 					generateCity("Athens", "Georgi", Race.hele),
 					generateCity("Cartage", "Wouter", Race.kart),
@@ -29,6 +28,42 @@ public class DBBootstrap {
 			pr1.setName("First grade");
 			pr1.setCities(Arrays.asList(cities1));
 			DBConnector.get().save(pr1);
+			
+			City[] cities2 = { 
+					generateCity("Machu Picchu", "Caroline", Race.iber),
+					generateCity("Persepolis", "Jason", Race.kart),
+					generateCity("Petra", "Carl", Race.pers),
+					generateCity("Dehli", "Anika", Race.rome)
+			};
+			
+			Province pr2 = new Province();
+			pr2.setName("Second grade");
+			pr2.setCities(Arrays.asList(cities2));
+			DBConnector.get().save(pr2);
+			
+			City[] cities3 = { 
+					generateCity("Pompeii", "Kevin", Race.hele),
+					generateCity("Nimrud", "Mo", Race.kart),
+					generateCity("Palmyra", "Vincent", Race.pers),
+					generateCity("Heliopolis", "Jess", Race.rome),
+					generateCity("Jerusalem", "David", Race.rome)
+			};
+			
+			Province pr3 = new Province();
+			pr3.setName("Third grade");
+			pr3.setCities(Arrays.asList(cities3));
+			DBConnector.get().save(pr3);
+
+			City[] cities4 = { 
+					generateCity("Memphis", "Sheila", Race.hele),
+					generateCity("Thebes", "Daniel", Race.kart),
+					generateCity("Constantinople", "William", Race.pers)
+			};
+			
+			Province pr4 = new Province();
+			pr4.setName("Fourth grade");
+			pr4.setCities(Arrays.asList(cities4));
+			DBConnector.get().save(pr4);
 			
 			
 		}
