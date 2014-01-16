@@ -38,7 +38,7 @@ public class MessageResource extends Resource {
 		return buildResponse(result);
 	}
 	
-	@PUT
+	/*@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createMessage(Message m){
@@ -47,7 +47,7 @@ public class MessageResource extends Resource {
 		player.addMessage(m);
 		DBConnector.get().save(player);
 		return buildResponse(m);		
-	}
+	}*/
 
 	@DELETE
 	@Path("/{messageId}")

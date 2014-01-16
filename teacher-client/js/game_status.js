@@ -2,27 +2,21 @@ var host = "http://localhost:8080/api/";
 
 function requestHistory(){
 	 var request = $.ajax({
-        url: host + 'message/list',
+        url: host + 'player/list',
         type: 'GET'
     });
 
     request.done(function ( response, textStatus, jqXHR ){
         console.log("SERVER RESPONSE: history retrieved successfully");
-        results = response; 
+        results = response.players; 
         $("#itens-area").empty();
-        if(results.messages.length > 2) {
-	        var i = 0;
-	        while( i != results.messages.length-2 )      
-	        {
-	        	$("#itens-area").append("<div class='row'>"
-	        		+ makeItem( results.messages[i] )
-	        		+ makeItem( results.messages[i+1] )
-	        		+ makeItem( results.messages[i+2] )
-	        		+ "</div>");
-
-	          	i+=3;
-	        }
-	    }
+        for(var i=0; i<results.length; i++) {
+        	for(var j=0; j<results[i].messages.length; j++) {
+        		if(results[i].messages[j].sender == "Teacher") {
+        			$("#itens-area").append( makeItem( results[i], j ) );
+        		}
+        	}
+        }
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -33,16 +27,18 @@ function requestHistory(){
     });
 }
 
-function makeItem( message ){
-	if(message != null) {
-		var date = message.entryDate.split("T");
+function makeItem( player, pos ){
+	if(player.messages[pos] != null) {
+		var date = player.messages[pos].entryDate.split("T");
 
 		return "<div id='item'><div><h4>To: "
-		   	+ message.player.name 
-		   	+ "</h4></div><div class='item-content'><section class='a'>"
-		   	+ message.message + "</section></div><h5>"
+		   	+ player.name 
+		   	+ "</h4></div><div class='item-content'>"
+		   	+ "<section class='a b'> Subject: " + player.messages[pos].subject + "</section>"
+		   	+ "<section class='a'>"
+		   	+ player.messages[pos].message + "</section></div><h5>"
 			+ date[1] + " " + date[0] + " || Citizens assigned: " 
-		   	+ message.assignNum + "</h5></div>";
+		   	+ player.messages[pos].assignNum + "</h5></div>";
    }
    return "";
 }

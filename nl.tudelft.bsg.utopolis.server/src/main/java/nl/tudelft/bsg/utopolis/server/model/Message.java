@@ -24,10 +24,6 @@ public class Message implements Serializable{
 	private Date openedDate;
 	private int assignNum;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="player_id", insertable=false, updatable=false)
-	private Player player;
-	
 	public int getId() {
 		return id;
 	}
@@ -36,14 +32,6 @@ public class Message implements Serializable{
 		this.id = messageId;
 	}
 	
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
 	public String getMessage() {
 		return message;
 	}
