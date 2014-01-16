@@ -1,6 +1,10 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 var host = "http://localhost:8080/api/";
+var Main = {
+	city: null,
+	clientOnlyMode: false
+}
 var clientOnlyMode = false;
 var container, stats;
 
@@ -32,8 +36,6 @@ var clock = new THREE.Clock();
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
 var structureCollection;
 var sounds = {};
-
-var city;
 
 init();
 
@@ -312,47 +314,10 @@ function init() {
 	structureCollection = new ModelArray();
 
     //MODEL LOADERS
-	initModels(callbackModelsLoaded);
-
-    // load city from server
-    function callbackModelsLoaded(){
-		// TODO: fallback mechanism if no server is found, play in singleplayer mode
-		requestCity();
-	}
+	initModels(Gui.modelsLoaded);
 
 	$( document ).ready(function() {
 	});
-}
-
-function requestCity() {
-    var request = $.ajax({
-        url: host + 'city/1',
-        type: 'GET'
-    });
-
-    request.done(function (response, textStatus, jqXHR){
-        console.log("SERVER RESPONSE: city retrieved successfully");
-		Gui.console.printText("Connection to server succesful!", null);
-        city = response;
-        console.log(city);
-
-        placeCity(city.structures);
-		startGame();
-
-    });
-
-    request.fail(function (jqXHR, textStatus, errorThrown){
-        console.error(
-            "Could not connect to " + host + ". The following error occured: " +
-            textStatus, errorThrown
-        );
-        clientOnlyMode = true;
-		Gui.console.printText("Could not connect to server. Playing in client-only mode.", null);
-		city = {
-            numCitizens: 100
-        }
-        startGame();
-    });
 }
 
 function placeCity(structures) {
@@ -390,7 +355,7 @@ function saveStructure( structure ) {
 		return;
 	}
     var request = $.ajax({
-        url: host + 'city/1/structure',
+        url: host + "city/" + Main.city.id + "/structure",
         type: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(struct),
@@ -413,14 +378,17 @@ function saveStructure( structure ) {
 
 }
 
-/** Starts the game, registers event handlers */
-function startGame(){
+/** Starts the game, populates the world, registers event handlers */
+Main.startGame = function(){
 	// register event handlers
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
 	scene.addEventListener("UPDATE", Gui.update);
+
+	// Place structures
+	placeCity(Main.city.structures);
 
 	// Start game loop
 	animate();
