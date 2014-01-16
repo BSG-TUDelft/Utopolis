@@ -12,12 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 
 @Entity
+@XmlRootElement
 public class City implements Serializable {
 	private static final long serialVersionUID = -4755608870513621756L;
 	
@@ -35,7 +39,7 @@ public class City implements Serializable {
 	private Race race;
 	private int provinceId;
 	 
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @XmlElement
 	@XmlInverseReference(mappedBy="cities")
  	private Province province;
 	

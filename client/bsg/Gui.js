@@ -338,19 +338,28 @@ var Gui = {
 					type: 'GET'
 				});
 
+				var Main = { city: city}; // remove after merge!
 				request.done(function (response, textStatus, jqXHR){
-					var data = [];
+					var citiesData = [];
+					var provinces;
+
 					for(var i = 0; i < response.cities.length; i++){
 						var city = response.cities[i];
-						data.push([
-							city.name + " (" + city.player.name + ")",
-							city.kpi.foreignRelations,
-							city.kpi.happiness,
-							city.kpi.population,
-							city.kpi.technology,
-							city.kpi.wealth,
-							getMedals(city.medals)
-						]);
+
+						if(city.provinceId == Main.city.provinceId){
+							// This city belongs to the same province as the current player
+							citiesData.push([
+								city.name + " (" + city.player.name + ")",
+								city.kpi.foreignRelations,
+								city.kpi.happiness,
+								city.kpi.population,
+								city.kpi.technology,
+								city.kpi.wealth,
+								getMedals(city.medals)
+							]);
+						}
+
+
 					}
 
 					function getMedals(medals) {
@@ -366,8 +375,11 @@ var Gui = {
 							gold3: medals.quest8Completed*/
 						};
 					};
+
+
+					var provinceData = []
 					Gui.leaderboard.ajaxSpinner.hide();
-					Gui.leaderboard.update(data);
+					Gui.leaderboard.update(citiesData, provinceData);
 				});
 
 				request.fail(function (jqXHR, textStatus, errorThrown){

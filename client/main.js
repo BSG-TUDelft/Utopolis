@@ -312,8 +312,8 @@ function init() {
 	structureCollection = new ModelArray();
 
     //MODEL LOADERS
-	initModels(callbackModelsLoaded);
-
+	//initModels(callbackModelsLoaded); //temporarily disabled to speed up dev process
+	callbackModelsLoaded();
     // load city from server
     function callbackModelsLoaded(){
 		// TODO: fallback mechanism if no server is found, play in singleplayer mode
