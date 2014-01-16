@@ -54,12 +54,18 @@ public class MessageResource extends Resource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteMessage(@PathParam("messageId") int messageId){
 		DBConnector.get().deleteMessage(messageId);
-		return buildResponse(true);
+		return simpleResponse(200);
 	}
 
 	
 	@OPTIONS
 	public Response createMessageOptions() {
+		return optionsResponse();
+	}
+	
+	@OPTIONS
+	@Path("/{messageId}")
+	public Response createMessageWithMessageIdOptions() {
 		return optionsResponse("PUT, POST, DELETE");
 	}
 	

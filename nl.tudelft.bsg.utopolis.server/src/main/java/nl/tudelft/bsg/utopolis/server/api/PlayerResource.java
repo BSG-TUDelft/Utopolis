@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.PlayerList;
+import nl.tudelft.bsg.utopolis.server.model.City;
 
 @Path("player")
 public class PlayerResource extends Resource {
@@ -39,6 +40,27 @@ public class PlayerResource extends Resource {
 		DBConnector.get().save(p);
 		return simpleResponse(200);
 	}
+
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response login(Player p) {
+		Player player = DBConnector.get().validate(p.getNick(), p.getPassword());
+		if(player != null){
+			City city = DBConnector.get().getCityByPlayerId(player.getId());
+			return authorizationResponse(city, "TESTHASH");
+		}
+		else {
+			return simpleResponse("WRONG_PASSWORD");
+		}
+	}
+
+	@OPTIONS
+	@Path("/login") //todo: this is stupid. It should be able to work with a wildcard for path?
+	public Response createPlayerLoginOptions() {
+		return optionsResponse();
+	}
+
 	
 	@OPTIONS
 	public Response createPlayerOptions() {
