@@ -122,7 +122,7 @@ public class DBConnector {
 				.list();
 	}
 	
-	public City getCity(int playerId) {
+	public City getCityByPlayerId(int playerId) {
 		City city = (City) getSession()
 			.createQuery("from City where player_id = :player_id")
 			.setParameter("player_id", playerId)
@@ -145,19 +145,12 @@ public class DBConnector {
 			.setParameter("nick", nick)
 			.uniqueResult();
 		// Check pwd seperately because SQL is case insensitive
-		if(player.getPassword().equals(password)){
+		if(player != null && player.getPassword().equals(password)){
 			return player;
 		}
 		return null;
 	}
-	
-	public City getCityByPlayerId(int playerId) {
-		return (City) getSession()
-			.createQuery("from City where player_id = :player_id")
-			.setParameter("player_id", playerId)
-			.uniqueResult();
-	}
-	
+		
 	private Province getProvinceForCity(City city) {
 		List<Province> provinces = getProvinces();
 		for(Province province : provinces){
