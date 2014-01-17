@@ -79,6 +79,9 @@ var Gui = {
 						"* Anika Rose (Technology, Policy and Management TU Delft)\n" +
 						"* Wouter van den Heuvel (Media Technology Leiden University)\n" +
 						"* Mircea Voda (Computer Science TU Delft)\n" +
+						"\n\n" +
+						"Teacher: Rafa Bidarra\n" +
+						"Commisioned for: Martijn Koops\n" +
 						"\n\n\n" +
 						"Additional credits \n\n" +
 						"* 3d models, textures, music: 0AD wildfire games (CC-BY 3.0)\n" +
