@@ -21,7 +21,7 @@ import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 
 @Entity
-@XmlRootElement
+//@XmlRootElement
 public class City implements Serializable {
 	private static final long serialVersionUID = -4755608870513621756L;
 	
@@ -39,9 +39,9 @@ public class City implements Serializable {
 	private Race race;
 	private int provinceId;
 	 
-    @XmlElement
+    /*@XmlElement
 	@XmlInverseReference(mappedBy="cities")
- 	private Province province;
+ 	private Province province;*/
 	
 	// Leaderboard
 	@OneToOne(cascade={CascadeType.ALL})
@@ -129,13 +129,13 @@ public class City implements Serializable {
 		this.provinceId = provinceId;
 	}
 
-	public Province getProvince() {
+	/*public Province getProvince() {
 		return province;
 	}
 
 	public void setProvince(Province province) {
 		this.province = province;
-	}
+	}*/
 
 
 }

@@ -19,7 +19,6 @@ public class Province implements Serializable {
 	private static final long serialVersionUID = 3634843961492433604L;
 	
 	@Id
-	@XmlID
 	@GeneratedValue
 	private int id;
 	@OneToMany(cascade={CascadeType.ALL})

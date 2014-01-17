@@ -23,7 +23,7 @@ public class CityResource extends Resource {
 	@Path("/{playerId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCity(@PathParam("playerId") int playerId) {
-		City city = DBConnector.get().getCity(playerId);
+		City city = DBConnector.get().getCityByPlayerId(playerId);
 		return buildResponse(city);
 
 	}
