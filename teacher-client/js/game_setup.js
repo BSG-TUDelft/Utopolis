@@ -1,4 +1,4 @@
-var host = "http://localhost:8080/api/";
+
 
 var provinces_data = [];
 var cities = [];

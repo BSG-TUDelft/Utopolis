@@ -1,4 +1,3 @@
-var host = "http://localhost:8080/api/";
 
 function requestHistory(){
 	 var request = $.ajax({

@@ -1,4 +1,4 @@
-var host = "http://localhost:8080/api/";
+
 function requestPlayers() {
     var request = $.ajax({
         url: host + 'player/list',
