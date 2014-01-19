@@ -33,6 +33,7 @@
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Medals"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Province"/>
 		<mapping class="nl.tudelft.bsg.utopolis.server.model.Message"/>
+		<mapping class="nl.tudelft.bsg.utopolis.server.model.Resources"/>
 		
 	</session-factory>
 </hibernate-configuration>
