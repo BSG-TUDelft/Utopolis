@@ -2,9 +2,18 @@ package nl.tudelft.bsg.utopolis.server.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Resources implements Serializable {
 	private static final long serialVersionUID = 3141736239170151879L;
 
+	@Id
+	@GeneratedValue
+	private int id;
+	
 	private float food;
 	private float metal;
 	private float stone;
