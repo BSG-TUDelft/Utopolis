@@ -337,23 +337,47 @@ var Gui = {
 				Gui.leaderboard.ajaxSpinner.show();
 
 				var request = $.ajax({
-					url: host + 'city/list',
+					url: host + 'province/list',
 					type: 'GET'
 				});
 
 				request.done(function (response, textStatus, jqXHR){
-					var data = [];
-					for(var i = 0; i < response.cities.length; i++){
-						var city = response.cities[i];
-						data.push([
-							Main.city.name + " (" + Main.city.player.name + ")",
-							Main.city.kpi.foreignRelations,
-							Main.city.kpi.happiness,
-							Main.city.kpi.population,
-							Main.city.kpi.technology,
-							Main.city.kpi.wealth,
-							getMedals(Main.city.medals)
+					var citiesData = [],
+						provinceData = [];
+
+					for(var i = 0; i < response.provinces.length; i++){
+						var province = response.provinces[i];
+
+						if(province.id == Main.city.provinceId){
+							// This city belongs to the same province as the current player
+							$.each(province.cities, function(index, city){
+								citiesData.push([
+									city.name + " (" + city.player.name + ")",
+									city.kpi.foreignRelations,
+									city.kpi.happiness,
+									city.kpi.population,
+									city.kpi.technology,
+									city.kpi.wealth,
+									getMedals(city.medals)
+								]);
+							});
+						}
+						provinceData.push([
+							province.name + ((province.id == Main.city.provinceId) ? " (your province)" : ""),
+							calculateAverage(province.cities, "foreignRelations"),
+							calculateAverage(province.cities, "happiness"),
+							calculateAverage(province.cities, "population"),
+							calculateAverage(province.cities, "technology"),
+							calculateAverage(province.cities, "wealth")
 						]);
+					}
+
+					function calculateAverage(cities, kpi){
+						var sum = 0;
+						$.each(cities, function(index, city){
+							sum += city.kpi[kpi];
+						});
+						return Math.round(sum / cities.length * 10000) / 10000;
 					}
 
 					function getMedals(medals) {
@@ -369,8 +393,9 @@ var Gui = {
 							gold3: medals.quest8Completed*/
 						};
 					};
+
 					Gui.leaderboard.ajaxSpinner.hide();
-					Gui.leaderboard.update(data);
+					Gui.leaderboard.update(citiesData, provinceData);
 				});
 
 				request.fail(function (jqXHR, textStatus, errorThrown){
@@ -395,13 +420,13 @@ var Gui = {
 						url: host + "message/" + Main.city.player.id + "/list",
 						type: 'GET'
 					});
-				}
-				var getPlayerData = function (){
+				};
+				var getPlayerData = function () {
 					return $.ajax({
 						url: host + "player/list",
 						type: 'GET'
 					});
-				}
+				};
 
 				// Send off two requests, one to get the inbox data, the other to get player data
 				$.when(getInboxData(), getPlayerData()).done(function(inboxResult, playerResult){

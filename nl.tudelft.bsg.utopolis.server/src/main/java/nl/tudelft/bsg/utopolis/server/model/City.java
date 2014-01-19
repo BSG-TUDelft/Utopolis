@@ -6,13 +6,22 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 
 @Entity
+//@XmlRootElement
 public class City implements Serializable {
 	private static final long serialVersionUID = -4755608870513621756L;
 	
@@ -28,7 +37,12 @@ public class City implements Serializable {
 	private String color;
 	@Enumerated
 	private Race race;
-
+	private int provinceId;
+	 
+    /*@XmlElement
+	@XmlInverseReference(mappedBy="cities")
+ 	private Province province;*/
+	
 	// Leaderboard
 	@OneToOne(cascade={CascadeType.ALL})
 	private KeyPerformanceIndicators kpi;
@@ -106,5 +120,22 @@ public class City implements Serializable {
 	public void setMedals(Medals medals) {
 		this.medals = medals;
 	}
-	
+
+	public int getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(int provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	/*public Province getProvince() {
+		return province;
+	}
+
+	public void setProvince(Province province) {
+		this.province = province;
+	}*/
+
+
 }

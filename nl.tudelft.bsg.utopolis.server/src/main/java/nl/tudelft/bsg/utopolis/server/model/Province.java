@@ -5,9 +5,14 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlID;
+
+import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 @Entity
 public class Province implements Serializable {
@@ -17,6 +22,8 @@ public class Province implements Serializable {
 	@GeneratedValue
 	private int id;
 	@OneToMany(cascade={CascadeType.ALL})
+	@XmlElement
+    @XmlInverseReference(mappedBy="province")
 	private List<City> cities;
 	private String name;
 

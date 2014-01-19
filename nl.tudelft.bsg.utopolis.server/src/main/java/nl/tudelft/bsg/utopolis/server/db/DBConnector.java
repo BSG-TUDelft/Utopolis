@@ -122,6 +122,19 @@ public class DBConnector {
 				.list();
 	}
 	
+	public City getCityByPlayerId(int playerId) {
+		City city = (City) getSession()
+			.createQuery("from City where player_id = :player_id")
+			.setParameter("player_id", playerId)
+			.uniqueResult();
+		
+		// This is extremely lame but if you can tell me how to do bidirectional relationship I'd be happy to know!
+		// this describes the situation I think but I can't make it work http://stackoverflow.com/questions/14844691/how-can-i-get-moxy-to-assign-a-parent-when-unmarshalling-a-child-with-an-xmlinve
+		city.setProvinceId(getProvinceForCity(city).getId());
+
+		return city;
+	}
+
 	/** Attemps to find a player in the database that has nick and password of given player. Only password is case sensitive
 	 * @param nick
 	 * @param password
@@ -132,24 +145,31 @@ public class DBConnector {
 			.setParameter("nick", nick)
 			.uniqueResult();
 		// Check pwd seperately because SQL is case insensitive
-		if(player.getPassword().equals(password)){
+		if(player != null && player.getPassword().equals(password)){
 			return player;
 		}
 		return null;
 	}
-	
-	public City getCityByPlayerId(int playerId) {
-		return (City) getSession()
-			.createQuery("from City where player_id = :player_id")
-			.setParameter("player_id", playerId)
-			.uniqueResult();
+		
+	private Province getProvinceForCity(City city) {
+		List<Province> provinces = getProvinces();
+		for(Province province : provinces){
+			if(province.getCities().contains(city))
+				return province;
+		}
+		return null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<City> getCities() {
-		return getSession()
-				.createQuery("from City")
-				.list();
+		List<City> cityList = getSession()
+			.createQuery("from City")
+			.list();
+		for(City city : cityList){
+			city.setProvinceId(getProvinceForCity(city).getId());
+		}
+		
+		return cityList;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -203,7 +223,7 @@ public class DBConnector {
 				.setParameter("id", id)
 				.uniqueResult();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Province> getProvinces() {
 		return getSession()
