@@ -1,6 +1,5 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.core.Context;
