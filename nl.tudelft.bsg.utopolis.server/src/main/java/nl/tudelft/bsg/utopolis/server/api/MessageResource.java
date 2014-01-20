@@ -2,7 +2,6 @@ package nl.tudelft.bsg.utopolis.server.api;
 
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -39,13 +38,9 @@ public class MessageResource extends Resource {
 	}
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createMessage(Message m){
-		int playerId = m.getPlayer().getId();
-		Player player = DBConnector.get().getPlayer(playerId);
-		player.addMessage(m);
-		DBConnector.get().save(player);
+		DBConnector.get().save(m);
 		return buildResponse(m);		
 	}
 

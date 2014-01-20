@@ -15,6 +15,13 @@ a {
 	display: flex;
 }
 
+.select-style {
+    position: relative;
+    font-size: 90%;
+}
+
+
+
 /**********************INDEX*****************/
 #root {
 	max-width: 100%;

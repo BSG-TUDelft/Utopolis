@@ -52,7 +52,7 @@
 						</a>
 					</div>
 					<div class="menu-tab">
-						<a id="set-up" href="#"> 
+						<a id="set-up" href="#" onclick="getProvinces();populateWithCities();"> 
 							<span class="tab-icon">
 								<i class="fa fa-gears fa-2x" style="margin: 5%;"></i>
 							</span>
@@ -107,7 +107,7 @@
 										</div>
 										<div id="add-city-save">
 											<span class="tab-icon">
-												<i id="button_c" class="fa fa-check-circle fa-2x" onclick="createCity()"></i>
+												<i id="button_c" class="fa fa-check-circle fa-2x" onclick="createCity();selectProvince();"></i>
 											</span>
 										</div>
 									</div>
@@ -141,21 +141,22 @@
 					<div id="build-city-province-area">
 						<h3>Set cities to a province</h3>
 						<div class="lineH"></div>
-						<div id="form-content form-description">
+						<div id="form-select-province">
 							<h5>1. Select a province from the list</h5>
 							<div class="flex">
 								<div id="select-province-list">
-									<select id="provinces-list">
+									<select id="provinces-list" class="select-style">
 									</select>
 								</div>
 								<div id="select-province-submit">
 									<span class="tab-icon">
-										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
+										<i id="button_province_s" class="fa fa-check-circle fa-2x button-submit" onclick="selectProvince()"></i>
 									</span>
 								</div>
 							</div>
 						</div>
 						<h5>2. Drag the cities you want to be in the selected province, from the left list into the right one</h5>
+						<h6>Tip: Choose province again if any city is missing!</h6>
 						<div class="drag-content-wrapper">
 							<div class="drag-left">
 								<div id="cities-without-province" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -167,35 +168,21 @@
 								</div>
 							</div>
 						</div>
+						<div id="submit-cities-to-province" class="flex">
+							<h5>3. Save province</h5>
+							<span class="tab-icon">
+								<i id="button" class="fa fa-check-circle fa-2x button-submit" onclick="updateProvince()"></i>
+							</span>
+						</div>
 					</div>
 					<div id="build-player-city-area">
-						<h3>Set players to a city</h3>
+						<h3>Select a player to each city</h3>
 						<div class="lineH"></div>
-						<div id="form-content form-description">
-							<h5>1. Select a city from the list</h5>
-							<div class="flex">
-								<div id="select-city-list">
-									<select id="cities-list">
-									</select>
-								</div>
-								<div id="select-city-submit">
-									<span class="tab-icon">
-										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="drag-content-wrapper">
-							<div class="drag-left"></div>
-							<div class="drag-right"></div>
+						<div id="cities-list" >
 						</div>
 					</div>
 				</div>
 				<div id="status-page">
-					<div id="global-view">
-						<h3>Global overview</h3>
-						<div class="lineH"></div>
-					</div>
 					<div id="history">
 						<h3>Assignments history</h3>
 						<div class="lineH"></div>

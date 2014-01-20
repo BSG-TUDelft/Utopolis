@@ -33,16 +33,16 @@ public class ProvinceResource extends Resource {
 		return buildResponse(p);
 	}
 	
+	@OPTIONS
+	public Response createProvinceOptions() {
+		return optionsResponse();
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateProvince(Province p) {
 		DBConnector.get().save(p);
 		return simpleResponse(200);
-	}
-	
-	@OPTIONS
-	public Response createProvinceOptions() {
-		return optionsResponse();
 	}
 	
 	@GET

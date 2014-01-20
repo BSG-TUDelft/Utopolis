@@ -27,6 +27,7 @@
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
 	backface-visibility: hidden;
+	text-align: center;
 }
 
 #history #itens-area .row {
@@ -42,8 +43,9 @@
 	-webkit-transform-style: preserve-3d;
 	-moz-transform-style: preserve-3d;
 	transform-style: preserve-3d;
-	width: 33.3333333%;
+	width: 40%;
 	margin: 2%;
+	display: inline-block;
 }
 
 #history #itens-area #item > h5 {
@@ -93,6 +95,10 @@
 	text-align: justify;
 	margin-left: 5%;
 	margin-right: 5%;
+}
+
+#history #itens-area #item .item-content .b{
+	color: #FFFFFF;
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1800px) {

@@ -3,8 +3,8 @@ package nl.tudelft.bsg.utopolis.server.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,9 +24,6 @@ public class Message implements Serializable{
 	private Date openedDate;
 	private int assignNum;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="player_id", insertable=false, updatable=false)
-	private Player player;
 	
 	public int getId() {
 		return id;
@@ -36,14 +33,6 @@ public class Message implements Serializable{
 		this.id = messageId;
 	}
 	
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
 	public String getMessage() {
 		return message;
 	}
