@@ -53,6 +53,7 @@ public class CityResource extends Resource {
 		return buildResponse(new CityList(DBConnector.get().getCities()));
 	}
 	
+
 	@OPTIONS
 	@Path("/{playerId}/structure")
 	public Response createStructureOptions() {

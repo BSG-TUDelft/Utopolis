@@ -65,7 +65,7 @@ function createPlayer(){
 
     request.done(function(response, textStatus, jqXHR){
         console.log("SERVER RESPONSE: player created!");
-        getPlayers();
+        populateWithCities();
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -109,8 +109,8 @@ function createCity(){
 
     request.done(function(response, textStatus, jqXHR){
         console.log("SERVER RESPONSE: city created!");
-        populateWithCitiesNoProvince();
-
+        getCities();
+        populateWithProvinces();
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -125,6 +125,7 @@ function createCity(){
 function getProvinces(){
     var request = $.ajax({
         url: host + 'province/list',
+        dataType: 'json',
         type: 'GET'
     });
 
@@ -149,7 +150,9 @@ function populateWithProvinces(){
     {
        $("#provinces-list").append("<option value='" + provinces_data[i].name + "'>" + provinces_data[i].name + "</option>");
     }
-	selectProvince();
+    getCities();
+	populateWithCitiesFromProvince();
+    populateWithCitiesNoProvince();
 }
 
 function selectProvince(){
@@ -200,10 +203,9 @@ function populateWithCitiesNoProvince(){
             testProvinceCities(all_cities[j]);
         }
         $("#cities-without-province").empty();
-        populateWithCities();
         if(cities.length > 0){
             for(var i=0; i<cities.length; i++){
-                $("#cities-without-province").append("<div id='city-no-province" + i + "' class='city-drag-item' draggable='true' ondragstart='drag(event)' value='" + cities[i].name + "''>"
+                $("#cities-without-province").append("<div id='city-no-province" + i + "' class='city-drag-item' draggable='true' ondragstart='drag(event)' value='" + cities[i].name + "'>"
                     + "<span class='tab-icon'><h4>" + cities[i].name + "</h4></span></div>");
             }
         }
@@ -213,6 +215,7 @@ function populateWithCitiesNoProvince(){
 function getCities(){
     var request = $.ajax({
         url: host + 'city/list',
+        dataType: 'json',
         type: 'GET'
     });
 
@@ -220,7 +223,7 @@ function getCities(){
         console.log("SERVER RESPONSE: cities retrieved successfully");
         results = response;
         all_cities = results.cities;
-       
+        populateWithCities();
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -244,7 +247,8 @@ function updateProvince() {
             }
         }
         
-        for(var i=0; i<$('#province-cities-list').length; i++){
+        console.log(all_cities.length);
+        for(var i=0; i<$('#province-cities-list').children().length; i++){
             if($('#province-cities-list').children('#city-no-province'+i)){
                 var city = $('#province-cities-list').children('#city-no-province'+i).text();
                 for(var j=0; j<cities.length; j++){
@@ -255,25 +259,36 @@ function updateProvince() {
             }
         }
 
-    var request = $.ajax({
-        url: host + 'province',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(province),
-    });
+       for(var z=0; z<all_cities.length; z++){
+            if($('#cities-without-province').children('#city-province'+z)){
+                var name = $('#cities-without-province').children('#city-province'+z).text();
+                for(var w=0; w<province.cities.length; w++){
+                    if(name == province.cities[w].name){
+                        province.cities.splice(w, 1);
+                    }
+                } 
+            }
+        }
 
-    request.done(function(response, textStatus, jqXHR){
-        console.log("SERVER RESPONSE: province updated!");
-    });
+        var request = $.ajax({
+            url: host + 'province',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(province),
+        });
 
-    request.fail(function ( jqXHR, textStatus, errorThrown ){
-        console.log(n);
-        console.error(
-            "The following error occured: " +
-            textStatus, errorThrown
-        );
-        alert("Something went wrong updating Province! Try again.");
-    });
+        request.done(function(response, textStatus, jqXHR){
+            console.log("SERVER RESPONSE: province updated!");
+        });
+
+        request.fail(function ( jqXHR, textStatus, errorThrown ){
+            console.log(n);
+            console.error(
+                "The following error occured: " +
+                textStatus, errorThrown
+            );
+            alert("Something went wrong updating Province! Try again.");
+        });
 
     }
 }
@@ -281,20 +296,23 @@ function updateProvince() {
 function populateWithCities(){
 	
     $("#cities-list").empty();
-    console.log(cities.length);
-    if(cities.length > 0) {       
-	    for (var i=0;i<cities.length;i++)
+    if(all_cities.length > 0) { 
+        var tmp = [];   
+	    for (var i=0;i<all_cities.length;i++)
 	    {
-             $("#cities-list").append('<div class="flex"><div id="city"><a id="'+i+'" value="'
-                + cities[i].name + '">'
-                + cities[i].name +'</a></div>'
-                + '<div id="players_list"><select id="p-list'+i+'"></select></div>'
-                + '</div>');
+            if(!all_cities[i].player){
+                 $("#cities-list").append('<div class="row"><div id="c-pos' + i + '" class="city"><a value="'
+                    + all_cities[i].name + '">'
+                    + all_cities[i].name +'</a></div>'
+                    + '<div class="players-list"><select id="s-pos' + i + '" class="p-list select-style"></select></div>'
+                    + '<div class="submit-cities-to-players"><span class="tab-icon">'
+                    + '<i class="fa fa-check-circle fa-2x button-submit" onclick="setPlayerToCity(' + i + ')"></i></span></div>'
+                    + '</div>');
+
+                 tmp.push(all_cities[i]);
+            }
         }
-        getPlayers();
-        
-        $("#cities-list").append('<div id="submit-cities-to-players"><span class="tab-icon">'
-                + '<i id="button" class="fa fa-check-circle fa-2x" onclick=""></i></span></div>');
+        getPlayers(tmp);
     }   
 }
 
@@ -303,7 +321,6 @@ function testPlayerNoCity( player ){
     for(var a=0; a<all_cities.length; a++){
         if(all_cities[a].player){
             if(player.name == all_cities[a].player.name){
-                console.log(player.name + " | " + all_cities[a].player.name);
                 add = false;
                 break;
             }
@@ -314,19 +331,19 @@ function testPlayerNoCity( player ){
 }
 
 
-function getPlayers(){
+function getPlayers( cts ){
     all_players = [];
 
     var request = $.ajax({
         url: host + 'player/list',
+        dataType: 'json',
         type: 'GET'
     });
 
     request.done(function ( response, textStatus, jqXHR ){
         console.log("SERVER RESPONSE: players retrieved successfully");
-        console.log(response.players.length);
         all_players = response.players;
-        populateWithPlayersNoCity();
+        populateWithPlayersNoCity(cts);
     });
 
     request.fail(function ( jqXHR, textStatus, errorThrown ){
@@ -339,20 +356,64 @@ function getPlayers(){
   
 }
 
-function populateWithPlayersNoCity() {
+function populateWithPlayersNoCity( cts ) {
     players = [];
-    for(var j=0; j<cities.length; j++){
-        $("#p-list"+j).empty();
+    for(var j=0; j<cts.length; j++){
+        $(".p-list").empty();
         if(all_players.length > 0) {       
             for (var i=0;i<all_players.length;i++){
                 testPlayerNoCity(all_players[i]);
             }
             if(players.length > 0){
                 for(var z=0; z<players.length; z++){
-                    $("#p-list"+j).append("<option value='" + players[z].name + "'>" + players[z].name + "</option>");
+                    if(!$(".p-list option[value='" + players[z].name + "']").text())
+                        $(".p-list").append("<option value='" + players[z].name + "'>" + players[z].name + "</option>");
                 }
             }
         }  
         
     }
+}
+
+function setPlayerToCity(pos){
+    var city_name = $("#c-pos"+pos).text();
+    var player_name =  $('#s-pos' + pos).find(":selected").text();
+    var player;
+    var city;
+
+    for(var j=0; j<all_players.length; j++){
+        if(player_name == all_players[j].name){
+            player = all_players[j];
+        }
+    }
+
+    for(var i=0; i<all_cities.length; i++){
+        if(city_name == all_cities[i].name){
+            city = all_cities[i];
+        }
+    }
+    
+    city.player = player;
+
+     var request = $.ajax({
+        url: host + 'city',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(city),
+    });
+
+    request.done(function(response, textStatus, jqXHR){
+        console.log("SERVER RESPONSE: city updated!");
+        populateWithCities();
+    });
+
+    request.fail(function ( jqXHR, textStatus, errorThrown ){
+        console.log(n);
+        console.error(
+            "The following error occured: " +
+            textStatus, errorThrown
+        );
+        alert("Something went wrong updating City! Try again.");
+    });
+
 }
