@@ -23,7 +23,7 @@ public class Message implements Serializable{
 	private Date entryDate;
 	private Date openedDate;
 	private int assignNum;
-	
+	private int playerId;
 	
 	public int getId() {
 		return id;
@@ -79,6 +79,14 @@ public class Message implements Serializable{
 
 	public void setSender(String sender) {
 		this.sender = sender;
+	}
+
+	public int getPlayerId() {
+		return playerId;
+	}
+
+	public void setPlayerId(int playerId) {
+		this.playerId = playerId;
 	}
 	
 }
