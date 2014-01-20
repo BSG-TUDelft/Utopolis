@@ -150,7 +150,7 @@
 								</div>
 								<div id="select-province-submit">
 									<span class="tab-icon">
-										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
+										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick="selectProvince()"></i>
 									</span>
 								</div>
 							</div>
@@ -167,22 +167,18 @@
 								</div>
 							</div>
 						</div>
+						<div id="submit-cities-to-province" class="flex">
+							<h5>Save province </h5>
+							<span class="tab-icon">
+								<i id="button" class="fa fa-check-circle fa-2x" onclick="updateProvince()"></i>
+							</span>
+						</div>
 					</div>
 					<div id="build-player-city-area">
-						<h3>Set players to a city</h3>
+						<h3>Select a player to each city</h3>
 						<div class="lineH"></div>
 						<div id="form-content form-description">
-							<h5>1. Select a city from the list</h5>
-							<div class="flex">
-								<div id="select-city-list">
-									<select id="cities-list">
-									</select>
-								</div>
-								<div id="select-city-submit">
-									<span class="tab-icon">
-										<i id="button_province_s" class="fa fa-check-circle fa-2x" onclick=""></i>
-									</span>
-								</div>
+							<div id="cities-list" class="flex">
 							</div>
 						</div>
 						<div class="drag-content-wrapper">
@@ -192,10 +188,6 @@
 					</div>
 				</div>
 				<div id="status-page">
-					<div id="global-view">
-						<h3>Global overview</h3>
-						<div class="lineH"></div>
-					</div>
 					<div id="history">
 						<h3>Assignments history</h3>
 						<div class="lineH"></div>

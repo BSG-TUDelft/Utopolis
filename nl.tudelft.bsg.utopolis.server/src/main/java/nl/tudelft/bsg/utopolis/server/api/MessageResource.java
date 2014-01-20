@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -36,16 +37,12 @@ public class MessageResource extends Resource {
 		return buildResponse(result);
 	}
 	
-	/*@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createMessage(Message m){
-		int playerId = m.getPlayer().getId();
-		Player player = DBConnector.get().getPlayer(playerId);
-		player.addMessage(m);
-		DBConnector.get().save(player);
+		DBConnector.get().save(m);
 		return buildResponse(m);		
-	}*/
+	}
 
 	@DELETE
 	@Path("/{messageId}")

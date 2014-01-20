@@ -27,6 +27,7 @@
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
 	backface-visibility: hidden;
+	text-align: center;
 }
 
 #history #itens-area .row {
@@ -42,7 +43,7 @@
 	-webkit-transform-style: preserve-3d;
 	-moz-transform-style: preserve-3d;
 	transform-style: preserve-3d;
-	width: 33.3333333%;
+	width: 40%;
 	margin: 2%;
 	display: inline-block;
 }
