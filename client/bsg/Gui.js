@@ -472,7 +472,7 @@ var Gui = {
 			var message = {
 				entryDate: new Date(),
 				message: msgInfo.message,
-				player: msgInfo.to,
+				playerId: msgInfo.to.id,
 				assignNum: 0,
 				subject: msgInfo.subject,
 				sender: Main.city.player.nick

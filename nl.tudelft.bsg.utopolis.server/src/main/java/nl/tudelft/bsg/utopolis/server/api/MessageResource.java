@@ -40,9 +40,11 @@ public class MessageResource extends Resource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createMessage(Message m){
-		DBConnector.get().save(m);
-		return buildResponse(m);		
-	}
+        Player player = DBConnector.get().getPlayer(m.getPlayerId());
+        player.addMessage(m);
+        DBConnector.get().save(player);
+        return buildResponse(m);  
+   	}
 
 	@DELETE
 	@Path("/{messageId}")
