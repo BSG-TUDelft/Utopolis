@@ -167,7 +167,10 @@ public class DBConnector {
 			.createQuery("from City")
 			.list();
 		for(City city : cityList){
-			city.setProvinceId(getProvinceForCity(city).getId());
+			Province province = getProvinceForCity(city);
+			if(province != null){
+				city.setProvinceId(province.getId());
+			}
 		}
 		
 		return cityList;
