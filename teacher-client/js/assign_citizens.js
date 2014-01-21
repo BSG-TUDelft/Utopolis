@@ -94,7 +94,7 @@ function saveMessage( player, numCitizens, msgText ) {
     var struct = {
         entryDate: message.date,
         message: message.msg,
-        player: message.player,
+        playerId: message.player.id,
         assignNum: message.assignNum,
         subject: message.subject,
         sender: message.sender

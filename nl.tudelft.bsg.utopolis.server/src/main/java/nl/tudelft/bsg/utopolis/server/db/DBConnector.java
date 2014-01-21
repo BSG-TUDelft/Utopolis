@@ -123,6 +123,15 @@ public class DBConnector {
 				.list();
 	}
 	
+	
+	public City getCityById(int cityId) {
+		City city = (City) getSession()
+			.createQuery("from City where id = :city_id")
+			.setParameter("city_id", cityId)
+			.uniqueResult();
+		return city;
+	}	
+	
 	public City getCityByPlayerId(int playerId) {
 		City city = (City) getSession()
 			.createQuery("from City where player_id = :player_id")
