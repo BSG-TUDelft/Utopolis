@@ -24,11 +24,12 @@ public class PollResource extends Resource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pollCity(City c) {
+		long then = c.getLastUpdate();
 		DBConnector.get().save(c);
 		long now = new Date().getTime();
 
 		for (Structure s : c.getStructures()) {
-			if (now - c.getLastUpdate() >= UPDATE_TIME) {
+			if (now - then >= UPDATE_TIME) {
 				Resources generates = StructureProperties.getProperties(s)
 						.getGenerates();
 				c.getResources().add(generates);
