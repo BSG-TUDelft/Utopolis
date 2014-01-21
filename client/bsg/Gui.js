@@ -13,7 +13,7 @@ var Gui = {
 	questOverview: null,		// Quest overview popup
 	console: null,				// Console to display text
 	timeLastPoll: $.now(),		// Time of last poll
-	pollInterval: 2000,			// Interval of polling (in ms)
+	pollInterval: 10000,			// Interval of polling (in ms)
 
 	// METHODS
 	initGui: function (menuData, topbarData){
@@ -531,30 +531,34 @@ var Gui = {
 		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
 			Gui.timeLastPoll = $.now();
 
-			var request = $.ajax({
-				url: host + 'poll',
-				type: 'PUT',
-				contentType: 'application/json',
-				data: JSON.stringify(Main.city)
-			});
+			// var request = $.ajax({
+			// 	url: host + 'poll',
+			// 	type: 'PUT',
+			// 	contentType: 'application/json',
+			// 	data: JSON.stringify(Main.city)
+			// });
 
-			request.done(function(response, textStatus, jqXHR){
-				Main.city = response;
-				Gui.updatePlayerResources ( Main.city.resources);
+			// request.done(function(response, textStatus, jqXHR){
+			// 	Main.city = response;
+			// 	Gui.updatePlayerResources ( Main.city.resources);
 
-			});
+			// });
 
-			request.fail(function (jqXHR, textStatus, errorThrown){
-                    console.error(
-                        "****** The following error occured: " +
-                            textStatus, errorThrown
-                    );
-                });
+			// request.fail(function (jqXHR, textStatus, errorThrown){
+		   //                  console.error(
+		   //                      "****** The following error occured: " +
+		   //                          textStatus, errorThrown
+		   //                  );
+   		   //              });
 
-			//res.wood += .75;
-			//res.stone += .5;
-			//res.metal += .25;
-			//res.food += 1;
+			var res = Main.city.resources;
+
+			res.wood += .75;
+			res.stone += .5;
+			res.metal += .25;
+			res.food += 1;
+
+			Gui.updatePlayerResources ( res );
 
 			// This should come from the poll
 			Gui.resources.citizens = getNumIdleCitizens();
