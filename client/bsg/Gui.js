@@ -531,19 +531,17 @@ var Gui = {
 		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
 			Gui.timeLastPoll = $.now();
 
-			
-			Gui.updatePlayerResources ( { food: 23, wood: 12, metal: 16 });
-
 			var request = $.ajax({
 				url: host + 'poll',
 				type: 'PUT',
 				contentType: 'application/json',
-				data: JSON.stringify(message)
+				data: JSON.stringify(Main.city)
 			});
 
 			request.done(function(response, textStatus, jqXHR){
-				Gui.console.printText("UPDATE HAPPENED", null);
-				console.log("TESTTTTTTTTT");
+				Main.city = response;
+				Gui.updatePlayerResources ( Main.city.resources);
+
 			});
 
 			request.fail(function (jqXHR, textStatus, errorThrown){
