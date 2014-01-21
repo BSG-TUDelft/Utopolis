@@ -6,18 +6,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 
 @Entity
@@ -38,6 +30,8 @@ public class City implements Serializable {
 	@Enumerated
 	private Race race;
 	private int provinceId;
+	
+	private long lastUpdate;
 	 
     /*@XmlElement
 	@XmlInverseReference(mappedBy="cities")
@@ -48,6 +42,10 @@ public class City implements Serializable {
 	private KeyPerformanceIndicators kpi;
 	@OneToOne(cascade={CascadeType.ALL})
 	private Medals medals;
+	
+	// Resources
+	@OneToOne(cascade={CascadeType.ALL})
+	private Resources resources;
 	
 	public int getId() {
 		return id;
@@ -129,6 +127,22 @@ public class City implements Serializable {
 		this.provinceId = provinceId;
 	}
 
+	public Resources getResources() {
+		return resources;
+	}
+
+	public void setResources(Resources resources) {
+		this.resources = resources;
+	}
+
+	public long getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(long lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
 	/*public Province getProvince() {
 		return province;
 	}
@@ -136,6 +150,5 @@ public class City implements Serializable {
 	public void setProvince(Province province) {
 		this.province = province;
 	}*/
-
 
 }

@@ -11,6 +11,7 @@ import nl.tudelft.bsg.utopolis.server.model.Message;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.Province;
 import nl.tudelft.bsg.utopolis.server.model.Race;
+import nl.tudelft.bsg.utopolis.server.model.Resources;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 public class DBBootstrap {
@@ -121,6 +122,8 @@ public class DBBootstrap {
 				(float) (Math.random() * 30f), 
 				(float) (Math.random() * 30f));
 		city.setKpi(kpi);			
+		
+		city.setResources(new Resources());
 		
 		Medals medals = new Medals();
 		for(int i = 0; i < Math.random() * 6; i++){

@@ -531,7 +531,27 @@ var Gui = {
 		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
 			Gui.timeLastPoll = $.now();
 
-			// POLL THAT MOFO !
+			
+			Gui.updatePlayerResources ( { food: 23, wood: 12, metal: 16 });
+
+			var request = $.ajax({
+				url: host + 'poll',
+				type: 'PUT',
+				contentType: 'application/json',
+				data: JSON.stringify(message)
+			});
+
+			request.done(function(response, textStatus, jqXHR){
+				Gui.console.printText("UPDATE HAPPENED", null);
+				console.log("TESTTTTTTTTT");
+			});
+
+			request.fail(function (jqXHR, textStatus, errorThrown){
+                    console.error(
+                        "****** The following error occured: " +
+                            textStatus, errorThrown
+                    );
+                });
 
 			//res.wood += .75;
 			//res.stone += .5;

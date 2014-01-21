@@ -76,6 +76,7 @@ public class DBConnector {
 			transaction.commit();
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
+			e.printStackTrace();
 			if (transaction != null)
 				transaction.rollback();
 		} finally {
