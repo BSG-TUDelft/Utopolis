@@ -26,20 +26,21 @@ public class PollResource extends Resource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pollCity(City c) {
 		long then = c.getLastUpdate();
-		DBConnector.get().save(c);
 		long now = new Date().getTime();
 
-		for (Structure s : c.getStructures()) {
+		City city = DBConnector.get().getCityById(c.getId());
+		
+		for (Structure s : city.getStructures()) {
 			if (now - then >= UPDATE_TIME) {
-				Resources generates = StructureProperties.getProperties(s)
-						.getGenerates();
-				c.getResources().add(generates);
+				Resources generates = StructureProperties.getProperties(s).getGenerates();
+				city.getResources().add(generates);
 			}
 		}
 		
-		DBConnector.get().save(c);
-
-		return buildResponse(c);
+		city.getPlayer().getMessages();
+		//DBConnector.get().getPlayer()
+		DBConnector.get().save(city);
+		return buildResponse(city);
 	}
 
 	

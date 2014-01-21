@@ -41,8 +41,10 @@ public class MessageResource extends Resource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createMessage(Message m){
         Player player = DBConnector.get().getPlayer(m.getPlayerId());
-        player.addMessage(m);
-        DBConnector.get().save(player);
+        if(player != null){
+        	player.addMessage(m);
+            DBConnector.get().save(player);
+        }
         return buildResponse(m);  
    	}
 

@@ -80,7 +80,7 @@ var Gui = {
 						"* Wouter van den Heuvel (Media Technology Leiden University)\n" +
 						"* Mircea Voda (Computer Science TU Delft)\n" +
 						"\n\n" +
-						"Teacher: Rafa Bidarra\n" +
+						"Teacher: Rafael Bidarra\n" +
 						"Commisioned for: Martijn Koops\n" +
 						"\n\n\n" +
 						"Additional credits \n\n" +
