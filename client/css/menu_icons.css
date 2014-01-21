@@ -177,6 +177,18 @@
 .structureicon.gaia_aleppo_pine {
 	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);
 }
+.structureicon.gaia_mediterranean_cypress {
+	background-image: url(../images/ui/icons/gaia/mediterranean_cypress.png);
+}
+.structureicon.gaia_poplar {
+	background-image: url(../images/ui/icons/gaia/poplar.png);
+}
+.structureicon.gaia_european_beech {
+	background-image: url(../images/ui/icons/gaia/european_beech.png);
+}
+.structureicon.gaia_pine {
+	background-image: url(../images/ui/icons/gaia/pine.png);
+}
 .structureicon.flag {
 	background-image: url(../images/flag/flag-icon.png);
 }
