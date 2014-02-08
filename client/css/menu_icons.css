@@ -173,6 +173,41 @@
 	background-image: url(../images/ui/icons/pers/temple.png);
 }
 
+/*<-- Ptolemies icons -->*/
+.structureicon.ptol_house {
+	background-image: url(../images/ui/icons/ptol/house.png);
+}
+.structureicon.ptol_farm {
+	background-image: url(../images/ui/icons/ptol/farm.png);
+}
+.structureicon.ptol_corral {
+	background-image: url(../images/ui/icons/ptol/corral.png);
+}
+.structureicon.ptol_market {
+	background-image: url(../images/ui/icons/ptol/market.png);
+}
+.structureicon.ptol_storehouse {
+	background-image: url(../images/ui/icons/ptol/storehouse.png);
+}
+.structureicon.ptol_barracks {
+	background-image: url(../images/ui/icons/ptol/barracks.png);
+}
+.structureicon.ptol_blacksmith {
+	background-image: url(../images/ui/icons/ptol/blacksmith.png);
+}
+.structureicon.ptol_civic {
+	background-image: url(../images/ui/icons/ptol/civic.png);
+}
+.structureicon.ptol_tower {
+	background-image: url(../images/ui/icons/ptol/tower.png);
+}
+.structureicon.ptol_fortress {
+	background-image: url(../images/ui/icons/ptol/fortress.png);
+}
+.structureicon.ptol_temple {
+	background-image: url(../images/ui/icons/ptol/temple.png);
+}
+
 /*<-- Gaia icons -->*/
 .structureicon.gaia_aleppo_pine {
 	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);

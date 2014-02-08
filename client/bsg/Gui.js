@@ -551,12 +551,12 @@ var Gui = {
 		   //                  );
    		   //              });
 
-			var res = Main.city.resources;
+			var res = {};
 
-			res.wood += .75;
-			res.stone += .5;
-			res.metal += .25;
-			res.food += 1;
+			res.wood = 75;
+			res.stone = 5;
+			res.metal = 25;
+			res.food = 1;
 
 			Gui.updatePlayerResources ( res );
 
@@ -988,6 +988,65 @@ function initGui() {
 				iconCss: "pers_temple",
 				structureType: "temple"
 			}]
+		}, {
+			name: "Ptolemies",
+			tabCss: "tab_ptol",
+			structures: [{
+				name: "House",
+				structureId: "ptol_house",
+				iconCss: "ptol_house",
+				structureType: "house"
+			},{
+				name: "Farm",
+				structureId: "ptol_farm",
+				iconCss: "ptol_farm",
+				structureType: "farm"
+			},{
+				name: "Corral",
+				structureId: "ptol_corral",
+				iconCss: "ptol_corral",
+				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "ptol_market",
+				iconCss: "ptol_market",
+				structureType: "market"
+			},{
+				name: "Storehouse",
+				structureId: "ptol_storehouse",
+				iconCss: "ptol_storehouse",
+				structureType: "storehouse"
+			},{
+				name: "Barracks",
+				structureId: "ptol_barracks",
+				iconCss: "ptol_barracks",
+				structureType: "barracks"
+			},{
+				name: "Blacksmith",
+				structureId: "ptol_blacksmith",
+				iconCss: "ptol_blacksmith",
+				structureType: "blacksmith"
+			},{
+				name: "Civic center",
+				structureId: "ptol_civic",
+				iconCss: "ptol_civic",
+				structureType: "civic"
+			},{
+				name: "Tower",
+				structureId: "ptol_tower",
+				iconCss: "ptol_tower",
+				structureType: "tower"
+			},{
+				name: "Fortress",
+				structureId: "ptol_fortress",
+				iconCss: "ptol_fortress",
+				structureType: "fortress"
+			},{
+				name: "Temple",
+				structureId: "ptol_temple",
+				iconCss: "ptol_temple",
+				structureType: "temple"
+			}]
 			//}, {
 			//	name: "Mauryans",
 			//	tabCss: "tab_maur"
@@ -1302,24 +1361,6 @@ function initGui() {
 	};
 
 	Gui.initGui(menuData, topbarData);
-
-
-
-
-
-	/** Test / demo function */
-//	setInterval(function(){
-//		for(var i = 0; i < data.length; i++){
-//			data[i][1] += Math.floor(Math.random() * 10);
-//			data[i][2] += Math.floor(Math.random() * 10);
-//			data[i][3] += Math.floor(Math.random() * 10);
-//			data[i][4] += Math.floor(Math.random() * 10);
-//		}
-//		leaderboard.update(data);
-//	}, 1500);
-//
-//
-
 
 	var login = new Popup($("body"), { modal: true, noClose: true, noDrag: true });
 	login.el.addClass("login");
