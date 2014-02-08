@@ -1,6 +1,7 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.OPTIONS;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.City;
+import nl.tudelft.bsg.utopolis.server.model.Message;
 import nl.tudelft.bsg.utopolis.server.model.Resources;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 import nl.tudelft.bsg.utopolis.server.model.util.StructureProperties;
@@ -37,8 +39,6 @@ public class PollResource extends Resource {
 			}
 		}
 		
-		city.getPlayer().getMessages();
-		//DBConnector.get().getPlayer()
 		DBConnector.get().save(city);
 		return buildResponse(city);
 	}

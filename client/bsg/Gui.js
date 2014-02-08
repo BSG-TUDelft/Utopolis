@@ -531,34 +531,34 @@ var Gui = {
 		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
 			Gui.timeLastPoll = $.now();
 
-			// var request = $.ajax({
-			// 	url: host + 'poll',
-			// 	type: 'PUT',
-			// 	contentType: 'application/json',
-			// 	data: JSON.stringify(Main.city)
-			// });
+			var request = $.ajax({
+				url: host + 'poll',
+				type: 'PUT',
+				contentType: 'application/json',
+				data: JSON.stringify(Main.city)
+			});
 
-			// request.done(function(response, textStatus, jqXHR){
-			// 	Main.city = response;
-			// 	Gui.updatePlayerResources ( Main.city.resources);
+			request.done(function(response, textStatus, jqXHR){
+				Main.city = response;
+				Gui.updatePlayerResources ( Main.city.resources);
 
-			// });
+			});
 
-			// request.fail(function (jqXHR, textStatus, errorThrown){
-		   //                  console.error(
-		   //                      "****** The following error occured: " +
-		   //                          textStatus, errorThrown
-		   //                  );
-   		   //              });
+			request.fail(function (jqXHR, textStatus, errorThrown){
+		                     console.error(
+		                         "****** The following error occured: " +
+		                             textStatus, errorThrown
+		                     );
+   		                 });
 
-			var res = Main.city.resources;
+			/*var res = Main.city.resources;
 
 			res.wood += .75;
 			res.stone += .5;
 			res.metal += .25;
 			res.food += 1;
 
-			Gui.updatePlayerResources ( res );
+			Gui.updatePlayerResources ( res );*/
 
 			// This should come from the poll
 			Gui.resources.citizens = getNumIdleCitizens();
