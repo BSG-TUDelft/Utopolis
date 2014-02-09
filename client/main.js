@@ -138,6 +138,19 @@ function initModels(callback){
 		'pers_civic': 'structures/persians/civil_centre.xml',
 		'pers_temple': 'structures/persians/temple.xml',
 
+		// Load PTOLEMIES buildings
+		'ptol_house': 'structures/ptolemies/house.xml',
+		'ptol_farm': 'structures/ptolemies/farmstead.xml',
+		'ptol_corral': 'structures/ptolemies/corral.xml',
+		'ptol_market': 'structures/ptolemies/market.xml',
+		'ptol_storehouse': 'structures/ptolemies/storehouse.xml',
+		'ptol_barracks': 'structures/ptolemies/barracks.xml',
+		'ptol_blacksmith': 'structures/ptolemies/blacksmith.xml',
+		'ptol_fortress': 'structures/ptolemies/fortress.xml',
+		'ptol_tower': 'structures/ptolemies/defense_tower.xml',
+		'ptol_civic': 'structures/ptolemies/civic_centre.xml',
+		'ptol_temple': 'structures/ptolemies/temple.xml',
+
 		// Load GAIA
 		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
 		'gaia_european_beech' : 'flora/trees/european_beech.xml',
