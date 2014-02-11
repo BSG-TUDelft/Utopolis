@@ -1,6 +1,7 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var host = "http://localhost:8080/api/";
+//var host = (window.location.protocol || document.location.protocol) + "//localhost:8080/api/";
+var host =  "http://localhost:8080/api/";
 var Main = {
 	city: null,
 	clientOnlyMode: false
