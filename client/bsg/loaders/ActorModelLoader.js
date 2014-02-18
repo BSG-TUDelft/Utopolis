@@ -83,6 +83,15 @@ var ActorModelLoader = function () {
 		me.scene.scale.x = me.scene.scale.y = me.scene.scale.z = me.scale;
 		me.scene.updateMatrix();
 
+
+		var glowMesh = me.scene.clone();
+		var glowMaterial = new THREE.MeshBasicMaterial ();
+		setMaterial(glowMesh, glowMaterial);
+
+		//glowMesh.position = me.scene.position;
+		glowMesh.scale.multiplyScalar(2.5);
+		me.scene.add( glowMesh );
+
 		loadProps();
 
 
@@ -246,6 +255,28 @@ var ActorModelLoader = function () {
 			uniforms: uniforms,
 			vertexShader: document.getElementById('player_color_vertex_shader').textContent,
 			fragmentShader: document.getElementById('player_color_fragment_shader').textContent
+		});
+	}
+
+	function getGlowMaterial(){
+		// uniforms
+		var uniforms = {
+			"c":   { type: "f", value: 1.0 },
+			"p":   { type: "f", value: 1.4 },
+			glowColor: { type: "c", value: new THREE.Color(0xffff00) },
+			viewVector: { type: "v3", value: camera.position }
+		};
+
+		// attributes
+		var attributes = {	};
+
+		// material
+		return new THREE.ShaderMaterial({
+			attributes: attributes,
+			uniforms: uniforms,
+			side: THREE.BackSide,
+			vertexShader: document.getElementById('glow_vertex_shader').textContent,
+			fragmentShader: document.getElementById('glow_fragment_shader').textContent
 		});
 	}
 
