@@ -16,7 +16,7 @@ import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 public class DBBootstrap {
 	public static void init() {
-		if (DBConnector.get().getPlayers().size() == 0) {
+		/*if (DBConnector.get().getPlayers().size() == 0) {
 			
 			City[] cities1 = { 
 					generateCity("Athens", "Georgi", Race.hele),
@@ -67,7 +67,7 @@ public class DBBootstrap {
 			DBConnector.get().save(pr4);
 			
 			
-		}
+		}*/
 	}
 
 	private static City generateCity(String cityName, String playerName, Race race) {
