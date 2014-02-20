@@ -1,6 +1,7 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var host = "http://localhost:8080/api/";
+//var host = (window.location.protocol || document.location.protocol) + "//localhost:8080/api/";
+var host =  "http://localhost:8080/api/";
 var Main = {
 	city: null,
 	clientOnlyMode: false
@@ -159,6 +160,14 @@ function initModels(callback){
 		'gaia_pine' : 'flora/trees/pine.xml',
 		'gaia_poplar' : 'flora/trees/poplar.xml'
 	};
+
+	// Hack to increase loading time (for debugging). Add ?thin=true to URL
+	if(location.search.indexOf("thin=true") > -1){
+		var actors = {	"hele_house": "structures/hellenes/house_new.xml" };
+	}
+
+
+
 	var queue = 0;
 	for(var i in actors){
 		if(!actors.hasOwnProperty(i)) continue;
