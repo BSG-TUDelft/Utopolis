@@ -65,6 +65,13 @@ public class Resources implements Serializable {
 		this.culture += that.culture * citizens;
 		this.citizens += that.citizens * citizens;
 		this.societal += that.societal * citizens;
+
+		this.spirituality += that.spirituality * citizens;
+		this.safety += that.safety * citizens;
+		this.peace += that.peace * citizens;
+		this.diplomacy += that.diplomacy * citizens;
+		this.economy += that.economy * citizens;
+		this.trade += that.trade * citizens;
 	}
 
 	public float getFood() {
