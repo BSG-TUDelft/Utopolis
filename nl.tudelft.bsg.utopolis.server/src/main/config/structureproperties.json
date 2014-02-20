@@ -1,0 +1,220 @@
+{
+	"house": {
+		"cost": {
+			"wood": 1,
+			"food": 2
+		},
+		"requirements": {
+			"culture": 4,
+			"knowledge": 4
+		},
+		"buildTime": 30000,
+		"generates": {
+			"wood": 1,
+			"metal": 1,
+			"stone": 1,
+			"safety": 1
+		},
+		"citizenCap": 4
+	},
+	"farm": {
+		"cost": {
+			"metal": 2,
+			"food": 2
+		},
+		"requirements": {
+			"knowledge": 4,
+			"culture": 4
+		},
+		"buildTime": 30000,
+		"generates": {
+			"food": 2,
+			"health": 1,
+			"economy": 1,
+			"trade": 1
+		},
+		"citizenCap": 6
+	},
+	"corral": {
+		"cost": {
+			"metal": 4,
+			"food": 2
+		},
+		"requirements": {
+			"knowledge": 4,
+			"culture": 4
+		},
+		"buildTime": 30000,
+		"generates": {
+			"food": 4,
+			"health": 1,
+			"diplomacy": 1
+		},
+		"citizenCap": 6
+	},
+	"market": {
+		"cost": {
+			"metal": 100,
+			"stone": 100,
+			"wood": 1000,
+			"food": 5000
+		},
+		"requirements": {
+			"knowledge": 100,
+			"culture": 250
+		},
+		"buildTime": 30000,
+		"generates": {
+			"stone": 8,
+			"metal": 8,
+			"wood": 8,
+			"food": 16,
+			"knowledge": 10,
+			"culture": 10,
+			"diplomacy": 5,
+			"trade": 5,
+			"peace": 5
+		},
+		"citizenCap": 6
+	},
+	"storehouse": {
+		"cost": {
+			"wood": 50,
+			"stone": 50,
+			"metal": 50,
+			"food": 100
+		},
+		"requirements": {
+			"knowledge": 4,
+			"culture": 4
+		},
+		"buildTime": 120000,
+		"generates": {
+			"stone": 6,
+			"metal": 6,
+			"wood": 6,
+			"food": 8,
+			"economy": 3
+		},
+		"citizenCap": 8
+	},
+	"barracks": {
+		"cost": {
+			"wood": 100,
+			"food": 200
+		},
+		"requirements": {
+			"knowledge": 40,
+			"culture": 40
+		},
+		"buildTime": 120000,
+		"generates": {
+			"wood": 10,
+			"metal": 10,
+			"stone": 10,
+			"safety": 5,
+			"peace": 5
+		},
+		"citizenCap": 10
+	},
+	"blacksmith": {
+		"cost": {
+			"wood": 50,
+			"food": 100,
+			"metal": 25,
+			"stone": 25
+		},
+		"requirements": {},
+		"buildTime": 240000,
+		"generates": {
+			"knowledge": 5,
+			"stone": 5,
+			"safety": 1,
+			"diplomacy": 1
+		},
+		"citizenCap": 8
+	},
+	"tower": {
+		"cost": {
+			"stone": 25,
+			"metal": 25,
+			"food": 50
+		},
+		"requirementst": {
+			"knowledge": 25,
+			"culture": 25
+		},
+		"buildTime": 120000,
+		"generates": {
+			"stone": 15,
+			"knowledge": 5,
+			"safety": 2
+		},
+		"citizenCap": 10
+	},
+	"civic": {
+		"cost": {
+			"stone": 1,
+			"metal": 1,
+			"food": 2
+		},
+		"requirements": {
+			"knowledge": 4,
+			"culture": 4
+		},
+		"buildTime": 30000,
+		"generates": {
+			"knowledge": 1,
+			"culture": 1,
+			"peace": 1
+		},
+		"citizenCap": 20
+	},
+	"fortress": {
+		"cost": {
+			"stone": 500,
+			"metal": 200,
+			"food": 1000
+		},
+		"requirementst": {
+			"knowledge": 500,
+			"culture": 500
+		},
+		"buildTime": 300000,
+		"generates": {
+			"culture": 35,
+			"knowledge": 35,
+			"safety": 5,
+			"peace": 5,
+			"diplomacy": 5
+		},
+		"citizenCap": 25
+	},
+	"temple": {
+		"cost": {
+			"stone": 500,
+			"food": 5000
+		},
+		"requirements": {
+			"knowledge": 250,
+			"culture": 250
+		},
+		"buildTime": 600000,
+		"generates": {
+			"culture": 35,
+			"spirituality": 15
+		},
+		"citizenCap": 30
+	},
+	"flag": {
+		"cost": {
+			"stone": 0,
+			"food": 0
+		},
+		"requirements": {
+			"knowledge": 0,
+			"culture": 0
+		},
+		"buildTime": 100000
+	}
+}
