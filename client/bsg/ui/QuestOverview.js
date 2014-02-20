@@ -1,6 +1,6 @@
 "use strict";
 var QuestOverview = function(parent, data, config){
-	var me = this;
+	var scope = this;
 	this.config = config || {};
 	this.activeQuestContainer = $('<div></div>');
 	this.inActiveQuestContainer = $('<div></div>');
@@ -30,20 +30,18 @@ var QuestOverview = function(parent, data, config){
 
 	function update(data){
 		checkQuestsCompleted(data);
-		me.data = data;
+		scope.data = data;
 
-		if (!me.isVisible()) return;
-		me.inActiveQuestContainer.empty();
-		me.activeQuestContainer.empty();
+		if (!scope.isVisible()) return;
+		scope.inActiveQuestContainer.empty();
+		scope.activeQuestContainer.empty();
 		for(var i = 0; i < data.length; i++){
-			//var css = data[i].completed ? "completed" : "incomplete";
-			//var status = data[i].completed ? "Completed!" : "Active";
 			var questDescription = getQuestDescriptionById(data[i].id);
-			var container = data[i].completed ? me.inActiveQuestContainer : me.activeQuestContainer;
+			var container = data[i].completed ? scope.inActiveQuestContainer : scope.activeQuestContainer;
 			container.append('' +
-				'<div data-quest_id="' + data[i].id + '" data-quest_completed="' + data[i].completed + '">' +
+				'<div data-quest_id="' + data[i].id + '" data-quest_completed="' + data[i].completed + '" class="quest">' +
 					'<h2>Quest: ' + questDescription.title + '</h2>' +
-					//'<span class="status">' + status + '</span>' +
+					'<div class="banner ' + questDescription.bannerCss + '"></div>' +
 					questDescription.text +
 				'</div>'
 			);
@@ -56,26 +54,26 @@ var QuestOverview = function(parent, data, config){
 
 	/** Gets quest description by quest id */
 	function getQuestDescriptionById(id){
-		for(var i = 0; i < me.questDescriptions.length; i++){
-			if(me.questDescriptions[i].id == id)
-				return me.questDescriptions[i];
+		for(var i = 0; i < scope.questDescriptions.length; i++){
+			if(scope.questDescriptions[i].id == id)
+				return scope.questDescriptions[i];
 		}
 		return null;
 	}
 
 	/** */
 	function checkQuestsCompleted(newQuestData){
-		if(!me.data) return;
+		if(!scope.data) return;
 		for(var i = 0; i < newQuestData.length; i++){
-			if(newQuestData[i].completed && !me.data[i].completed){
+			if(newQuestData[i].completed && !scope.data[i].completed){
 				var questDescription = getQuestDescriptionById(newQuestData[i].id);
-				me.dispatchEvent( { type: QuestOverview.newQuestCompleted, questDescription: questDescription } );
+				scope.dispatchEvent( { type: QuestOverview.newQuestCompleted, questDescription: questDescription } );
 			}
 		}
 	}
 
-	me.el.hide();
-	me.update = update;
+	scope.el.hide();
+	scope.update = update;
 };
 QuestOverview.prototype = new Popup();
 
