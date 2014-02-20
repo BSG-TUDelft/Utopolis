@@ -1,5 +1,13 @@
 package nl.tudelft.bsg.utopolis.server.model.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+
 import nl.tudelft.bsg.utopolis.server.model.Resources;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
 
@@ -20,7 +28,38 @@ public class StructureProperties {
 	}
 	
 	public static StructureProperties getProperties(Structure s) {
+		FileReader reader;
 		String sid = s.getStructureId();
+		String structureTypeId = sid.substring(sid.lastIndexOf('_')+1);
+
+		try {
+			reader = new FileReader( "src/main/config/structureproperties.json");
+			JsonObject allProperties = JsonObject.readFrom(reader);
+			JsonObject structProps = allProperties.get("house").asObject();
+			JsonObject requirements = structProps.get("requirements").asObject();
+			JsonObject cost = structProps.get("cost").asObject();
+			JsonObject generates = structProps.get("generates").asObject();
+			
+			return new StructureProperties(
+					new Resources(2, 0, 0, 1, 0, 0, 0, 0), 
+					new Resources(0, 0, 0, 0, 4, 4, 0, 0), 
+					new Resources(1, 1, 1, 0, 1, 1, 1, 1), 
+					30000, 
+					4);
+			
+			Resources resources = new Resources();
+			resources.setCitizens(0);
+			resources.setCulture(.);
+			System.out.println(k);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
 		if (sid.endsWith("house")) {
 			return new StructureProperties(
 						new Resources(2, 0, 0, 1, 0, 0, 0, 0), 
