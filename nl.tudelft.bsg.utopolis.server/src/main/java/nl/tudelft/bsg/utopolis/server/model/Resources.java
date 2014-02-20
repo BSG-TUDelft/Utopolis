@@ -23,6 +23,12 @@ public class Resources implements Serializable {
 	private float culture;
 	private float citizens;
 	private float societal;
+	private float spirituality;
+	private float safety;
+	private float peace;
+	private float diplomacy;
+	private float economy;
+	private float trade;
 
 	public Resources() {
 		this.food = 0.0f;
@@ -123,6 +129,62 @@ public class Resources implements Serializable {
 
 	public void setSocietal(float societal) {
 		this.societal = societal;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public float getSpirituality() {
+		return spirituality;
+	}
+
+	public void setSpirituality(float spirituality) {
+		this.spirituality = spirituality;
+	}
+
+	public float getSafety() {
+		return safety;
+	}
+
+	public void setSafety(float safety) {
+		this.safety = safety;
+	}
+
+	public float getPeace() {
+		return peace;
+	}
+
+	public void setPeace(float peace) {
+		this.peace = peace;
+	}
+
+	public float getDiplomacy() {
+		return diplomacy;
+	}
+
+	public void setDiplomacy(float diplomacy) {
+		this.diplomacy = diplomacy;
+	}
+
+	public float getEconomy() {
+		return economy;
+	}
+
+	public void setEconomy(float economy) {
+		this.economy = economy;
+	}
+
+	public float getTrade() {
+		return trade;
+	}
+
+	public void setTrade(float trade) {
+		this.trade = trade;
 	}
 
 }
