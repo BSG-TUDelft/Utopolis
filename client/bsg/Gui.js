@@ -111,7 +111,7 @@ var Gui = {
 		Gui.contextMenu.hide();
 
 		Gui.contextMenu.addEventListener(ContextMenu.citizensChanged, function(e){
-            if(!clientOnlyMode){
+            if(!Main.clientOnlyMode){
                 var request = $.ajax({
                     url: host + 'structure/' + e.structure.id + '/citizens/' + e.citizens,
                     type: 'GET'
@@ -329,7 +329,7 @@ var Gui = {
 
 		// Private functions
 		function openLeaderboard(){
-			if(!clientOnlyMode){
+			if(!Main.clientOnlyMode){
 				if(!Main.city) // global city
 					return alert("Something went horribly wrong! :( Please reload the game.");
 
@@ -411,7 +411,7 @@ var Gui = {
 		}
 
         function openMessages(){
-            if(!clientOnlyMode){
+            if(!Main.clientOnlyMode){
 				if(!Main.city) // global city
 					return alert("Something went horribly wrong! :( Please reload the game.");
 
