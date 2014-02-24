@@ -1,4 +1,4 @@
-var loadedModels = [];
+var loadedModels = {};
 
 ModelLoader = function ( file ) {
 	this.textureFile = file;

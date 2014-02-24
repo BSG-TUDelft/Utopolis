@@ -13,7 +13,8 @@ var Gui = {
 	questOverview: null,		// Quest overview popup
 	console: null,				// Console to display text
 	timeLastPoll: $.now(),		// Time of last poll
-	pollInterval: 10000,			// Interval of polling (in ms)
+	pollInterval: 10000,		// Interval of polling (in ms)
+	loadingSpinner: null,		// Loading spinner indicator
 
 	// METHODS
 	initGui: function (menuData, topbarData){
@@ -47,13 +48,7 @@ var Gui = {
 			}
 			else {
 				if(Gui.enoughResources(Gui.resources, menuData.structureTypes[e.structure.structureType])) {
-					currentModel = loadedModels[e.structure.structureId];
-
-					if(rollOverMesh) {
-						refreshRollover();
-					}
-					if(rollOverMesh == undefined)
-						togglePlacementMode();
+					Main.initStructurePlacement(e.structure.structureId);
 				}
 				else {																		//if not enough resources, deselect building.
 					$("#structures").find("li").removeClass("selected");
@@ -520,6 +515,33 @@ var Gui = {
 				sounds.mailSent.play();
 			});
 		}
+
+		/** Loading indicator */
+		var loaderEl = $("<div class='modalBlock loading_spinner'><div class='loader'></div></div>");
+		$(document.body).append(loaderEl);
+
+		var opts = {
+			lines: 17, // The number of lines to draw
+			length: 21, // The length of each line
+			width: 15, // The line thickness
+			radius: 60, // The radius of the inner circle
+			corners: 1, // Corner roundness (0..1)
+			rotate: 0, // The rotation offset
+			direction: 1, // 1: clockwise, -1: counterclockwise
+			color: '#fff', // #rgb or #rrggbb or array of colors
+			speed: 1, // Rounds per second
+			trail: 58, // Afterglow percentage
+			shadow: false, // Whether to render a shadow
+			hwaccel: false, // Whether to use hardware acceleration
+			className: 'spinner', // The CSS class to assign to the spinner
+			zIndex: 2e9, // The z-index (defaults to 2000000000)
+			top: 'auto', // Top position relative to parent in px
+			left: 'auto' // Left position relative to parent in px
+		};
+
+		loaderEl.find('.loader').spin(opts);
+		loaderEl.hide();
+		Gui.loadingSpinner = loaderEl;
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -675,10 +697,16 @@ var Gui = {
 		return null;
 	},
 
-	/** Gets called when all models and graphical assets have been loaded into memory */
-	modelsLoaded: function(){
+	/** Shows login window*/
+	showLogin: function(){
 		$("#login-submit").show();
 	}
+	//,
+
+	/** Gets called when all models and graphical assets have been loaded into memory *
+	modelsLoaded: function(){
+		$("#login-submit").show();
+	}*/
 };
 
 
