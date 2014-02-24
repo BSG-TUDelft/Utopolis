@@ -1,6 +1,7 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var host = "http://localhost:8080/api/";
+//var host = (window.location.protocol || document.location.protocol) + "//localhost:8080/api/";
+var host =  "http://localhost:8080/api/";
 var Main = {
 	city: null,
 	clientOnlyMode: false,
@@ -90,7 +91,6 @@ var Main = {
 		'gaia_pine' : 'flora/trees/pine.xml',
 		'gaia_poplar' : 'flora/trees/poplar.xml'
 	},
-
 
 	/** Initiates structure placement, loads model if not done so already */
 	initStructurePlacement: function(structureId){
@@ -199,7 +199,7 @@ function loadModels(modelNames, callback){
 	for(var i in modelNames){
 		if(!modelNames.hasOwnProperty(i)) continue;
 		load(modelNames[i], Main.actorsDefinition[modelNames[i]]);
-	}
+	};
 }
 
 function initRollOver(position) {

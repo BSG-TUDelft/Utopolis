@@ -256,24 +256,29 @@ var Gui = {
         // Quests
 		var questDescriptions = [{
 			id: 0,
+			bannerCss: 'quest0',
 			title: "Foundation",
 			text: "Welcome to Utopolis! As you are now in charge of new city within Utopolis, your citizens need a place to live. \n\n" +
 				"Thus, your first quest: Build the first village in your city. A village contains at least 3 houses, a civic center and a farm."
 		}, {
 			id: 1,
+			bannerCss: 'quest1',
 			title: "Boundaries",
 			text: "Your second quest is a group quest. This means each city in your province must complete this quest before you can go onto the next quest. \n\n" +
 				"Your citizens have started to notice other cities. They feel they need to define their home clearly. Your second quest is to set the boundaries of your “downtown”. This means you will need to build at least 4 wall towers. "
 		}, {
 			id: 2,
+			bannerCss: 'quest2',
 			title: "Nourishment",
 			text: "Your citizens are not getting enough food. They are hungry! Give your citizens nourishment. Build at least 3 farms and 2 corrals."
 		}, {
 			id: 3,
+			bannerCss: 'quest3',
 			title: "Rainy Day",
 			text: "As your citizens are becoming richer, they are thinking further in the future. They are worried they will not have enough food in the future. Provide your citizens with at least 2 food stores in case of a rainy day (build 2 storehouses)."
 		}, {
 			id: 4,
+			bannerCss: 'quest4',
 			title: "Trading",
 			text: "Your citizens are happy in the city, but are starting to hope to see the world. Open the trade routes between your city and the rest of the province. Build at least 2 markets. Give at least one gift to someone else. "
 		}];

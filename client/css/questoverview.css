@@ -1,5 +1,6 @@
 .questoverview {
 	width: 60%;
+	height: 80%;
 }
 
 .questoverview h1 {
@@ -8,16 +9,55 @@
 }
 
 .questoverview h2 {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
+	margin-left: 20px;
 }
 
 .questoverview .questlog {
-	height: 300px;
+	height: 100%;
+	height: -moz-calc(100% - 60px);
+	height: -webkit-calc(100% - 60px);
+	height: -o-calc(100% - 60px);
+	height: calc(100% - 60px);
 	overflow-y: auto;
+	
+	padding-right: 10px;
 }
 
-.questoverview .questlog div div {
+.questoverview .questlog .quest {
 	margin: 2px;
-	padding: 6px;
+	margin-bottom: 20px;
+	padding: 10px;
 	background-color: rgba(0,0,0,.5);
+}
+
+.questoverview .questlog .banner {
+	height: 150px;
+	border: 1px solid black;
+	background-position: center center;
+	margin-bottom: 10px;
+}
+
+.questoverview .questlog .banner.quest0 {
+	background-image: url(../images/quests/banners/questbanner0.png);
+}
+
+.questoverview .questlog .banner.quest1 {
+	background-image: url(../images/quests/banners/questbanner1.png);
+}
+
+.questoverview .questlog .banner.quest2 {
+	background-image: url(../images/quests/banners/questbanner2.png);
+}
+
+.questoverview .questlog .banner.quest3 {
+	background-image: url(../images/quests/banners/questbanner3.png);
+}
+
+.questoverview .questlog .banner.quest4 {
+	background-image: url(../images/quests/banners/questbanner4.png);
+}
+
+.questoverview .questlog .banner.quest5 {
+	background-image: url(../images/quests/banners/questbanner5.png);
 }
