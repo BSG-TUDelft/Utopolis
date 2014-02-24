@@ -38,7 +38,7 @@ ContextMenu.prototype = {
 			"<div class='structureicon " + structureInfo.iconCss + "'></div>",
 			"<span id='citizencounter'>" + citizenFormatter() + "</span>",
 			"<div id='structureslider'></div>",
-			"<h3>Generates (every X time): </h3>",
+			"<h3>Generates (every " + Gui.pollInterval / 1000 + " seconds): </h3>",
 			"<ul class='generates'>",
 			"</div>",
 			"</ul>"];

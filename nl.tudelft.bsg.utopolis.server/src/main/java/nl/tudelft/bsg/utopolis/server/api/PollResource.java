@@ -31,11 +31,13 @@ public class PollResource extends Resource {
 		long now = new Date().getTime();
 
 		City city = DBConnector.get().getCityById(c.getId());
-		
+		if(city == null)
+			return simpleResponse("");
+
 		for (Structure s : city.getStructures()) {
 			if (now - then >= UPDATE_TIME) {
 				Resources generates = StructureProperties.getProperties(s).getGenerates();
-				city.getResources().add(generates);
+				city.getResources().add(generates, s.getNumCitizens());
 			}
 		}
 		
