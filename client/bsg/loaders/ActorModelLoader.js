@@ -134,13 +134,15 @@ var ActorModelLoader = function () {
 					return function (xml) {
 
 					if($(xml).find("actor group variant mesh").size() === 0){
-						// There's no mesh, we dont know how to handle this. Keep calm and parse on.
+						// There's no mesh, we don't know how to handle this. Keep calm and parse on.
 						removeFromQueue(reqUrl);
+						checkIfDone();
 						return;
 					}
 					if($(xml).find("actor group variant textures texture[name*='baseTex']").size() === 0){
 						console.warn("ActorModelLoader.loadProps: Could not find any texture with name=baseTex in prop [" + reqUrl + "]. Will not load this prop");
 						removeFromQueue(reqUrl);
+						checkIfDone();
 						return;
 					}
 
@@ -183,7 +185,7 @@ var ActorModelLoader = function () {
 					break;
 				}
 			}
-			checkIfDone();
+			//checkIfDone();
 		}
 	}
 
