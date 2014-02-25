@@ -3,6 +3,115 @@ if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var host =  "http://localhost:8080/api/";
 var Main = {
 	city: null,
+	clientOnlyMode: false,
+	actorsDefinition: {
+		// Actors HELLENIC buildings
+		"hele_house": "structures/hellenes/house_new.xml",
+		"hele_farm": "structures/hellenes/farmstead_new.xml",
+		"hele_corral": "structures/hellenes/corral.xml",
+		"hele_market": "structures/hellenes/market.xml",
+		'hele_barracks': 'structures/hellenes/barracks_new.xml',
+		"hele_storehouse": "structures/hellenes/storehouse.xml",
+		"hele_blacksmith": "structures/hellenes/blacksmith.xml",
+		"hele_fortress": "structures/hellenes/fortress_new.xml",
+		"hele_tower": "structures/hellenes/wall_tower.xml",
+		"hele_civic": "structures/hellenes/civic_centre_new.xml",
+		"hele_temple": "structures/hellenes/temple_new.xml",
+
+		// Actors ROMAN buildings
+		'rome_house': 'structures/romans/house.xml',
+		'rome_farm': 'structures/romans/farmstead.xml',
+		'rome_corral': 'structures/romans/corral.xml',
+		'rome_market': 'structures/romans/market.xml',
+		'rome_storehouse': 'structures/romans/storehouse.xml',
+		'rome_barracks': 'structures/romans/barracks.xml',
+		'rome_blacksmith': 'structures/romans/blacksmith.xml',
+		'rome_fortress': 'structures/romans/fortress.xml',
+		'rome_tower': 'structures/romans/wall_tower.xml',
+		'rome_civic': 'structures/romans/civic_centre.xml',
+		'rome_temple': 'structures/romans/temple_mars.xml',
+
+		// Actors CARTHAGINIAN buildings
+		'kart_house': 'structures/carthaginians/house.xml',
+		'kart_farm': 'structures/carthaginians/farmstead.xml',
+		'kart_corral': 'structures/carthaginians/corral.xml',
+		'kart_market': 'structures/carthaginians/market.xml',
+		'kart_storehouse': 'structures/carthaginians/storehouse.xml',
+		'kart_barracks': 'structures/carthaginians/barracks.xml',
+		'kart_blacksmith': 'structures/carthaginians/blacksmith.xml',
+		'kart_fortress': 'structures/carthaginians/fortress.xml',
+		'kart_tower': 'structures/carthaginians/wall_tower.xml',
+		'kart_civic': 'structures/carthaginians/civil_centre.xml',
+		'kart_temple': 'structures/carthaginians/temple_big.xml',
+
+		// Actors IBERIAN buildings
+		'iber_house': 'structures/iberians/house.xml',
+		'iber_farm': 'structures/iberians/farmstead.xml',
+		'iber_corral': 'structures/iberians/corral.xml',
+		'iber_market': 'structures/iberians/market.xml',
+		'iber_storehouse': 'structures/iberians/storehouse.xml',
+		'iber_barracks': 'structures/iberians/barracks.xml',
+		'iber_blacksmith': 'structures/iberians/blacksmith.xml',
+		'iber_fortress': 'structures/iberians/fortress.xml',
+		'iber_tower': 'structures/iberians/wall_tower.xml',
+		'iber_civic': 'structures/iberians/civil_centre.xml',
+		'iber_temple': 'structures/iberians/temple.xml',
+
+		// Actors PERSIAN buildings
+		'pers_house': 'structures/persians/house.xml',
+		'pers_farm': 'structures/persians/farmstead.xml',
+		'pers_corral': 'structures/persians/corral.xml',
+		'pers_market': 'structures/persians/market.xml',
+		'pers_storehouse': 'structures/persians/storehouse.xml',
+		'pers_barracks': 'structures/persians/barracks.xml',
+		'pers_blacksmith': 'structures/persians/blacksmith.xml',
+		'pers_fortress': 'structures/persians/fortress.xml',
+		'pers_tower': 'structures/persians/wall_tower.xml',
+		'pers_civic': 'structures/persians/civil_centre.xml',
+		'pers_temple': 'structures/persians/temple.xml',
+
+		// Actors PTOLEMIES buildings
+		'ptol_house': 'structures/ptolemies/house.xml',
+		'ptol_farm': 'structures/ptolemies/farmstead.xml',
+		'ptol_corral': 'structures/ptolemies/corral.xml',
+		'ptol_market': 'structures/ptolemies/market.xml',
+		'ptol_storehouse': 'structures/ptolemies/storehouse.xml',
+		'ptol_barracks': 'structures/ptolemies/barracks.xml',
+		'ptol_blacksmith': 'structures/ptolemies/blacksmith.xml',
+		'ptol_fortress': 'structures/ptolemies/fortress.xml',
+		'ptol_tower': 'structures/ptolemies/defense_tower.xml',
+		'ptol_civic': 'structures/ptolemies/civic_centre.xml',
+		'ptol_temple': 'structures/ptolemies/temple.xml',
+
+		// Actors GAIA
+		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
+		'gaia_european_beech' : 'flora/trees/european_beech.xml',
+		'gaia_mediterranean_cypress' : 'flora/trees/mediterranean_cypress.xml',
+		'gaia_pine' : 'flora/trees/pine.xml',
+		'gaia_poplar' : 'flora/trees/poplar.xml'
+	},
+
+	/** Initiates structure placement, loads model if not done so already */
+	initStructurePlacement: function(structureId){
+		function init(){
+			currentModel = loadedModels[structureId];
+			if(rollOverMesh) {
+				refreshRollover();
+			}
+			if(rollOverMesh == undefined){
+				togglePlacementMode();
+			}
+		}
+
+		if(loadedModels[structureId] !== undefined){
+			// Model is already loaded, show placement mode
+			init();
+		}
+		else {
+			// Model is not loaded, show placement when done loading
+			loadModels([structureId], init);
+		}
+	},
 	clientOnlyMode: false
 }
 var container, stats;
@@ -42,19 +151,6 @@ var outlineOffset = new THREE.Vector3(1, 1, 1);
 
 init();
 
-/*function initFloor() {
-    // FLOOR
-    var floorTexture = new THREE.ImageUtils.loadTexture( './art/textures/terrain/types/desert_lakebed_dry_b.png' );
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set( 10, 10 );
-    var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-    var floorGeometry = new THREE.PlaneGeometry(40, 40, 10, 10);
-    floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.position.y = 0;
-    floor.rotation.x = Math.PI / 2;
-    scene.add(floor);
-}*/
-
 function initFloor() {
     var loader = new TerrainLoader();
     loader.load();
@@ -72,109 +168,49 @@ function initModels(callback){
 			}
 		});
 		loader.loadActorXml(name, xml);
+	}
+}
 
+function initFloor() {
+    var loader = new TerrainLoader();
+    loader.load();
+}
+
+/** Loads structure models into memory
+ * @param modelNames names of models, see Main.actorsDefinition
+ * @param callback executed when done */
+function loadModels(modelNames, callback){
+	Gui.loadingSpinner.show();
+
+	if(modelNames.length == 0){
+		Gui.loadingSpinner.hide();
+
+		if(typeof(callback) === 'function')
+			callback();
+		return;
 	}
 
-	var actors = {
-		// Load HELLENIC buildings
-		"hele_house": "structures/hellenes/house_new.xml",
-		"hele_farm": "structures/hellenes/farmstead_new.xml",
-		"hele_corral": "structures/hellenes/corral.xml",
-		"hele_market": "structures/hellenes/market.xml",
-		'hele_barracks': 'structures/hellenes/barracks_new.xml',
-		"hele_storehouse": "structures/hellenes/storehouse.xml",
-		"hele_blacksmith": "structures/hellenes/blacksmith.xml",
-		"hele_fortress": "structures/hellenes/fortress_new.xml",
-		"hele_tower": "structures/hellenes/wall_tower.xml",
-		"hele_civic": "structures/hellenes/civic_centre_new.xml",
-		"hele_temple": "structures/hellenes/temple_new.xml",
+	function load(name, xml){
+		var loader = new ActorModelLoader();
+		loader.addEventListener(ActorModelLoader.doneLoading, function(res){
+			loadedModels[res.scene.name] = new ModelWrapper(res.scene);
+			loader = null;
 
-		// Load ROMAN buildings
-		'rome_house': 'structures/romans/house.xml',
-		'rome_farm': 'structures/romans/farmstead.xml',
-		'rome_corral': 'structures/romans/corral.xml',
-		'rome_market': 'structures/romans/market.xml',
-		'rome_storehouse': 'structures/romans/storehouse.xml',
-		'rome_barracks': 'structures/romans/barracks.xml',
-		'rome_blacksmith': 'structures/romans/blacksmith.xml',
-		'rome_fortress': 'structures/romans/fortress.xml',
-		'rome_tower': 'structures/romans/wall_tower.xml',
-		'rome_civic': 'structures/romans/civic_centre.xml',
-		'rome_temple': 'structures/romans/temple_mars.xml',
+			if(--queue === 0){
+				Gui.loadingSpinner.hide();
 
-		// Load CARTHAGINIAN buildings
-		'kart_house': 'structures/carthaginians/house.xml',
-		'kart_farm': 'structures/carthaginians/farmstead.xml',
-		'kart_corral': 'structures/carthaginians/corral.xml',
-		'kart_market': 'structures/carthaginians/market.xml',
-		'kart_storehouse': 'structures/carthaginians/storehouse.xml',
-		'kart_barracks': 'structures/carthaginians/barracks.xml',
-		'kart_blacksmith': 'structures/carthaginians/blacksmith.xml',
-		'kart_fortress': 'structures/carthaginians/fortress.xml',
-		'kart_tower': 'structures/carthaginians/wall_tower.xml',
-		'kart_civic': 'structures/carthaginians/civil_centre.xml',
-		'kart_temple': 'structures/carthaginians/temple_big.xml',
+				if(typeof(callback) === 'function')
+					callback();
+			}
+		});
+		loader.loadActorXml(name, xml);
+	}
 
-		// Load IBERIAN buildings
-		'iber_house': 'structures/iberians/house.xml',
-		'iber_farm': 'structures/iberians/farmstead.xml',
-		'iber_corral': 'structures/iberians/corral.xml',
-		'iber_market': 'structures/iberians/market.xml',
-		'iber_storehouse': 'structures/iberians/storehouse.xml',
-		'iber_barracks': 'structures/iberians/barracks.xml',
-		'iber_blacksmith': 'structures/iberians/blacksmith.xml',
-		'iber_fortress': 'structures/iberians/fortress.xml',
-		'iber_tower': 'structures/iberians/wall_tower.xml',
-		'iber_civic': 'structures/iberians/civil_centre.xml',
-		'iber_temple': 'structures/iberians/temple.xml',
-
-		// Load PERSIAN buildings
-		'pers_house': 'structures/persians/house.xml',
-		'pers_farm': 'structures/persians/farmstead.xml',
-		'pers_corral': 'structures/persians/corral.xml',
-		'pers_market': 'structures/persians/market.xml',
-		'pers_storehouse': 'structures/persians/storehouse.xml',
-		'pers_barracks': 'structures/persians/barracks.xml',
-		'pers_blacksmith': 'structures/persians/blacksmith.xml',
-		'pers_fortress': 'structures/persians/fortress.xml',
-		'pers_tower': 'structures/persians/wall_tower.xml',
-		'pers_civic': 'structures/persians/civil_centre.xml',
-		'pers_temple': 'structures/persians/temple.xml',
-
-		// Load PTOLEMIES buildings
-		'ptol_house': 'structures/ptolemies/house.xml',
-		'ptol_farm': 'structures/ptolemies/farmstead.xml',
-		'ptol_corral': 'structures/ptolemies/corral.xml',
-		'ptol_market': 'structures/ptolemies/market.xml',
-		'ptol_storehouse': 'structures/ptolemies/storehouse.xml',
-		'ptol_barracks': 'structures/ptolemies/barracks.xml',
-		'ptol_blacksmith': 'structures/ptolemies/blacksmith.xml',
-		'ptol_fortress': 'structures/ptolemies/fortress.xml',
-		'ptol_tower': 'structures/ptolemies/defense_tower.xml',
-		'ptol_civic': 'structures/ptolemies/civic_centre.xml',
-		'ptol_temple': 'structures/ptolemies/temple.xml',
-
-		// Load GAIA
-		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
-		'gaia_european_beech' : 'flora/trees/european_beech.xml',
-		'gaia_mediterranean_cypress' : 'flora/trees/mediterranean_cypress.xml',
-		'gaia_pine' : 'flora/trees/pine.xml',
-		'gaia_poplar' : 'flora/trees/poplar.xml'
+	var queue = modelNames.length;
+	for(var i in modelNames){
+		if(!modelNames.hasOwnProperty(i)) continue;
+		load(modelNames[i], Main.actorsDefinition[modelNames[i]]);
 	};
-
-	// Hack to increase loading time (for debugging). Add ?thin=true to URL
-	if(location.search.indexOf("thin=true") > -1){
-		actors = {	"hele_civic": "structures/hellenes/civic_centre_new.xml", };
-	}
-
-
-
-	var queue = 0;
-	for(var i in actors){
-		if(!actors.hasOwnProperty(i)) continue;
-        queue++;
-		load(i, actors[i]);
-	}
 }
 
 function initRollOver(position) {
@@ -358,17 +394,20 @@ function init() {
 	// COLLECTION OF STRUCTURES
 	structureCollection = new ModelArray();
 
-    //MODEL LOADERS
-	initModels(Gui.modelsLoaded);
-
-	$( document ).ready(function() {
-	});
+	// Show login screen
+	Gui.showLogin();
 }
 
 function placeCity(structures) {
-    structures.forEach(function(structure) {
-        placeStructure(structure);
-    });
+	// Preload structure models
+	var modelNames = [];
+	$.each(structures, function(i, val) { if(modelNames.indexOf(val.structureId) == -1 ) { modelNames.push(val.structureId); } });
+
+	loadModels(modelNames, function (){
+		structures.forEach(function(structure) {
+			placeStructure(structure);
+		});
+	});
 }
 
 function placeStructure(struct) {
@@ -433,7 +472,9 @@ Main.startGame = function(){
 	scene.addEventListener("UPDATE", Gui.update);
 
 	// Place structures
-	placeCity(Main.city.structures);
+	if(!Main.clientOnlyMode){
+		placeCity(Main.city.structures);
+	}
 
 	// Start game loop
 	animate();
