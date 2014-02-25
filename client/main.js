@@ -1,17 +1,19 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-//var host = (window.location.protocol || document.location.protocol) + "//localhost:8080/api/";
 var host =  "http://localhost:8080/api/";
 var Main = {
 	city: null,
 	clientOnlyMode: false
 }
-var clientOnlyMode = false;
 var container, stats;
 
-var camera, scene, renderer;
-var material, dae, skin;
+var camera,
+	scene, 						// Base scene
+	hlOutlineScene,				// For highlighting, contains outline mesh
+	hlSelectedObjectScene,		// For highlighting, contains the selected object which is overlayed on outline
+	renderer;
 
+var loadedModels = [];
 var currentModel;
 var selectedModel;
 
@@ -31,12 +33,12 @@ var selectableMeshes = [];          //merge this with collidableMeshList?       
 var flag_placed = false;
 var handling_flag = false;
 
-var t = 0;
 var clock = new THREE.Clock();
 
 var cameraLookAt, cameraLookAngle, cameraElevationAngle;
 var structureCollection;
 var sounds = {};
+var outlineOffset = new THREE.Vector3(1, 1, 1);
 
 init();
 
@@ -162,7 +164,7 @@ function initModels(callback){
 
 	// Hack to increase loading time (for debugging). Add ?thin=true to URL
 	if(location.search.indexOf("thin=true") > -1){
-		var actors = {	"hele_house": "structures/hellenes/house_new.xml" };
+		actors = {	"hele_civic": "structures/hellenes/civic_centre_new.xml", };
 	}
 
 
@@ -190,14 +192,25 @@ function initRollOver(position) {
         else if(currentModel.material != null){
             rollOverMesh = currentModel.getBoundingMesh(3, 3, 3);            // use values higher than 1 for increased collision precision
             ghostModel = currentModel.getClone();
-            var ghostMaterial = ghostModel.material.clone();
+			ghostModel.name = "ghost";
+			rollOverMesh.add(ghostModel);
 
-            setMaterial(ghostModel, ghostMaterial);
-            setTransparent(ghostModel);
+			var ghostMaterial = new THREE.MeshBasicMaterial( { opacity: .5, transparent:true, needsUpdate: true });
+			rollOverMesh.material = ghostMaterial;
+			// Apply ghost material to all sub meshes
+			rollOverMesh.traverse(function(obj){
+				if(obj instanceof THREE.Mesh){
+					// Only replace the meshes that have the player color material
+					if(obj.material instanceof THREE.ShaderMaterial){
+						obj.material = ghostMaterial;
+					}
+					else {
+						obj.visible = false;
+					}
+				}
+			});
 
             ghostModel.position.set(-rollOverMesh.boundingBox.center().x, -rollOverMesh.boundingBox.center().y, -rollOverMesh.boundingBox.center().z);
-            rollOverMesh.add(ghostModel);
-
             rollOverMesh.position.set(position.x, position.y, position.z);              //set initial position
 
             scene.add( rollOverMesh );
@@ -225,7 +238,8 @@ function registerCollidableBoundingMesh(model) {            //using this method 
     //model.modelBoundingBox = modelBoundingBox;                               //add bounding box to the model (use for deletion)
     //model.modelBoundingMesh = modelBoundingMesh;                   //add bounding mesh to the model (use for deletion)
 
-    selectableMeshes.push( model.getMesh() );                   //TODO fix this!
+
+	selectableMeshes = selectableMeshes.concat( model.getDescendants() );        //  Add all descendants so players can click on props, too         //TODO fix this!
 }
 
 function onTerrainLoad() {
@@ -278,6 +292,8 @@ function init() {
 
     //SCENE
     scene = new THREE.Scene();
+	hlOutlineScene = new THREE.Scene();
+	hlSelectedObjectScene = new THREE.Scene();
 
     //CAMERA
     initCamera();
@@ -293,6 +309,9 @@ function init() {
     directionalLight.position.z = Math.random() - 0.5;
     directionalLight.position.normalize();
     scene.add( directionalLight );
+
+	hlSelectedObjectScene.add( new THREE.AmbientLight( 0xcccccc ) );
+	hlSelectedObjectScene.add(directionalLight.clone());
 
 	var skybox = Skybox.get([
 		'art/skybox/cloudy_0/yellowcloud_ft.jpg',
@@ -321,7 +340,11 @@ function init() {
     mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
 
     //RENDERER
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+		antialias: true
+	});
+	renderer.autoClear = false; 							// Because we render multiple passes
+	renderer.setClearColor(0x000000, 1);
     renderer.setSize( container.offsetWidth, container.offsetHeight );
     container.appendChild( renderer.domElement );
 
@@ -372,7 +395,7 @@ function saveStructure( structure ) {
 		rotation: structure.model.rotation.y
 	};
 
-	if(clientOnlyMode){
+	if(Main.clientOnlyMode){
 		structure.id = parseInt(Math.random() * 65535, 2);
 		return;
 	}
@@ -429,16 +452,24 @@ function collidablesContainEmitter(colliderOrigin) {
 }
 
 function changeColliderColor(collider, r, g, b) {
-    if(collider.children[0].material != null && collider.children[0].material.ambient){
-        collider.children[0].material.ambient.r = r;
-        collider.children[0].material.ambient.g = g;
-        collider.children[0].material.ambient.b = b;
-    }
+	collider.material.color.r = r;
+	collider.material.color.g = g;
+	collider.material.color.b = b;
+
+	/*
+	collider.children[0].material.color.r = r;
+	collider.children[0].material.color.g = g;
+	collider.children[0].material.color.b = b;
+
+	collider.material.color.setHex(0xffff00);
+	 collider.material.needsUpdate = true;
+
+	 if(collider.children[0].material != null && collider.children[0].material.ambient){
+    }*/
 }
 
 function detectCollision (collider) {           //collider = oject that detects collision (casts rays)
-    if(collider)
-    {
+    if(collider)  {
         var collisionFlag = false;
         var originPoint = collider.position.clone();
 
@@ -529,7 +560,18 @@ function onDocumentMouseDown( event ) {
                     model = currentModel.getClone();
     				model.position = intersector.point;
     				model.rotation = rollOverMesh.rotation.clone();
+					// This is needed to update a material run-time
+					model.material.needsUpdate = true;
 
+					function setUpdateGeom(obj){
+						// On all meshes (including props), set to be updateable
+
+						if((obj instanceof THREE.Mesh)){
+							obj.geometry.buffersNeedUpdate = true;
+							obj.geometry.uvsNeedUpdate = true;
+						}
+					};
+					model.traverse(setUpdateGeom);
     				scene.add(model);
     				registerCollidableBoundingMesh(model);
 
@@ -623,10 +665,6 @@ function onKeyDown ( event ) {
             break;
         case 221: // ], }
             rotateRollOverCW();
-            break;
-        case 75: // k
-            //printEmitterOfModel(rollOverMesh);                  //collision debugging
-            //showEmitterOfModel(rollOverMesh);
             break;
         case 88: // x
             removeSelectedModel();
@@ -782,36 +820,15 @@ function decreaseCameraElevation () {
     }
 }
 
-/*function nextBuilding() {
-    var index = loadedModels.indexOf(currentModel);
-    if(index != loadedModels.length-1) {
-        index++;
-        currentModel = loadedModels[index];
-        refreshRollover();
-        //console.log(index);
-    }
-}
-
-function previousBuilding() {
-    var index = loadedModels.indexOf(currentModel);
-    if(index != 0) {
-        index--;
-        currentModel = loadedModels[index];
-        refreshRollover();
-        //console.log(index);
-    }
-}
-*/
-
 function rotateRollOverCW() {
     if(rollOverMesh) {
-        rollOverMesh.rotation.y += Math.PI/13;
+        rollOverMesh.rotation.y += Math.PI/10;
     }
 }
 
 function rotateRollOverCCW() {
     if(rollOverMesh) {
-        rollOverMesh.rotation.y -= Math.PI/13;
+        rollOverMesh.rotation.y -= Math.PI/10;
     }
 }
 
@@ -853,7 +870,6 @@ function togglePlacementMode () {
     else {
         clearSelectedModel();                 //clear selected model
         var intersector = getMouseProjectionOnFloor();
-        //console.log(intersector);
         if(intersector)                                     //avoid errors when mouse is outside the floor area
             initRollOver(intersector);
         else {
@@ -878,10 +894,14 @@ function animate() {
 }
 
 function update() {
-    var delta = clock.getDelta();
-    if ( t > 1 ) t = 0;
     stats.update();
 
+	// Set size of the outline mesh, depending of distance to camera (very, VERY hackish :/) actually I dont think it's working at all
+	if(outlineMesh && selectedModel){
+		outlineMesh.scale.copy(selectedModel.scale).add(outlineOffset.clone().multiplyScalar(0.0001 * (camera.position.distanceTo(selectedModel.position)))).multiplyScalar(1.02);
+	}
+
+	var delta = clock.getDelta();
 	// Dispatch 'UPDATE' event on scene
 	scene.dispatchEvent({
 		type: "UPDATE",
@@ -889,24 +909,63 @@ function update() {
 	});
 }
 
+function render() {
+	camera.lookAt( cameraLookAt );
+
+	if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set
+		intersector = getMouseProjectionOnFloor();
+		if ( intersector ) {
+			setRollOverPosition(intersector);
+		}
+	}
+
+	detectCollision(rollOverMesh);
+
+	renderer.clear();
+	renderer.render(scene, camera );
+	renderer.render(hlOutlineScene, camera);
+	renderer.render(hlSelectedObjectScene, camera);
+
+}
+
+var outlineMesh,
+	selectedMesh;
 function highlightSelectedModel (model) {
 	var topLevelMesh = getTopLevelMesh(model);
 	Gui.structureSelected(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've selected a building. Will also play sound
 
+	// Create 'outline' mesh
+	outlineMesh = topLevelMesh.clone();
+	var outlineMaterial = new THREE.MeshBasicMaterial ( { depthWrite: false });
+	setMaterial(outlineMesh, outlineMaterial);
+	outlineMesh.position.copy(topLevelMesh.position);
+	outlineMesh.rotation.copy(topLevelMesh.rotation);
+	outlineMesh.scale.copy(topLevelMesh.scale);
+	hlOutlineScene.add(outlineMesh);
 
-    selectedModel = model;                                              //get the first object intersected;
-    selectedModel.oldMaterial = selectedModel.material;
-    var highlightMaterial = selectedModel.material.clone();             //needed, otherwise all models of the same type will get highlighted
-    if(highlightMaterial.emissive) highlightMaterial.emissive.setHex(0x888888);
-    selectedModel.material = highlightMaterial;
+	// Create 'outline overlay' mesh
+	selectedMesh = topLevelMesh.clone();
+	selectedMesh.position.copy(topLevelMesh.position);
+	selectedMesh.rotation.copy(topLevelMesh.rotation);
+	selectedMesh.scale.copy(topLevelMesh.scale);
+	hlSelectedObjectScene.add(selectedMesh);
+
+	selectedModel = topLevelMesh;                                              //get the first object intersected;
 }
 
 function clearSelectedModel () {
 	Gui.structureUnselected();
 
     if(selectedModel) {                                         //if we already have a model selected
-        selectedModel.material = selectedModel.oldMaterial;             //reset material to old one
-    }
+
+		// Delete previous outline mesh
+		if(outlineMesh)
+			hlOutlineScene.remove(outlineMesh);
+		// Delete previous selected mesh
+		if(selectedMesh)
+			hlSelectedObjectScene.remove(selectedMesh);
+
+	}
     selectedModel = null;
 }
 
@@ -925,21 +984,7 @@ function getMouseProjectionOnFloor() {
     return null;
 }
 
-function render() {
-    camera.lookAt( cameraLookAt );
 
-    if (rollOverMesh) {                                     //project rays only if the rollOverMesh is set
-        intersector = getMouseProjectionOnFloor();
-        if ( intersector ) {
-            //console.log(intersector);
-            setRollOverPosition(intersector);
-        }
-    }
-
-    detectCollision(rollOverMesh);
-
-    renderer.render( scene, camera );
-}
 
 function getRealIntersector( intersects ) {
     for( i = 0; i < intersects.length; i++ ) {
@@ -973,4 +1018,25 @@ function setTransparent(node) {
             setTransparent(node.children[i]);
         }
     }
+}
+
+
+function removeLights(model) {
+	if (model.children) {
+		for (var j = 0; j < model.children.length; j++) {
+			var child = model.children[j];
+			if (child instanceof THREE.Light) {
+				model.children.splice(j, 1);
+			}
+		}
+	}
+}
+
+function setMaterial(node, material) {
+	node.material = material;
+	if (node.children) {
+		for (var i = 0; i < node.children.length; i++) {
+			setMaterial(node.children[i], material);
+		}
+	}
 }
