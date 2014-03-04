@@ -35,6 +35,8 @@ public class Main {
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
+    	
+    	
 		/*
 		 * Todo: read structure properties here, store in application variable
 		

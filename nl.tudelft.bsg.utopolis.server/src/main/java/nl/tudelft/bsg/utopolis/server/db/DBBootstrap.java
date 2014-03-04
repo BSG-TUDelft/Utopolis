@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import nl.tudelft.bsg.utopolis.server.game.QuestEngine;
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.KeyPerformanceIndicators;
 import nl.tudelft.bsg.utopolis.server.model.Medals;
@@ -16,6 +17,10 @@ import nl.tudelft.bsg.utopolis.server.model.Structure;
 
 public class DBBootstrap {
 	public static void init() {
+		
+		
+		new QuestEngine().calculateCompletedQuests(DBConnector.get().getCities().get(0));
+		
 		/*if (DBConnector.get().getPlayers().size() == 0) {
 			
 			City[] cities1 = { 
