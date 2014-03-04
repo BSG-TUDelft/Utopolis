@@ -1,10 +1,13 @@
 package nl.tudelft.bsg.utopolis.server.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +26,10 @@ public class Player implements Serializable {
 	private String password;
 	@OneToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
 	private List<Message> messages;
-
+	//private HashMap<Quest, Boolean> quests;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<Integer> completedQuests; 
+	
 	public int getId() {
 		return id;
 	}
@@ -70,6 +76,14 @@ public class Player implements Serializable {
 	
 	public List<Message> getMessages() {
 		return messages;
+	}
+
+	public Set<Integer> getCompletedQuests() {
+		return completedQuests;
+	}
+
+	public void setCompletedQuests(Set<Integer> completedQuests) {
+		this.completedQuests = completedQuests;
 	}
 	
 }

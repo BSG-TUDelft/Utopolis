@@ -1,5 +1,8 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -12,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
+import nl.tudelft.bsg.utopolis.server.game.QuestEngine;
 import nl.tudelft.bsg.utopolis.server.model.City;
 import nl.tudelft.bsg.utopolis.server.model.CityList;
 import nl.tudelft.bsg.utopolis.server.model.Structure;
@@ -70,8 +74,13 @@ public class CityResource extends Resource {
 			Structure s) {
 		City c = DBConnector.get().getCityByPlayerId(playerId);
 		c.getStructures().add(s);
+
+		// Run Quest engine
+		Set<Integer> completedQuests = new QuestEngine().calculateCompletedQuests(c);
+		c.getPlayer().setCompletedQuests(completedQuests);
+
 		DBConnector.get().save(c);
-		return buildResponse(s);
+		return buildResponse(c);
 	}
 
 	@POST

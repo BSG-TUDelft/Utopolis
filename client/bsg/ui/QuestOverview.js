@@ -5,6 +5,7 @@ var QuestOverview = function(parent, data, config){
 	this.activeQuestContainer = $('<div></div>');
 	this.inActiveQuestContainer = $('<div></div>');
 	this.questDescriptions = data.description;
+	this.data = null;
 
 	this.config.tabs = [{
 		text: "Active quests",
@@ -27,9 +28,20 @@ var QuestOverview = function(parent, data, config){
 		'</div>' );
 	this.el.find(".questlog").append(this.activeQuestContainer,	this.inActiveQuestContainer);
 
+	// Add initial data
+	var up = [];
+	for(var i in data.description){
+		up.push({
+			id: data.description[i].id,
+			completed: !!data.description[i].completed
+		});
+	}
+	update(up, true);
 
-	function update(data){
-		checkQuestsCompleted(data);
+
+	function update(data, silent){
+		if(!silent)
+			checkQuestsCompleted(data);
 		scope.data = data;
 
 		if (!scope.isVisible()) return;

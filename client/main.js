@@ -85,25 +85,25 @@ var Main = {
 
 		// Actors GAIA
 		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
-		'gaia_european_beech' : 'flora/trees/european_beech.xml',
-		'gaia_mediterranean_cypress' : 'flora/trees/mediterranean_cypress.xml',
-		'gaia_pine' : 'flora/trees/pine.xml',
-		'gaia_poplar' : 'flora/trees/poplar.xml'
+		'gaia_european_beech': 'flora/trees/european_beech.xml',
+		'gaia_mediterranean_cypress': 'flora/trees/mediterranean_cypress.xml',
+		'gaia_pine': 'flora/trees/pine.xml',
+		'gaia_poplar': 'flora/trees/poplar.xml'
 	},
 
 	/** Initiates structure placement, loads model if not done so already */
-	initStructurePlacement: function(structureId){
-		function init(){
+	initStructurePlacement: function (structureId) {
+		function init() {
 			currentModel = loadedModels[structureId];
-			if(rollOverMesh) {
+			if (rollOverMesh) {
 				refreshRollover();
 			}
-			if(rollOverMesh == undefined){
+			if (rollOverMesh == undefined) {
 				togglePlacementMode();
 			}
 		}
 
-		if(loadedModels[structureId] !== undefined){
+		if (loadedModels[structureId] !== undefined) {
 			// Model is already loaded, show placement mode
 			init();
 		}
@@ -111,9 +111,9 @@ var Main = {
 			// Model is not loaded, show placement when done loading
 			loadModels([structureId], init);
 		}
-	},
-	clientOnlyMode: false
-}
+	}
+};
+
 var container, stats;
 
 var camera,
@@ -156,26 +156,6 @@ function initFloor() {
     loader.load();
 }
 
-function initModels(callback){
-	function load(name, xml){
-		var loader = new ActorModelLoader();
-		loader.addEventListener(ActorModelLoader.doneLoading, function(res){
-			loadedModels[res.scene.name] = new ModelWrapper(res.scene);
-			loader = null;
-
-			if(--queue === 0){
-				callback();
-			}
-		});
-		loader.loadActorXml(name, xml);
-	}
-}
-
-function initFloor() {
-    var loader = new TerrainLoader();
-    loader.load();
-}
-
 /** Loads structure models into memory
  * @param modelNames names of models, see Main.actorsDefinition
  * @param callback executed when done */
@@ -210,7 +190,7 @@ function loadModels(modelNames, callback){
 	for(var i in modelNames){
 		if(!modelNames.hasOwnProperty(i)) continue;
 		load(modelNames[i], Main.actorsDefinition[modelNames[i]]);
-	};
+	}
 }
 
 function initRollOver(position) {
@@ -448,9 +428,11 @@ function saveStructure( structure ) {
 
     request.done(function(response, textStatus, jqXHR){
 		// todo: Checking mechanism for concurrent requests!
-		console.log("SERVER RESPONSE: new structure saved");
 		// Save the newly generated id to the structure on the client
-		this.id = response.id;
+		//this.id = response.id;
+		Main.city = response;
+
+		Gui.constructionCompleted(this);
 	});
 
     request.fail(function (jqXHR, textStatus, errorThrown){
@@ -463,17 +445,20 @@ function saveStructure( structure ) {
 }
 
 /** Starts the game, populates the world, registers event handlers */
-Main.startGame = function(){
+Main.startGame = function () {
 	// register event handlers
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.addEventListener( 'keydown', onKeyDown, false );
-	window.addEventListener( 'resize', onWindowResize, false );
+	document.addEventListener('mousemove', onDocumentMouseMove, false);
+	document.addEventListener('mousedown', onDocumentMouseDown, false);
+	document.addEventListener('keydown', onKeyDown, false);
+	window.addEventListener('resize', onWindowResize, false);
 	scene.addEventListener("UPDATE", Gui.update);
 
-	// Place structures
-	if(!Main.clientOnlyMode){
+	if (!Main.clientOnlyMode) {
+		// Place structures
 		placeCity(Main.city.structures);
+
+		// Update quest status without showing any popups
+		Gui.updateQuests(true);
 	}
 
 	// Start game loop
@@ -481,7 +466,7 @@ Main.startGame = function(){
 
 	// Display welcome message
 	Gui.console.printText("Welcome to Utopolis [Beta]", 120000);
-}
+};
 
 function collidablesContainEmitter(colliderOrigin) {
     for(var index = 0; index < collidableBoundingBoxes.length; index ++) {
@@ -497,16 +482,6 @@ function changeColliderColor(collider, r, g, b) {
 	collider.material.color.g = g;
 	collider.material.color.b = b;
 
-	/*
-	collider.children[0].material.color.r = r;
-	collider.children[0].material.color.g = g;
-	collider.children[0].material.color.b = b;
-
-	collider.material.color.setHex(0xffff00);
-	 collider.material.needsUpdate = true;
-
-	 if(collider.children[0].material != null && collider.children[0].material.ambient){
-    }*/
 }
 
 function detectCollision (collider) {           //collider = oject that detects collision (casts rays)
@@ -522,7 +497,7 @@ function detectCollision (collider) {           //collider = oject that detects 
 
             var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
             var collisionResults = ray.intersectObjects( collidableMeshList );
-            if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
+            if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length ) {
                 collisionFlag = true;
                 break;
             }
@@ -611,7 +586,7 @@ function onDocumentMouseDown( event ) {
 							obj.geometry.buffersNeedUpdate = true;
 							obj.geometry.uvsNeedUpdate = true;
 						}
-					};
+					}
 					model.traverse(setUpdateGeom);
     				scene.add(model);
     				registerCollidableBoundingMesh(model);
@@ -627,8 +602,9 @@ function onDocumentMouseDown( event ) {
     				intersects = getMouseProjectionOnObjects( selectableMeshes );
     				if(intersects.length > 0) {
     					if (selectedModel != intersects[0].object) {                    //we have a new selection
-    						var topLevelMesh = getTopLevelMesh(model);
-    						Gui.structureConstructed(structureCollection.findByMesh(topLevelMesh));// Inform the GUI we've constructed a building.
+    						//var topLevelMesh = getTopLevelMesh(model);
+							//var structure = structureCollection.findByMesh(topLevelMesh);
+    						Gui.constructionStarted(structure);// Inform the GUI we've constructed a building.
 
     						// Highlight selected model
     						clearSelectedModel();
@@ -977,7 +953,7 @@ function highlightSelectedModel (model) {
 
 	// Create 'outline' mesh
 	outlineMesh = topLevelMesh.clone();
-	var outlineMaterial = new THREE.MeshBasicMaterial ( { depthWrite: false });
+	var outlineMaterial = new THREE.MeshBasicMaterial ( { depthWrite: false, opacity:.75, transparent: true });
 	setMaterial(outlineMesh, outlineMaterial);
 	outlineMesh.position.copy(topLevelMesh.position);
 	outlineMesh.rotation.copy(topLevelMesh.rotation);

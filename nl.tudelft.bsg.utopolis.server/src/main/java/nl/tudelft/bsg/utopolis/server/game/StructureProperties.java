@@ -1,4 +1,4 @@
-package nl.tudelft.bsg.utopolis.server.model.util;
+package nl.tudelft.bsg.utopolis.server.game;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,13 +29,13 @@ public class StructureProperties {
 		String sid = s.getStructureId();
 		String structureTypeId = sid.substring(sid.lastIndexOf('_')+1);
 		try {
+			// Reads setting json file
 			reader = new FileReader( "src/main/config/structureproperties.json");
 			JsonObject allProperties = JsonObject.readFrom(reader);
 			JsonObject structProps = allProperties.get(structureTypeId).asObject();
 			Resources cost = new Resources(),
 					requirements = new Resources(),
 					generates = new Resources();
-
 			
 			// Parse cost
 			JsonObject costProps = structProps.get("cost").asObject();
@@ -94,6 +94,7 @@ public class StructureProperties {
 			long buildTime = structProps.get("buildTime").asLong();
 			int citizenCap = structProps.get("citizenCap").asInt();
 			
+			reader.close();
 			return new StructureProperties(cost, requirements, generates, buildTime, citizenCap);
 		
 		} catch (FileNotFoundException e) {

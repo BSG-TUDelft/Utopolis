@@ -292,30 +292,6 @@ var Gui = {
 			}, 1500);
 		});
 
-		var questStatus = [{
-			id: 0,
-			completed: true
-		}, {
-			id: 1,
-			completed: true
-		}, {
-			id: 2,
-			completed: false
-		}, {
-			id: 3,
-			completed: false
-		}, {
-			id: 4,
-			completed: false
-		}/*, {
-			id: 5,
-			completed: false
-		}, {
-			id: 6,
-			completed: false
-		}*/];
-		Gui.questOverview.update(questStatus);
-
 		/** Initiates a leaderboard with parent and given inital data */
 		var medalDescriptions = {
 			bronze1: "This medal is awarded for completing quest " + questDescriptions[0].title + ".",
@@ -542,6 +518,7 @@ var Gui = {
 		loaderEl.find('.loader').spin(opts);
 		loaderEl.hide();
 		Gui.loadingSpinner = loaderEl;
+
 	},
 
 	/** GUIs update loop, gets called from the game loop */
@@ -604,38 +581,25 @@ var Gui = {
 	},
 
 	/** Gets called from Main whenever a structure is just constructed */
-	structureConstructed: function(structure){
-		// Undo 'selected state' of icon in menu
-		Gui.buildMenu.unselectStructure();
-
+	constructionStarted: function(structure){
 		var structureInfo = Gui.getStructureInfoByTypeId(structure.name);
 		if(structureInfo.structureType === "tree")
 			return;
 
-		// test
-		var questStatus = [{
-			id: 0,
-			completed: true
-		}, {
-			id: 1,
-			completed: true
-		}, {
-			id: 2,
-			completed: true
-		}, {
-			id: 3,
-			completed: false
-		}, {
-			id: 4,
-			completed: false
-		}];
-		Gui.questOverview.update(questStatus);
-
+		// Undo 'selected state' of icon in menu
+		Gui.buildMenu.unselectStructure();
 
 		var structureTypeInfo = this.menuData.structureTypes[structureInfo.structureType];
 		var eta = new Date($.now() + structureTypeInfo.buildTime );
 		Gui.console.printText("You have started constructing a " + structureInfo.name +
 			". Construction will be done on " + $.formatDateTime('mm/dd/y g:ii', eta), null);
+	},
+
+
+	/** Gets called from Main whenever a structure is just constructed */
+	constructionCompleted: function(structure){
+
+		Gui.updateQuests();
 	},
 
 	/** Gets called whenever the current players resources change. Will update all appropriate Gui elements
@@ -700,6 +664,27 @@ var Gui = {
 	/** Shows login window*/
 	showLogin: function(){
 		$("#login-submit").show();
+	},
+
+	/** Update the quest overview status to that of Main.city */
+	updateQuests: function(silent){
+		var questStatus = [{
+			id: 0,
+			completed: Main.city.player.completedQuests.indexOf(0) != -1
+		}, {
+			id: 1,
+			completed: Main.city.player.completedQuests.indexOf(1) != -1
+		}, {
+			id: 2,
+			completed: Main.city.player.completedQuests.indexOf(2) != -1
+		}, {
+			id: 3,
+			completed: Main.city.player.completedQuests.indexOf(3) != -1
+		}, {
+			id: 4,
+			completed: Main.city.player.completedQuests.indexOf(4) != -1
+		}];
+		Gui.questOverview.update(questStatus, silent);
 	}
 	//,
 
