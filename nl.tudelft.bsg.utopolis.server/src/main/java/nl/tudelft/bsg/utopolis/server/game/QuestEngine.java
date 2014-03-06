@@ -3,6 +3,7 @@ package nl.tudelft.bsg.utopolis.server.game;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,15 +23,30 @@ import nl.tudelft.bsg.utopolis.server.model.StructureType;
 
 public class QuestEngine {
 	
-	public Set<Integer> calculateCompletedQuests(City city){
+	public Set<String> calculateCompletedQuests(City city){
 		// This has to be done less retarded >_<
 
-		HashMap<StructureType, HashMap<String, Integer>> questRequirements = getQuestRequirements(city);
+		List<Quest> quests = getQuestRequirements(city);
 
-		Set<Integer> completed = new HashSet<Integer>();		
+		Set<String> completed = new HashSet<String>();		
 		HashMap<StructureType, Integer> count = countStructures(city);
 
+		for(Quest quest : quests){
+			Boolean questComplete = true;
+			HashMap<StructureType, Integer> requirements = quest.getRequirements();
+			for (StructureType type : requirements.keySet()) {
+
+				// If we don't have enough of this perticular type of structure
+				if(requirements.get(type) > count.get(type)){
+					questComplete = false;
+				}
+			}
+			if(questComplete){
+				completed.add(quest.getId());
+			}
+		}
 		
+		/*
 		// Quest 0
 		if((count.get(StructureType.house) >= 3) &&
 			(count.get(StructureType.civic_center) >= 1) &&
@@ -49,24 +65,30 @@ public class QuestEngine {
 		if((count.get(StructureType.corral) >= 1)){
 
 			completed.add(2);
-		}
+		}*/
 		
 		return completed;
 	}
 
 	private List<Quest> getQuestRequirements(City city) {
-		HashMap<String, HashMap<String, Integer>> questRequirements;
+		//HashMap<String, HashMap<String, Integer>> questRequirements;
+		List<Quest> quests = new ArrayList<Quest>();
 		FileReader reader;
 		try {
 		
 			reader = new FileReader( "src/main/config/quests.json");
 			JsonObject all = JsonObject.readFrom(reader);
 		
-			for(JsonValue quest : all.get("quests").asArray()){
-				JsonObject reqDefs = quest.asObject().get("requirements").asObject();
+			for(JsonValue questDef : all.get("quests").asArray()){
+				JsonObject reqDefs = questDef.asObject().get("requirements").asObject();
+				Quest quest = new Quest();
+				quests.add(quest);
+				
 				for(Member reqDef : reqDefs){
-					reqDef.getName();
-					reqDef.getValue();				
+					StructureType type = parseStructureType(reqDef.getName());
+					int value = reqDef.getValue().asInt();
+
+					quest.addRequirement(type, value);
 				}
 			}
 			reader.close();
@@ -76,7 +98,12 @@ public class QuestEngine {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return quests;
+	}
 
+	/** Parses StructureType */
+	private StructureType parseStructureType(String name) {
+		return StructureType.valueOf(name);
 	}
 
 	/** Basically performs a count of the structures in a city, grouped by structuretype 

@@ -76,7 +76,7 @@ public class CityResource extends Resource {
 		c.getStructures().add(s);
 
 		// Run Quest engine
-		Set<Integer> completedQuests = new QuestEngine().calculateCompletedQuests(c);
+		Set<String> completedQuests = new QuestEngine().calculateCompletedQuests(c);
 		c.getPlayer().setCompletedQuests(completedQuests);
 
 		DBConnector.get().save(c);

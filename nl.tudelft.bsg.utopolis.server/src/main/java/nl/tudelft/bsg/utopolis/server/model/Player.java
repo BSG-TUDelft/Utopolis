@@ -28,7 +28,7 @@ public class Player implements Serializable {
 	private List<Message> messages;
 	//private HashMap<Quest, Boolean> quests;
 	@ElementCollection(fetch = FetchType.EAGER)
-	private Set<Integer> completedQuests; 
+	private Set<String> completedQuests; 
 	
 	public int getId() {
 		return id;
@@ -78,11 +78,11 @@ public class Player implements Serializable {
 		return messages;
 	}
 
-	public Set<Integer> getCompletedQuests() {
+	public Set<String> getCompletedQuests() {
 		return completedQuests;
 	}
 
-	public void setCompletedQuests(Set<Integer> completedQuests) {
+	public void setCompletedQuests(Set<String> completedQuests) {
 		this.completedQuests = completedQuests;
 	}
 	
