@@ -1,6 +1,5 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;

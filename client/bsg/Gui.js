@@ -155,7 +155,7 @@ var Gui = {
 				iconCss: "product_bronze_statue",
 				productionTime: 900000, // 15 minutes
 				ingredients: [ "bronze", "clay", "wax" ],
-				workshop: "civic"
+				workshop: "civic_center"
 			},
 			candles: {
 				name: "candles",
@@ -163,7 +163,7 @@ var Gui = {
 				iconCss: "product_candles",
 				productionTime: 300000, // 5 minutes
 				ingredients: [  "wax" ],
-				workshop: "civic"
+				workshop: "civic_center"
 			},
 			clay: {
 				name: "clay",
@@ -194,7 +194,7 @@ var Gui = {
 				iconCss: "product_vase",
 				productionTime: 120000, // 2 minutes
 				ingredients: [  "clay", "clay", "wood" ],
-				workshop: "civic"
+				workshop: "civic_center"
 			},
 			wax: {
 				name: "wax",
@@ -207,7 +207,7 @@ var Gui = {
 				iconCss: "product_wax_tablet",
 				productionTime: 120000, // 2 minutes
 				ingredients: [  "wax", "wood" ],
-				workshop: "civic"
+				workshop: "civic_center"
 			},
 			wood: {
 				name: "wood",
@@ -670,19 +670,19 @@ var Gui = {
 	updateQuests: function(silent){
 		var questStatus = [{
 			id: 0,
-			completed: Main.city.player.completedQuests.indexOf(0) != -1
+			completed: Main.city.player.completedQuests.indexOf("0") != -1
 		}, {
 			id: 1,
-			completed: Main.city.player.completedQuests.indexOf(1) != -1
+			completed: Main.city.player.completedQuests.indexOf("1") != -1
 		}, {
 			id: 2,
-			completed: Main.city.player.completedQuests.indexOf(2) != -1
+			completed: Main.city.player.completedQuests.indexOf("2") != -1
 		}, {
 			id: 3,
-			completed: Main.city.player.completedQuests.indexOf(3) != -1
+			completed: Main.city.player.completedQuests.indexOf("3") != -1
 		}, {
 			id: 4,
-			completed: Main.city.player.completedQuests.indexOf(4) != -1
+			completed: Main.city.player.completedQuests.indexOf("4") != -1
 		}];
 		Gui.questOverview.update(questStatus, silent);
 	}
@@ -742,7 +742,7 @@ function initGui() {
 				name: "Civic center",
 				structureId: "hele_civic",
 				iconCss: "hele_civic",
-				structureType: "civic"
+				structureType: "civic_center"
 			},{
 				name: "Tower",
 				structureId: "hele_tower",
@@ -802,7 +802,7 @@ function initGui() {
 				name: "Civic center",
 				structureId: "rome_civic",
 				iconCss: "rome_civic",
-				structureType: "civic"
+				structureType: "civic_center"
 			},{
 				name: "Tower",
 				structureId: "rome_tower",
@@ -861,7 +861,7 @@ function initGui() {
 				name: "Civic center",
 				structureId: "kart_civic",
 				iconCss: "kart_civic",
-				structureType: "civic"
+				structureType: "civic_center"
 			},{
 				name: "Tower",
 				structureId: "kart_tower",
@@ -920,7 +920,7 @@ function initGui() {
 				name: "Civic center",
 				structureId: "iber_civic",
 				iconCss: "iber_civic",
-				structureType: "civic"
+				structureType: "civic_center"
 			},{
 				name: "Tower",
 				structureId: "iber_tower",
@@ -979,7 +979,7 @@ function initGui() {
 				name: "Civic center",
 				structureId: "pers_civic",
 				iconCss: "pers_civic",
-				structureType: "civic"
+				structureType: "civic_center"
 			},{
 				name: "Tower",
 				structureId: "pers_tower",
@@ -1038,7 +1038,7 @@ function initGui() {
 				name: "Civic center",
 				structureId: "ptol_civic",
 				iconCss: "ptol_civic",
-				structureType: "civic"
+				structureType: "civic_center"
 			},{
 				name: "Tower",
 				structureId: "ptol_tower",
@@ -1252,7 +1252,7 @@ function initGui() {
 				},
 				citizenCap: 10
 			},
-			"civic": {
+			"civic_center": {
 				cost: {
 					stone: 1,
 					metal: 1,

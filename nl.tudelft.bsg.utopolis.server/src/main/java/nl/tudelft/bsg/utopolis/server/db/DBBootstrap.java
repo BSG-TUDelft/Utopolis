@@ -18,8 +18,7 @@ import nl.tudelft.bsg.utopolis.server.model.Structure;
 public class DBBootstrap {
 	public static void init() {
 		
-		
-		new QuestEngine().calculateCompletedQuests(DBConnector.get().getCities().get(0));
+	
 		
 		/*if (DBConnector.get().getPlayers().size() == 0) {
 			

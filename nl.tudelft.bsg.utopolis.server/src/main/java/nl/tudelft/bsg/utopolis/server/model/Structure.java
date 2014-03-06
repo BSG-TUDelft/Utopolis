@@ -3,7 +3,6 @@ package nl.tudelft.bsg.utopolis.server.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;

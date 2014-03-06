@@ -4,15 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonObject.Member;
 import com.eclipsesource.json.JsonValue;
@@ -26,7 +22,7 @@ public class QuestEngine {
 	public Set<String> calculateCompletedQuests(City city){
 		// This has to be done less retarded >_<
 
-		List<Quest> quests = getQuestRequirements(city);
+		List<Quest> quests = getQuestDefinitions();
 
 		Set<String> completed = new HashSet<String>();		
 		HashMap<StructureType, Integer> count = countStructures(city);
@@ -36,7 +32,7 @@ public class QuestEngine {
 			HashMap<StructureType, Integer> requirements = quest.getRequirements();
 			for (StructureType type : requirements.keySet()) {
 
-				// If we don't have enough of this perticular type of structure
+				// If we don't have enough of this particular type of structure
 				if(requirements.get(type) > count.get(type)){
 					questComplete = false;
 				}
@@ -70,8 +66,7 @@ public class QuestEngine {
 		return completed;
 	}
 
-	private List<Quest> getQuestRequirements(City city) {
-		//HashMap<String, HashMap<String, Integer>> questRequirements;
+	private List<Quest> getQuestDefinitions() {
 		List<Quest> quests = new ArrayList<Quest>();
 		FileReader reader;
 		try {
@@ -82,12 +77,13 @@ public class QuestEngine {
 			for(JsonValue questDef : all.get("quests").asArray()){
 				JsonObject reqDefs = questDef.asObject().get("requirements").asObject();
 				Quest quest = new Quest();
+				quest.setId(questDef.asObject().get("id").asString());
 				quests.add(quest);
 				
 				for(Member reqDef : reqDefs){
 					StructureType type = parseStructureType(reqDef.getName());
 					int value = reqDef.getValue().asInt();
-
+					
 					quest.addRequirement(type, value);
 				}
 			}

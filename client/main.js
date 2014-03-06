@@ -281,7 +281,7 @@ function initSound(){
 	sounds.selected = {
 		barracks: new Sound(['audio/selected/sel_barracks.ogg']),
 		blacksmith: new Sound(['audio/selected/sel_blacksmith.ogg']),
-		civic: new Sound(['audio/selected/sel_civ_center.ogg']),
+		civic_center: new Sound(['audio/selected/sel_civ_center.ogg']),
 		corral: new Sound(['audio/selected/sel_corral.ogg']),
 		farm: new Sound(['audio/selected/sel_farmstead.ogg']),
 		fortress: new Sound(['audio/selected/sel_fortress.ogg']),
