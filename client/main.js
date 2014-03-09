@@ -83,6 +83,19 @@ var Main = {
 		'ptol_civic': 'structures/ptolemies/civic_centre.xml',
 		'ptol_temple': 'structures/ptolemies/temple.xml',
 
+		// Actors PTOLEMIES buildings
+		'maur_house': 'structures/mauryans/house.xml',
+		'maur_farm': 'structures/mauryans/farmstead.xml',
+		'maur_corral': 'structures/mauryans/corral.xml',
+		'maur_market': 'structures/mauryans/market.xml',
+		'maur_storehouse': 'structures/mauryans/storehouse.xml',
+		'maur_barracks': 'structures/mauryans/barracks.xml',
+		'maur_blacksmith': 'structures/mauryans/blacksmith.xml',
+		'maur_fortress': 'structures/mauryans/fortress.xml',
+		'maur_tower': 'structures/mauryans/wall_tower.xml',
+		'maur_civic': 'structures/mauryans/civil_centre.xml',
+		'maur_temple': 'structures/mauryans/temple.xml',
+
 		// Actors GAIA
 		'gaia_aleppo_pine': 'flora/trees/aleppo_pine.xml',
 		'gaia_european_beech' : 'flora/trees/european_beech.xml',
