@@ -107,7 +107,7 @@ THREE.ColladaLoader = function () {
 
 			request.open( "GET", url, true );
 			request.send( null );
-
+			//console.log("cp " + url + " ../client" + url.substring(1));
 		} else {
 
 			alert( "Don't know how to parse XML!" );
