@@ -83,10 +83,22 @@ void main() {
 // Fragment shader for player color
 uniform vec3 color;
 uniform sampler2D texture;
+uniform bool enableAO;
+uniform sampler2D tAO;
 varying vec2 vUv;
 void main() {
     vec4 tColor = texture2D( texture, vUv );
     gl_FragColor = vec4( mix( color, tColor.rgb, tColor.a ), 1.0 );
+
+	if( enableAO ) {
+		#ifdef GAMMA_INPUT
+		vec4 aoColor = texture2D( tAO, vUv );
+		aoColor.xyz *= aoColor.xyz;
+		gl_FragColor.xyz = gl_FragColor.xyz * aoColor.xyz;
+		#else
+		gl_FragColor.xyz = gl_FragColor.xyz * texture2D( tAO, vUv ).xyz;
+		#endif
+	}
 }
 </script>
 

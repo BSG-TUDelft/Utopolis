@@ -43,17 +43,19 @@ var ActorModelLoader = function () {
 					}).toArray();
 				var textureUrl = textureUrlPrefix + $(xml).find("texture[name*='baseTex']").attr("file");
 				textureUrl = checkTextureUrl(url, textureUrl);
+				var aoUrl = textureUrlPrefix + $(xml).find("texture[name*='aoTex']").attr("file");
 
+				//console.log("cp " + aoUrl.substring(2) + " ../client" + aoUrl.substring(1))
 				// Taking the first mesh
 				var meshUrl = meshUrlPrefix + $(xml).find("mesh").first().text();
 				var material;
 
 				// This crude way of defining material looks if the <material> node contains the word player
 				// and if so, loads the player color shader (where transparency == player color)
-//				if($(xml).find("material").first().text().indexOf("player") > -1)
-					material = getPlayerColorMaterial(textureUrl);
-//				else
-//					material = getAdditiveAlphaBlendingMaterial(textureUrl);
+				if($(xml).find("material").first().text().indexOf("player") > -1)
+					material = getPlayerColorMaterial(textureUrl, aoUrl);
+				else
+					material = getAdditiveAlphaBlendingMaterial(textureUrl);
 
 				// Load the mesh
 				colladaLoader.load(meshUrl, function(material) {
@@ -149,12 +151,13 @@ var ActorModelLoader = function () {
 					var propMeshUrl = meshUrlPrefix + $(xml).find("actor group variant mesh").first().text();
 					var propTextureUrl = textureUrlPrefix + $(xml).find("actor group variant textures texture[name*='baseTex']").first().attr("file");
 					propTextureUrl = checkTextureUrl(reqUrl, propTextureUrl);
+					var propAoUrl = textureUrlPrefix + $(xml).find("texture[name*='aoTex']").attr("file");
 
 					// This crude way of defining material looks if the <material> node contains the word player
 					// and if so, loads the player color shader (where transparency == player color)
 					var material;
 					if($(xml).find("material").first().text().indexOf("player") > -1)
-						material = getPlayerColorMaterial(propTextureUrl);
+						material = getPlayerColorMaterial(propTextureUrl, propAoUrl);
 					else
 						material = getAdditiveAlphaBlendingMaterial(propTextureUrl);
 
@@ -227,17 +230,20 @@ var ActorModelLoader = function () {
 
 	/** Returns the material used in meshes that need to be textures with player color
 	 * @param textureUrl {String} url to texture
+	 * @param aoUrl {String} url to ao map (optional)
 	 * @returns {THREE.ShaderMaterial} to be applied to meshes */
-	function getPlayerColorMaterial(textureUrl){
+	function getPlayerColorMaterial(textureUrl, aoUrl){
 		// texture
 		var texture = THREE.ImageUtils.loadTexture(textureUrl);
+		var aoTexture = (aoUrl) ? THREE.ImageUtils.loadTexture(aoUrl) : null;
 
 		// uniforms
 		var uniforms = {
 			color: { type: "c", value: scope.playerColor },
-			texture: { type: "t", value: texture }
+			texture: { type: "t", value: texture },
+			enableAO: { type: "i", value: aoUrl !== null},
+			tAo: { type: "t", value: aoTexture }
 		};
-
 		// attributes
 		var attributes = {	};
 
