@@ -63,12 +63,12 @@ public class CityResource extends Resource {
 	}
 
 	@PUT
-	@Path("/{playerId}/structure")
+	@Path("/{cityId}/structure")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createStructure(@PathParam("playerId") int playerId,
+	public Response createStructure(@PathParam("cityId") int cityId,
 			Structure s) {
-		City c = DBConnector.get().getCityByPlayerId(playerId);
+		City c = DBConnector.get().getCityById(cityId);
 		c.getStructures().add(s);
 		DBConnector.get().save(c);
 		return buildResponse(s);
