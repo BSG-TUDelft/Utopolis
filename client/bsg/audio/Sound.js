@@ -21,7 +21,6 @@ var Sound = function ( sources, config ) {
 
 	var audio = document.createElement('audio');
 	var source = document.createElement('source');
-	audio.appendChild( source );
 	audio.addEventListener('ended', $.proxy(onEnd, this));
 	audio.addEventListener('error', $.proxy(onError, this));
 
@@ -40,6 +39,10 @@ var Sound = function ( sources, config ) {
 
 	// PRIVATE METHODS
 	function load(){
+		if(audio.childNodes.length == 0){
+			audio.appendChild( source );
+		}
+
 		switch(playMode){
 			case Sound.playMode.random:
 				currentIndex = parseInt(Math.random() * this.sources.length, 10);
