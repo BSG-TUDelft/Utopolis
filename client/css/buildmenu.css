@@ -105,6 +105,7 @@
 #tabstrip .tab_maur div .icon {
 	background-position: -200px -40px;
 }
+
 #tabstrip .tab_maur div .icon:hover, #tabstrip .tab_maur.selected div .icon {
 	background-position: -200px 0;
 }
@@ -112,6 +113,7 @@
 #tabstrip .tab_ptol div .icon {
 	background-position: -280px -40px;
 }
+
 #tabstrip .tab_ptol div .icon:hover, #tabstrip .tab_ptol.selected div .icon {
 	background-position: -280px 0;
 }
@@ -119,6 +121,7 @@
 #tabstrip .tab_gaia div .icon {
 	background-position: -240px -40px;
 }
+
 #tabstrip .tab_gaia div .icon:hover, #tabstrip .tab_gaia.selected div .icon {
 	background-position: -240px 0;
 }

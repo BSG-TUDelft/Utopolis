@@ -555,7 +555,7 @@ var Gui = {
 		};
 
 		// See if we have to issue a poll request
-		if(Gui.timeLastPoll + Gui.pollInterval < $.now()){
+		if(!Main.clientOnlyMode && Gui.timeLastPoll + Gui.pollInterval < $.now()){
 			Gui.timeLastPoll = $.now();
 
 			var request = $.ajax({
@@ -1070,6 +1070,65 @@ function initGui() {
 				iconCss: "ptol_temple",
 				structureType: "temple"
 			}]
+		}, {
+			name: "Mauryans",
+			tabCss: "tab_maur",
+			structures: [{
+				name: "House",
+				structureId: "maur_house",
+				iconCss: "maur_house",
+				structureType: "house"
+			},{
+				name: "Farm",
+				structureId: "maur_farm",
+				iconCss: "maur_farm",
+				structureType: "farm"
+			},{
+				name: "Corral",
+				structureId: "maur_corral",
+				iconCss: "maur_corral",
+				structureType: "corral"
+			},{
+				name: "Market",
+				structureId: "maur_market",
+				iconCss: "maur_market",
+				structureType: "market"
+			},{
+				name: "Storehouse",
+				structureId: "maur_storehouse",
+				iconCss: "maur_storehouse",
+				structureType: "storehouse"
+			},{
+				name: "Barracks",
+				structureId: "maur_barracks",
+				iconCss: "maur_barracks",
+				structureType: "barracks"
+			},{
+				name: "Blacksmith",
+				structureId: "maur_blacksmith",
+				iconCss: "maur_blacksmith",
+				structureType: "blacksmith"
+			},{
+				name: "Civic center",
+				structureId: "maur_civic",
+				iconCss: "maur_civic",
+				structureType: "civic"
+			},{
+				name: "Tower",
+				structureId: "maur_tower",
+				iconCss: "maur_tower",
+				structureType: "tower"
+			},{
+				name: "Fortress",
+				structureId: "maur_fortress",
+				iconCss: "maur_fortress",
+				structureType: "fortress"
+			},{
+				name: "Temple",
+				structureId: "maur_temple",
+				iconCss: "maur_temple",
+				structureType: "temple"
+			}]
 			//}, {
 			//	name: "Mauryans",
 			//	tabCss: "tab_maur"
@@ -1404,6 +1463,8 @@ function initGui() {
 		submitLogin();
 	});
 	login.el.keypress(function( event ) {
+		Gui.buildMenu.selectTab(6); //temp, to test mauryans
+
 		if ( event.which == 13 ) { submitLogin(); }
 	});
 

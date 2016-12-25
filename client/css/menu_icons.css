@@ -208,6 +208,41 @@
 	background-image: url(../images/ui/icons/ptol/temple.png);
 }
 
+/*<-- Mauryans icons -->*/
+.structureicon.maur_house {
+	background-image: url(../images/ui/icons/maur/house.png);
+}
+.structureicon.maur_farm {
+	background-image: url(../images/ui/icons/maur/farm.png);
+}
+.structureicon.maur_corral {
+	background-image: url(../images/ui/icons/maur/corral.png);
+}
+.structureicon.maur_market {
+	background-image: url(../images/ui/icons/maur/market.png);
+}
+.structureicon.maur_storehouse {
+	background-image: url(../images/ui/icons/maur/storehouse.png);
+}
+.structureicon.maur_barracks {
+	background-image: url(../images/ui/icons/maur/barracks.png);
+}
+.structureicon.maur_blacksmith {
+	background-image: url(../images/ui/icons/maur/blacksmith.png);
+}
+.structureicon.maur_civic {
+	background-image: url(../images/ui/icons/maur/civic.png);
+}
+.structureicon.maur_tower {
+	background-image: url(../images/ui/icons/maur/tower.png);
+}
+.structureicon.maur_fortress {
+	background-image: url(../images/ui/icons/maur/fortress.png);
+}
+.structureicon.maur_temple {
+	background-image: url(../images/ui/icons/maur/temple.png);
+}
+
 /*<-- Gaia icons -->*/
 .structureicon.gaia_aleppo_pine {
 	background-image: url(../images/ui/icons/gaia/aleppo_pine.png);

@@ -65,6 +65,7 @@ var ActorModelLoader = function () {
 			},
 			error: function(xhr, status, error){
 				console.error("ActorModelLoader.loadActorXml: Error loading xml [" + url + "]. Name: [" + name + "]. Error message: " + error);
+				//console.log("cp " + url + " ../client" + url.substring(1));
 			}
 		});
 	}
@@ -174,6 +175,8 @@ var ActorModelLoader = function () {
 					// create closeure for reqUrl
 					return function(xhr, status, error){
 					console.error("ActorModelLoader.loadProps: Error loading prop for [" + scope.modelName + "] xml [" + reqUrl + "]. Error message: " + error);
+					//console.log("cp " + reqUrl + " ../client" + reqUrl.substring(1));
+
 				}}(url)
 			});
 		}
