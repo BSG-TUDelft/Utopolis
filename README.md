@@ -16,12 +16,8 @@ More info
 Screenshots
 -----------
 ![carthagenians](docs/screenshots/carthagenians.png)
-
-![hellenics](docs/screenshots/screenshots/hellenics.png)
-
+![hellenics](docs/screenshots/hellenics.png)
 ![ptolemies_crafting](docs/screenshots/ptolemies_crafting.png)
-
 ![quests](docs/screenshots/quests.png)
-
 
 ![alt tag](http://www.catb.org/hacker-emblem/hacker.png)
