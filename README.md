@@ -11,17 +11,16 @@ More info
 ---------
 
 * [game_design.pdf](docs/game_design%20.pdf)
-
 * [technical_documentation.pdf](docs/technical_documentation.pdf)
 
 Screenshots
 -----------
-!(docs/screenshots/carthagenians.png)
+![carthagenians](docs/screenshots/carthagenians.png)
 
-!(docs/screenshots/screenshots/hellenics.png)
+![hellenics](docs/screenshots/screenshots/hellenics.png)
 
-!(docs/screenshots/ptolemies_crafting.png)
-!(docs/screenshots/quests.png)
+![ptolemies_crafting](docs/screenshots/ptolemies_crafting.png)
+![quests](docs/screenshots/quests.png)
 
 
 ![alt tag](http://www.catb.org/hacker-emblem/hacker.png)
