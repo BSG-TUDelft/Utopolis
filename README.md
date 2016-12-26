@@ -9,15 +9,19 @@ The setting of the game takes place in a fictional iron age style world. One pro
 
 More info
 ---------
-[game_design.pdf](docs/game_design%20.pdf)
-[technical_documentation.pdf](docs/technical_documentation.pdf)
+
+* [game_design.pdf](docs/game_design%20.pdf)
+
+* [technical_documentation.pdf](docs/technical_documentation.pdf)
 
 Screenshots
 -----------
-(docs/screenshots/carthagenians.png)
-(docs/screenshots/screenshots/hellenics.png)
-(docs/screenshots/ptolemies_crafting.png)
-(docs/screenshots/quests.png)
+!(docs/screenshots/carthagenians.png)
+
+!(docs/screenshots/screenshots/hellenics.png)
+
+!(docs/screenshots/ptolemies_crafting.png)
+!(docs/screenshots/quests.png)
 
 
 ![alt tag](http://www.catb.org/hacker-emblem/hacker.png)
