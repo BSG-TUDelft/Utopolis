@@ -20,6 +20,7 @@ Screenshots
 ![hellenics](docs/screenshots/screenshots/hellenics.png)
 
 ![ptolemies_crafting](docs/screenshots/ptolemies_crafting.png)
+
 ![quests](docs/screenshots/quests.png)
 
 
