@@ -12,7 +12,6 @@ import javax.ws.rs.ext.ContextResolver;
 import nl.tudelft.bsg.utopolis.server.db.DBBootstrap;
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
 import nl.tudelft.bsg.utopolis.server.model.Resources;
-import nl.tudelft.bsg.utopolis.server.model.util.StructureProperties;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -36,6 +35,8 @@ public class Main {
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
+    	
+    	
 		/*
 		 * Todo: read structure properties here, store in application variable
 		

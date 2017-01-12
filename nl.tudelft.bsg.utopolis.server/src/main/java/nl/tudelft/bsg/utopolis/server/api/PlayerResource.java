@@ -1,5 +1,7 @@
 package nl.tudelft.bsg.utopolis.server.api;
 
+import java.util.Set;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -12,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import nl.tudelft.bsg.utopolis.server.db.DBConnector;
+import nl.tudelft.bsg.utopolis.server.game.QuestEngine;
 import nl.tudelft.bsg.utopolis.server.model.Player;
 import nl.tudelft.bsg.utopolis.server.model.PlayerList;
 import nl.tudelft.bsg.utopolis.server.model.City;
@@ -48,6 +51,9 @@ public class PlayerResource extends Resource {
 		Player player = DBConnector.get().validate(p.getNick(), p.getPassword());
 		if(player != null){
 			City city = DBConnector.get().getCityByPlayerId(player.getId());
+			Set<String> completedQuests = new QuestEngine().calculateCompletedQuests(city);
+			city.getPlayer().setCompletedQuests(completedQuests);
+			
 			return authorizationResponse(city, "TESTHASH");
 		}
 		else {
